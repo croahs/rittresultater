@@ -32,6 +32,7 @@
 .sc-mapwrap { position: relative; border: 1px solid var(--line, #e2e5e8); border-radius: 8px; overflow: hidden;
   aspect-ratio: 4 / 3; min-height: 320px; background: var(--panel, #fff); }
 .sc-map { position: absolute; inset: 0; }
+.sc-map.leaflet-container { background: var(--grid, #eceef0); }
 .sc-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 450; }
 .sc-clock { position: absolute; top: 10px; left: 12px; z-index: 460; pointer-events: none;
   font: 700 2.4rem/1 var(--display, "Arial Narrow", sans-serif); font-variant-numeric: tabular-nums;
