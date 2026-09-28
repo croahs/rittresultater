@@ -1,191 +1,344 @@
-<title>Pedårs rittkasino</title>
+<title>Pedårs rittresultater</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: a casino table. A 3D felt with one chip stack per race (the hero), a row of
-   slot-machine counters, then the year-over-year board and the full ledger. */
+/* Layout: app shell after Pedår's reference shot. Top bar, a race feed down the left,
+   a centre stage (season chips, dashed ring gauge, power "equalizer"), then four
+   gradient-headed cards by race type, then the full ledger. */
 :root {
-  --bg: #e9efe9; --panel: #ffffff; --fg: #10201a; --fg-2: #3f5249; --muted: #6f8078; --line: #cfdad3;
-  --felt: #2f8a62; --felt-edge: #1f6b4a; --rim: #b8862f; --gold: #9a6b12;
-  --road: #2a78d6; --gravel: #eb6834; --tempo: #1baf7a; --points: #7a5af0;
-  --good: #1d7f45; --bad: #b8392f; --chipline: #ffffff;
-  --glow: rgb(184 134 47 / .25);
-  --display: "Bungee", "Impact", sans-serif;
-  --body: "Manrope", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --bg: #eef0f8; --shell: #ffffff; --side: #f6f7fc; --card: #ffffff; --raised: #eceef8;
+  --fg: #1d2040; --fg-2: #4d5275; --muted: #8a8fae; --line: #e1e4f0; --ghost: rgb(29 32 64 / .05);
+  --blue: #4f7fe8; --blue-2: #6f98f2;
+  --road-a: #3a3d62; --road-b: #4d5180;
+  --gravel-a: #8f5cf6; --gravel-b: #c56cf0;
+  --tt-a: #ff5f7e; --tt-b: #ff9160;
+  --pts-a: #2fb5c9; --pts-b: #34d3a2;
+  --good: #1f9d63; --bad: #d8465b;
+  --font: "Mulish", "Segoe UI", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #07110d; --panel: #0e1b16; --fg: #eef5f0; --fg-2: #b4c4bb; --muted: #7d9087; --line: #1f3029;
-  --felt: #0f4d36; --felt-edge: #0a3325; --rim: #d4a449; --gold: #f2c35b;
-  --road: #3987e5; --gravel: #d95926; --tempo: #199e70; --points: #9085e9;
-  --good: #4cc27d; --bad: #f07268; --chipline: #f4efe2; --glow: rgb(242 195 91 / .22); color-scheme: dark } }
+  --bg: #1d1e33; --shell: #292b46; --side: #24263e; --card: #30324f; --raised: #383a5c;
+  --fg: #eceefb; --fg-2: #b3b6d4; --muted: #7f83a6; --line: #393b5d; --ghost: rgb(255 255 255 / .04);
+  --blue: #5b8def; --blue-2: #7aa4f4; --road-a: #34365a; --road-b: #3d4068;
+  --good: #4fd08e; --bad: #ff7a8d; color-scheme: dark } }
 :root[data-theme="dark"] {
-  --bg: #07110d; --panel: #0e1b16; --fg: #eef5f0; --fg-2: #b4c4bb; --muted: #7d9087; --line: #1f3029;
-  --felt: #0f4d36; --felt-edge: #0a3325; --rim: #d4a449; --gold: #f2c35b;
-  --road: #3987e5; --gravel: #d95926; --tempo: #199e70; --points: #9085e9;
-  --good: #4cc27d; --bad: #f07268; --chipline: #f4efe2; --glow: rgb(242 195 91 / .22); color-scheme: dark }
+  --bg: #1d1e33; --shell: #292b46; --side: #24263e; --card: #30324f; --raised: #383a5c;
+  --fg: #eceefb; --fg-2: #b3b6d4; --muted: #7f83a6; --line: #393b5d; --ghost: rgb(255 255 255 / .04);
+  --blue: #5b8def; --blue-2: #7aa4f4; --road-a: #34365a; --road-b: #3d4068;
+  --good: #4fd08e; --bad: #ff7a8d; color-scheme: dark }
 
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); }
-.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 64px; display: grid; gap: 32px; }
-h1, h2 { margin: 0; text-wrap: balance; }
-h1 { font: 400 clamp(2rem, 7vw, 3.6rem)/1 var(--display); letter-spacing: .01em; }
-h1 span { color: var(--gold); }
-h2 { font: 400 1.25rem/1.1 var(--display); letter-spacing: .02em; }
-.eyebrow { font: 600 .74rem/1 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.sub { color: var(--fg-2); margin: 8px 0 0; max-width: 62ch; }
-header { display: grid; gap: 10px; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--font); }
+.page { padding-inline: 16px; padding-block: 16px 40px; }
+.shell { max-width: 1440px; margin: 0 auto; background: var(--shell); border-radius: 6px; overflow: hidden; box-shadow: 0 20px 60px -30px rgb(20 20 60 / .45); }
 
-/* Table scene */
-.table { position: relative; border-radius: 18px; overflow: hidden; background: radial-gradient(120% 90% at 50% 40%, var(--felt) 0%, var(--felt-edge) 75%);
-  box-shadow: 0 0 0 3px var(--rim), 0 0 0 7px var(--felt-edge), 0 24px 60px -20px var(--glow); }
-#scene { display: block; width: 100%; height: clamp(460px, 58vw, 580px); touch-action: pan-y; cursor: grab; }
-#scene:active { cursor: grabbing; }
-.controls { position: absolute; inset: 12px 12px auto 12px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; pointer-events: none; }
-.seg { display: inline-flex; flex-wrap: wrap; background: rgb(0 0 0 / .35); border: 1px solid rgb(255 255 255 / .18); border-radius: 999px; padding: 3px; pointer-events: auto; backdrop-filter: blur(6px); }
-.seg button { font: 600 .8rem/1 var(--body); color: #e9f3ee; background: none; border: 0; border-radius: 999px; padding: 8px 12px; cursor: pointer; }
-.seg button[aria-pressed="true"] { background: #f2c35b; color: #1b1405; }
-.seg button:focus-visible { outline: 2px solid #f2c35b; outline-offset: 2px; }
-.legend { position: absolute; left: 12px; bottom: 12px; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .8rem; color: #e9f3ee; background: rgb(0 0 0 / .35); padding: 6px 12px; border-radius: 14px; backdrop-filter: blur(6px); max-width: calc(100% - 24px); }
-.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; box-shadow: inset 0 0 0 2px rgb(255 255 255 / .8); }
-@media (max-width: 560px) { .hint { display: none; } }
-.hint { position: absolute; right: 12px; bottom: 52px; font-size: .75rem; color: rgb(233 243 238 / .75); }
-.tip { position: absolute; pointer-events: none; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 10px;
-  padding: 10px 12px; font-size: .85rem; min-width: 210px; box-shadow: 0 10px 30px rgb(0 0 0 / .3); z-index: 3; }
-.tip b { display: block; font-weight: 700; }
-.tip .row { display: flex; justify-content: space-between; gap: 16px; color: var(--fg-2); font-variant-numeric: tabular-nums; }
-.tip .row span:last-child { color: var(--fg); font-family: var(--mono); font-size: .8rem; }
-.fallback { padding: 40px 20px; color: #e9f3ee; text-align: center; }
+/* Top bar */
+.top { display: flex; align-items: center; gap: 8px 24px; padding: 0 20px; min-height: 56px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.logo { font-weight: 800; letter-spacing: .02em; text-transform: uppercase; font-size: .95rem; padding-block: 16px; }
+.logo span { font-weight: 500; color: var(--muted); }
+.nav { display: flex; gap: 0 22px; flex-wrap: wrap; }
+.nav a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; padding: 18px 0; border-bottom: 2px solid transparent; }
+.nav a[aria-current="true"], .nav a:hover { color: var(--fg); border-color: var(--blue); }
+.who { margin-left: auto; display: flex; align-items: center; gap: 12px; font-weight: 600; padding-block: 10px; }
+.pill { background: var(--raised); border-radius: 4px; padding: 6px 12px; font-variant-numeric: tabular-nums; color: var(--fg-2); font-size: .85rem; }
+.pill b { color: var(--fg); }
+.avatar { width: 30px; height: 30px; border-radius: 4px; display: grid; place-items: center; background: var(--raised); color: var(--muted); font-size: .7rem; font-weight: 700; flex: none; }
+@media (max-width: 700px) { .nav { display: none; } }
 
-/* Slot machine counters */
-.reels { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-.reel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; }
-.window { display: flex; gap: 3px; align-items: baseline; }
-.digit { display: inline-block; height: 1.1em; overflow: hidden; font: 700 2.4rem/1.1 var(--mono); color: var(--gold); }
-.digit > span { display: block; transition: transform 1.4s cubic-bezier(.2, .9, .2, 1.05); }
-.digit > span > span { display: block; height: 1.1em; }
-.unit { font: 600 1rem var(--body); color: var(--fg-2); margin-left: 4px; }
-.reel p { margin: 0; color: var(--fg-2); font-size: .9rem; }
+.banner { display: flex; align-items: center; gap: 12px; padding: 10px 20px; color: #fff; background: linear-gradient(90deg, var(--blue), var(--blue-2)); font-weight: 600; flex-wrap: wrap; }
 
-/* Tables */
-section { display: grid; gap: 12px; min-width: 0; }
-.scroll { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: .9rem; }
-th, td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
-th { font: 600 .7rem/1.2 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.body { display: grid; grid-template-columns: 290px minmax(0, 1fr); }
+@media (max-width: 900px) { .body { grid-template-columns: 1fr; } .feed { order: 2; max-height: 520px; border-right: 0; } }
+
+/* Feed */
+.feed { background: var(--side); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; max-height: 1180px; }
+.feed-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; position: relative; overflow: hidden; }
+.feed-head::before { content: "Ritt"; position: absolute; left: 12px; top: -14px; font-size: 5rem; font-weight: 800; color: var(--ghost); pointer-events: none; }
+.feed-head .online { color: var(--muted); font-size: .85rem; }
+.feed-head .online::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--good); margin-right: 6px; vertical-align: 2px; }
+.feed-head .online b { color: var(--fg); }
+.feed ol { list-style: none; margin: 0; padding: 0 0 12px; overflow-y: auto; }
+.feed li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; padding: 14px 20px; }
+.feed li[data-i] { cursor: pointer; }
+.feed li[data-i]:hover, .feed li[aria-selected="true"] { background: var(--ghost); }
+.feed .name { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
+.feed .name small { color: var(--muted); font-weight: 500; font-size: .75rem; white-space: nowrap; }
+.feed .place { color: var(--blue); font-weight: 700; margin-left: 5px; }
+.feed p { margin: 2px 0 0; color: var(--fg-2); font-size: .85rem; }
+
+/* Stage */
+.main { padding: 28px clamp(16px, 3vw, 40px) 32px; display: grid; gap: 32px; min-width: 0; align-content: start; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 24px; align-items: center; }
+@media (max-width: 1150px) { .stage { grid-template-columns: 1fr; justify-items: center; } .stage > * { width: 100%; max-width: 520px; } .ring { max-width: 330px; } }
+.ghost-word { position: relative; }
+.ghost-word::before { content: attr(data-ghost); position: absolute; left: -6px; top: -44px; font-size: 5rem; font-weight: 800; color: var(--ghost); pointer-events: none; white-space: nowrap; }
+.stat { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.stat::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); opacity: .6; flex: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 30px; }
+.chips button { background: none; border: 0; color: var(--fg-2); font: 700 .8rem var(--font); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; padding: 6px 0; }
+.chips button[aria-pressed="true"] { color: var(--blue); }
+.chips button:focus-visible, .feed li:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.slider { margin-top: 26px; position: relative; height: 4px; border-radius: 2px; background: var(--raised); }
+.slider > i { position: absolute; inset: 0 auto 0 0; border-radius: 2px; background: linear-gradient(90deg, var(--blue), var(--blue-2)); transition: width .8s ease; }
+.slider > i::after { content: ""; position: absolute; right: -8px; top: -6px; width: 16px; height: 16px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px rgb(91 141 239 / .3), 0 0 14px rgb(91 141 239 / .8); }
+.slider-label { display: flex; justify-content: space-between; color: var(--muted); font-size: .75rem; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.slider-label b { color: var(--fg); }
+.box { display: inline-block; margin-top: 22px; background: var(--raised); border-radius: 4px; padding: 10px 18px; font-variant-numeric: tabular-nums; color: var(--fg-2); }
+
+.ring { position: relative; width: min(330px, 80vw); aspect-ratio: 1; justify-self: center; }
+.ring svg { width: 100%; height: 100%; display: block; }
+.ring .inner { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; gap: 2px; }
+.ring .inner small { color: var(--muted); font-size: .85rem; max-width: 20ch; }
+.ring .inner strong { font-size: 2.3rem; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.ring .inner span { color: var(--fg-2); font-size: .85rem; }
+.ring .spin { transform-origin: 160px 160px; animation: spin 80s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadein { to { opacity: 1; } }
+
+.eq-title { display: flex; justify-content: flex-end; color: var(--blue); font-weight: 600; font-size: .85rem; }
+.eq svg { width: 100%; height: 150px; display: block; margin-top: 12px; }
+.eq rect { cursor: pointer; transform-origin: bottom; transform-box: fill-box; animation: grow .7s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes grow { from { transform: scaleY(0); } }
+.eq-axis { display: flex; justify-content: space-between; color: var(--muted); font-size: .75rem; margin-top: 6px; }
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
+.card { background: var(--card); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px -18px rgb(10 10 40 / .45); border: 1px solid var(--line); }
+.card header { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 16px; color: #fff; font-variant-numeric: tabular-nums; overflow: hidden; }
+.card header::before { content: attr(data-ghost); position: absolute; left: 8px; bottom: -18px; font-size: 3.4rem; font-weight: 800; color: rgb(255 255 255 / .12); letter-spacing: -.02em; }
+.card header span { position: relative; font-size: .95rem; font-weight: 600; }
+.card.road header { background: linear-gradient(90deg, var(--road-a), var(--road-b)); }
+.card.gravel header { background: linear-gradient(90deg, var(--gravel-a), var(--gravel-b)); }
+.card.tt header { background: linear-gradient(90deg, var(--tt-a), var(--tt-b)); }
+.card.pts header { background: linear-gradient(90deg, var(--pts-a), var(--pts-b)); }
+.card ul { list-style: none; margin: 0; padding: 8px 0; max-height: 348px; overflow-y: auto; }
+.card li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 9px 16px; }
+.card li b { font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card li small { color: var(--muted); font-variant-numeric: tabular-nums; }
+.card li .v { color: var(--fg); font-variant-numeric: tabular-nums; text-align: right; font-size: .85rem; line-height: 1.3; }
+.card .empty { color: var(--muted); padding: 16px; }
+
+/* Ledger */
+h2 { margin: 0; font-size: .95rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.scroll { overflow-x: auto; background: var(--card); border-radius: 4px; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: .85rem; }
+th, td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 700; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
 th:first-child, td:first-child { text-align: left; }
 tr:last-child td { border-bottom: 0; }
 td a { color: inherit; text-decoration-color: var(--muted); text-underline-offset: 2px; }
-.chip { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; box-shadow: inset 0 0 0 2px var(--chipline); }
-.chg { font-size: .78rem; font-weight: 700; margin-left: 6px; }
+.chg { font-size: .75rem; font-weight: 700; margin-left: 6px; }
 .chg.up { color: var(--good); } .chg.down { color: var(--bad); }
-.small { color: var(--muted); font-size: .8rem; display: block; white-space: normal; max-width: 34ch; }
-.foot { color: var(--muted); font-size: .85rem; }
-@media (prefers-reduced-motion: reduce) { .digit > span { transition: none; } }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .8rem; }
+footer a { color: inherit; margin-right: 16px; }
+.tip { position: fixed; pointer-events: none; background: var(--card); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; font-size: .8rem; box-shadow: 0 10px 30px rgb(0 0 0 / .25); z-index: 5; }
+.tip b { display: block; }
+.tip span { color: var(--fg-2); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .ring .spin, .eq rect, .ring path { animation: none !important; opacity: 1 !important; } .slider > i { transition: none; } }
 </style>
 
-<div class="wrap">
-  <header>
-    <div class="eyebrow">Turritt · EQ Timing · raceresult · intervals.icu</div>
-    <h1>Pedårs <span>rittkasino</span></h1>
-    <p class="sub" id="span"></p>
-  </header>
-
-  <div class="table" id="table">
-    <canvas id="scene" aria-label="3D-bord med én sjetongstabel per ritt"></canvas>
-    <div class="controls">
-      <div class="seg" role="group" aria-label="Hva stablene viser" id="metric">
-        <button type="button" data-m="beat" aria-pressed="true">Slått av feltet</button>
-        <button type="button" data-m="np" aria-pressed="false">NP</button>
-        <button type="button" data-m="speed" aria-pressed="false">Fart</button>
-      </div>
-      <div class="seg" role="group" aria-label="Rittype" id="filter">
-        <button type="button" data-f="all" aria-pressed="true">Alle</button>
-        <button type="button" data-f="Road" aria-pressed="false">Landevei</button>
-        <button type="button" data-f="Gravel" aria-pressed="false">Gravel</button>
-        <button type="button" data-f="TT" aria-pressed="false">Tempo</button>
-      </div>
-    </div>
-    <div class="hint" id="hint">Dra for å snu bordet</div>
-    <div class="legend" id="legend"></div>
-    <div class="tip" id="tip" hidden></div>
+<div class="page"><div class="shell">
+  <div class="top">
+    <div class="logo">Ritt<span>resultater</span></div>
+    <nav class="nav">
+      <a href="#oversikt" aria-current="true">Oversikt</a>
+      <a href="#typer">Rittyper</a>
+      <a href="#sammenlign">2025 mot 2026</a>
+      <a href="#alle">Alle ritt</a>
+    </nav>
+    <div class="who"><span class="pill" id="count"></span><span>Pedår</span><span class="avatar">PS</span></div>
   </div>
+  <div class="banner" id="banner"></div>
 
-  <div class="reels" id="reels"></div>
+  <div class="body">
+    <aside class="feed" aria-label="Rittfeed">
+      <div class="feed-head"><span></span><span class="online" id="feed-count"></span></div>
+      <ol id="feed" aria-label="Ritt, nyeste først"></ol>
+    </aside>
 
-  <section>
-    <h2>Samme ritt, 2025 mot 2026</h2>
-    <div class="scroll"><table id="yoy"></table></div>
-  </section>
+    <main class="main" id="oversikt">
+      <div class="stage">
+        <div class="ghost-word" data-ghost="Sesong">
+          <div class="stat" id="stat"></div>
+          <div class="chips" role="group" aria-label="Sesong" id="season"></div>
+          <div class="slider" aria-hidden="true"><i id="bar"></i></div>
+          <div class="slider-label"><span>Snitt NP (skala 150–320 W)</span><b id="bar-label"></b></div>
+          <div class="box" id="box"></div>
+        </div>
+        <div class="ring" id="ring"></div>
+        <div class="eq ghost-word" data-ghost="Watt">
+          <div class="eq-title">Normalisert watt per ritt</div>
+          <svg id="eq" role="img" aria-label="Stolper med NP for hvert ritt i perioden"></svg>
+          <div class="eq-axis"><span id="eq-from"></span><span>150–320 W</span><span id="eq-to"></span></div>
+        </div>
+      </div>
 
-  <section>
-    <h2>Poengritt: SSK Cup 2026</h2>
-    <div class="scroll"><table id="points"></table></div>
-  </section>
+      <div class="cards" id="typer"></div>
 
-  <section>
-    <h2>Alle ritt</h2>
-    <div class="scroll"><table id="all"></table></div>
-  </section>
+      <section id="sammenlign" style="display:grid;gap:12px">
+        <h2>Samme ritt, 2025 mot 2026</h2>
+        <div class="scroll"><table id="yoy"></table></div>
+      </section>
 
-  <p class="foot">Hver sjetong er 5 % av feltet du slo, 10 W eller 2 km/t. Plassering fra Turritt og EQ Timing, der DNF telles med i feltet. Watt og fart fra intervals.icu, målt bare over selve rittet.</p>
-</div>
+      <section id="alle" style="display:grid;gap:12px">
+        <h2>Alle ritt</h2>
+        <div class="scroll"><table id="all"></table></div>
+      </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <footer>
+        <span><a href="https://turritt.com" target="_blank" rel="noopener">Turritt</a><a href="https://live.eqtiming.com" target="_blank" rel="noopener">EQ Timing</a><a href="https://my.raceresult.com/391696/" target="_blank" rel="noopener">raceresult</a><a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a></span>
+        <span>Plassering: DNF telles med i feltet. Watt og fart: bare selve rittet.</span>
+      </footer>
+    </main>
+  </div>
+</div></div>
+<div class="tip" id="tip" hidden></div>
+
 <script>
 const DATA = /*DATA*/[];
 const POINTS = /*POINTS*/[];
-const TYPES = { Road: ["Landevei", "--road"], Gravel: ["Gravel", "--gravel"], TT: ["Tempo", "--tempo"], TTT: ["Lagtempo", "--tempo"] };
-const METRICS = {
-  beat: { per: 5, unit: "%", marks: [25, 50, 75, 100], v: r => 100 - r.top },
-  np: { per: 10, unit: "W", marks: [100, 200, 300], v: r => r.np },
-  speed: { per: 2, unit: "km/t", marks: [10, 20, 30, 40], v: r => r.speed },
-};
+const TYPES = { Road: "Landevei", Gravel: "Gravel", TT: "Tempo", TTT: "Lagtempo" };
 const MON = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"];
 const fmtDate = s => { const d = new Date(s); return `${d.getDate()}. ${MON[d.getMonth()]} ${d.getFullYear()}`; };
+const shortDate = s => { const d = new Date(s); return `${d.getDate()}. ${MON[d.getMonth()]}`; };
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const initials = n => n.replace(/[^A-Za-zÆØÅæøå ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+const median = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 const years = [...new Set(DATA.map(r => r.year))].sort();
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
-const median = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
-const typeKey = t => (t === "TTT" ? "TT" : t);
+const tip = document.getElementById("tip");
+const showTip = (e, html) => { tip.innerHTML = html; tip.hidden = false;
+  const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8), y = Math.min(e.clientY + 14, innerHeight - tip.offsetHeight - 8);
+  tip.style.left = `${x}px`; tip.style.top = `${y}px`; };
+const hideTip = () => { tip.hidden = true; };
+const typeColor = t => ({ Road: "var(--blue)", Gravel: "var(--gravel-b)", TT: "var(--tt-a)", TTT: "var(--tt-b)" }[t]);
+const ptsPlace = p => p.place ? p.place.replace(" (shared)", " delt") : "Datt av";
 
-document.getElementById("span").textContent =
-  `${DATA.length} ritt på tid og ${POINTS.length} poengritt, fra ${fmtDate(DATA[0].date)} til ${fmtDate(DATA[DATA.length - 1].date)}. Hver stabel på bordet er ett ritt.`;
-document.getElementById("legend").innerHTML = ["Road", "Gravel", "TT"].map(t =>
-  `<span><i style="background:var(${TYPES[t][1]})"></i>${TYPES[t][0]}</span>`).join("") + `<span style="opacity:.8">Bakerst ${years[0]}, fremst ${years[years.length - 1]}</span>`;
+const last = DATA[DATA.length - 1];
+document.getElementById("count").innerHTML = `<b>${DATA.length + POINTS.length}</b> ritt`;
+document.getElementById("banner").innerHTML =
+  `<span aria-hidden="true">◆</span><span>Siste ritt: ${esc(last.name)} ${last.year}, ${last.place}. av ${last.field}. Du slo ${Math.round(100 - last.top)} % av feltet.</span>`;
 
-/* ---------- Slot machine counters ---------- */
-(() => {
-  const [y0, y1] = [years[0], years[years.length - 1]];
-  const by = y => DATA.filter(r => r.year === y);
-  const best = DATA.reduce((a, b) => (b.top < a.top ? b : a));
-  const np = y => Math.round(mean(by(y).filter(r => r.np).map(r => r.np)));
-  const beh = y => Math.round(median(by(y).map(r => r.behind)));
-  const podiums = DATA.filter(r => r.age_place && r.age_place <= 3).length + POINTS.filter(p => +p.place && +p.place <= 3).length;
-  const reels = [
-    [String(np(y1)), "W", `Snitt NP i ${y1}, mot ${np(y0)} W i ${y0}`],
-    [String(beh(y1)), "%", `Typisk tid bak vinneren i ${y1}, mot ${beh(y0)} % i ${y0}`],
-    [String(Math.round(best.top)), "%", `Beste plassering: topp ${Math.round(best.top)} % i ${best.name} ${best.year} (${best.place}. av ${best.field})`],
-    [String(podiums), "pall", "Pallplasser i aldersklasse eller SSK Cup"],
-  ];
-  const el = document.getElementById("reels");
-  el.innerHTML = reels.map(([v, u, t]) =>
-    `<div class="reel"><div class="window" role="img" aria-label="${v} ${u}">${[...v].map(() =>
-      `<span class="digit" aria-hidden="true"><span>${[..."01234567890123456789"].map(d => `<span>${d}</span>`).join("")}</span></span>`).join("")}<span class="unit">${u}</span></div><p>${esc(t)}</p></div>`).join("");
-  const spin = () => el.querySelectorAll(".reel").forEach((reel, i) => {
-    const v = reels[i][0];
-    reel.querySelectorAll(".digit > span").forEach((strip, j) => {
-      strip.style.transitionDelay = `${i * 140 + j * 90}ms`;
-      strip.style.transform = `translateY(-${(10 + +v[j]) * 1.1}em)`;
-    });
-  });
-  if (reduced) spin(); else setTimeout(spin, 250);
-})();
+let season = "all", selected = null;
 
-/* ---------- Tables ---------- */
-const chip = t => `<i class="chip" style="background:var(${TYPES[t][1]})"></i>`;
+/* Season chips */
+const seasonEl = document.getElementById("season");
+seasonEl.innerHTML = [["all", "Alle"], ...years.map(y => [String(y), String(y)])].map(([k, l]) =>
+  `<button type="button" data-s="${k}" aria-pressed="${k === "all"}">${l}</button>`).join("");
+seasonEl.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  season = b.dataset.s; selected = null;
+  seasonEl.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  render();
+});
+const inSeason = d => season === "all" || d.startsWith(season);
+
+/* Feed: every race, newest first, points races mixed in */
+const feedItems = [
+  ...DATA.map(r => ({ kind: "time", r, date: r.date })),
+  ...POINTS.map(p => ({ kind: "pts", p, date: p.date })),
+].sort((a, b) => b.date.localeCompare(a.date));
+function renderFeed() {
+  const items = feedItems.filter(i => inSeason(i.date));
+  document.getElementById("feed-count").innerHTML = `Ritt: <b>${items.length}</b>`;
+  document.getElementById("feed").innerHTML = items.map(i => {
+    if (i.kind === "pts") {
+      const p = i.p;
+      return `<li><span class="avatar">SC</span><div><div class="name"><span>${esc(p.name)}<span class="place">${p.pts ? esc(ptsPlace(p)) : ""}</span></span><small>${shortDate(p.date)} ${p.date.slice(2, 4)}</small></div>` +
+        `<p>${esc(p.cls)}. ${p.pts ? `${esc(ptsPlace(p))} plass, ${esc(p.pts)} poeng` : p.place ? "0 poeng" : `Datt av etter ${esc(p.laps)} runder`}. NP ${esc(p.np)} W.</p></div></li>`;
+    }
+    const r = i.r, idx = DATA.indexOf(r);
+    return `<li tabindex="0" data-i="${idx}" aria-selected="${selected === idx}"><span class="avatar">${initials(r.name)}</span><div><div class="name"><span>${esc(r.name)}<span class="place">${r.place}</span></span><small>${shortDate(r.date)} ${String(r.year).slice(2)}</small></div>` +
+      `<p>${r.place}. av ${r.field}${r.age_place ? `, ${r.age_place}. i ${esc(r.age_class)}` : ""}. ${r.behind} % bak vinner${r.np ? `, NP ${r.np} W` : ""}.${r.notes ? " " + esc(r.notes) + "." : ""}</p></div></li>`;
+  }).join("");
+}
+const feedEl = document.getElementById("feed");
+feedEl.addEventListener("click", e => {
+  const li = e.target.closest("li[data-i]"); if (!li) return;
+  selected = selected === +li.dataset.i ? null : +li.dataset.i; render(true);
+});
+feedEl.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("li[data-i]")) { e.preventDefault(); e.target.click(); } });
+
+/* Ring gauge: share of the field beaten, dashed like the reference */
+function renderRing(rows) {
+  const r = selected != null ? DATA[selected] : null;
+  const value = r ? 100 - r.top : median(rows.map(x => 100 - x.top));
+  const N = 64, R = 138, C = 160, gap = 0.4;
+  const lit = Math.round((value / 100) * N);
+  const stops = [[91, 141, 239], [143, 92, 246], [255, 95, 126], [47, 181, 201]];
+  const colAt = t => { const s = t * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(s)), f = s - i;
+    return `rgb(${stops[i].map((v, k) => Math.round(v + (stops[i + 1][k] - v) * f)).join(",")})`; };
+  const pt = (a, rr) => `${(C + rr * Math.cos(a)).toFixed(1)} ${(C + rr * Math.sin(a)).toFixed(1)}`;
+  let segs = "";
+  for (let i = 0; i < N; i++) {
+    const a0 = (i / N) * 2 * Math.PI - Math.PI / 2, a1 = ((i + 1 - gap) / N) * 2 * Math.PI - Math.PI / 2, on = i < lit;
+    segs += `<path d="M ${pt(a0, R)} A ${R} ${R} 0 0 1 ${pt(a1, R)}" stroke="${on ? colAt(i / N) : "var(--raised)"}" stroke-width="${on ? 4 : 3}" stroke-linecap="round" fill="none" style="opacity:0;animation:fadein .25s ${i * 10}ms forwards"/>`;
+  }
+  const tick = (value / 100) * 2 * Math.PI - Math.PI / 2;
+  document.getElementById("ring").innerHTML =
+    `<svg viewBox="0 0 320 320" aria-hidden="true"><g class="spin"><circle cx="160" cy="160" r="${R + 16}" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="2 9"/></g>${segs}` +
+    `<circle cx="${(C + R * Math.cos(tick)).toFixed(1)}" cy="${(C + R * Math.sin(tick)).toFixed(1)}" r="6" fill="var(--shell)" stroke="${colAt(value / 100)}" stroke-width="3"/>` +
+    `<path d="M160 44 l-6 10 h12 z" fill="var(--blue)"/></svg>` +
+    `<div class="inner"><small>${r ? `${esc(r.name)} ${r.year}` : season === "all" ? "Typisk ritt, alle sesonger" : `Typisk ritt i ${season}`}</small>` +
+    `<strong>${Math.round(value)} %</strong><span>av feltet slått${r ? ` (${r.place}. av ${r.field})` : ""}</span></div>`;
+}
+
+/* Power equalizer: one bar per race with NP, in date order */
+const LO = 150, HI = 320;
+function renderEq(rows) {
+  const svg = document.getElementById("eq"), withNp = rows.filter(r => r.np);
+  const W = 320, H = 150, n = withNp.length, step = W / Math.max(n, 1), bw = Math.max(3, Math.min(9, step * 0.45));
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("preserveAspectRatio", "none");
+  svg.innerHTML = [200, 250, 300].map(v => { const y = H - ((v - LO) / (HI - LO)) * H; return `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-dasharray="2 4"/>`; }).join("") +
+    withNp.map((r, i) => {
+      const x = step * i + (step - bw) / 2, h = Math.max(4, ((r.np - LO) / (HI - LO)) * H);
+      const on = selected == null || DATA[selected] === r;
+      return `<rect data-i="${DATA.indexOf(r)}" x="${x.toFixed(1)}" y="${(H - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="${(bw / 2).toFixed(1)}" fill="${typeColor(r.type)}" opacity="${on ? 1 : 0.3}" style="animation-delay:${i * 30}ms"/>`;
+    }).join("");
+  document.getElementById("eq-from").textContent = n ? `${shortDate(withNp[0].date)} ${withNp[0].year}` : "";
+  document.getElementById("eq-to").textContent = n ? `${shortDate(withNp[n - 1].date)} ${withNp[n - 1].year}` : "";
+}
+const eqEl = document.getElementById("eq");
+eqEl.addEventListener("pointermove", e => {
+  const b = e.target.closest("rect[data-i]"); if (!b) return hideTip();
+  const r = DATA[+b.dataset.i];
+  showTip(e, `<b>${esc(r.name)} ${r.year}</b><span>NP ${r.np} W, snitt ${r.ap} W<br>${TYPES[r.type]}, ${r.place}. av ${r.field}</span>`);
+});
+eqEl.addEventListener("pointerleave", hideTip);
+eqEl.addEventListener("click", e => { const b = e.target.closest("rect[data-i]"); if (b) { selected = selected === +b.dataset.i ? null : +b.dataset.i; render(true); } });
+
+/* Left column: numbers for the season */
+function renderSide(rows) {
+  const np = Math.round(mean(rows.filter(r => r.np).map(r => r.np)));
+  const pts = POINTS.filter(p => inSeason(p.date)).length;
+  document.getElementById("stat").textContent = `${rows.length} ritt på tid${pts ? ` og ${pts} poengritt` : ""}`;
+  document.getElementById("bar").style.width = `${((np - LO) / (HI - LO)) * 100}%`;
+  document.getElementById("bar-label").textContent = `${np} W`;
+  const best = rows.reduce((a, b) => (b.top < a.top ? b : a));
+  document.getElementById("box").textContent = `Best: ${best.name} ${best.year}, ${best.place}. av ${best.field}`;
+}
+
+/* Cards by race type */
+function renderCards(rows) {
+  const road = rows.filter(r => r.type === "Road"), gravel = rows.filter(r => r.type === "Gravel");
+  const tt = rows.filter(r => r.type === "TT" || r.type === "TTT");
+  const pts = POINTS.filter(p => inSeason(p.date));
+  const list = rs => rs.length ? [...rs].sort((a, b) => a.top - b.top).map(r =>
+    `<li><span class="avatar">${initials(r.name)}</span><span><b>${esc(r.name)}</b><small>${shortDate(r.date)} ${r.year}</small></span><span class="v">${r.place}/${r.field}<br><small>${r.np ? r.np + " W" : "–"}</small></span></li>`).join("")
+    : `<li class="empty">Ingen ritt i perioden</li>`;
+  const card = (rs, cls, ghost, label) => {
+    const best = rs.length ? Math.round(Math.min(...rs.map(r => r.top))) : null;
+    return `<article class="card ${cls}"><header data-ghost="${ghost}"><span>${rs.length} ${label}</span><span>${best != null ? `Topp ${best} %` : "–"}</span></header><ul>${list(rs)}</ul></article>`;
+  };
+  document.getElementById("typer").innerHTML =
+    card(road, "road", "VEI", "landevei") + card(gravel, "gravel", "GRUS", "gravel") + card(tt, "tt", "TEMPO", "tempo") +
+    `<article class="card pts"><header data-ghost="POENG"><span>${pts.length} SSK Cup</span><span>${pts.reduce((s, p) => s + (+p.pts || 0), 0)} poeng</span></header><ul>` +
+    (pts.length ? pts.map(p => `<li><span class="avatar">SC</span><span><b>${esc(p.name)}</b><small>${esc(p.cls)}</small></span><span class="v">${esc(ptsPlace(p))}<br><small>${esc(p.np)} W</small></span></li>`).join("") : `<li class="empty">Ingen poengritt i perioden</li>`) +
+    `</ul></article>`;
+}
+
+/* Tables (always every race; they are the reference) */
 (() => {
   const [y0, y1] = [years[0], years[years.length - 1]];
   const pairs = DATA.filter(r => r.year === y1).map(b => [DATA.find(r => r.year === y0 && r.key === b.key), b]).filter(p => p[0]);
@@ -196,241 +349,25 @@ const chip = t => `<i class="chip" style="background:var(${TYPES[t][1]})"></i>`;
     return `<span class="chg ${good ? "up" : "down"}">${good ? "▲" : "▼"} ${Math.abs(d)}${unit}</span>`;
   };
   let h = `<thead><tr><th>Ritt</th><th>Topp % ${y0}</th><th>${y1}</th><th>Bak vinner ${y0}</th><th>${y1}</th><th>NP ${y0}</th><th>${y1}</th></tr></thead><tbody>`;
-  for (const [a, b] of pairs) h += `<tr><td>${chip(b.type)}${esc(b.name)}</td><td>${Math.round(a.top)} %</td><td>${Math.round(b.top)} %${chg(a.top, b.top, true, " pp")}</td>` +
+  for (const [a, b] of pairs) h += `<tr><td>${esc(b.name)}</td><td>${Math.round(a.top)} %</td><td>${Math.round(b.top)} %${chg(a.top, b.top, true, " pp")}</td>` +
     `<td>${a.behind} %</td><td>${b.behind} %${chg(a.behind, b.behind, true, " pp")}</td><td>${a.np ?? "–"}</td><td>${b.np ?? "–"}${chg(a.np, b.np, false, " W")}</td></tr>`;
   document.getElementById("yoy").innerHTML = h + "</tbody>";
-
-  h = `<thead><tr><th>Runde</th><th>Dato</th><th>Klasse</th><th>Plass</th><th>Poeng</th><th>Vinner</th><th>Runder</th><th>Tid</th><th>Fart</th><th>NP</th></tr></thead><tbody>`;
-  for (const p of POINTS) h += `<tr><td><i class="chip" style="background:var(--points)"></i>${esc(p.name)}</td><td>${fmtDate(p.date)}</td><td>${esc(p.cls)}</td>` +
-    `<td>${p.place ? esc(p.place.replace(" (shared)", " (delt)")) + (p.n ? ` av ${esc(p.n)}` : "") : "Datt av"}</td><td>${esc(p.pts || "–")}</td><td>${esc(p.win || "–")}</td>` +
-    `<td>${esc(p.laps)}</td><td>${esc(p.time)}</td><td>${esc(p.speed)}</td><td>${p.icu ? `<a href="${esc(p.icu)}" target="_blank" rel="noopener">${esc(p.np)}</a>` : esc(p.np)}</td></tr>`;
-  document.getElementById("points").innerHTML = h + "</tbody>";
-
-  h = `<thead><tr><th>Ritt</th><th>Dato</th><th>Plass</th><th>Aldersklasse</th><th>Bak vinner</th><th>Tid</th><th>Km</th><th>Fart</th><th>NP</th><th>Snitt W</th></tr></thead><tbody>`;
+  h = `<thead><tr><th>Ritt</th><th>Dato</th><th>Type</th><th>Plass</th><th>Aldersklasse</th><th>Bak vinner</th><th>Tid</th><th>Km</th><th>Fart</th><th>NP</th><th>Snitt W</th></tr></thead><tbody>`;
   for (const r of [...DATA].reverse()) {
     const name = r.turritt ? `<a href="${esc(r.turritt)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name);
-    h += `<tr><td>${chip(r.type)}${name}${r.notes ? `<span class="small">${esc(r.notes)}</span>` : ""}</td><td>${fmtDate(r.date)}</td><td>${r.place}/${r.field}</td>` +
-      `<td>${r.age_place ? `${r.age_place}/${r.age_n} ${esc(r.age_class)}` : "–"}</td><td>${r.behind} %</td><td>${r.time}</td><td>${r.km ?? "–"}</td>` +
-      `<td>${r.speed ? r.speed.toFixed(1) : "–"}</td><td>${r.np ? (r.icu ? `<a href="${esc(r.icu)}" target="_blank" rel="noopener">${r.np}</a>` : r.np) : "–"}</td><td>${r.ap ?? "–"}</td></tr>`;
+    h += `<tr><td>${name}</td><td>${fmtDate(r.date)}</td><td>${TYPES[r.type]}</td><td>${r.place}/${r.field}</td><td>${r.age_place ? `${r.age_place}/${r.age_n} ${esc(r.age_class)}` : "–"}</td>` +
+      `<td>${r.behind} %</td><td>${r.time}</td><td>${r.km ?? "–"}</td><td>${r.speed ? r.speed.toFixed(1) : "–"}</td>` +
+      `<td>${r.np ? (r.icu ? `<a href="${esc(r.icu)}" target="_blank" rel="noopener">${r.np}</a>` : r.np) : "–"}</td><td>${r.ap ?? "–"}</td></tr>`;
   }
   document.getElementById("all").innerHTML = h + "</tbody>";
 })();
 
-/* ---------- 3D table ---------- */
-(() => {
-  const canvas = document.getElementById("scene"), host = document.getElementById("table"), tip = document.getElementById("tip");
-  const fail = msg => { host.insertAdjacentHTML("afterbegin", `<p class="fallback">${msg} Tabellene under har de samme tallene.</p>`); canvas.hidden = true; };
-  if (!window.THREE) return fail("3D-bordet kunne ikke lastes.");
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { return fail("Nettleseren din viser ikke 3D."); }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(38, 2, 0.1, 200);
-
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x223322, 0.8));
-  const key = new THREE.SpotLight(0xfff1d6, 1.1, 90, Math.PI / 4.5, 0.5, 1);
-  key.position.set(6, 24, 12); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); scene.add(key);
-  const back = new THREE.DirectionalLight(0x88ccff, 0.3); back.position.set(-10, 6, -12); scene.add(back);
-
-  // Felt and brass rail
-  const feltMat = new THREE.MeshStandardMaterial({ roughness: 0.95 });
-  const felt = new THREE.Mesh(new THREE.CylinderGeometry(15, 15, 0.4, 96), feltMat);
-  felt.scale.z = 0.62; felt.position.y = -0.2; felt.receiveShadow = true; scene.add(felt);
-  const railMat = new THREE.MeshStandardMaterial({ roughness: 0.35, metalness: 0.6 });
-  const rail = new THREE.Mesh(new THREE.TorusGeometry(15, 0.45, 20, 120), railMat);
-  rail.rotation.x = Math.PI / 2; rail.scale.y = 0.62; rail.position.y = 0.05; scene.add(rail);
-
-  const textTex = (text, color, w = 512, h = 128, font = "64px Bungee, Impact, sans-serif") => {
-    const c = document.createElement("canvas"); c.width = w; c.height = h;
-    const g = c.getContext("2d"); g.font = font; g.fillStyle = color; g.textAlign = "center"; g.textBaseline = "middle";
-    g.fillText(text, w / 2, h / 2); const t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t;
-  };
-  // Year names printed on the felt beside each row
-  const yearLabels = years.map((y, i) => {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false }));
-    m.rotation.x = -Math.PI / 2; m.position.set(-12.4, 0.01, i === 0 ? -2.6 : 2.6); m.userData.year = y; scene.add(m); return m;
-  });
-  const rod = new THREE.Group(); scene.add(rod);  // measuring rod: what the chip count means
-
-  const CH = 0.16, CR = 0.56;
-  const chipGeo = new THREE.CylinderGeometry(CR, CR, CH, 40);
-  const sideTex = color => {
-    const c = document.createElement("canvas"); c.width = 256; c.height = 32;
-    const g = c.getContext("2d"); g.fillStyle = color; g.fillRect(0, 0, 256, 32);
-    g.fillStyle = css("--chipline"); for (let i = 0; i < 8; i++) g.fillRect(i * 32 + 8, 6, 14, 20);
-    return new THREE.CanvasTexture(c);
-  };
-  const topTex = (color, label) => {
-    const c = document.createElement("canvas"); c.width = c.height = 256;
-    const g = c.getContext("2d"); g.fillStyle = color; g.fillRect(0, 0, 256, 256);
-    g.strokeStyle = css("--chipline"); g.lineWidth = 10; g.setLineDash([22, 18]);
-    g.beginPath(); g.arc(128, 128, 104, 0, Math.PI * 2); g.stroke(); g.setLineDash([]);
-    g.fillStyle = "rgba(255,255,255,.95)"; g.beginPath(); g.arc(128, 128, 72, 0, Math.PI * 2); g.fill();
-    g.fillStyle = "#14201b"; g.font = `700 ${label.length > 5 ? 34 : 44}px "JetBrains Mono", monospace`; g.textAlign = "center"; g.textBaseline = "middle";
-    g.fillText(label, 128, 132); return new THREE.CanvasTexture(c);
-  };
-  let mats = {};
-  const matsFor = type => {
-    const t = typeKey(type);
-    if (!mats[t]) {
-      const col = css(TYPES[t][1]);
-      mats[t] = { col, side: new THREE.MeshStandardMaterial({ map: sideTex(col), roughness: 0.45 }),
-                  plain: new THREE.MeshStandardMaterial({ color: col, roughness: 0.45 }) };
-    }
-    return mats[t];
-  };
-
-  // Wide screens: 2025 in the back row, 2026 in front. Narrow screens: each season
-  // splits into two rows on a narrower table, so the stacks stay big enough to read.
-  let narrow = false;
-  const layout = () => {
-    const sx = narrow ? 0.52 : 1;
-    felt.scale.set(sx, 1, narrow ? 0.6 : 0.62); rail.scale.set(sx, narrow ? 0.6 : 0.62, 1);
-    for (const g of stacks) {
-      const r = g.userData.r, ys = DATA.filter(x => x.year === r.year), k = ys.indexOf(r), n = ys.length;
-      const yi = years.indexOf(r.year);
-      if (!narrow) {
-        g.position.x = n === 1 ? 0 : -9.8 + (19.6 * k) / (n - 1); g.position.z = yi === 0 ? -2.6 : 2.6;
-      } else {
-        const half = Math.ceil(n / 2), row = k < half ? 0 : 1, kk = row ? k - half : k, m = row ? n - half : half;
-        g.position.x = m === 1 ? 0 : -5 + (10 * kk) / (m - 1); g.position.z = [-4.8, -2.4, 1.2, 3.6][yi * 2 + row];
-      }
-    }
-    yearLabels.forEach((l, i) => { l.visible = !narrow; });
-    rod.position.x = narrow ? -5.3 : 0;
-  };
-  const stacks = DATA.map(r => {
-    const g = new THREE.Group();
-    const hitbox = new THREE.Mesh(new THREE.CylinderGeometry(CR * 1.3, CR * 1.3, 1, 12), new THREE.MeshBasicMaterial({ visible: false }));
-    hitbox.userData.stack = g; g.add(hitbox);
-    g.userData = { r, chips: [], sink: 1, hitbox };
-    scene.add(g); return g;
-  });
-
-  let metric = "beat", filter = "all";
-  const buildStack = (g, animate, order) => {
-    const { r } = g.userData, M = METRICS[metric];
-    const v = M.v(r);
-    const count = v == null ? 0 : Math.max(1, Math.round(v / M.per));
-    g.userData.chips.forEach(c => g.remove(c)); g.userData.chips = [];
-    const m = matsFor(r.type);
-    const label = metric === "beat" ? `${r.place}/${r.field}` : metric === "np" ? `${r.np}W` : `${r.speed?.toFixed(1)}`;
-    const top = new THREE.MeshStandardMaterial({ map: topTex(m.col, label), roughness: 0.4 });
-    for (let i = 0; i < count; i++) {
-      const c = new THREE.Mesh(chipGeo, [m.side, i === count - 1 ? top : m.plain, m.plain]);
-      c.castShadow = c.receiveShadow = true;
-      c.rotation.y = Math.random() * Math.PI * 2;
-      const j = (Math.random() - 0.5) * 0.05;
-      c.userData = { restY: CH / 2 + i * CH, startY: 9 + i * 0.2, delay: order * 45 + i * 16 };
-      c.position.set(j, animate && !reduced ? c.userData.startY : c.userData.restY, -j);
-      g.add(c); g.userData.chips.push(c);
-    }
-    g.userData.hitbox.scale.y = Math.max(0.5, count * CH); g.userData.hitbox.position.y = (count * CH) / 2;
-    g.userData.dropStart = performance.now();
-  };
-  const buildRod = () => {
-    rod.clear();
-    const { per, unit, marks } = METRICS[metric];
-    const top = (marks[marks.length - 1] / per) * CH;
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, top, 12), railMat);
-    pole.position.set(12.2, top / 2, 0); rod.add(pole);
-    for (const v of marks) {
-      const y = (v / per) * CH;
-      const tick = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.03, 0.03), railMat); tick.position.set(12.2, y, 0); rod.add(tick);
-      const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: textTex(`${v} ${unit}`, "#f5e7c4", 256, 64, "700 40px Manrope, sans-serif"), depthTest: false }));
-      s.scale.set(2.6, 0.65, 1); s.position.set(13.9, y, 0); rod.add(s);
-    }
-    for (const lbl of yearLabels) { lbl.material.map = textTex(String(lbl.userData.year), "rgba(255,255,255,.8)"); lbl.material.needsUpdate = true; }
-  };
-  const rebuild = animate => { stacks.forEach((g, i) => buildStack(g, animate, i)); buildRod(); };
-  const paint = () => { feltMat.color.set(css("--felt")); railMat.color.set(css("--rim")); mats = {}; };
-
-  // Theme changes repaint everything without the drop animation
-  const onTheme = () => { paint(); rebuild(false); };
-  new MutationObserver(onTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", onTheme);
-
-  const wire = (id, attr, set) => document.getElementById(id).addEventListener("click", e => {
-    const b = e.target.closest("button"); if (!b) return;
-    document.querySelectorAll(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", String(x === b)));
-    set(b.dataset[attr]);
-  });
-  wire("metric", "m", m => { metric = m; rebuild(true); });
-  wire("filter", "f", f => { filter = f; });
-
-  // Orbit by drag (horizontal), wheel to zoom; vertical drags scroll the page on touch
-  let az = -0.3, el = 0.55, dist = 24, drag = null, autoSpin = !reduced, lastInteract = 0, hovered = null;
-  canvas.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY, az, el }; canvas.setPointerCapture(e.pointerId); autoSpin = false; document.getElementById("hint").hidden = true; });
-  const endDrag = () => { drag = null; lastInteract = performance.now(); };
-  canvas.addEventListener("pointerup", endDrag); canvas.addEventListener("pointercancel", endDrag);
-  canvas.addEventListener("pointermove", e => {
-    if (drag) {
-      az = drag.az - (e.clientX - drag.x) * 0.006;
-      if (e.pointerType === "mouse") el = Math.min(1.35, Math.max(0.2, drag.el + (e.clientY - drag.y) * 0.004));
-      tip.hidden = true; return;
-    }
-    hover(e);
-  });
-  canvas.addEventListener("pointerleave", () => { tip.hidden = true; hovered = null; });
-  canvas.addEventListener("wheel", e => { if (!e.ctrlKey && Math.abs(e.deltaY) < 1) return; e.preventDefault(); dist = Math.min(44, Math.max(16, dist + e.deltaY * 0.02)); }, { passive: false });
-  canvas.addEventListener("click", e => hover(e));
-
-  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
-  function hover(e) {
-    const b = canvas.getBoundingClientRect();
-    ptr.set(((e.clientX - b.left) / b.width) * 2 - 1, -((e.clientY - b.top) / b.height) * 2 + 1);
-    ray.setFromCamera(ptr, camera);
-    const hits = ray.intersectObjects(stacks.filter(g => g.userData.sink > 0.5).map(g => g.userData.hitbox));
-    hovered = hits.length ? hits[0].object.userData.stack : null;
-    if (!hovered) { tip.hidden = true; return; }
-    const r = hovered.userData.r;
-    const rows = [["Plass", `${r.place}. av ${r.field}`], ["Slått av feltet", `${Math.round(100 - r.top)} %`],
-      ...(r.age_place ? [["Aldersklasse", `${r.age_place}. av ${r.age_n} ${r.age_class}`]] : []),
-      ["Bak vinner", `${r.behind} %`], ["Tid", r.time],
-      ...(r.np ? [["NP / snitt", `${r.np} / ${r.ap} W`]] : []), ...(r.speed ? [["Fart", `${r.speed.toFixed(1)} km/t`]] : [])];
-    tip.innerHTML = `<b>${esc(r.name)} ${r.year}</b><div class="row"><span>${fmtDate(r.date)}</span><span>${TYPES[r.type][0]}</span></div>` +
-      rows.map(([k, v]) => `<div class="row"><span>${k}</span><span>${esc(v)}</span></div>`).join("");
-    tip.hidden = false;
-    const hb = host.getBoundingClientRect();
-    let x = e.clientX - hb.left + 16, y = e.clientY - hb.top + 16;
-    if (x + tip.offsetWidth > hb.width - 8) x = e.clientX - hb.left - tip.offsetWidth - 16;
-    if (y + tip.offsetHeight > hb.height - 8) y = hb.height - tip.offsetHeight - 8;
-    tip.style.left = `${Math.max(8, x)}px`; tip.style.top = `${Math.max(8, y)}px`;
-  }
-
-  const resize = () => {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    renderer.setSize(w, h, false); camera.aspect = w / h;
-    camera.fov = w < 560 ? 46 : 38; camera.updateProjectionMatrix();
-    const n = camera.aspect < 0.9; if (n !== narrow) { narrow = n; layout(); }
-  };
-  new ResizeObserver(resize).observe(canvas);
-
-  const t0 = performance.now();
-  const frame = now => {
-    if (autoSpin) az = -0.3 + Math.sin((now - t0) / 9000) * 0.3;
-    else if (!drag && lastInteract && now - lastInteract > 15000 && !reduced) autoSpin = true;
-    const d = narrow ? dist * 1.25 : dist;
-    camera.position.set(Math.sin(az) * Math.cos(el) * d, Math.sin(el) * d, Math.cos(az) * Math.cos(el) * d);
-    camera.lookAt(0, 0.6, 0.6);
-    for (const g of stacks) {
-      const { r, chips, dropStart } = g.userData;
-      const want = filter === "all" || typeKey(r.type) === filter ? 1 : 0.15;
-      g.userData.sink += (want - g.userData.sink) * 0.12;
-      g.scale.y = Math.max(0.02, g.userData.sink);
-      g.position.y += ((hovered === g ? 0.3 : 0) - g.position.y) * 0.2;
-      for (const c of chips) {
-        const u = c.userData, t = (now - dropStart - u.delay) / 1000;
-        if (c.position.y <= u.restY || t < 0) continue;
-        c.position.y = Math.max(u.restY, u.startY - 0.5 * 40 * t * t);  // time-based fall, same speed at any frame rate
-      }
-    }
-    renderer.render(scene, camera);
-    requestAnimationFrame(frame);
-  };
-  paint(); layout(); rebuild(true); resize(); requestAnimationFrame(frame);
-  document.fonts?.ready.then(buildRod);
-})();
+// keepEq: selecting a race dims the other bars without replaying the grow animation
+function render(keepEq) {
+  const rows = DATA.filter(r => inSeason(r.date));
+  renderFeed(); renderRing(rows); renderSide(rows); renderCards(rows);
+  if (keepEq) document.querySelectorAll("#eq rect").forEach(b => b.setAttribute("opacity", selected == null || +b.dataset.i === selected ? 1 : 0.3));
+  else renderEq(rows);
+}
+render();
 </script>
