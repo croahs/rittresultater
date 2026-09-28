@@ -1,1 +1,0 @@
-{"root":["./src/App.tsx","./src/clip-module.ts","./src/data.ts","./src/env.d.ts","./src/format.ts","./src/leaflet-global.ts","./src/main.tsx","./src/state.tsx","./src/ui.tsx","./src/pages/Clip.tsx","./src/pages/Development.tsx","./src/pages/Overview.tsx","./src/pages/Races.tsx","./src/pages/Rivals.tsx","./vite.config.ts"],"version":"5.9.3"}
