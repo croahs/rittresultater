@@ -382,9 +382,9 @@ def write_all(evs):
         opps, analysis = build(entry["id"], evs)
         results = [{
             "race": a["race"], "date": iso(a["date"]), "type": a["type"], "class": a["class"],
-            "place": a["class_place"], "field": a["class_n"],
+            "place": a["class_place"] if a["time"] != "DNF" else None, "field": a["class_n"],
             "top_pct": round(100 * a["class_place"] / a["class_n"], 2) if a["class_place"] != "" else None,
-            "behind_pct": a["behind_class_winner_pct"], "time": a["time"], "winner": a["class_winner"],
+            "behind_pct": a["behind_class_winner_pct"] if a["time"] != "DNF" else None, "time": a["time"], "winner": a["class_winner"],
             "overall_place": a["place"], "overall_field": a["field"], "beaten_pct": a["beaten_pct"],
             "distance_km": a["distance_km"], "climb_m_per_km": a["climb_m_per_km"],
             "turritt": urls[a["turritt_race_id"]],
