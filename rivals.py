@@ -348,7 +348,7 @@ def write_all(evs):
     data = os.path.join(HERE, "data")
     os.makedirs(os.path.join(data, "riders"), exist_ok=True)
     dump = lambda path, obj: json.dump(obj, open(os.path.join(data, path), "w", encoding="utf-8"),
-                                       ensure_ascii=False, separators=(",", ":"))
+                                       ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     races_out, seen = [], defaultdict(list)
     for ev in evs:
         sh = ev["sheet"]
