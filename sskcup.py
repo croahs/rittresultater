@@ -121,7 +121,7 @@ def main(dst):
             "Average speed (km/h)": f"{km / secs * 3600:.1f}" if km and secs else "",
             "Average Power": round(avg) if avg else "", "Normalized Power": round(np_) if np_ else "",
             "raceresult": PAGE, "intervals.icu activity": f"https://intervals.icu/activities/{a['id']}",
-            "Note": ("rode Sort klasse (not in its results list); " if sort_class else "")
+            "Note": (f"rode Sort klasse, dropped after {len(laps)} laps (not in its results list); " if sort_class else "")
                     + "power, speed and time over the race laps only",
         })
         out.append(row)
