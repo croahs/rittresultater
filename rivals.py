@@ -45,7 +45,26 @@ def pool(race_id):
     names = dict(turritt.year_list(year))
     name = names.get(race_id, "")
     sibs = [v for v, n in names.items() if name and turritt._base(n) == turritt._base(name)] or [race_id]
-    return [r for v in sibs for r in turritt.results(v) if turritt._counts(r)]
+    rows = [(r, category(names.get(v, ""), r[3])) for v in sibs for r in turritt.results(v) if turritt._counts(r)]
+    if any(c == "CX/Gravel" for _, c in rows):
+        # Gravel events: the main race next to the CX/Gravel class is open to any bike, mostly MTB.
+        rows = [(r, c or "Åpen (mest MTB)") for r, c in rows]
+    return rows
+
+
+def category(race_name, group):
+    """Bike category of a start: "Racer", "Temposykkel", "CX/Gravel", "MTB/Hybrid", or None when the
+    race has no bike classes (seeded waves like "Pulje 2" say nothing about the bike)."""
+    g = f"{race_name} | {group}".lower()
+    if re.search(r"mtb|hybrid", g):
+        return "MTB/Hybrid"
+    if re.search(r"\bcx\b|gravel", g):
+        return "CX/Gravel"
+    if re.search(r"- tempo$", race_name.lower()) or re.search(r"^(tempo|temposykkel)$", group.strip().lower()):
+        return "Temposykkel"
+    if "racer" in g:
+        return "Racer"
+    return None
 
 
 def name(r):
@@ -57,10 +76,12 @@ def build():
     meetings = defaultdict(list)
     analysis = []
     for sheet, race_id in races():
-        rows = pool(race_id)
+        cats = pool(race_id)
+        rows = [r for r, _ in cats]
         me = next((r for r in rows if r[2] == ME), None)
         if not me:
             continue
+        my_cat = next(c for r, c in cats if r is me)
         t = int(me[9])
         finished = [int(r[9]) for r in rows if int(r[9]) < DNF]
         winner = min(finished)
@@ -76,7 +97,7 @@ def build():
             "turritt_race_id": race_id,
         })
         times = sorted(int(r[9]) for r in rows if r[2] != ME)
-        for r in rows:
+        for r, cat in cats:
             if r[2] == ME or not r[2] or r[2] == "0":
                 continue
             o = int(r[9])
@@ -94,6 +115,9 @@ def build():
                 "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"], "result": res,
                 "gap_s": gap, "gap_pct": round(100 * gap / o, 1) if gap is not None else None,
                 "their_time": turritt.hms(o) if o < DNF else "DNF",
+                # Bike category each of you started in; same_class is False only when they differ,
+                # e.g. you on CX/Gravel and them on MTB, or you on a road bike and them on a TT bike.
+                "my_class": my_cat, "their_class": cat, "same_class": cat == my_cat,
                 # Places between you: 1 = finished right ahead of you, -1 = right behind.
                 "places": (1 + sum(o < x < t for x in times)) if o < t < DNF else
                           -(1 + sum(t < x < o for x in times)) if t < o < DNF else None,
@@ -109,6 +133,9 @@ def build():
             "wins": sum(m["result"] == "win" for m in ms),
             "losses": sum(m["result"] == "loss" for m in ms),
             "draws": sum(m["result"] == "draw" for m in ms),
+            "same_class_races": sum(m["same_class"] for m in ms),
+            "same_class_wins": sum(m["same_class"] and m["result"] == "win" for m in ms),
+            "same_class_losses": sum(m["same_class"] and m["result"] == "loss" for m in ms),
             "avg_gap_s": round(statistics.mean(secs)) if secs else None,
             "median_gap_pct": round(statistics.median(gaps), 1) if gaps else None,
             "meetings": ms,
@@ -238,7 +265,8 @@ def search(opps, q):
               f"snitt tidsforskjell {fmt_gap(o['avg_gap_s'])} (minus = du var raskere)")
         for m in o["meetings"]:
             res = {"win": "slo", "loss": "tapte for", "draw": "likt med"}[m["result"]]
-            print(f"  {m['date']}  {m['race']:<32} du {res}  {fmt_gap(m['gap_s'])}  (deres tid {m['their_time']})")
+            other = "" if m["same_class"] else f"  [annen klasse: {m['their_class'] or 'åpen'}, du {m['my_class'] or 'åpen'}]"
+            print(f"  {m['date']}  {m['race']:<32} du {res}  {fmt_gap(m['gap_s'])}  (deres tid {m['their_time']}){other}")
 
 
 def write(opps, analysis):
@@ -246,7 +274,8 @@ def write(opps, analysis):
         json.dump({"rider": ME, "rivals": [o["turritt_id"] for o in rivals(opps)],
                    "insights": insights(opps), "opponents": opps},
                   f, ensure_ascii=False, indent=1)
-    cols = ["turritt_id", "name", "club", "age_class", "races", "wins", "losses", "draws", "avg_gap_s", "median_gap_pct"]
+    cols = ["turritt_id", "name", "club", "age_class", "races", "wins", "losses", "draws",
+            "same_class_races", "same_class_wins", "same_class_losses", "avg_gap_s", "median_gap_pct"]
     with open(os.path.join(HERE, "rivals.csv"), "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, cols + ["rival_rank"], extrasaction="ignore")
         w.writeheader()
