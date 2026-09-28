@@ -118,15 +118,12 @@ def main(src, dst, report):
         acts = load_activities(ACTIVITIES_FILE)
         ACTIVITIES_FILE_USED = True
     for r in rows:
+        gps_speed = False
         if acts:
             a, note = sync.match(r, acts)
             r["Match note"] = "; ".join(x for x in (r.get("Match note"), note) if x)
             if a:
                 r["intervals.icu activity"] = f"https://intervals.icu/activities/{a['id']}"
-                # Speed is official distance / official time; the file's speed only
-                # fills in when there is no official distance.
-                if not r.get("Distance (km)") and a.get("average_speed"):
-                    r["Average speed (km/h)"] = f"{a['average_speed'] * 3.6:.1f}"
                 win = None
                 if icu and not ACTIVITIES_FILE_USED:
                     try:
@@ -134,21 +131,28 @@ def main(src, dst, report):
                     except Exception as e:
                         print(f"streams for {a['id']} skipped: {e}", file=sys.stderr)
                 if win:
-                    avg, np_, (s0, s1) = win
-                    r["Average Power"], r["Normalized Power"] = str(round(avg)), str(round(np_))
+                    avg, np_, (s0, s1), metres = win
+                    if avg is not None:
+                        r["Average Power"], r["Normalized Power"] = str(round(avg)), str(round(np_))
+                    race_s = sync.secs(r["Time"])
+                    if s1 - s0 == race_s and metres:
+                        # GPS distance in the race window / official time: official
+                        # course lengths are rounded, the Turritt time is exact.
+                        r["Average speed (km/h)"] = f"{metres / race_s * 3.6:.1f}"
+                        gps_speed = True
                     whole = a.get("elapsed_time") or 0
-                    if whole - (s1 - s0) > 60:
+                    if avg is not None and whole - (s1 - s0) > 60:
                         r["Match note"] = "; ".join(x for x in (r.get("Match note"),
                             f"power over race only ({s0 // 60}-{s1 // 60} min of {whole // 60} min file)") if x)
-                else:
+                if not win or win[0] is None:
                     if a.get("icu_average_watts"):
                         r["Average Power"] = str(round(a["icu_average_watts"]))
                     if a.get("icu_weighted_avg_watts"):
                         r["Normalized Power"] = str(round(a["icu_weighted_avg_watts"]))
                 if not r.get("Elevation gain (m)") and a.get("total_elevation_gain"):
                     r["Elevation gain (m)"] = str(round(a["total_elevation_gain"]))
-        if r.get("Distance (km)"):  # official speed, see above
-            r["Average speed (km/h)"] = ""
+        if not gps_speed and r.get("Distance (km)"):
+            r["Average speed (km/h)"] = ""  # derive() then uses official distance / time
         if r.get("Elevation gain (m)"):
             sync.derive(r)
         else:  # everything but climbing per km

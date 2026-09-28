@@ -95,13 +95,16 @@ def race_window(streams, race_secs):
     """Average and normalized power over the race itself, without dead time.
 
     The race is taken as the race_secs-long stretch of the file that covers the most
-    distance, so standing at the start, warm-up and cool-down fall outside it.
+    distance, so standing at the start and lying on the ground after the finish
+    before stopping the Garmin fall outside it; stops during the race still count.
     Samples are put on a 1 s grid; pauses in recording count as 0 W.
-    Returns (avg, np, (start_s, end_s)) or None without power data.
+    Returns (avg, np, (start_s, end_s), metres ridden in the window); avg and np
+    are None without power data.
     """
     t, w, d = streams.get("time"), streams.get("watts"), streams.get("distance")
-    if not t or not w or not any(w):
+    if not t or not (w and any(w)) and not d:
         return None
+    w = w or [0.0] * len(t)
     n = t[-1] + 1
     watts, dist = [0.0] * n, [0.0] * n
     for i, s in enumerate(t):
@@ -112,6 +115,8 @@ def race_window(streams, race_secs):
     span = min(race_secs, n)
     start = max(range(n - span + 1), key=lambda s: dist[s + span - 1] - dist[s]) if d else 0
     win = watts[start:start + span]
+    if not any(win):  # no power meter: only the distance is useful
+        return None, None, (start, start + span), dist[start + span - 1] - dist[start]
     avg = sum(win) / len(win)
     roll, acc = [], 0.0
     for i, x in enumerate(win):
@@ -119,7 +124,7 @@ def race_window(streams, race_secs):
         if i >= 29:
             roll.append(acc / 30)
     np_ = (sum(x ** 4 for x in roll) / len(roll)) ** 0.25 if roll else avg
-    return avg, np_, (start, start + span)
+    return avg, np_, (start, start + span), dist[start + span - 1] - dist[start]
 
 
 def match(race, activities):
