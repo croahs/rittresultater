@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sesongklipp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+/* Same tokens as dashboard_template.html, so the clip drops into the dashboard as a tab unchanged. */
+:root {
+  --bg: #f5f6f7; --panel: #ffffff; --fg: #15181b; --fg-2: #50565c; --muted: #868c92;
+  --line: #e2e5e8; --grid: #eceef0;
+  --road: #2a78d6; --gravel: #eb6834; --tempo: #1baf7a;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Barlow", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111315; --panel: #1a1d20; --fg: #f2f3f4; --fg-2: #b9bec3; --muted: #82888e;
+  --line: #2b2f33; --grid: #24282b;
+  --road: #3987e5; --gravel: #d95926; --tempo: #199e70; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111315; --panel: #1a1d20; --fg: #f2f3f4; --fg-2: #b9bec3; --muted: #82888e;
+  --line: #2b2f33; --grid: #24282b;
+  --road: #3987e5; --gravel: #d95926; --tempo: #199e70; color-scheme: dark }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 28px 16px 56px; display: grid; gap: 18px; }
+h1 { font: 700 clamp(2rem, 6vw, 3rem)/1 var(--display); text-transform: uppercase; margin: 0; }
+.sub { color: var(--fg-2); margin: 6px 0 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .88rem; color: var(--fg-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Sesongklipp <span id="year"></span></h1>
+    <p class="sub">Alle årets ritt starter samtidig og går i rittid. Den som er i mål først, hadde kortest tid.</p>
+  </header>
+  <div class="legend"><span><i style="background:var(--road)"></i>Landevei</span><span><i style="background:var(--gravel)"></i>Gravel</span><span><i style="background:var(--tempo)"></i>Tempo og lagtempo</span></div>
+  <div id="clip"></div>
+</div>
+<script>/*SEASON_CLIP_JS*/</script>
+<script>
+const DATA = /*DATA*/null;
+document.getElementById("year").textContent = DATA.year;
+SeasonClip.mount(document.getElementById("clip"), DATA, { seconds: 30 });
+</script>
+</body>
+</html>
