@@ -11,7 +11,7 @@ the event, same course, officials/leisure groups and DNS dropped). Faster time
 wins. A DNF loses to any finisher (the sheet's rule); two DNFs are a draw.
 
   python3 rivals.py                 writes rivals.json, rivals.csv, race_analysis.csv (you)
-                                    and data/ for every rider (races.json, riders/index.json, riders/<id>.json)
+                                    and data/ for every rider (races.json, riders/index.json, riders/shard-NN.json)
   python3 rivals.py søk <navn>      head-to-head against riders matching <navn>
 """
 import bisect
@@ -114,6 +114,7 @@ def build(me=ME, evs=None):
             "class_place": 1 + sum(x < t for x in cls) if t < DNF else "",
             "class_n": len(cls),
             "behind_class_winner_pct": round(100 * (t / min(cls) - 1), 1) if t < DNF else "",
+            "class_winner": turritt.hms(min(cls)),
         })
         lo, hi = bisect.bisect_left(times, t), bisect.bisect_right(times, t)
         met = set()
@@ -337,12 +338,13 @@ def profile(analysis):
     return out
 
 
+SHARDS = 64
 SUMMARY_KEYS = ("turritt_id", "name", "club", "races", "wins", "losses", "draws",
                 "same_class_races", "same_class_wins", "same_class_losses", "avg_gap_s", "median_gap_pct")
 
 
 def write_all(evs):
-    """Static-site data for every rider in the cached lists: races.json, riders/index.json, riders/<id>.json."""
+    """Static-site data for every rider in the cached lists: races.json, riders/index.json, riders/shard-NN.json."""
     data = os.path.join(HERE, "data")
     os.makedirs(os.path.join(data, "riders"), exist_ok=True)
     dump = lambda path, obj: json.dump(obj, open(os.path.join(data, path), "w", encoding="utf-8"),
@@ -370,34 +372,54 @@ def write_all(evs):
     index = []
     for tid, rs in seen.items():
         last = max(rs, key=lambda x: x[0])[1]
-        index.append({"id": tid, "name": name(last), "club": last[7].strip(), "races": len(rs)})
+        index.append({"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
+                      "races": len(rs), "shard": f"{int(tid) % SHARDS:02}"})
     index.sort(key=lambda r: (-r["races"], r["name"]))
-    dump(os.path.join("riders", "index.json"), index)
 
-    written = 0
+    urls = {ev["race_id"]: ev["sheet"]["Turritt"] for ev in evs}
+    shards = defaultdict(dict)
     for entry in index:
-        if entry["races"] < 2:
-            continue
         opps, analysis = build(entry["id"], evs)
-        results = [{**a, "date": iso(a["date"])} for a in analysis]
+        results = [{
+            "race": a["race"], "date": iso(a["date"]), "type": a["type"], "class": a["class"],
+            "place": a["class_place"], "field": a["class_n"],
+            "top_pct": round(100 * a["class_place"] / a["class_n"], 2) if a["class_place"] != "" else None,
+            "behind_pct": a["behind_class_winner_pct"], "time": a["time"], "winner": a["class_winner"],
+            "overall_place": a["place"], "overall_field": a["field"], "beaten_pct": a["beaten_pct"],
+            "distance_km": a["distance_km"], "climb_m_per_km": a["climb_m_per_km"],
+            "turritt": urls[a["turritt_race_id"]],
+        } for a in analysis]
         results.sort(key=lambda a: a["date"])
-        summ = lambda o: {k: o[k] for k in SUMMARY_KEYS}
-        ins = insights(opps)
-        for c in ins["gap_curves"]:
-            for pt in c["points"]:
-                pt["date"] = iso(pt["date"])
-        dump(os.path.join("riders", f"{entry['id']}.json"), {
-            **entry,
-            "results": results,
-            "record": {"opponents": len(opps), "wins": sum(o["wins"] for o in opps),
-                       "losses": sum(o["losses"] for o in opps)},
-            **profile(analysis),
-            "most_met": [summ(o) for o in opps[:10]],
-            "rivals": [summ(o) for o in rivals(opps)[:10]],
-            "insights": ins,
-        })
-        written += 1
-    return len(index), written
+        obj = {k: entry[k] for k in ("id", "name", "club", "age_class")}
+        obj["results"] = results
+        if entry["races"] < 2:
+            obj.update(opponents=[], rivals=[], insights={})
+        else:
+            ins = insights(opps)
+            del ins["gap_curves"]  # the app draws them from opponents
+            ranked = [o["turritt_id"] for o in rivals(opps)]
+            named = set(ranked[:20]) | {x["turritt_id"] for v in ins.values() if isinstance(v, list)
+                                         for x in v if "turritt_id" in x}
+            named |= {x["turritt_id"] for v in ins["rivals_by_type"].values() for x in v}
+            obj["opponents"] = [
+                [o["turritt_id"], o["name"], o["club"], o["wins"], o["losses"], o["median_gap_pct"],
+                 [[m["race"], iso(m["date"]), m["type"], m["result"][0], m["gap_s"], m["gap_pct"], m["places"],
+                   m["my_class"], m["their_class"], int(m["same_class"])] for m in o["meetings"]]]
+                for o in opps if o["races"] >= MIN_RACES or o["turritt_id"] in named]
+            obj["rivals"] = ranked
+            obj["insights"] = ins
+            obj["record"] = {"opponents": len(opps), "wins": sum(o["wins"] for o in opps),
+                             "losses": sum(o["losses"] for o in opps)}
+            obj.update(profile(analysis))
+        shards[entry["shard"]][entry["id"]] = obj
+
+    riders_dir = os.path.join(data, "riders")
+    for f in os.listdir(riders_dir):  # clear files from earlier layouts
+        os.remove(os.path.join(riders_dir, f))
+    dump(os.path.join("riders", "index.json"), index)
+    for k, v in shards.items():
+        dump(os.path.join("riders", f"shard-{k}.json"), v)
+    return len(index), sum(e["races"] >= 2 for e in index)
 
 
 def summary(opps, analysis):
