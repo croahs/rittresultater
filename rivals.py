@@ -1,0 +1,322 @@
+"""Rivals: head-to-head against every rider you have met, from cached Turritt lists.
+
+No network: every result list is already in cache/turritt.json (the races in
+race_results_auto.csv plus their sibling races). Riders are matched on
+TurrittID, which is stable across years. EQ Timing-only races (Repsol-mila,
+Atlantic Gravel) are left out for now: their cached lists have rider ids but no
+names. SSK Cup is points only and is left out too.
+
+Who counts, per race: the "overall" pool from turritt.py (all sibling races of
+the event, same course, officials/leisure groups and DNS dropped). Faster time
+wins. A DNF loses to any finisher (the sheet's rule); two DNFs are a draw.
+
+  python3 rivals.py                 writes rivals.json, rivals.csv, race_analysis.csv
+  python3 rivals.py søk <navn>      head-to-head against riders matching <navn>
+"""
+import csv
+import json
+import os
+import re
+import statistics
+import sys
+from collections import defaultdict
+
+import turritt
+
+ME = "171101"
+HERE = os.path.dirname(os.path.abspath(__file__))
+SHEET = os.path.join(HERE, "race_results_auto.csv")
+MIN_RACES = 3  # to be called a rival
+DNF = 359000
+
+
+def races():
+    """[(race dict from the sheet, turritt race id)] for sheet rows that link to Turritt."""
+    with open(SHEET, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            m = re.search(r"Turritt=(\d+)", r.get("Turritt", ""))
+            if m:
+                yield r, m.group(1)
+
+
+def pool(race_id):
+    """Every counted row on the same course: the race plus its sibling races."""
+    year = turritt.race_info(race_id)[0].year
+    names = dict(turritt.year_list(year))
+    name = names.get(race_id, "")
+    sibs = [v for v, n in names.items() if name and turritt._base(n) == turritt._base(name)] or [race_id]
+    return [r for v in sibs for r in turritt.results(v) if turritt._counts(r)]
+
+
+def name(r):
+    return f"{r[5]} {r[6]}".strip()
+
+
+def build():
+    opp = {}  # turritt id -> summary
+    meetings = defaultdict(list)
+    analysis = []
+    for sheet, race_id in races():
+        rows = pool(race_id)
+        me = next((r for r in rows if r[2] == ME), None)
+        if not me:
+            continue
+        t = int(me[9])
+        finished = [int(r[9]) for r in rows if int(r[9]) < DNF]
+        winner = min(finished)
+        beaten = sum(int(r[9]) > t for r in rows if r[2] != ME)
+        dist = float(sheet["Distance (km)"] or 0)
+        elev = float(sheet["Elevation gain (m)"] or 0)
+        analysis.append({
+            "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"],
+            "field": len(rows), "beaten": beaten,
+            "beaten_pct": round(100 * beaten / (len(rows) - 1), 1),
+            "behind_winner_pct": round(100 * (t / winner - 1), 1) if t < DNF else "",
+            "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else "",
+            "turritt_race_id": race_id,
+        })
+        times = sorted(int(r[9]) for r in rows if r[2] != ME)
+        for r in rows:
+            if r[2] == ME or not r[2] or r[2] == "0":
+                continue
+            o = int(r[9])
+            if t >= DNF and o >= DNF:
+                res, gap = "draw", None
+            elif o >= DNF:
+                res, gap = "win", None
+            elif t >= DNF:
+                res, gap = "loss", None
+            else:
+                res = "win" if t < o else "loss" if t > o else "draw"
+                gap = t - o  # seconds; negative = you were faster
+            opp[r[2]] = {"turritt_id": r[2], "name": name(r), "club": r[7].strip(), "age_class": r[8]}
+            meetings[r[2]].append({
+                "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"], "result": res,
+                "gap_s": gap, "gap_pct": round(100 * gap / o, 1) if gap is not None else None,
+                "their_time": turritt.hms(o) if o < DNF else "DNF",
+                # Places between you: 1 = finished right ahead of you, -1 = right behind.
+                "places": (1 + sum(o < x < t for x in times)) if o < t < DNF else
+                          -(1 + sum(t < x < o for x in times)) if t < o < DNF else None,
+            })
+
+    out = []
+    for tid, ms in meetings.items():
+        gaps = [m["gap_pct"] for m in ms if m["gap_pct"] is not None]
+        secs = [m["gap_s"] for m in ms if m["gap_s"] is not None]
+        o = opp[tid]
+        o.update({
+            "races": len(ms),
+            "wins": sum(m["result"] == "win" for m in ms),
+            "losses": sum(m["result"] == "loss" for m in ms),
+            "draws": sum(m["result"] == "draw" for m in ms),
+            "avg_gap_s": round(statistics.mean(secs)) if secs else None,
+            "median_gap_pct": round(statistics.median(gaps), 1) if gaps else None,
+            "meetings": ms,
+        })
+        out.append(o)
+    out.sort(key=lambda o: (-o["races"], abs(o["median_gap_pct"] or 99)))
+    return out, analysis
+
+
+def rivals(opps):
+    """Met at least MIN_RACES times, ranked by how close you usually finish."""
+    rs = [o for o in opps if o["races"] >= MIN_RACES and o["median_gap_pct"] is not None]
+    # Closeness: median gap, plus how split the record is (5-5 is a rivalry, 10-0 is not).
+    score = lambda o: abs(o["median_gap_pct"]) + 5 * abs(o["wins"] - o["losses"]) / o["races"]
+    return sorted(rs, key=score)
+
+
+def _record(ms):
+    w = sum(m["result"] == "win" for m in ms)
+    l = sum(m["result"] == "loss" for m in ms)
+    gaps = [m["gap_pct"] for m in ms if m["gap_pct"] is not None]
+    return w, l, (statistics.median(gaps) if gaps else None)
+
+
+def _who(o, **extra):
+    return {"turritt_id": o["turritt_id"], "name": o["name"], "club": o["club"], **extra}
+
+
+def club_key(club):
+    """Same club, different spelling: "Bogafjell SK" = "Bogafjell Sykleklubb" = "bogafjell sykleklubb"."""
+    c = re.sub(r"\b(sykleklubb|sykkelklubb|sykkelklub|sykleklub)\b", "sk", club.lower())
+    return re.sub(r"\s+", " ", c).strip() or "(ingen klubb)"
+
+
+def insights(opps):
+    """The extra views: rivals per race type, gap over time, nemesis/victim, clubs, who is right ahead."""
+    out = {}
+
+    # Rivals per race type: the same closeness score, counting only that type's races.
+    out["rivals_by_type"] = {}
+    for typ in ("Road", "TT", "Gravel"):
+        rows = []
+        for o in opps:
+            ms = [m for m in o["meetings"] if m["type"] == typ]
+            w, l, med = _record(ms)
+            if len(ms) >= MIN_RACES and med is not None:
+                rows.append((abs(med) + 5 * abs(w - l) / len(ms),
+                             _who(o, races=len(ms), wins=w, losses=l, median_gap_pct=round(med, 1))))
+        out["rivals_by_type"][typ] = [r for _, r in sorted(rows, key=lambda x: x[0])[:10]]
+
+    # Gap over time against the closest rivals, ready to plot (negative = you were faster).
+    out["gap_curves"] = [_who(o, points=[{"date": m["date"], "race": m["race"], "type": m["type"],
+                                            "gap_s": m["gap_s"], "gap_pct": m["gap_pct"]}
+                                           for m in o["meetings"] if m["gap_s"] is not None])
+                         for o in rivals(opps)[:10]]
+
+    # Nemesis and victim: among riders at your level (median gap within 5 %, 3+ races).
+    level = [o for o in opps if o["races"] >= MIN_RACES and o["median_gap_pct"] is not None
+             and abs(o["median_gap_pct"]) <= 5]
+    pick = lambda key: [_who(o, races=o["races"], wins=o["wins"], losses=o["losses"])
+                        for o in sorted(level, key=key)[:5]]
+    out["nemesis"] = pick(lambda o: (-o["losses"] / o["races"], -o["losses"]))
+    out["victims"] = pick(lambda o: (-o["wins"] / o["races"], -o["wins"]))
+
+    # Specialists: always beat you in one type, always lose to you in another (2+ races each).
+    out["specialists"] = []
+    for o in opps:
+        by = defaultdict(list)
+        for m in o["meetings"]:
+            by[m["type"]].append(m["result"])
+        strong = [t for t, rs in by.items() if len(rs) >= 2 and all(r == "loss" for r in rs)]
+        weak = [t for t, rs in by.items() if len(rs) >= 2 and all(r == "win" for r in rs)]
+        if strong and weak:
+            out["specialists"].append(_who(o, stronger_than_you_in=strong, weaker_than_you_in=weak))
+
+    # Overtaken: beat you every time last season, you beat them every time this season.
+    out["overtaken"] = []
+    for o in opps:
+        by = defaultdict(list)
+        for m in o["meetings"]:
+            by["20" + m["date"][-2:]].append(m["result"])
+        years = sorted(by)
+        for a, b in zip(years, years[1:]):
+            if len(by[a]) >= 2 and len(by[b]) >= 2 and set(by[a]) == {"loss"} and set(by[b]) == {"win"}:
+                out["overtaken"].append(_who(o, lost_in=a, beat_in=b, races=len(by[a]) + len(by[b])))
+
+    # Clubs: how often you beat riders from each club (20+ head-to-heads).
+    clubs = defaultdict(lambda: {"riders": set(), "wins": 0, "losses": 0, "names": defaultdict(int)})
+    for o in opps:
+        c = clubs[club_key(o["club"])]
+        c["names"][o["club"] or "(ingen klubb)"] += 1
+        c["riders"].add(o["turritt_id"])
+        c["wins"] += o["wins"]
+        c["losses"] += o["losses"]
+    out["clubs"] = sorted(({"club": max(v["names"], key=v["names"].get), "riders": len(v["riders"]), "wins": v["wins"], "losses": v["losses"],
+                            "win_pct": round(100 * v["wins"] / (v["wins"] + v["losses"]), 1)}
+                           for k, v in clubs.items() if v["wins"] + v["losses"] >= 20),
+                          key=lambda c: -c["win_pct"])
+
+    # Right ahead: riders who most often finish 1-3 places in front of you. The next ones to catch.
+    ahead = []
+    for o in opps:
+        n = sum(1 <= (m["places"] or 0) <= 3 for m in o["meetings"])
+        behind = sum(-3 <= (m["places"] or 0) <= -1 for m in o["meetings"])
+        if n + behind >= 2:
+            ahead.append(_who(o, right_ahead=n, right_behind=behind, races=o["races"]))
+    out["right_ahead"] = sorted(ahead, key=lambda a: (-a["right_ahead"], a["right_behind"]))[:10]
+    out["right_behind"] = sorted(ahead, key=lambda a: (-a["right_behind"], a["right_ahead"]))[:10]
+    return out
+
+
+def fmt_gap(s):
+    if s is None:
+        return "–"
+    sign = "+" if s > 0 else "-"
+    return f"{sign}{turritt.hms(abs(s)).lstrip('0:') or '0'}"
+
+
+def search(opps, q):
+    q = q.lower()
+    hits = [o for o in opps if q in o["name"].lower()]
+    if not hits:
+        print(f"Ingen motstandere som matcher «{q}».")
+    for o in hits[:10]:
+        print(f"\n{o['name']} ({o['club']}, {o['age_class']}), TurrittID {o['turritt_id']}")
+        print(f"  {o['races']} ritt sammen: {o['wins']} seire, {o['losses']} tap, {o['draws']} likt; "
+              f"snitt tidsforskjell {fmt_gap(o['avg_gap_s'])} (minus = du var raskere)")
+        for m in o["meetings"]:
+            res = {"win": "slo", "loss": "tapte for", "draw": "likt med"}[m["result"]]
+            print(f"  {m['date']}  {m['race']:<32} du {res}  {fmt_gap(m['gap_s'])}  (deres tid {m['their_time']})")
+
+
+def write(opps, analysis):
+    with open(os.path.join(HERE, "rivals.json"), "w", encoding="utf-8") as f:
+        json.dump({"rider": ME, "rivals": [o["turritt_id"] for o in rivals(opps)],
+                   "insights": insights(opps), "opponents": opps},
+                  f, ensure_ascii=False, indent=1)
+    cols = ["turritt_id", "name", "club", "age_class", "races", "wins", "losses", "draws", "avg_gap_s", "median_gap_pct"]
+    with open(os.path.join(HERE, "rivals.csv"), "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, cols + ["rival_rank"], extrasaction="ignore")
+        w.writeheader()
+        rank = {o["turritt_id"]: i + 1 for i, o in enumerate(rivals(opps))}
+        for o in opps:
+            w.writerow({**o, "rival_rank": rank.get(o["turritt_id"], "")})
+    with open(os.path.join(HERE, "race_analysis.csv"), "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, list(analysis[0]))
+        w.writeheader()
+        w.writerows(analysis)
+
+
+def summary(opps, analysis):
+    print(f"{len(opps)} motstandere i {len(analysis)} Turritt-ritt.\n")
+    print("Mest møtt:")
+    for o in opps[:10]:
+        print(f"  {o['races']:>2} ritt  {o['wins']}-{o['losses']}  {o['name']} ({o['club']})")
+    print(f"\nRivaler (minst {MIN_RACES} ritt, jevnest først):")
+    for o in rivals(opps)[:15]:
+        print(f"  {o['races']:>2} ritt  {o['wins']}-{o['losses']}  median {o['median_gap_pct']:+.1f} %  {o['name']} ({o['club']})")
+    print("\nAndel av feltet du slo, per type:")
+    by = defaultdict(list)
+    for a in analysis:
+        by[a["type"]].append(a["beaten_pct"])
+    for k, v in sorted(by.items(), key=lambda kv: -statistics.mean(kv[1])):
+        print(f"  {k:<7} {statistics.mean(v):5.1f} %  ({len(v)} ritt)")
+    by = defaultdict(list)
+    for a in analysis:
+        by["20" + a["date"][-2:]].append(a["beaten_pct"])
+    print("\nAndel av feltet du slo, per år:")
+    for k, v in sorted(by.items()):
+        print(f"  {k}    {statistics.mean(v):5.1f} %  ({len(v)} ritt)")
+    y = [a["beaten_pct"] for a in analysis]
+    print("\nSammenheng med andel slått (korrelasjon, -1 til 1):")
+    for label, key in (("feltstørrelse", "field"), ("stigning per km", "climb_m_per_km"), ("distanse", "distance_km")):
+        print(f"  {label:<16} {statistics.correlation([float(a[key]) for a in analysis], y):+.2f}")
+
+    ins = insights(opps)
+    for typ, rs in ins["rivals_by_type"].items():
+        print(f"\nRivaler, {typ}:")
+        for o in rs[:5]:
+            print(f"  {o['races']:>2} ritt  {o['wins']}-{o['losses']}  median {o['median_gap_pct']:+.1f} %  {o['name']}")
+    print("\nTidsforskjell over tid (minus = du var raskere):")
+    for c in ins["gap_curves"][:5]:
+        print(f"  {c['name']:<28} " + "  ".join(f"{p['date'][:5]}.{p['date'][-2:]} {fmt_gap(p['gap_s'])}" for p in c["points"]))
+    for key, label in (("nemesis", "Nemesis (jevnbyrdige du taper oftest mot)"), ("victims", "Offer (jevnbyrdige du slår oftest)")):
+        print(f"\n{label}:")
+        for o in ins[key]:
+            print(f"  {o['wins']}-{o['losses']}  {o['name']} ({o['club']})")
+    print("\nSpesialister:")
+    for o in ins["specialists"]:
+        print(f"  {o['name']}: sterkere i {', '.join(o['stronger_than_you_in'])}, svakere i {', '.join(o['weaker_than_you_in'])}")
+    print("\nForbikjørt:")
+    for o in ins["overtaken"]:
+        print(f"  {o['name']}: tapte for i {o['lost_in']}, slo i {o['beat_in']}")
+    print("\nKlubber (seiersprosent, minst 20 dueller):")
+    for c in ins["clubs"]:
+        print(f"  {c['win_pct']:5.1f} %  {c['wins']:>3}-{c['losses']:<3} {c['riders']:>3} ryttere  {c['club']}")
+    print("\nOftest rett foran deg (1-3 plasser):")
+    for o in ins["right_ahead"][:8]:
+        print(f"  {o['right_ahead']} ganger foran, {o['right_behind']} bak  {o['name']} ({o['club']})")
+    print("\nOftest rett bak deg:")
+    for o in ins["right_behind"][:5]:
+        print(f"  {o['right_behind']} ganger bak, {o['right_ahead']} foran  {o['name']} ({o['club']})")
+
+
+if __name__ == "__main__":
+    opps, analysis = build()
+    if len(sys.argv) > 2 and sys.argv[1] in ("søk", "sok", "search"):
+        search(opps, " ".join(sys.argv[2:]))
+    else:
+        write(opps, analysis)
+        summary(opps, analysis)
