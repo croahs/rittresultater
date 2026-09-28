@@ -17,3 +17,4 @@ python3 build.py race_results_original.csv race_results_auto.csv turritt_vs_shee
 - `race_results_auto.csv` is the rebuilt sheet; `turritt_vs_sheet.md` lists where Turritt disagrees with it.
 - `cache/turritt.json` caches every Turritt page fetched. Published results never change, so each race is fetched once and never again. Keep this file committed.
 - Without `INTERVALS_API_KEY`, placings are still written; power and speed are left blank.
+- Season clip: `python3 season_clip.py race_results_auto.csv season_clip.json [year]` writes every race of the year as a GPS track cut to the race window (from the gun to the official finish time), and `... season_clip.html` writes a standalone page. `season_clip.js` (`SeasonClip.mount(el, data)`, needs Leaflet) plays them all at once on one race clock, so the dashboard can show it as a tab.
