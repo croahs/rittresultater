@@ -70,7 +70,7 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
                   <span className="avatar">{initials(o.name)}</span>
                   <span style={{ minWidth: 0 }}><b>{o.name}</b><small>{o.club || "Uten klubb"}</small></span>
                   <span className="rec"><span className="w">{r.w}</span>–<span className="l">{r.l}</span>
-                    <span className="mini" aria-hidden="true">{ms.map((m, i) => <i key={i} className={m.res === "w" ? "" : m.res} />)}</span></span>
+                    <span className="mini" aria-hidden="true">{ms.slice(-8).map((m, i) => <i key={i} className={m.res === "w" ? "" : m.res} />)}</span></span>
                 </button></li>
               );
             })}
@@ -96,7 +96,7 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
             {(ins.specialists || []).map((s) => <li key={`s${s.turritt_id}`}><button type="button" onClick={() => open(s.turritt_id)}>
               <b>{s.name}</b> slår {you} på {listNo(s.stronger_than_you_in.map((t) => TYPE_LC[t]))}, men taper på {listNo(s.weaker_than_you_in.map((t) => TYPE_LC[t]))}.</button></li>)}
             {(ins.overtaken || []).map((s) => <li key={`o${s.turritt_id}`}><button type="button" onClick={() => open(s.turritt_id)}>
-              <b>{s.name}</b> slo {you} hver gang i {s.lost_in}. I {s.beat_in} slo {isMe ? "du" : firstName(a.name)} hen hver gang.</button></li>)}
+              <b>{s.name}</b> slo {you} hver gang i {s.lost_in}. I {s.beat_in} slo {isMe ? "du" : firstName(a.name)} {firstName(s.name)} hver gang.</button></li>)}
             {!(ins.specialists?.length || ins.overtaken?.length) && <li className="note">Ingen ennå. Listen vokser med hver sesong.</li>}
           </ul>
         </section>
@@ -106,10 +106,12 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
 }
 
 function Duel({ a, o, ms: all, type, isMe, sameOnly, inIndex, onRider }: { a: Athlete; o: Opponent; ms: Meeting[]; type: RaceType | null; isMe: boolean; sameOnly: boolean; inIndex: boolean; onRider: (id: string) => void }) {
-  const ms = all;
-  const r = record(ms);
+  // Same race type as the list the rival was picked from, so the list and the duel agree.
+  const ms = type ? all.filter((m) => m.type === type || (type === "TT" && m.type === "TTT")) : all;
+  const r = record(ms), rAll = record(all);
   if (!o.ms.length) return <Empty title={`${firstName(a.name)} og ${o.name} har ikke kjørt samme ritt`}>Ingen av resultatlistene vi har hentet har med begge to.</Empty>;
-  if (!ms.length) return <Empty title={`Ingen møter med ${o.name} i samme klasse`}>Slå av «Bare samme klasse» for å se alle møtene.</Empty>;
+  if (!all.length) return <Empty title={`Ingen møter med ${o.name} i samme klasse`}>Slå av «Bare samme klasse» for å se alle møtene.</Empty>;
+  if (!ms.length) return <Empty title={`Ingen ${TYPE_LC[type!]}ritt mot ${o.name}`}>Velg «Jevneste» for å se alle rittypene.</Empty>;
   const same = record(o.ms.filter((m) => m.same));
   const gaps = ms.filter((m) => m.gp != null).map((m) => m.gp!);
   const med = gaps.length ? median(gaps) : null;
@@ -124,15 +126,16 @@ function Duel({ a, o, ms: all, type, isMe, sameOnly, inIndex, onRider }: { a: At
         <div className="score" aria-label={`${r.w} seire og ${r.l} tap`}><span className="w">{r.w}</span><span className="sep">–</span><span className="l">{r.l}</span></div>
         <div><b>{o.name}</b><small>{o.club || "Uten klubb"}</small></div>
       </div>
-      <div className="strip" aria-hidden="true">{ms.map((m, i) => <i key={i} className={`${m.res === "w" ? "" : m.res} ${type && m.type !== type ? "o" : ""}`} />)}</div>
+      <div className="strip" aria-hidden="true">{ms.map((m, i) => <i key={i} className={m.res === "w" ? "" : m.res} />)}</div>
       <div className="kv">
         <div><small>Møtt i</small><b>{ms.length} ritt</b></div>
         <div><small>Typisk tidsforskjell</small><b>{med == null ? "–" : med === 0 ? "Helt likt" : med < 0 ? `${me} ${Math.abs(med).toFixed(1).replace(".", ",")} % foran` : `${them} ${med.toFixed(1).replace(".", ",")} % foran`}</b></div>
+        {type && rAll.w + rAll.l !== r.w + r.l && <div><small>Alle rittyper</small><b>{rAll.w}–{rAll.l}</b></div>}
         {!sameOnly && same.w + same.l > 0 && same.w + same.l !== r.w + r.l && <div><small>I samme klasse</small><b>{same.w}–{same.l}</b></div>}
         <div><small>Siste møte</small><b>{last.race} {last.date.slice(0, 4)}, {resTxt(last)}</b></div>
       </div>
       <GapChart ms={ms} type={type} them={them} me={me} />
-      {inIndex && <div><button type="button" className="btn" onClick={() => onRider(o.id)}>Åpne {them} sin side</button></div>}
+      {inIndex && <div><button type="button" className="btn" onClick={() => onRider(o.id)}>Se siden til {them}</button></div>}
     </div>
   );
 }
@@ -159,7 +162,9 @@ function GapChart({ ms, type, them, me }: { ms: Meeting[]; type: RaceType | null
     <div className="chart" ref={ref}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Tidsforskjell mot ${them} per ritt`}>
         {tv.map((v) => <g key={v}><line x1={L} x2={W - R} y1={y(v)} y2={y(v)} stroke={v ? "var(--line)" : "var(--ink-2)"} strokeDasharray={v ? "2 4" : undefined} strokeOpacity={v ? 1 : 0.6} />
-          <text x={L - 8} y={y(v) + 4} textAnchor="end" fontSize="11" fill="var(--muted)">{v > 0 ? "+" : v < 0 ? "−" : ""}{Math.abs(v)} %</text></g>)}
+          <text x={L - 8} y={y(v) + 4} textAnchor="end" fontSize="11" fill="var(--muted)">{Math.abs(v)} %</text></g>)}
+        <text x={L + 6} y={T + 11} fontSize="11" fontWeight="700" fill="var(--win)">▲ {me} raskere</text>
+        <text x={L + 6} y={H - B - 6} fontSize="11" fontWeight="700" fill="var(--loss)">▼ {them} raskere</text>
         {ms.map((m, i) => {
           const cx = L + slot * (i + 0.5), dim = type && m.type !== type && !(type === "TT" && m.type === "TTT") ? 0.3 : 1;
           const tipC = <><b>{m.race} {m.date.slice(0, 4)}</b><span>{TYPE_LABEL[m.type]}, {dateLong(m.date)}<br />
@@ -203,7 +208,14 @@ function HlCard({ title, sub, c, rows, val, onPick }: { title: string; sub: stri
 }
 
 function Clubs({ clubs }: { clubs: NonNullable<Athlete["insights"]["clubs"]> }) {
-  const top = [...clubs].filter((c) => c.wins + c.losses >= 10).sort((x, y) => y.wins + y.losses - (x.wins + x.losses)).slice(0, 12);
+  // Result lists spell clubs differently ("Sandnes" and "Sandnes Sykleklubb"); count them as one.
+  const merged = new Map<string, { club: string; riders: number; wins: number; losses: number; win_pct: number }>();
+  for (const c of clubs) {
+    const k = fold(c.club).replace(/[.,]/g, "").replace(/\s+(sykkelklubb|sykleklubb|sykkelklubben|sk|ck|cycling club|il|if)$/, "").trim();
+    const m = merged.get(k);
+    merged.set(k, m ? { ...m, club: c.club.length > m.club.length ? c.club : m.club, riders: m.riders + c.riders, wins: m.wins + c.wins, losses: m.losses + c.losses } : { ...c });
+  }
+  const top = [...merged.values()].filter((c) => c.wins + c.losses >= 10).sort((x, y) => y.wins + y.losses - (x.wins + x.losses)).slice(0, 12);
   const max = Math.max(1, ...top.flatMap((c) => [c.wins, c.losses]));
   return (
     <section className="card card-pad section" style={{ alignContent: "start" }}>
@@ -226,6 +238,7 @@ const Row = ({ c, max }: { c: { club: string; riders: number; wins: number; loss
 function OppSearch({ O, index, self, onPick }: { O: Map<string, Opponent>; index: IndexRider[]; self: string; onPick: (id: string) => void }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [act, setAct] = useState(0);
   const keyed = useMemo(() => index.filter((r) => r.id !== self).map((r) => [fold(`${r.name} ${r.club}`), r] as const), [index, self]);
   const hits = useMemo(() => {
     const s = fold(q.trim());
@@ -237,11 +250,16 @@ function OppSearch({ O, index, self, onPick }: { O: Map<string, Opponent>; index
   return (
     <div className="rsearch picker" style={{ marginLeft: 0 }}>
       <input type="search" id="opp-search" placeholder="Sammenlign med en rytter" aria-label="Sammenlign med en rytter" value={q} autoComplete="off"
-        onChange={(e) => { setQ(e.target.value); setOpen(true); }} onBlur={() => setTimeout(() => setOpen(false), 150)}
-        onKeyDown={(e) => { if (e.key === "Enter" && hits[0]) pick(hits[0]); if (e.key === "Escape") setOpen(false); }} style={{ paddingLeft: 12 }} />
-      {open && q.trim().length >= 2 && <ul className="hits" role="listbox" aria-label="Ryttere">
+        onChange={(e) => { setQ(e.target.value); setOpen(true); setAct(0); }}
+        role="combobox" aria-expanded={open && hits.length > 0} aria-controls="opp-hits" aria-activedescendant={open && hits[act] ? `opp-${hits[act].id}` : undefined} onBlur={() => setTimeout(() => setOpen(false), 150)}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); setOpen(true); setAct((i) => (i + (e.key === "ArrowDown" ? 1 : hits.length - 1)) % Math.max(hits.length, 1)); }
+          if (e.key === "Enter" && hits[act]) pick(hits[act]);
+          if (e.key === "Escape") setOpen(false);
+        }} style={{ paddingLeft: 12 }} />
+      {open && q.trim().length >= 2 && <ul className="hits" role="listbox" id="opp-hits" aria-label="Ryttere">
         {hits.length === 0 && <li className="none">Ingen treff</li>}
-        {hits.map((r) => { const o = O.get(r.id); return <li key={r.id} role="option" aria-selected={false} onMouseDown={(e) => { e.preventDefault(); pick(r); }}>
+        {hits.map((r, i) => { const o = O.get(r.id); return <li key={r.id} id={`opp-${r.id}`} role="option" aria-selected={i === act} onMouseDown={(e) => { e.preventDefault(); pick(r); }}>
           <span className="who"><b>{r.name}</b><small>{r.club || "Uten klubb"}</small></span><small className="tnum">{o ? `${o.w}–${o.l}` : `${r.races} ritt`}</small></li>; })}
       </ul>}
     </div>

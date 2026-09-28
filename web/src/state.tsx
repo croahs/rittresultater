@@ -17,3 +17,11 @@ export function SelProvider({ a, children }: { a: Athlete; children: ReactNode }
   }), [season, sel, rows]);
   return <Ctx.Provider value={v}>{children}</Ctx.Provider>;
 }
+
+/** Shows which race is selected, with a way back to all races. Renders nothing when none is. */
+export function SelChip() {
+  const { sel, setSel, rows } = useSel();
+  const r = rows.find((x) => raceKey(x) === sel);
+  if (!r) return null;
+  return <div className="sel-chip" role="status"><span>Valgt: {r.race} {r.year}</span><button type="button" onClick={() => setSel(null)}>Fjern valg ✕</button></div>;
+}

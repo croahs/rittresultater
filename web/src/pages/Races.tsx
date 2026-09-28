@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import type { Athlete, RaceType, Result } from "../data";
-import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, pct } from "../format";
-import { raceKey, useSel } from "../state";
+import { flags, type Athlete, type RaceType, type Result } from "../data";
+import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
+import { SelChip, raceKey, useSel } from "../state";
 
 type SortKey = "date" | "beaten" | "behind" | "np";
 
@@ -24,7 +24,7 @@ export default function Races({ a }: { a: Athlete }) {
   );
   return (
     <>
-      <div><h1 className="h-display">Alle ritt</h1><p className="lead">Hele resultatlisten. Trykk på en kolonne for å sortere, og på et ritt for å velge det.</p></div>
+      <div><h1 className="h-display">Alle ritt</h1><p className="lead">Hele resultatlisten. Trykk på en kolonne for å sortere, og på et ritt for å velge det.</p><SelChip /></div>
       <section className="card">
         <div className="toolbar">
           <input type="search" id="race-filter" placeholder="Filtrer på rittnavn" aria-label="Filtrer på rittnavn" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -35,19 +35,22 @@ export default function Races({ a }: { a: Athlete }) {
           <span className="muted tnum" style={{ marginLeft: "auto" }}>{rows.length} av {a.results.length}</span>
         </div>
         {rows.length === 0 ? <div className="empty"><b>Ingen ritt passer filteret</b><button className="btn" onClick={() => { setQ(""); setType("all"); }}>Nullstill filter</button></div> : (
-          <div className="table-wrap"><table>
-            <thead><tr><th className="l">Ritt</th>{th("date", "Dato")}<th className="l">Type</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}<th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}</tr></thead>
+          <div className="table-wrap"><table className="sticky">
+            <thead><tr><th className="l">Ritt</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}{th("date", "Dato")}<th className="l">Type</th><th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}<th>Liste</th></tr></thead>
             <tbody>{rows.map((r) => {
               const k = raceKey(r);
               return (
-                <tr key={k} aria-selected={sel === k} onClick={() => setSel(sel === k ? null : k)} style={{ cursor: "pointer" }}>
-                  <td>{r.link ? <a href={r.link} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>{r.race}</a> : r.race}</td>
+                <tr key={k} aria-selected={sel === k} tabIndex={0} style={{ cursor: "pointer" }} onClick={() => setSel(sel === k ? null : k)}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSel(sel === k ? null : k); } }}>
+                  <td className="l"><b style={{ fontWeight: 600 }}>{r.race}</b> <span className="muted">{r.year}</span></td>
+                  <td>{r.place}/{r.field}{r.agePlace ? <span className="muted"> ({r.agePlace}/{r.ageN} {r.ageClass})</span> : null}</td>
+                  <td>{pct(r.beaten)}</td><td>{pct(r.behind)}</td>
                   <td>{dateLong(r.date)}</td>
                   <td className="l"><span className="swatch"><span className="dot" style={{ background: TYPE_VAR[r.type] }} />{TYPE_LABEL[r.type]}{r.cls ? ` · ${r.cls}` : ""}</span></td>
-                  <td>{r.place}/{r.field}{r.agePlace ? <span className="muted"> ({r.agePlace}/{r.ageN} {r.ageClass})</span> : null}</td>
-                  <td>{pct(r.beaten)}</td><td>{pct(r.behind)}</td><td>{r.time}</td><td>{dec(r.km)}</td><td>{dec(r.speed)}</td>
-                  {a.power && <td>{r.np ? (r.icu ? <a href={r.icu} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>{r.np}</a> : r.np) : "–"}</td>}
+                  <td>{hms(r.time)}</td><td>{dec(r.km)}</td><td>{dec(r.speed)}</td>
+                  {a.power && <td>{r.np ? (r.icu && flags.activityLinks ? <a href={r.icu} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>{r.np}</a> : r.np) : "–"}</td>}
                   {a.power && <td>{r.ap ?? "–"}</td>}
+                  <td>{r.link ? <a href={r.link} target="_blank" rel="noopener" aria-label={`Resultatliste for ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}>↗</a> : ""}</td>
                 </tr>
               );
             })}</tbody>
@@ -57,7 +60,7 @@ export default function Races({ a }: { a: Athlete }) {
       {a.points.length > 0 && (
         <section className="card">
           <div className="card-pad"><h2 className="h-card">Poengritt</h2><p className="note" style={{ margin: "4px 0 0" }}>SSK Cup telles i poeng, ikke tid, og er ikke med i plasseringstallene over. Watt og fart gjelder bare rundene i selve rittet.</p></div>
-          <div className="table-wrap"><table>
+          <div className="table-wrap"><table className="sticky">
             <thead><tr><th className="l">Ritt</th><th>Dato</th><th className="l">Klasse</th><th>Plass</th><th>Poeng</th><th>Runder</th><th>Tid</th><th>Fart</th><th>NP</th><th>Snitt W</th></tr></thead>
             <tbody>{a.points.map((p) => (
               <tr key={p.date}><td>{p.name}</td><td>{dateLong(p.date)}</td><td className="l">{p.cls}</td>

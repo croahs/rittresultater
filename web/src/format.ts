@@ -9,9 +9,15 @@ export const dateLong = (s: string) => { const [y, m, d] = s.split("-").map(Numb
 export const dateShort = (s: string) => { const [, m, d] = s.split("-").map(Number); return `${d}. ${MON[m - 1]}`; };
 
 export const pct = (v: number | null | undefined, digits = 0) =>
-  v === null || v === undefined || Number.isNaN(v) ? "–" : `${v.toFixed(digits).replace(".", ",")} %`;
+  v === null || v === undefined || Number.isNaN(v) ? "–" : `${v.toFixed(digits).replace(".", ",")}\u00a0%`;
 export const dec = (v: number | null | undefined, digits = 1) =>
   v === null || v === undefined || Number.isNaN(v) ? "–" : v.toFixed(digits).replace(".", ",");
+
+/** "00:21:44" -> "21:44", "01:28:08" -> "1:28:08" */
+export const hms = (t: string) => t.replace(/^00:/, "").replace(/^0(\d)/, "$1");
+
+/** "2025" or "2024–2026" */
+export const span = (ys: number[]) => (!ys.length ? "" : ys[0] === ys[ys.length - 1] ? String(ys[0]) : `${ys[0]}–${ys[ys.length - 1]}`);
 
 export const clock = (s: number) => {
   s = Math.abs(Math.round(s));

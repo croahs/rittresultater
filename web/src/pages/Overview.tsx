@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import { median, mean, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
-import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, pct } from "../format";
+import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, hms, pct, span } from "../format";
+import { useState } from "react";
 import { raceKey, useSel } from "../state";
+import { flags } from "../data";
 import type { Tab } from "../App";
 
 export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void }) {
@@ -14,7 +16,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
   return (
     <>
       <Hero a={a} isMe={isMe} />
-      {!isMe && <p className="note" style={{ margin: "-12px 0 0" }}>Viser de {a.results.length} rittene med {firstName(a.name)} som er hentet inn så langt. {firstName(a.name)} kan ha kjørt flere ritt som ikke er med her. Watt vises når rytteren kobler til intervals.icu.</p>}
+      {!isMe && <p className="note" style={{ margin: "-12px 0 0" }}>Viser {a.results.length === 1 ? "det ene rittet" : `de ${a.results.length} rittene`} med {firstName(a.name)} som er hentet inn så langt. {firstName(a.name)} kan ha kjørt flere ritt som ikke er med her. Watt vises når rytteren kobler til intervals.icu.</p>}
       {last && (
         <div className="latest" role="note">
           <span>Siste ritt: {last.race} {last.year}, {last.place}. av {last.field}. {who} slo {Math.round(last.beaten)} % av feltet.</span>
@@ -32,9 +34,9 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
           </div>
         </div>
         <div className="board">
-          <FinishSheet a={a} isMe={isMe} />
-          <div className="board-side" id="race-detail" style={{ display: "grid", gap: 20, minWidth: 0 }}>
-            <DialCard a={a} r={selected} rows={rows} isMe={isMe} go={go} />
+          <FinishSheet a={a} />
+          <div className="board-side">
+            <DialCard a={a} r={selected} rows={rows} go={go} />
             <TypeCards rows={rows} />
           </div>
         </div>
@@ -50,17 +52,17 @@ function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
   // Development = the same races in the last two seasons, so a change in race mix does not fool it.
   const [y0, y1] = [ys[ys.length - 2], ys[ys.length - 1]];
   const pairs = a.results.filter((r) => r.year === y1).map((b) => [a.results.find((r) => r.year === y0 && r.race === b.race), b] as const).filter((p) => p[0]);
-  const change = pairs.length >= 2 ? mean(pairs.map(([p, b]) => b.beaten - p!.beaten)) : null;
+  const change = pairs.length >= 3 ? mean(pairs.map(([p, b]) => b.beaten - p!.beaten)) : null;
   const who = isMe ? "Du" : firstName(a.name);
   return (
     <div className="hero">
       <div className="bib" aria-label={`Startnummer for ${a.name}`}>
-        <div className="bib-top"><span>Turritt-ID</span><span>{a.ageClass || (ys.length ? `${ys[0]}–${ys[ys.length - 1]}` : "")}</span></div>
+        <div className="bib-top"><span>Turritt-ID</span><span>{a.ageClass || span(ys)}</span></div>
         <div className="bib-num">{a.id}</div>
         <div className="bib-stripe" aria-hidden="true" />
         <div>
           <div className="bib-name">{a.name}{isMe ? "" : ""}</div>
-          <div className="bib-meta">{a.club || "Uten klubb"} · {a.results.length} ritt på tid{a.points.length ? ` og ${a.points.length} poengritt` : ""}{ys.length ? ` · ${ys[0]}–${ys[ys.length - 1]}` : ""}</div>
+          <div className="bib-meta">{a.club || "Uten klubb"} · {a.results.length} ritt på tid{a.points.length ? ` og ${a.points.length} poengritt` : ""}{ys.length ? ` · ${span(ys)}` : ""}</div>
         </div>
       </div>
       <div className="stats">
@@ -68,7 +70,7 @@ function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
         <div className="card stat"><span className="eyebrow">Beste ritt</span><b>{best ? `Topp ${Math.round(best.top)} %` : "–"}</b><small>{best ? `${best.place}. av ${best.field} i ${best.race} ${best.year}` : "Ingen ritt ennå"}</small></div>
         <div className="card stat"><span className="eyebrow">Utvikling</span>
           <b className={change == null ? "" : change >= 0 ? "pos" : "neg"}>{change == null ? "–" : `${change >= 0 ? "+" : "−"}${Math.abs(change).toFixed(0)} pp`}</b>
-          <small>{change == null ? "Trenger de samme rittene i to sesonger" : `${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></div>
+          <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></div>
         <div className="card stat"><span className="eyebrow">{a.power ? "Snitt NP" : "Watt"}</span>
           <b>{a.power ? `${Math.round(mean(a.results.filter((r) => r.np).map((r) => r.np!)))} W` : "–"}</b>
           <small>{a.power ? "normalisert watt i rittene med wattdata" : "Kommer når rytteren kobler til intervals.icu"}</small></div>
@@ -77,19 +79,20 @@ function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
   );
 }
 
-function FinishSheet({ a, isMe }: { a: Athlete; isMe: boolean }) {
+function FinishSheet({ a }: { a: Athlete }) {
   const { season, sel, setSel, rows } = useSel();
+  const [all, setAll] = useState(false);
   const selected = rows.find((r) => raceKey(r) === sel);
   const pts = a.points.filter((p) => season === "all" || p.date.startsWith(String(season)));
   const items: { d: string; r?: Result; p?: PointsRace }[] = [...rows.map((r) => ({ d: r.date, r })), ...pts.map((p) => ({ d: p.date, p }))].sort((x, y) => y.d.localeCompare(x.d));
   return (
-    <div className="card sheet" aria-label="Rittliste">
+    <div className={`card sheet${all ? "" : " short"}`} aria-label="Rittliste">
       <div className="sheet-head">
         <div className="row"><h3 className="h-card">Målgangsliste</h3><span className="muted tnum">{items.length} ritt</span></div>
         {selected ? (
           <div className="selected-bar" role="status">
             <span><small>Valgt ritt</small>{selected.race} {selected.year}</span>
-            <button type="button" onClick={() => setSel(null)}>Alle ritt</button>
+            <button type="button" onClick={() => setSel(null)}>Fjern valg</button>
           </div>
         ) : <p className="note" style={{ margin: 0 }}>Viser alle ritt{season === "all" ? "" : ` i ${season}`}. Trykk på et ritt for å velge det.</p>}
       </div>
@@ -101,7 +104,7 @@ function FinishSheet({ a, isMe }: { a: Athlete; isMe: boolean }) {
             return (
               <li key={`p${p.date}`} className="pts-row">
                 <span className="place"><i style={{ background: "var(--pts)" }} />{p.place || "–"}<small>{p.n ? `av ${p.n}` : "poeng"}</small></span>
-                <div><div className="t" style={{ display: "flex", justifyContent: "space-between", gap: 8, fontWeight: 600 }}><span>{p.name}</span><small className="muted">{dateShort(p.date)}</small></div>
+                <div><div className="t" style={{ display: "flex", justifyContent: "space-between", gap: 8, fontWeight: 600 }}><span>{p.name}</span><small className="muted">{dateShort(p.date)} {p.date.slice(2, 4)}</small></div>
                   <p style={{ margin: "1px 0 0", color: "var(--ink-2)", fontSize: ".82rem" }}>{p.cls}. {p.pts ? `${p.pts} poeng` : `Datt av etter ${p.laps} runder`}. NP {p.np} W.</p></div>
               </li>
             );
@@ -116,13 +119,14 @@ function FinishSheet({ a, isMe }: { a: Athlete; isMe: boolean }) {
                 <span className="place"><i style={{ background: TYPE_VAR[r.type] }} />{r.place}<small>av {r.field}</small></span>
                 <span style={{ minWidth: 0 }}>
                   <span className="t"><span>{r.race}</span><small>{dateShort(r.date)} {String(r.year).slice(2)}</small></span>
-                  <p>{TYPE_LABEL[r.type]}{r.cls ? ` (${r.cls})` : ""}. Slo {Math.round(r.beaten)} %{r.behind != null ? `, ${r.behind} % bak vinner` : ""}{isMe && r.np ? `, NP ${r.np} W` : ""}.</p>
+                  <p>{TYPE_LABEL[r.type]}{r.cls ? ` (${r.cls})` : ""}. Slo {Math.round(r.beaten)} %{r.behind != null ? `, ${pct(r.behind)} bak vinner` : ""}{r.np ? `, NP ${r.np} W` : ""}.</p>
                 </span>
               </button>
             </li>
           );
         })}
       </ol>
+      {items.length > 8 && <button type="button" className="more" onClick={() => setAll(!all)}>{all ? "Vis færre" : `Vis alle ${items.length}`}</button>}
     </div>
   );
 }
@@ -151,22 +155,26 @@ function Dial({ value, label, sub }: { value: number; label: string; sub: string
   );
 }
 
-function DialCard({ a, r, rows, isMe, go }: { a: Athlete; r: Result | null; rows: Result[]; isMe: boolean; go: (t: Tab) => void }) {
-  const { season } = useSel();
+function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Result[]; go: (t: Tab) => void }) {
+  const { season, setSel } = useSel();
   if (!rows.length) return <div className="card empty"><b>Ingen ritt i denne perioden</b></div>;
   if (r) {
     return (
-      <div className="card dial-card">
+      <div className="card dial-card" id="race-detail">
+        <div className="selected-bar" role="status" style={{ gridColumn: "1 / -1" }}>
+          <span><small>Valgt ritt</small>{r.race} {r.year}</span>
+          <button type="button" onClick={() => setSel(null)}>Fjern valg</button>
+        </div>
         <Dial value={r.beaten} label={`${r.race} ${r.year}`} sub={`av feltet slått (${r.place}. av ${r.field})`} />
         <div className="facts">
           <span className="eyebrow">{TYPE_LABEL[r.type]} · {dateLong(r.date)}</span>
           <div className="fact"><span>Plassering</span><b>{r.place}. av {r.field}{r.cls ? ` (${r.cls})` : ""}</b></div>
           {r.agePlace && <div className="fact"><span>Aldersklasse</span><b>{r.agePlace}. av {r.ageN} i {r.ageClass}</b></div>}
-          <div className="fact"><span>Tid / vinnertid</span><b>{r.time} / {r.winner}</b></div>
-          {r.behind != null && <div className="fact"><span>Bak vinneren</span><b>{r.behind} %</b></div>}
-          {isMe && r.np && <div className="fact"><span>Watt (NP / snitt)</span><b>{r.np} / {r.ap} W</b></div>}
+          <div className="fact"><span>Tid / vinnertid</span><b>{hms(r.time)} / {hms(r.winner)}</b></div>
+          {r.behind != null && <div className="fact"><span>Bak vinneren</span><b>{pct(r.behind, r.behind % 1 ? 1 : 0)}</b></div>}
+          {r.np && <div className="fact"><span>Watt (NP / snitt)</span><b>{r.np} / {r.ap} W</b></div>}
           {r.speed && <div className="fact"><span>Fart / distanse</span><b>{dec(r.speed)} km/t · {dec(r.km)} km{r.climb ? ` · ${Math.round(r.climb)} hm` : ""}</b></div>}
-          <div className="fact"><span>Kilder</span><b>{r.link && <a href={r.link} target="_blank" rel="noopener">Resultatliste</a>}{r.icu && isMe && <> · <a href={r.icu} target="_blank" rel="noopener">intervals.icu</a></>}</b></div>
+          <div className="fact"><span>Kilder</span><b>{r.link && <a href={r.link} target="_blank" rel="noopener">Resultatliste</a>}{r.icu && flags.activityLinks && <> · <a href={r.icu} target="_blank" rel="noopener">intervals.icu</a></>}</b></div>
           <button type="button" className="btn" onClick={() => go("rivaler")}>Se rivalene</button>
         </div>
       </div>
@@ -177,14 +185,14 @@ function DialCard({ a, r, rows, isMe, go }: { a: Athlete; r: Result | null; rows
   const best = rows.reduce((b, x) => (x.top < b.top ? x : b));
   const np = rows.filter((x) => x.np).map((x) => x.np!);
   return (
-    <div className="card dial-card">
+    <div className="card dial-card" id="race-detail">
       <Dial value={typical} label={season === "all" ? "Typisk ritt, alle år" : `Typisk ritt i ${season}`} sub="av feltet slått (median)" />
       <div className="facts">
         <span className="eyebrow">{season === "all" ? "Alle år" : `Sesongen ${season}`}</span>
         <div className="fact"><span>Ritt på tid</span><b>{rows.length}</b></div>
-        <div className="fact"><span>Typisk bak vinneren</span><b>{pct(behind)}</b></div>
+        <div className="fact"><span>Typisk tid bak vinneren</span><b>{pct(behind)}</b></div>
         <div className="fact"><span>Beste ritt</span><b>{best.race} {best.year}, {best.place}. av {best.field}</b></div>
-        {a.power && isMe && np.length > 0 && <div className="fact"><span>Snitt NP</span><b>{Math.round(mean(np))} W</b></div>}
+        {a.power && np.length > 0 && <div className="fact"><span>Snitt NP</span><b>{Math.round(mean(np))} W</b></div>}
         <button type="button" className="btn" onClick={() => go("utvikling")}>Se utviklingen</button>
       </div>
     </div>

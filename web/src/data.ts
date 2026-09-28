@@ -46,7 +46,10 @@ export interface Athlete {
 }
 
 export interface IndexRider { id: string; name: string; club: string; races: number; shard: string | null }
-export interface Site { default_rider: string; profiles: string[] }
+export interface Site { default_rider: string; profiles: string[]; activity_links?: boolean }
+
+/** Site-wide switches from site.json. Links to intervals.icu activities are off unless the owner turns them on. */
+export const flags = { activityLinks: false };
 
 export interface ClipData {
   year: number; step: number; skipped: string[];
@@ -94,12 +97,17 @@ const num = (v: unknown) => (v === null || v === undefined || v === "" ? null : 
 function result(r: Record<string, unknown>): Result {
   // Two shapes: the sheet export (place/field/top/np...) and rivals.py's per-rider rows (top_pct/behind_pct).
   const date = toIso(String(r.date));
-  const rawTop = r.top ?? r.top_pct;
+  // Riders from the shared lists are placed against the whole field, not tiny age/bike classes.
+  const overall = r.overall_place != null && r.overall_field != null;
+  const place = Number(overall ? r.overall_place : r.place), field = Number(overall ? r.overall_field : r.field);
+  const rawTop = overall ? (place / field) * 100 : r.top ?? r.top_pct;
   const top = rawTop === null || rawTop === undefined || rawTop === "" ? NaN : Number(rawTop); // DNF has no placing
+  // Share of the others beaten: the winner beat 100 %, last beat 0 %.
+  const beaten = field > 1 ? ((field - place) / (field - 1)) * 100 : 100;
   return {
     race: String(r.name ?? r.race).replace(/\s+20\d\d$/, ""), date, year: Number(date.slice(0, 4)),
     type: r.type as RaceType, cls: (r.class as string) ?? null,
-    place: Number(r.place), field: Number(r.field), top, beaten: Math.max(0, Math.min(100, 100 - top)),
+    place, field, top, beaten: Math.max(0, Math.min(100, beaten)),
     behind: num(r.behind ?? r.behind_pct), time: String(r.time ?? ""), winner: String(r.winner ?? ""),
     np: num(r.np), ap: num(r.ap), speed: num(r.speed), km: num(r.km), climb: num(r.climb),
     ageClass: String(r.age_class ?? ""), agePlace: num(r.age_place), ageN: num(r.age_n),
@@ -127,6 +135,11 @@ export async function loadAthlete(id: string, site: Site, index: IndexRider[]): 
   const raw = shard[id];
   if (!raw) throw new Error("Fant ikke rytteren");
   return athlete({ ...raw, id });
+}
+
+/** The athlete with race power fetched in the browser from intervals.icu merged in (not stored anywhere). */
+export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>): Athlete {
+  return { ...a, power: true, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
 }
 
 /* ---------- derived numbers ---------- */

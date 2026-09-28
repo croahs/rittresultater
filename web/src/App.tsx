@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getJSON, loadAthlete, type Athlete, type IndexRider, type Site } from "./data";
+import { flags, getJSON, loadAthlete, withPower, type Athlete, type IndexRider, type Site } from "./data";
 import { fold } from "./format";
 import { BrandMark, Icon, TipProvider } from "./ui";
 import Overview from "./pages/Overview";
@@ -8,6 +8,7 @@ import Rivals from "./pages/Rivals";
 import Races from "./pages/Races";
 import Clip from "./pages/Clip";
 import { SelProvider } from "./state";
+import type { RacePower } from "./intervals";
 
 export type Tab = "oversikt" | "utvikling" | "rivaler" | "ritt" | "klipp";
 const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
@@ -53,7 +54,7 @@ export default function App() {
 
   useEffect(() => {
     Promise.all([getJSON<Site>("site.json"), getJSON<IndexRider[]>("riders/index.json")])
-      .then(([s, i]) => { setSite(s); setIndex(i); setRiderId(readHash().rider || s.default_rider); })
+      .then(([s, i]) => { flags.activityLinks = !!s.activity_links; setSite(s); setIndex(i); setRiderId(readHash().rider || s.default_rider); })
       .catch(() => setError("Fant ikke dataene. Kjør python3 export_web.py og bygg på nytt."));
     const onHash = () => { const h = readHash(); if (h.tab) setTab(h.tab); if (h.rider) setRiderId(h.rider); };
     addEventListener("hashchange", onHash);
@@ -79,6 +80,7 @@ export default function App() {
   return (
     <TipProvider>
       <div className="app">
+        <button type="button" className="skip" onClick={() => { const m = document.getElementById("innhold"); m?.focus(); m?.scrollIntoView(); }}>Hopp til innholdet</button>
         <aside className="rail" aria-label="Hovedmeny">
           <div className="brand"><BrandMark /><div>Ritt<br /><small>resultater</small></div></div>
           <nav className="nav">
@@ -99,7 +101,7 @@ export default function App() {
         <div className="main" ref={mainRef}>
           <header className="topbar">
             <div className="brand"><BrandMark /></div>
-            <RiderPicker index={index} current={athlete} me={site?.default_rider} onPick={(id) => setRiderId(id)} />
+            <RiderPicker index={index} me={site?.default_rider} onPick={(id) => setRiderId(id)} />
             <div className="theme" role="group" aria-label="Fargetema">
               {([["system", "Følg systemet", Icon.auto], ["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
                 <button key={k} type="button" aria-pressed={theme === k} title={l} aria-label={l} onClick={() => setTheme(k)}><I /></button>
@@ -107,12 +109,13 @@ export default function App() {
             </div>
           </header>
 
-          <main className="page" id="innhold">
+          <main className="page" id="innhold" tabIndex={-1}>
             {error && <div className="card empty"><b>{error}</b>{riderId !== site?.default_rider && site && <button className="btn" onClick={() => setRiderId(site.default_rider)}>Tilbake til min side</button>}</div>}
             {!error && !athlete && <div className="loading">Henter resultater …</div>}
             {athlete && (
               <SelProvider key={athlete.id} a={athlete}>
-                <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index} />
+                <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index}
+                  onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))} />
               </SelProvider>
             )}
             <footer className="site">
@@ -126,17 +129,17 @@ export default function App() {
   );
 }
 
-function Page({ tab, athlete, isMe, go, onRider, index }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[] }) {
+function Page({ tab, athlete, isMe, go, onRider, index, onPower }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[]; onPower: (p: Map<string, RacePower>) => void }) {
   switch (tab) {
     case "oversikt": return <Overview a={athlete} isMe={isMe} go={go} />;
-    case "utvikling": return <Development a={athlete} isMe={isMe} />;
+    case "utvikling": return <Development a={athlete} isMe={isMe} onPower={onPower} />;
     case "rivaler": return <Rivals a={athlete} isMe={isMe} onRider={onRider} index={index} />;
     case "ritt": return <Races a={athlete} />;
     case "klipp": return <Clip a={athlete} isMe={isMe} />;
   }
 }
 
-function RiderPicker({ index, current, me, onPick }: { index: IndexRider[]; current: Athlete | null; me?: string; onPick: (id: string) => void }) {
+function RiderPicker({ index, me, onPick }: { index: IndexRider[]; me?: string; onPick: (id: string) => void }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [hi, setHi] = useState(0);
@@ -159,10 +162,10 @@ function RiderPicker({ index, current, me, onPick }: { index: IndexRider[]; curr
     <div className="picker" ref={box}>
       <Icon.search />
       <input type="search" id="rider-search" role="combobox" aria-expanded={open && q.length >= 2} aria-controls="rider-hits" aria-autocomplete="list"
-        placeholder={current ? `Vis en annen rytter enn ${current.name.split(" ")[0]} …` : "Søk etter rytter …"}
+        placeholder="Søk etter rytter …"
         aria-label="Søk etter rytter" value={q} autoComplete="off"
         onChange={(e) => { setQ(e.target.value); setOpen(true); setHi(0); }}
-        onFocus={() => setOpen(true)}
+        onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 150)}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown") { e.preventDefault(); setHi((h) => Math.min(h + 1, hits.length - 1)); }
           if (e.key === "ArrowUp") { e.preventDefault(); setHi((h) => Math.max(h - 1, 0)); }

@@ -61,7 +61,9 @@ def main():
             index = json.load(f)
 
     # Your own profile: official results with power, points races, rivals, clips.
-    me = turritt_rider(me_id)
+    # The search index (rivals.py) has the club from the newest result; the Turritt cache is only a fallback.
+    me = {**turritt_rider(me_id), **{k: v for k, v in next((r for r in index if r["id"] == me_id), {}).items()
+                                     if k in ("name", "club", "age_class") and v}}
     profile = {
         "id": me_id, "name": me.get("name", ""), "club": me.get("club", ""), "age_class": me.get("age_class", ""),
         "power": True, "clips": sorted(set(clips)),
@@ -70,7 +72,9 @@ def main():
         "insights": {k: v for k, v in rivals.get("insights", {}).items() if k != "closest"},
     }
     dump(os.path.join(OUT, "athletes", f"{me_id}.json"), profile)
-    dump(os.path.join(OUT, "site.json"), {"default_rider": me_id, "profiles": [me_id]})
+    dump(os.path.join(OUT, "site.json"), {"default_rider": me_id, "profiles": [me_id],
+                                                 # Links to your intervals.icu activities; they are private there anyway.
+                                                 "activity_links": False})
     print(f"wrote {OUT}: {len(results)} races, {len(points)} points races, "
           f"{len(profile['opponents'])} opponents, clips {clips}, {len(index)} riders in search")
 
