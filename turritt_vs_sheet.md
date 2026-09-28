@@ -30,6 +30,7 @@
 | Nordsjørittet 2026 | Overall placement | 147 | 146 |
 | Nordsjørittet 2026 | Class participants (not officials or DNS, DNF included) | 255 | 260 |
 | Nordsjørittet 2026 | Overall participants (not officials or DNS, DNF included) | 787 | 825 |
+| Atlantic Gravel 2026 | Class winner | 04:24:05 | 04:24:04 (EQ Timing) |
 | Tempo Bue-Bryne 2026 | Overall participants (not officials or DNS, DNF included) | 52 | 51 |
 | Lysebotn-Bryne 2026 | Class participants (not officials or DNS, DNF included) | 141 | 132 |
 | Lysebotn-Bryne 2026 | Overall participants (not officials or DNS, DNF included) | 141 | 132 |

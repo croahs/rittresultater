@@ -17,6 +17,7 @@ import sys
 from datetime import timedelta
 
 import sync
+import eqtiming
 import turritt
 
 TURRITT_ID, NAME = "171101", "Peder Holterman Solland"
@@ -72,12 +73,30 @@ def main(src, dst, report):
     rid = turritt.find_rider(TURRITT_ID, NAME)
     tt = [turritt.race_row(race_id, year, TURRITT_ID) for race_id, year in turritt.rider_races(rid)]
 
+    eq_by_date = {}
+    try:
+        for e in eqtiming.races():
+            eq_by_date[sync.parse_date_iso(e["date"]).strftime("%d.%m.%y")] = e
+    except Exception as e:  # placings still come from Turritt
+        print(f"EQ Timing skipped: {e}", file=sys.stderr)
+
     changes, used = [], set()
     for r in rows:
         d = sync.parse_date(r["Date"])
         hit = min((t for t in tt if abs((t["date"] - d).days) <= 2), key=lambda t: abs((t["date"] - d).days), default=None)
         if not hit:
-            r["Match note"] = "not on Turritt, kept as typed"
+            eq = eq_by_date.get(r["Date"])
+            if not eq:
+                r["Match note"] = "not on Turritt or EQ Timing, kept as typed"
+                continue
+            # EQ Timing has no separate overall list here; the sheet uses class = overall.
+            hit = {**eq, "overall_place": eq["class_place"], "overall_n": eq["class_n"]}
+            r["Match note"] = "placings from EQ Timing"
+            for col, key in FROM_TURRITT.items():
+                v = str(hit[key])
+                if r.get(col) != v:
+                    changes.append((r["Race"], col, r.get(col, ""), v + " (EQ Timing)"))
+                    r[col] = v
             continue
         used.add(hit["turritt_race_id"])
         r["Turritt"] = f"https://turritt.com/index.php?Turritt={hit['turritt_race_id']}&page=resultat&current=2&su=2"
@@ -151,6 +170,12 @@ def main(src, dst, report):
                         r["Normalized Power"] = str(round(a["icu_weighted_avg_watts"]))
                 if not r.get("Elevation gain (m)") and a.get("total_elevation_gain"):
                     r["Elevation gain (m)"] = str(round(a["total_elevation_gain"]))
+        eq = eq_by_date.get(r["Date"])
+        if eq:
+            r["EQ Timing"] = eq["url"]
+            if eq["age_place"] and eq["age_class"] not in ("Menn", "M17+"):
+                r["Age class"] = eq["age_class"]
+                r["Age class placement"], r["Age class participants"] = str(eq["age_place"]), str(eq["age_n"])
         if not gps_speed and r.get("Distance (km)"):
             r["Average speed (km/h)"] = ""  # derive() then uses official distance / time
         if r.get("Elevation gain (m)"):
@@ -160,7 +185,8 @@ def main(src, dst, report):
             sync.derive(r)
             r["Elevation gain (m)"] = r["Climbing per km"] = ""
 
-    cols = sync.COLS[:-2] + ["Turritt", "intervals.icu activity", "Match note"]
+    cols = sync.COLS[:-2] + ["Age class", "Age class placement", "Age class participants",
+                             "Turritt", "EQ Timing", "intervals.icu activity", "Match note"]
     with open(dst, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
         w.writeheader()

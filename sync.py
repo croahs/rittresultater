@@ -41,6 +41,10 @@ def parse_date(d):
     return datetime.strptime(d, "%d.%m.%y").date()
 
 
+def parse_date_iso(d):
+    return datetime.strptime(d, "%Y-%m-%d").date()
+
+
 def rnd(x, places=2):
     """Round half up like a spreadsheet (Python's round/format use half-even on floats)."""
     return str(Decimal(str(x)).quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP))
