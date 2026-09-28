@@ -61,7 +61,15 @@ body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--font); }
 .feed ol { list-style: none; margin: 0; padding: 0 0 12px; overflow-y: auto; }
 .feed li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; padding: 14px 20px; }
 .feed li[data-i] { cursor: pointer; }
-.feed li[data-i]:hover, .feed li[aria-selected="true"] { background: var(--ghost); }
+.feed li[data-i]:hover { background: var(--ghost); }
+.feed li[aria-selected="true"] { background: color-mix(in srgb, var(--blue) 14%, transparent); box-shadow: inset 3px 0 0 var(--blue); }
+.feed li[aria-selected="true"] .avatar { background: var(--blue); color: #fff; }
+.feed-sel { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 12px 8px; padding: 10px 12px; border-radius: 4px; background: linear-gradient(90deg, var(--blue), var(--blue-2)); color: #fff; font-size: .85rem; }
+.feed-sel span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.feed-sel small { display: block; opacity: .8; font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+.feed-sel button { flex: none; background: rgb(255 255 255 / .18); color: #fff; border: 1px solid rgb(255 255 255 / .5); border-radius: 4px; padding: 6px 10px; font: 700 .75rem var(--font); cursor: pointer; }
+.feed-sel button:hover { background: rgb(255 255 255 / .3); }
+.feed-sel button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .feed .name { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
 .feed .name small { color: var(--muted); font-weight: 500; font-size: .75rem; white-space: nowrap; }
 .feed .place { color: var(--blue); font-weight: 700; margin-left: 5px; }
@@ -235,6 +243,7 @@ footer a { color: inherit; margin-right: 16px; }
   <div class="body">
     <aside class="feed" aria-label="Rittfeed">
       <div class="feed-head"><span></span><span class="online" id="feed-count"></span></div>
+      <div class="feed-sel" id="feed-sel" hidden></div>
       <ol id="feed" aria-label="Ritt, nyeste først"></ol>
     </aside>
 
@@ -345,6 +354,9 @@ const feedItems = [
   ...POINTS.map(p => ({ kind: "pts", p, date: p.date })),
 ].sort((a, b) => b.date.localeCompare(a.date));
 function renderFeed() {
+  const sel = document.getElementById("feed-sel"), sr = selected != null ? DATA[selected] : null;
+  sel.hidden = !sr;
+  sel.innerHTML = sr ? `<span><small>Valgt ritt</small>${esc(sr.name)} ${sr.year}</span><button type="button" id="feed-all">Alle ritt</button>` : "";
   const items = feedItems.filter(i => inSeason(i.date));
   document.getElementById("feed-count").innerHTML = `Ritt: <b>${items.length}</b>`;
   document.getElementById("feed").innerHTML = items.map(i => {
@@ -355,10 +367,11 @@ function renderFeed() {
     }
     const r = i.r, idx = DATA.indexOf(r);
     return `<li tabindex="0" data-i="${idx}" aria-selected="${selected === idx}"><span class="avatar">${initials(r.name)}</span><div><div class="name"><span>${esc(r.name)}<span class="place">${r.place}</span></span><small>${shortDate(r.date)} ${String(r.year).slice(2)}</small></div>` +
-      `<p>${r.place}. av ${r.field}${r.age_place ? `, ${r.age_place}. i ${esc(r.age_class)}` : ""}. ${r.behind} % bak vinner${r.np ? `, NP ${r.np} W` : ""}.${r.notes ? " " + esc(r.notes) + "." : ""}</p></div></li>`;
+      `<p>${r.place}. av ${r.field}${r.age_place ? `, ${r.age_place}. i ${esc(r.age_class)}` : ""}. ${r.behind} % bak vinner${r.np ? `, NP ${r.np} W` : ""}.</p></div></li>`;
   }).join("");
 }
 const feedEl = document.getElementById("feed");
+document.getElementById("feed-sel").addEventListener("click", e => { if (e.target.closest("#feed-all")) { selected = null; render(true); } });
 feedEl.addEventListener("click", e => {
   const li = e.target.closest("li[data-i]"); if (!li) return;
   selected = selected === +li.dataset.i ? null : +li.dataset.i; render(true);

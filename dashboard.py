@@ -35,7 +35,6 @@ def rows(path):
                 "speed": num("Average speed (km/h)"),
                 "km": num("Distance (km)"), "climb": num("Elevation gain (m)"),
                 "time": r["Time"], "winner": r["Class winner"],
-                "notes": r.get("Notes", ""),
                 "age_class": r.get("Age class", ""),
                 "age_place": int(r["Age class placement"]) if r.get("Age class placement") else None,
                 "age_n": int(r["Age class participants"]) if r.get("Age class participants") else None,
