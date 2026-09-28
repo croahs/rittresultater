@@ -51,19 +51,20 @@ def rnd(x, places=2):
 
 
 def derive(r):
-    """Fill the derived columns from the raw ones (same formulas as the hand sheet)."""
+    """Fill the derived columns from the raw ones (same formulas as the hand sheet).
+    Columns whose inputs are missing (no distance, no climbing) are left blank."""
     t = secs(r["Time"])
-    dist = float(r["Distance (km)"])
+    dist = float(r["Distance (km)"]) if r.get("Distance (km)") else None
     cp, cn = int(r["Placement in class"]), int(r["Class participants (not officials or DNS, DNF included)"])
     op, on = int(r["Overall placement"]), int(r["Overall participants (not officials or DNS, DNF included)"])
     r["Percentile in class"] = rnd(cp / cn * 100)
     r["Overall percentile"] = rnd(op / on * 100)
     # The hand sheet's speed comes from the bike computer, not official distance/time;
     # this is only a fallback, overwritten from the intervals.icu activity when matched.
-    if not r.get("Average speed (km/h)"):
+    if not r.get("Average speed (km/h)") and dist:
         r["Average speed (km/h)"] = f"{dist / (t / 3600):.1f}"
     r["% behind winner"] = f"{round((t / secs(r['Class winner']) - 1) * 100)}"
-    r["Climbing per km"] = rnd(float(r['Elevation gain (m)']) / dist)
+    r["Climbing per km"] = rnd(float(r["Elevation gain (m)"]) / dist) if dist and r.get("Elevation gain (m)") else ""
     return r
 
 
@@ -141,20 +142,20 @@ def match(race, activities):
     """
     d = parse_date(race["Date"])
     t = secs(race["Time"])
-    dist_m = float(race["Distance (km)"]) * 1000
+    dist_m = float(race["Distance (km)"]) * 1000 if race.get("Distance (km)") else None
     cands = [a for a in activities
              if a.get("type") in RIDE_TYPES and str(a.get("start_date_local", ""))[:10] == d.isoformat()]
     if not cands:
         return None, "no ride on race date"
 
     def score(a):
-        de = abs((a.get("distance") or 0) - dist_m) / dist_m
+        de = abs((a.get("distance") or 0) - dist_m) / dist_m if dist_m else 0
         te = abs((a.get("elapsed_time") or a.get("moving_time") or 0) - t) / t
         return de + te + (0 if a.get("race") else 0.05)
 
     best = min(cands, key=score)
     note = [] if score(best) < 0.3 else [f"weak match (score {score(best):.2f})"]
-    if (best.get("distance") or 0) > dist_m * 1.15:
+    if dist_m and (best.get("distance") or 0) > dist_m * 1.15:
         note.append("file longer than race, power includes warm-up")
     return best, "; ".join(note)
 
