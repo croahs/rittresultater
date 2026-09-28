@@ -35,6 +35,10 @@ ACTIVITIES_FILE = next((p for p in (os.path.join(os.path.dirname(os.path.abspath
                         for n in ("activities.csv", "activities.json")) if os.path.exists(p)), "")
 
 
+ACTIVITIES_FILE_USED = False
+STREAMS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache", "intervals")
+
+
 def load_activities(path):
     if path.endswith(".json"):
         with open(path, encoding="utf-8") as f:
@@ -99,7 +103,8 @@ def main(src, dst, report):
         changes.append((r["Race"], "(new row)", "", "added from Turritt"))
 
     rows.sort(key=lambda r: sync.parse_date(r["Date"]))
-    acts = []
+    acts, icu = [], None
+    global ACTIVITIES_FILE_USED
     key = os.environ.get("INTERVALS_API_KEY", "")
     try:
         dates = [sync.parse_date(r["Date"]) for r in rows]
@@ -111,20 +116,39 @@ def main(src, dst, report):
         print(f"intervals.icu API skipped: {e}", file=sys.stderr)
     if not acts and os.path.exists(ACTIVITIES_FILE):
         acts = load_activities(ACTIVITIES_FILE)
+        ACTIVITIES_FILE_USED = True
     for r in rows:
         if acts:
             a, note = sync.match(r, acts)
             r["Match note"] = "; ".join(x for x in (r.get("Match note"), note) if x)
             if a:
                 r["intervals.icu activity"] = f"https://intervals.icu/activities/{a['id']}"
-                if a.get("average_speed"):
+                # Speed is official distance / official time; the file's speed only
+                # fills in when there is no official distance.
+                if not r.get("Distance (km)") and a.get("average_speed"):
                     r["Average speed (km/h)"] = f"{a['average_speed'] * 3.6:.1f}"
-                if a.get("icu_average_watts"):
-                    r["Average Power"] = str(round(a["icu_average_watts"]))
-                if a.get("icu_weighted_avg_watts"):
-                    r["Normalized Power"] = str(round(a["icu_weighted_avg_watts"]))
+                win = None
+                if icu and not ACTIVITIES_FILE_USED:
+                    try:
+                        win = sync.race_window(icu.streams(a["id"], STREAMS_DIR), sync.secs(r["Time"]))
+                    except Exception as e:
+                        print(f"streams for {a['id']} skipped: {e}", file=sys.stderr)
+                if win:
+                    avg, np_, (s0, s1) = win
+                    r["Average Power"], r["Normalized Power"] = str(round(avg)), str(round(np_))
+                    whole = a.get("elapsed_time") or 0
+                    if whole - (s1 - s0) > 60:
+                        r["Match note"] = "; ".join(x for x in (r.get("Match note"),
+                            f"power over race only ({s0 // 60}-{s1 // 60} min of {whole // 60} min file)") if x)
+                else:
+                    if a.get("icu_average_watts"):
+                        r["Average Power"] = str(round(a["icu_average_watts"]))
+                    if a.get("icu_weighted_avg_watts"):
+                        r["Normalized Power"] = str(round(a["icu_weighted_avg_watts"]))
                 if not r.get("Elevation gain (m)") and a.get("total_elevation_gain"):
                     r["Elevation gain (m)"] = str(round(a["total_elevation_gain"]))
+        if r.get("Distance (km)"):  # official speed, see above
+            r["Average speed (km/h)"] = ""
         if r.get("Elevation gain (m)"):
             sync.derive(r)
         else:  # everything but climbing per km

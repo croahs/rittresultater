@@ -11,6 +11,7 @@ Usage:
   python3 sync.py race_results_original.csv out.csv --offline   # recompute only
 """
 import csv
+import json
 import os
 import sys
 from datetime import date, datetime, timedelta
@@ -73,6 +74,52 @@ class Intervals:
                        params={"oldest": oldest.isoformat(), "newest": newest.isoformat()})
         r.raise_for_status()
         return r.json()
+
+    def streams(self, activity_id, cache_dir):
+        """time/watts/distance streams for one activity, cached on disk (rides never change)."""
+        path = os.path.join(cache_dir, f"{activity_id}.json")
+        if os.path.exists(path):
+            with open(path, encoding="utf-8") as f:
+                return json.load(f)
+        r = self.s.get(f"{INTERVALS}/activity/{activity_id}/streams.json",
+                       params={"types": "time,watts,distance"})
+        r.raise_for_status()
+        data = {x["type"]: x["data"] for x in r.json()}
+        os.makedirs(cache_dir, exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        return data
+
+
+def race_window(streams, race_secs):
+    """Average and normalized power over the race itself, without dead time.
+
+    The race is taken as the race_secs-long stretch of the file that covers the most
+    distance, so standing at the start, warm-up and cool-down fall outside it.
+    Samples are put on a 1 s grid; pauses in recording count as 0 W.
+    Returns (avg, np, (start_s, end_s)) or None without power data.
+    """
+    t, w, d = streams.get("time"), streams.get("watts"), streams.get("distance")
+    if not t or not w or not any(w):
+        return None
+    n = t[-1] + 1
+    watts, dist = [0.0] * n, [0.0] * n
+    for i, s in enumerate(t):
+        watts[s] = w[i] or 0.0
+        dist[s] = (d[i] or 0.0) if d else 0.0
+    for s in range(1, n):  # carry distance over recording gaps
+        dist[s] = max(dist[s], dist[s - 1])
+    span = min(race_secs, n)
+    start = max(range(n - span + 1), key=lambda s: dist[s + span - 1] - dist[s]) if d else 0
+    win = watts[start:start + span]
+    avg = sum(win) / len(win)
+    roll, acc = [], 0.0
+    for i, x in enumerate(win):
+        acc += x - (win[i - 30] if i >= 30 else 0)
+        if i >= 29:
+            roll.append(acc / 30)
+    np_ = (sum(x ** 4 for x in roll) / len(roll)) ** 0.25 if roll else avg
+    return avg, np_, (start, start + span)
 
 
 def match(race, activities):
