@@ -1,12 +1,13 @@
 import { useMemo, useRef, useState, useEffect } from "react";
-import { median, record, type Athlete, type IndexRider, type Meeting, type Opponent, type RaceType, type Who } from "../data";
+import { headToHead, median, record, type Athlete, type IndexRider, type Meeting, type Opponent, type RaceType, type Who } from "../data";
 import { TYPE_LABEL, TYPE_LC, clock, dateLong, firstName, fold, initials, listNo } from "../format";
 import { Empty, useTip } from "../ui";
 
 type TabKey = "closest" | RaceType;
 
 export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: boolean; onRider: (id: string) => void; index: IndexRider[] }) {
-  const O = a.opponents;
+  const [extra, setExtra] = useState<Map<string, Opponent>>(new Map());
+  const O = useMemo(() => new Map([...a.opponents, ...extra]), [a.opponents, extra]);
   const ins = a.insights;
   const [sameOnly, setSameOnly] = useState(false);
   const TABS = useMemo(() => ([["closest", "Jevneste"], ["Road", "Landevei"], ["TT", "Tempo"], ["Gravel", "Gravel"]] as [TabKey, string][])
@@ -20,16 +21,23 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
   const pool = (o: Opponent) => (sameOnly ? o.ms.filter((m) => m.same) : o.ms);
   const hasClass = useMemo(() => [...O.values()].some((o) => o.ms.some((m) => m.mc || m.tc)), [O]);
   const you = isMe ? "deg" : firstName(a.name);
-  const You = isMe ? "Du" : firstName(a.name);
 
   const open = (id: string) => {
-    if (!O.has(id)) return;
+    if (!O.has(id)) {
+      const r = index.find((x) => x.id === id);
+      if (!r) return;
+      headToHead(a.id, r).then((o) => {
+        setExtra((m) => new Map(m).set(id, o)); setCur(id); setTab("closest");
+        duelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      return;
+    }
     setCur(id);
     if (!ids(tab).includes(id)) setTab("closest");
     duelRef.current?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   };
 
-  if (!O.size) return (
+  if (!a.opponents.size && !extra.size) return (
     <>
       <h1 className="h-display">Rivaler</h1>
       <div className="card"><Empty title="Ingen rivaler ennå">Rivaler regnes ut når en rytter har minst to ritt i resultatlistene vi har hentet.</Empty></div>
@@ -42,8 +50,8 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
     <>
       <div className="section-head">
         <div><h1 className="h-display">Rivaler</h1>
-          <p className="lead">{You} har møtt {O.size} ulike ryttere i resultatlistene. Velg en rival, eller søk opp hvem som helst {isMe ? "du" : firstName(a.name)} har kjørt mot.</p></div>
-        <OppSearch O={O} onPick={open} />
+          <p className="lead">{isMe ? `Du har møtt ${a.opponents.size} ulike ryttere i resultatlistene. ` : ""}Velg en rival i listen, eller søk opp en hvilken som helst rytter for å se hvordan {isMe ? "dere" : `${firstName(a.name)} og rytteren`} har gjort det mot hverandre.</p></div>
+        <OppSearch O={O} index={index} self={a.id} onPick={open} />
       </div>
 
       <section className="card duel-wrap" ref={duelRef} style={{ scrollMarginTop: 80 }}>
@@ -100,6 +108,7 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
 function Duel({ a, o, ms: all, type, isMe, sameOnly, inIndex, onRider }: { a: Athlete; o: Opponent; ms: Meeting[]; type: RaceType | null; isMe: boolean; sameOnly: boolean; inIndex: boolean; onRider: (id: string) => void }) {
   const ms = all;
   const r = record(ms);
+  if (!o.ms.length) return <Empty title={`${firstName(a.name)} og ${o.name} har ikke kjørt samme ritt`}>Ingen av resultatlistene vi har hentet har med begge to.</Empty>;
   if (!ms.length) return <Empty title={`Ingen møter med ${o.name} i samme klasse`}>Slå av «Bare samme klasse» for å se alle møtene.</Empty>;
   const same = record(o.ms.filter((m) => m.same));
   const gaps = ms.filter((m) => m.gp != null).map((m) => m.gp!);
@@ -214,25 +223,26 @@ const Row = ({ c, max }: { c: { club: string; riders: number; wins: number; loss
   </>
 );
 
-function OppSearch({ O, onPick }: { O: Map<string, Opponent>; onPick: (id: string) => void }) {
+function OppSearch({ O, index, self, onPick }: { O: Map<string, Opponent>; index: IndexRider[]; self: string; onPick: (id: string) => void }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
-  const keyed = useMemo(() => [...O.values()].map((o) => [fold(`${o.name} ${o.club}`), o] as const), [O]);
+  const keyed = useMemo(() => index.filter((r) => r.id !== self).map((r) => [fold(`${r.name} ${r.club}`), r] as const), [index, self]);
   const hits = useMemo(() => {
     const s = fold(q.trim());
     if (s.length < 2) return [];
-    return keyed.filter(([k]) => s.split(/\s+/).every((w) => k.includes(w))).map(([, o]) => o).sort((x, y) => y.ms.length - x.ms.length).slice(0, 8);
-  }, [q, keyed]);
-  const pick = (id: string) => { onPick(id); setQ(O.get(id)!.name); setOpen(false); };
+    return keyed.filter(([k]) => s.split(/\s+/).every((w) => k.includes(w))).map(([, r]) => r)
+      .sort((x, y) => (O.get(y.id)?.ms.length ?? 0) - (O.get(x.id)?.ms.length ?? 0) || y.races - x.races).slice(0, 8);
+  }, [q, keyed, O]);
+  const pick = (r: IndexRider) => { onPick(r.id); setQ(r.name); setOpen(false); };
   return (
     <div className="rsearch picker" style={{ marginLeft: 0 }}>
-      <input type="search" id="opp-search" placeholder="Søk etter en motstander" aria-label="Søk etter en motstander" value={q} autoComplete="off"
+      <input type="search" id="opp-search" placeholder="Sammenlign med en rytter" aria-label="Sammenlign med en rytter" value={q} autoComplete="off"
         onChange={(e) => { setQ(e.target.value); setOpen(true); }} onBlur={() => setTimeout(() => setOpen(false), 150)}
-        onKeyDown={(e) => { if (e.key === "Enter" && hits[0]) pick(hits[0].id); if (e.key === "Escape") setOpen(false); }} style={{ paddingLeft: 12 }} />
-      {open && q.trim().length >= 2 && <ul className="hits" role="listbox" aria-label="Motstandere">
+        onKeyDown={(e) => { if (e.key === "Enter" && hits[0]) pick(hits[0]); if (e.key === "Escape") setOpen(false); }} style={{ paddingLeft: 12 }} />
+      {open && q.trim().length >= 2 && <ul className="hits" role="listbox" aria-label="Ryttere">
         {hits.length === 0 && <li className="none">Ingen treff</li>}
-        {hits.map((o) => <li key={o.id} role="option" aria-selected={false} onMouseDown={(e) => { e.preventDefault(); pick(o.id); }}>
-          <span className="who"><b>{o.name}</b><small>{o.club}</small></span><small className="tnum">{o.w}–{o.l}</small></li>)}
+        {hits.map((r) => { const o = O.get(r.id); return <li key={r.id} role="option" aria-selected={false} onMouseDown={(e) => { e.preventDefault(); pick(r); }}>
+          <span className="who"><b>{r.name}</b><small>{r.club || "Uten klubb"}</small></span><small className="tnum">{o ? `${o.w}–${o.l}` : `${r.races} ritt`}</small></li>; })}
       </ul>}
     </div>
   );

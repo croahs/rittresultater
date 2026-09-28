@@ -139,3 +139,30 @@ export const median = (a: number[]) => {
 export const mean = (a: number[]) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN);
 export const years = (a: Athlete) => [...new Set(a.results.map((r) => r.year))].sort();
 export const record = (ms: Meeting[]) => ({ w: ms.filter((m) => m.res === "w").length, l: ms.filter((m) => m.res === "l").length });
+
+/* Head-to-head against any rider, computed from the shared result lists (data/races.json). */
+interface RacesFile { races: { name: string; date: string; type: RaceType; rows: [string, string, string, string, string | null, number | null][] }[] }
+export async function headToHead(meId: string, other: IndexRider): Promise<Opponent> {
+  const { races } = await getJSON<RacesFile>("races.json");
+  const ms: Meeting[] = [];
+  for (const race of races) {
+    const me = race.rows.find((r) => r[0] === meId), o = race.rows.find((r) => r[0] === other.id);
+    if (!me || !o) continue;
+    const t = me[5], x = o[5];
+    let res: Meeting["res"], gs: number | null = null, gp: number | null = null, pl: number | null = null;
+    if (t == null && x == null) res = "d";
+    else if (x == null) res = "w";
+    else if (t == null) res = "l";
+    else {
+      res = t < x ? "w" : t > x ? "l" : "d";
+      gs = t - x; gp = Math.round((1000 * gs) / x) / 10;
+      const times = race.rows.map((r) => r[5]).filter((v): v is number => v != null);
+      pl = x < t ? 1 + times.filter((v) => v > x && v < t).length : t < x ? -(1 + times.filter((v) => v > t && v < x).length) : null;
+    }
+    ms.push({ race: race.name.replace(/\s+20\d\d$/, ""), date: race.date, type: race.type, res, gs, gp, pl, mc: me[4], tc: o[4], same: me[4] === o[4] });
+  }
+  ms.sort((a, b) => a.date.localeCompare(b.date));
+  const gaps = ms.filter((m) => m.gp != null).map((m) => m.gp!);
+  const rec = record(ms);
+  return { id: other.id, name: other.name, club: other.club, w: rec.w, l: rec.l, med: gaps.length ? median(gaps) : null, ms };
+}
