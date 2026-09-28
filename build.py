@@ -185,7 +185,8 @@ def main(src, dst, report):
             sync.derive(r)
             r["Elevation gain (m)"] = r["Climbing per km"] = ""
 
-    cols = sync.COLS[:-2] + ["Age class", "Age class placement", "Age class participants",
+    # The hand-written Notes column is dropped: future races won't have it.
+    cols = [c for c in sync.COLS[:-2] if c != "Notes"] + ["Age class", "Age class placement", "Age class participants",
                              "Turritt", "EQ Timing", "intervals.icu activity", "Match note"]
     with open(dst, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
