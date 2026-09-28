@@ -1,0 +1,242 @@
+<title>Pedårs rittresultater</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column; summary tiles, then two time charts sharing one date axis, then year-over-year, then the full list. */
+:root {
+  --bg: #f5f6f7; --panel: #ffffff; --fg: #15181b; --fg-2: #50565c; --muted: #868c92;
+  --line: #e2e5e8; --grid: #eceef0;
+  --road: #2a78d6; --gravel: #eb6834; --tempo: #1baf7a;
+  --good: #1d7f45; --bad: #b8392f;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Barlow", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111315; --panel: #1a1d20; --fg: #f2f3f4; --fg-2: #b9bec3; --muted: #82888e;
+  --line: #2b2f33; --grid: #24282b;
+  --road: #3987e5; --gravel: #d95926; --tempo: #199e70; --good: #4cc27d; --bad: #f07268; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111315; --panel: #1a1d20; --fg: #f2f3f4; --fg-2: #b9bec3; --muted: #82888e;
+  --line: #2b2f33; --grid: #24282b;
+  --road: #3987e5; --gravel: #d95926; --tempo: #199e70; --good: #4cc27d; --bad: #f07268; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 28px; }
+h1, h2 { font-family: var(--display); font-weight: 700; margin: 0; text-wrap: balance; letter-spacing: .01em; }
+h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1; text-transform: uppercase; }
+h2 { font-size: 1.45rem; text-transform: uppercase; }
+.sub { color: var(--fg-2); margin: 6px 0 0; }
+.eyebrow { font: 600 .75rem/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.big { font: 700 2.3rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.big small { font-size: 1.1rem; color: var(--fg-2); font-weight: 600; }
+.tile p { margin: 0; color: var(--fg-2); font-size: .9rem; }
+section { display: grid; gap: 12px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; justify-content: space-between; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .88rem; color: var(--fg-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.chart { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 6px 4px; position: relative; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { fill: var(--muted); font: 12px var(--body); font-variant-numeric: tabular-nums; }
+.chart .lbl { fill: var(--fg-2); font-weight: 500; }
+.chart .grid { stroke: var(--grid); stroke-width: 1; }
+.chart .season { fill: var(--grid); opacity: .5; }
+.dot { stroke: var(--panel); stroke-width: 2; cursor: pointer; }
+.dot:hover, .dot.on { stroke: var(--fg); }
+.tip { position: absolute; pointer-events: none; background: var(--panel); color: var(--fg); border: 1px solid var(--line);
+  border-radius: 6px; padding: 8px 10px; font-size: .85rem; box-shadow: 0 4px 16px rgb(0 0 0 / .14); min-width: 180px; z-index: 5; }
+.tip b { font-weight: 600; display: block; margin-bottom: 2px; }
+.tip .row { display: flex; justify-content: space-between; gap: 14px; color: var(--fg-2); font-variant-numeric: tabular-nums; }
+.tip .row span:last-child { color: var(--fg); }
+.scroll { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: .92rem; }
+th, td { padding: 8px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+th { font: 600 .72rem/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--panel); position: sticky; top: 0; }
+th:first-child, td:first-child { text-align: left; }
+tr:last-child td { border-bottom: 0; }
+td a { color: inherit; text-decoration-color: var(--muted); text-underline-offset: 2px; }
+.type { display: inline-flex; align-items: center; gap: 6px; color: var(--fg-2); }
+.chg { font-size: .8rem; font-weight: 600; margin-left: 6px; }
+.chg.up { color: var(--good); } .chg.down { color: var(--bad); }
+.note { color: var(--muted); font-size: .85rem; white-space: normal; min-width: 180px; text-align: left; }
+.foot { color: var(--muted); font-size: .85rem; }
+@media (max-width: 560px) { th, td { padding: 7px 8px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Turritt Rogaland · intervals.icu</div>
+    <h1>Pedårs rittresultater</h1>
+    <p class="sub" id="span"></p>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <div class="head"><h2>Plassering i klassen</h2><div class="legend" id="legend1"></div></div>
+    <p class="sub" style="margin:0">Andel av feltet du endte foran eller bak. Høyere opp er bedre; toppen er seier.</p>
+    <div class="chart" id="c-place"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Normalisert watt</h2><div class="legend" id="legend2"></div></div>
+    <p class="sub" style="margin:0">NP over selve rittet, uten dødtid før start og etter mål.</p>
+    <div class="chart" id="c-np"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Samme ritt, 2025 mot 2026</h2></div>
+    <div class="scroll"><table id="yoy"></table></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Alle ritt</h2></div>
+    <div class="scroll"><table id="all"></table></div>
+  </section>
+
+  <p class="foot">Plassering og tid fra Turritt. Watt og fart fra intervals.icu: fart er GPS-distansen i rittvinduet delt på offisiell tid. DNF telles med i feltet.</p>
+</div>
+
+<script>
+const DATA = /*DATA*/[];
+const TYPES = { Road: ["Landevei", "--road"], Gravel: ["Gravel", "--gravel"], TT: ["Tempo", "--tempo"], TTT: ["Lagtempo", "--tempo"] };
+const MON = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"];
+const fmtDate = s => { const d = new Date(s); return `${d.getDate()}. ${MON[d.getMonth()]} ${d.getFullYear()}`; };
+const topPct = r => Math.round(r.top);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const col = t => `var(${TYPES[t][1]})`;
+const years = [...new Set(DATA.map(r => r.year))].sort();
+const median = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+
+document.getElementById("span").textContent =
+  `${DATA.length} ritt fra ${fmtDate(DATA[0].date)} til ${fmtDate(DATA[DATA.length - 1].date)}.`;
+
+// Tiles
+(() => {
+  const [y0, y1] = [years[0], years[years.length - 1]];
+  const by = y => DATA.filter(r => r.year === y);
+  const best = DATA.reduce((a, b) => (b.top < a.top ? b : a));
+  const np = y => Math.round(mean(by(y).filter(r => r.np).map(r => r.np)));
+  const beh = y => Math.round(median(by(y).map(r => r.behind)));
+  const tiles = [
+    [`${DATA.length}`, "ritt", `${by(y0).length} i ${y0}, ${by(y1).length} i ${y1}`],
+    [`Topp ${topPct(best)}`, "%", `Beste plassering: ${best.name} ${best.year}, ${best.place}. av ${best.field}`],
+    [`${np(y1)}`, "W", `Snitt NP i ${y1}, mot ${np(y0)} W i ${y0}`],
+    [`${beh(y1)}`, "%", `Typisk tid bak klassevinneren i ${y1}, mot ${beh(y0)} % i ${y0}`],
+  ];
+  document.getElementById("tiles").innerHTML = tiles.map(([v, u, t]) =>
+    `<div class="tile"><div class="big">${v}<small> ${u}</small></div><p>${esc(t)}</p></div>`).join("");
+})();
+
+// Legends: only the types present
+const present = [...new Set(DATA.map(r => r.type === "TTT" ? "TT" : r.type))];
+const legendHtml = present.map(t => `<span><i class="sw" style="background:${col(t)}"></i>${TYPES[t][0]}${t === "TT" && DATA.some(r => r.type === "TTT") ? " (◆ lagtempo)" : ""}</span>`).join("");
+document.getElementById("legend1").innerHTML = legendHtml;
+document.getElementById("legend2").innerHTML = legendHtml;
+
+// Time scatter
+function scatter(el, { y, domain, invert, ticks, fmt, tip }) {
+  // Pixel-sized viewBox so text stays 12px at any width; winters are cut out of the x axis.
+  const W = Math.max(300, el.clientWidth - 12), H = W < 560 ? 240 : 300, m = { l: 48, r: 12, t: 14, b: 30 }, gap = 18;
+  const rows = DATA.filter(r => y(r) != null);
+  const seasons = years.map(yr => {
+    const ds = DATA.filter(r => r.year === yr).map(r => +new Date(r.date));
+    return { yr, a: Math.min(...ds) - 12 * 864e5, b: Math.max(...ds) + 12 * 864e5 };
+  });
+  const total = seasons.reduce((n, z) => n + z.b - z.a, 0), avail = W - m.l - m.r - gap * (seasons.length - 1);
+  let off = m.l; for (const z of seasons) { z.x0 = off; z.x1 = off + (z.b - z.a) / total * avail; off = z.x1 + gap; }
+  const X = d => { const t = +new Date(d), z = seasons.find(z => t >= z.a && t <= z.b); return z.x0 + (t - z.a) / (z.b - z.a) * (z.x1 - z.x0); };
+  const Y = v => { const f = (v - domain[0]) / (domain[1] - domain[0]); return m.t + (invert ? f : 1 - f) * (H - m.t - m.b); };
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  for (const z of seasons) {
+    s += `<rect class="season" x="${z.x0}" y="${m.t}" width="${z.x1 - z.x0}" height="${H - m.t - m.b}" rx="4"/>`;
+    s += `<text class="lbl" x="${(z.x0 + z.x1) / 2}" y="${H - 8}" text-anchor="middle">${z.yr}</text>`;
+  }
+  for (const v of ticks) s += `<line class="grid" x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
+  const r0 = W < 560 ? 5 : 7;
+  rows.forEach(r => {
+    const cx = X(r.date), cy = Y(y(r));
+    s += r.type === "TTT"
+      ? `<rect class="dot" data-i="${DATA.indexOf(r)}" x="${cx - r0}" y="${cy - r0}" width="${2 * r0}" height="${2 * r0}" transform="rotate(45 ${cx} ${cy})" fill="${col(r.type)}"/>`
+      : `<circle class="dot" data-i="${DATA.indexOf(r)}" cx="${cx}" cy="${cy}" r="${r0}" fill="${col(r.type)}"/>`;
+  });
+  s += `</svg><div class="tip" hidden></div>`;
+  el.innerHTML = s;
+  const tipEl = el.querySelector(".tip");
+  const show = (dot, ev) => {
+    const r = DATA[+dot.dataset.i];
+    tipEl.innerHTML = `<b>${esc(r.name)} ${r.year}</b><div class="row"><span>${fmtDate(r.date)}</span><span>${TYPES[r.type][0]}</span></div>` +
+      tip(r).map(([k, v]) => `<div class="row"><span>${k}</span><span>${v}</span></div>`).join("");
+    tipEl.hidden = false;
+    const box = el.getBoundingClientRect(), d = dot.getBoundingClientRect();
+    let left = d.left - box.left + d.width / 2 + 12, top = d.top - box.top - 10;
+    if (left + tipEl.offsetWidth > box.width - 4) left = d.left - box.left - tipEl.offsetWidth - 12;
+    if (top + tipEl.offsetHeight > box.height) top = box.height - tipEl.offsetHeight - 4;
+    tipEl.style.left = `${Math.max(4, left)}px`; tipEl.style.top = `${Math.max(4, top)}px`;
+  };
+  el.querySelectorAll(".dot").forEach(d => {
+    d.addEventListener("pointerenter", e => show(d, e));
+    d.addEventListener("pointerleave", () => { tipEl.hidden = true; });
+    d.addEventListener("click", e => show(d, e));
+  });
+}
+
+const tipRows = r => [
+  ["Plass", `${r.place}. av ${r.field}`],
+  ["Bak vinner", `${r.behind} %`],
+  ["Tid", r.time],
+  ...(r.np ? [["NP / snitt", `${r.np} / ${r.ap} W`]] : []),
+  ...(r.speed ? [["Fart", `${r.speed.toFixed(1)} km/t`]] : []),
+];
+const drawCharts = () => {
+scatter(document.getElementById("c-place"), {
+  y: r => r.top, domain: [0, 100], invert: true, ticks: [0, 25, 50, 75, 100],
+  fmt: v => v === 0 ? "1." : `${v} %`, tip: tipRows,
+});
+const nps0 = 0;
+const nps = DATA.filter(r => r.np).map(r => r.np);
+const lo = Math.floor((Math.min(...nps) - 10) / 20) * 20, hi = Math.ceil((Math.max(...nps) + 10) / 20) * 20;
+const npTicks = []; for (let v = lo; v <= hi; v += 20) npTicks.push(v);
+scatter(document.getElementById("c-np"), {
+  y: r => r.np, domain: [lo, hi], invert: false, ticks: npTicks, fmt: v => `${v} W`, tip: tipRows,
+});
+};
+
+// Year over year
+(() => {
+  const [y0, y1] = [years[0], years[years.length - 1]];
+  const pairs = [];
+  for (const b of DATA.filter(r => r.year === y1)) {
+    const a = DATA.find(r => r.year === y0 && r.key === b.key);
+    if (a) pairs.push([a, b]);
+  }
+  const chg = (a, b, lowerBetter, unit, dec = 0) => {
+    if (a == null || b == null) return "";
+    const d = b - a; if (Math.abs(d) < 0.5 * 10 ** -dec) return `<span class="chg">±0</span>`;
+    const good = lowerBetter ? d < 0 : d > 0;
+    return `<span class="chg ${good ? "up" : "down"}">${good ? "▲" : "▼"} ${Math.abs(d).toFixed(dec)}${unit}</span>`;
+  };
+  let h = `<thead><tr><th>Ritt</th><th>Plassering ${y0}</th><th>${y1}</th><th>Bak vinner ${y0}</th><th>${y1}</th><th>NP ${y0}</th><th>${y1}</th></tr></thead><tbody>`;
+  for (const [a, b] of pairs) {
+    h += `<tr><td>${esc(b.name)}</td><td>Topp ${topPct(a)} %</td><td>Topp ${topPct(b)} %${chg(a.top, b.top, true, " pp")}</td>` +
+      `<td>${a.behind} %</td><td>${b.behind} %${chg(a.behind, b.behind, true, " pp")}</td>` +
+      `<td>${a.np ?? "–"}</td><td>${b.np ?? "–"}${chg(a.np, b.np, false, " W")}</td></tr>`;
+  }
+  document.getElementById("yoy").innerHTML = h + "</tbody>";
+})();
+
+// All races, newest first
+(() => {
+  let h = `<thead><tr><th>Ritt</th><th>Dato</th><th>Type</th><th>Plass</th><th>Bak vinner</th><th>Tid</th><th>Km</th><th>Fart</th><th>NP</th><th>Snitt W</th><th>Merknad</th></tr></thead><tbody>`;
+  for (const r of [...DATA].reverse()) {
+    const name = r.turritt ? `<a href="${esc(r.turritt)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name);
+    const np = r.np ? (r.icu ? `<a href="${esc(r.icu)}" target="_blank" rel="noopener">${r.np}</a>` : r.np) : "–";
+    h += `<tr><td>${name}</td><td>${fmtDate(r.date)}</td><td><span class="type"><i class="sw" style="background:${col(r.type)}"></i>${TYPES[r.type][0]}</span></td>` +
+      `<td>${r.place}/${r.field}</td><td>${r.behind} %</td><td>${r.time}</td><td>${r.km ?? "–"}</td><td>${r.speed ? r.speed.toFixed(1) : "–"}</td>` +
+      `<td>${np}</td><td>${r.ap ?? "–"}</td><td class="note">${esc(r.notes || "")}</td></tr>`;
+  }
+  document.getElementById("all").innerHTML = h + "</tbody>";
+})();
+</script>
