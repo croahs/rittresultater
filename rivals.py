@@ -10,9 +10,11 @@ Who counts, per race: the "overall" pool from turritt.py (all sibling races of
 the event, same course, officials/leisure groups and DNS dropped). Faster time
 wins. A DNF loses to any finisher (the sheet's rule); two DNFs are a draw.
 
-  python3 rivals.py                 writes rivals.json, rivals.csv, race_analysis.csv
+  python3 rivals.py                 writes rivals.json, rivals.csv, race_analysis.csv (you)
+                                    and data/ for every rider (races.json, riders/index.json, riders/<id>.json)
   python3 rivals.py søk <navn>      head-to-head against riders matching <navn>
 """
+import bisect
 import csv
 import json
 import os
@@ -47,8 +49,9 @@ def pool(race_id):
     sibs = [v for v, n in names.items() if name and turritt._base(n) == turritt._base(name)] or [race_id]
     rows = [(r, category(names.get(v, ""), r[3])) for v in sibs for r in turritt.results(v) if turritt._counts(r)]
     if any(c == "CX/Gravel" for _, c in rows):
-        # Gravel events: the main race next to the CX/Gravel class is open to any bike, mostly MTB.
-        rows = [(r, c or "Åpen (mest MTB)") for r, c in rows]
+        # Gravel events: the main race next to the CX/Gravel class is one class (MTB or any bike),
+        # even where one of its waves is labelled "(MTB)".
+        rows = [(r, c if c == "CX/Gravel" else "MTB/åpen") for r, c in rows]
     return rows
 
 
@@ -71,35 +74,53 @@ def name(r):
     return f"{r[5]} {r[6]}".strip()
 
 
-def build():
+def events():
+    """Every race in the sheet that links to Turritt, with its pool of riders, fetched once."""
+    out = []
+    for sheet, race_id in races():
+        cats = pool(race_id)
+        out.append({"sheet": sheet, "race_id": race_id, "cats": cats,
+                    "times": sorted(int(r[9]) for r, _ in cats),
+                    "by_id": {r[2]: (r, c) for r, c in cats if r[2] not in ("", "0")}})
+    return out
+
+
+def build(me=ME, evs=None):
     opp = {}  # turritt id -> summary
     meetings = defaultdict(list)
     analysis = []
-    for sheet, race_id in races():
-        cats = pool(race_id)
-        rows = [r for r, _ in cats]
-        me = next((r for r in rows if r[2] == ME), None)
-        if not me:
+    for ev in evs or events():
+        if me not in ev["by_id"]:
             continue
-        my_cat = next(c for r, c in cats if r is me)
-        t = int(me[9])
-        finished = [int(r[9]) for r in rows if int(r[9]) < DNF]
-        winner = min(finished)
-        beaten = sum(int(r[9]) > t for r in rows if r[2] != ME)
+        sheet, race_id, cats, times = ev["sheet"], ev["race_id"], ev["cats"], ev["times"]
+        rows = [r for r, _ in cats]
+        me_row, my_cat = ev["by_id"][me]
+        t = int(me_row[9])
+        winner = times[0]
+        beaten = sum(int(r[9]) > t for r in rows) if t < DNF else 0
+        cls = [int(r[9]) for r, c in cats if c == my_cat]
         dist = float(sheet["Distance (km)"] or 0)
         elev = float(sheet["Elevation gain (m)"] or 0)
         analysis.append({
             "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"],
             "field": len(rows), "beaten": beaten,
-            "beaten_pct": round(100 * beaten / (len(rows) - 1), 1),
+            "beaten_pct": round(100 * beaten / (len(rows) - 1), 1) if len(rows) > 1 else 0.0,
             "behind_winner_pct": round(100 * (t / winner - 1), 1) if t < DNF else "",
             "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else "",
             "turritt_race_id": race_id,
+            "time": turritt.hms(t) if t < DNF else "DNF",
+            "class": my_cat,
+            "place": bisect.bisect_left(times, t) + 1 if t < DNF else "",
+            "class_place": 1 + sum(x < t for x in cls) if t < DNF else "",
+            "class_n": len(cls),
+            "behind_class_winner_pct": round(100 * (t / min(cls) - 1), 1) if t < DNF else "",
         })
-        times = sorted(int(r[9]) for r in rows if r[2] != ME)
+        lo, hi = bisect.bisect_left(times, t), bisect.bisect_right(times, t)
+        met = set()
         for r, cat in cats:
-            if r[2] == ME or not r[2] or r[2] == "0":
+            if r[2] == me or r[2] in ("", "0") or r[2] in met:  # a few riders are listed twice
                 continue
+            met.add(r[2])
             o = int(r[9])
             if t >= DNF and o >= DNF:
                 res, gap = "draw", None
@@ -111,6 +132,12 @@ def build():
                 res = "win" if t < o else "loss" if t > o else "draw"
                 gap = t - o  # seconds; negative = you were faster
             opp[r[2]] = {"turritt_id": r[2], "name": name(r), "club": r[7].strip(), "age_class": r[8]}
+            if o < t < DNF:  # places between you: 1 = finished right ahead of you, -1 = right behind
+                places = 1 + lo - bisect.bisect_right(times, o)
+            elif t < o < DNF:
+                places = -(1 + bisect.bisect_left(times, o) - hi)
+            else:
+                places = None
             meetings[r[2]].append({
                 "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"], "result": res,
                 "gap_s": gap, "gap_pct": round(100 * gap / o, 1) if gap is not None else None,
@@ -118,9 +145,7 @@ def build():
                 # Bike category each of you started in; same_class is False only when they differ,
                 # e.g. you on CX/Gravel and them on MTB, or you on a road bike and them on a TT bike.
                 "my_class": my_cat, "their_class": cat, "same_class": cat == my_cat,
-                # Places between you: 1 = finished right ahead of you, -1 = right behind.
-                "places": (1 + sum(o < x < t for x in times)) if o < t < DNF else
-                          -(1 + sum(t < x < o for x in times)) if t < o < DNF else None,
+                "places": places,
             })
 
     out = []
@@ -288,6 +313,93 @@ def write(opps, analysis):
         w.writerows(analysis)
 
 
+def iso(d):
+    dd, mm, yy = d.split(".")
+    return f"20{yy}-{mm}-{dd}"
+
+
+def profile(analysis):
+    """Share of the field beaten per race type and per year, and what it goes with."""
+    out = {"by_type": {}, "by_year": {}, "correlations": None}
+    for key, f in (("by_type", lambda a: a["type"]), ("by_year", lambda a: "20" + a["date"][-2:])):
+        by = defaultdict(list)
+        for a in analysis:
+            by[f(a)].append(a["beaten_pct"])
+        out[key] = {k: {"races": len(v), "avg_beaten_pct": round(statistics.mean(v), 1)} for k, v in sorted(by.items())}
+    if len(analysis) >= 4:
+        y = [a["beaten_pct"] for a in analysis]
+        out["correlations"] = {}
+        for key in ("field", "climb_m_per_km", "distance_km"):
+            try:
+                out["correlations"][key] = round(statistics.correlation([float(a[key] or 0) for a in analysis], y), 2)
+            except statistics.StatisticsError:  # constant input
+                out["correlations"][key] = None
+    return out
+
+
+SUMMARY_KEYS = ("turritt_id", "name", "club", "races", "wins", "losses", "draws",
+                "same_class_races", "same_class_wins", "same_class_losses", "avg_gap_s", "median_gap_pct")
+
+
+def write_all(evs):
+    """Static-site data for every rider in the cached lists: races.json, riders/index.json, riders/<id>.json."""
+    data = os.path.join(HERE, "data")
+    os.makedirs(os.path.join(data, "riders"), exist_ok=True)
+    dump = lambda path, obj: json.dump(obj, open(os.path.join(data, path), "w", encoding="utf-8"),
+                                       ensure_ascii=False, separators=(",", ":"))
+    races_out, seen = [], defaultdict(list)
+    for ev in evs:
+        sh = ev["sheet"]
+        dist, elev = float(sh["Distance (km)"] or 0), float(sh["Elevation gain (m)"] or 0)
+        races_out.append({
+            "id": ev["race_id"], "name": sh["Race"], "date": iso(sh["Date"]), "type": sh["Type"],
+            "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else None,
+            "turritt": sh["Turritt"],
+            "rows": [[r[2], name(r), r[7].strip(), r[8], c, int(r[9]) if int(r[9]) < DNF else None]
+                     for r, c in sorted(ev["cats"], key=lambda rc: int(rc[0][9]))],
+        })
+        for tid, (r, _) in ev["by_id"].items():
+            seen[tid].append((iso(sh["Date"]), r))
+    races_out.sort(key=lambda r: r["date"])
+    dump("races.json", {
+        "scope": "Turritt result lists of the races in race_results_auto.csv (every race Pedår rode that "
+                 "Turritt lists). Other riders' histories only cover these races.",
+        "row_fields": ["turritt_id", "name", "club", "age_class", "class", "time_s (null = DNF)"],
+        "races": races_out})
+
+    index = []
+    for tid, rs in seen.items():
+        last = max(rs, key=lambda x: x[0])[1]
+        index.append({"id": tid, "name": name(last), "club": last[7].strip(), "races": len(rs)})
+    index.sort(key=lambda r: (-r["races"], r["name"]))
+    dump(os.path.join("riders", "index.json"), index)
+
+    written = 0
+    for entry in index:
+        if entry["races"] < 2:
+            continue
+        opps, analysis = build(entry["id"], evs)
+        results = [{**a, "date": iso(a["date"])} for a in analysis]
+        results.sort(key=lambda a: a["date"])
+        summ = lambda o: {k: o[k] for k in SUMMARY_KEYS}
+        ins = insights(opps)
+        for c in ins["gap_curves"]:
+            for pt in c["points"]:
+                pt["date"] = iso(pt["date"])
+        dump(os.path.join("riders", f"{entry['id']}.json"), {
+            **entry,
+            "results": results,
+            "record": {"opponents": len(opps), "wins": sum(o["wins"] for o in opps),
+                       "losses": sum(o["losses"] for o in opps)},
+            **profile(analysis),
+            "most_met": [summ(o) for o in opps[:10]],
+            "rivals": [summ(o) for o in rivals(opps)[:10]],
+            "insights": ins,
+        })
+        written += 1
+    return len(index), written
+
+
 def summary(opps, analysis):
     print(f"{len(opps)} motstandere i {len(analysis)} Turritt-ritt.\n")
     print("Mest møtt:")
@@ -343,9 +455,12 @@ def summary(opps, analysis):
 
 
 if __name__ == "__main__":
-    opps, analysis = build()
+    evs = events()
+    opps, analysis = build(ME, evs)
     if len(sys.argv) > 2 and sys.argv[1] in ("søk", "sok", "search"):
         search(opps, " ".join(sys.argv[2:]))
     else:
         write(opps, analysis)
+        n, written = write_all(evs)
         summary(opps, analysis)
+        print(f"\ndata/: {n} ryttere i indeksen, {written} rytterfiler (minst 2 ritt)")
