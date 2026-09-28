@@ -1,5 +1,5 @@
-Race,Date,Class,Placement,Riders in class,Points,Winner points,Distance (km),Average speed (km/h),Average Power,Normalized Power,raceresult,intervals.icu activity,Note
-SSK Cup 1,2026-04-22,Blå klasse,6-10 (shared),10,0,56,25.6,35.2,188,229,https://my.raceresult.com/391696/,https://intervals.icu/activities/i142121692,power and speed over the whole file (no official time to trim to)
-SSK Cup 4,2026-08-19,Blå klasse,2,10,19,28,20.6,37.2,238,292,https://my.raceresult.com/391696/,https://intervals.icu/activities/i177653179,power and speed over the whole file (no official time to trim to)
-SSK Cup 5,2026-09-02,Blå klasse,3,10,27,40,20.5,35.9,244,293,https://my.raceresult.com/391696/,https://intervals.icu/activities/i182583963,power and speed over the whole file (no official time to trim to)
-SSK Cup 6,2026-09-16,Blå klasse,6,10,1,49,26.8,35.2,162,229,https://my.raceresult.com/391696/,https://intervals.icu/activities/i187378317,power and speed over the whole file (no official time to trim to)
+Race,Date,Class,Placement,Riders in class,Points,Winner points,Race laps,Race time,Distance (km),Average speed (km/h),Average Power,Normalized Power,raceresult,intervals.icu activity,Note
+SSK Cup 1,2026-04-22,Sort klasse,,,,,3,5:26,3.8,42.1,280,325,https://my.raceresult.com/391696/,https://intervals.icu/activities/i142121692,"rode Sort klasse (not in its results list); power, speed and time over the race laps only"
+SSK Cup 4,2026-08-19,Blå klasse,2,10,19,28,15,29:37,19.2,38.8,252,295,https://my.raceresult.com/391696/,https://intervals.icu/activities/i177653179,"power, speed and time over the race laps only"
+SSK Cup 5,2026-09-02,Blå klasse,3,10,27,40,15,30:51,19.1,37.2,259,300,https://my.raceresult.com/391696/,https://intervals.icu/activities/i182583963,"power, speed and time over the race laps only"
+SSK Cup 6,2026-09-16,Sort klasse,,,,,4,7:16,5.0,41.5,279,342,https://my.raceresult.com/391696/,https://intervals.icu/activities/i187378317,"rode Sort klasse (not in its results list); power, speed and time over the race laps only"
