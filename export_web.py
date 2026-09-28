@@ -1,4 +1,4 @@
-"""Write the JSON files the web dashboard reads (web/public/data/).
+"""Write your own profile for the web dashboard (data/site/).
 
 The site is static: it only reads these files, so refresh them after the pipeline has run.
 
@@ -16,7 +16,7 @@ import shutil
 import dashboard
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "web", "public", "data")
+OUT = os.path.join(HERE, "data", "site")  # web/scripts/copy-data.mjs copies this and data/riders into the site
 ME = "171101"
 
 
@@ -54,13 +54,10 @@ def main():
         dump(os.path.join(OUT, "clips", f"{me_id}-{clip['year']}.json"), clip)
         clips.append(clip["year"])
 
-    riders_dir = os.path.join(HERE, "data", "riders")
+    index_path = os.path.join(HERE, "data", "riders", "index.json")
     index = []
-    if os.path.isdir(riders_dir):
-        os.makedirs(os.path.join(OUT, "riders"), exist_ok=True)
-        for path in glob.glob(os.path.join(riders_dir, "*.json")):
-            shutil.copy(path, os.path.join(OUT, "riders"))
-        with open(os.path.join(riders_dir, "index.json"), encoding="utf-8") as f:
+    if os.path.exists(index_path):
+        with open(index_path, encoding="utf-8") as f:
             index = json.load(f)
 
     # Your own profile: official results with power, points races, rivals, clips.
@@ -73,9 +70,6 @@ def main():
         "insights": {k: v for k, v in rivals.get("insights", {}).items() if k != "closest"},
     }
     dump(os.path.join(OUT, "athletes", f"{me_id}.json"), profile)
-    if not index:  # before rivals.py has written every rider: search finds only you
-        index = [{"id": me_id, "name": profile["name"], "club": profile["club"], "races": len(results), "shard": None}]
-        dump(os.path.join(OUT, "riders", "index.json"), index)
     dump(os.path.join(OUT, "site.json"), {"default_rider": me_id, "profiles": [me_id]})
     print(f"wrote {OUT}: {len(results)} races, {len(points)} points races, "
           f"{len(profile['opponents'])} opponents, clips {clips}, {len(index)} riders in search")

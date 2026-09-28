@@ -190,7 +190,8 @@ h1, h2, h3 { text-wrap: balance; }
 .type-card .bar i { display: block; height: 100%; border-radius: 3px; background: var(--c); }
 .type-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: .85rem; }
 .type-card li { display: flex; justify-content: space-between; gap: 8px; }
-.type-card li span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.type-card li span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.type-card li span:last-child { flex: none; }
 
 /* ---------- charts ---------- */
 .chart { width: 100%; }

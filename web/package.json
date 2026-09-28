@@ -4,9 +4,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "data": "node scripts/copy-data.mjs",
+    "predev": "node scripts/copy-data.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/copy-data.mjs",
     "build": "tsc -b && vite build",
-    "build:single": "tsc -b && vite build --mode single",
+    "build:single": "node scripts/copy-data.mjs && tsc -b && vite build --mode single",
     "preview": "vite preview",
     "typecheck": "tsc -b"
   },

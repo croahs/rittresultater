@@ -24,3 +24,8 @@ python3 build.py race_results_original.csv race_results_auto.csv turritt_vs_shee
   - `data/riders/index.json`: `[{id, name, club, age_class, races, shard}]` for search, most races first.
   - `data/riders/shard-NN.json` (64 shards, `int(id) % 64`): `{id: rider}` for every rider. A rider has `results` (class place, `top_pct`, `behind_pct`, time, winner, overall place, share of field beaten, over time) and, with 2+ races, `opponents` (compact head-to-head arrays for opponents met 3+ times or named in rivals/insights), `rivals` (ranked ids), `insights` (as in `rivals.json`, minus gap curves), `record`, `by_type`, `by_year`, `correlations`.
   - Scope: only the races Pedår rode, so other riders' histories are partial.
+
+## Dashboard (web/)
+
+The dashboard is a static Vite + React + TypeScript site in `web/`. It reads only JSON: `data/riders/` (from `rivals.py`) and `data/site/` (from `python3 export_web.py`: your results with power, points races, rivals and season clips). `cd web && pnpm install && pnpm build` writes `web/dist/`; `pnpm dev` runs it locally. Publishing on Cloudflare Pages is described in `docs/DEPLOY.md`. The older single-file page (`dashboard.py`, `dashboard_template.html`) still builds, but the web app replaces it.
+

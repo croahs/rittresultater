@@ -94,7 +94,8 @@ const num = (v: unknown) => (v === null || v === undefined || v === "" ? null : 
 function result(r: Record<string, unknown>): Result {
   // Two shapes: the sheet export (place/field/top/np...) and rivals.py's per-rider rows (top_pct/behind_pct).
   const date = toIso(String(r.date));
-  const top = Number(r.top ?? r.top_pct);
+  const rawTop = r.top ?? r.top_pct;
+  const top = rawTop === null || rawTop === undefined || rawTop === "" ? NaN : Number(rawTop); // DNF has no placing
   return {
     race: String(r.name ?? r.race).replace(/\s+20\d\d$/, ""), date, year: Number(date.slice(0, 4)),
     type: r.type as RaceType, cls: (r.class as string) ?? null,
@@ -112,7 +113,7 @@ function athlete(p: RawProfile): Athlete {
   return {
     id: p.id, name: p.name, club: p.club, ageClass: p.age_class || "",
     power: !!p.power, clips: p.clips || [],
-    results: p.results.map(result).filter((r) => r.field > 0).sort((a, b) => a.date.localeCompare(b.date)),
+    results: p.results.map(result).filter((r) => r.field > 0 && Number.isFinite(r.top)).sort((a, b) => a.date.localeCompare(b.date)),
     points: p.points || [],
     opponents: opponents(p.opponents), rivals: p.rivals?.length ? p.rivals : closest || [], insights: ins,
   };
