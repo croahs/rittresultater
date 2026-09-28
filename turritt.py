@@ -128,7 +128,7 @@ def race_name(race_id):
     def fetch():
         t = re.sub(r"\s+", " ", _text(_get(Turritt=race_id, page="resultat", current=2, su=2)))
         m = re.search(r"\} ([^{}]+?) - 20\d\d .*?Dato:", t)
-        return m.group(1).strip() if m else f"Turritt {race_id}"
+        return re.sub(r"\s*Resultat$", "", m.group(1)).strip() if m else f"Turritt {race_id}"
     return _cached(f"name:{race_id}", fetch)
 
 
