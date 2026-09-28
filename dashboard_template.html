@@ -163,6 +163,8 @@ footer a { color: inherit; margin-right: 16px; }
 .duel-wrap { display: grid; grid-template-columns: 300px minmax(0, 1fr); background: var(--card); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; box-shadow: 0 10px 30px -18px rgb(10 10 40 / .45); }
 @media (max-width: 860px) { .duel-wrap { grid-template-columns: 1fr; } .picker { border-right: 0; border-bottom: 1px solid var(--line); } .picker ol { max-height: 260px; } }
 .picker { background: var(--side); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; }
+.same-toggle { display: flex; align-items: center; gap: 8px; padding: 12px 16px 0; font-weight: 600; font-size: .85rem; color: var(--fg-2); cursor: pointer; }
+.same-toggle input { accent-color: var(--blue); width: 16px; height: 16px; margin: 0; }
 .tabs { display: flex; flex-wrap: wrap; gap: 0 14px; padding: 8px 16px 0; border-bottom: 1px solid var(--line); }
 .tabs button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); font: 700 .75rem var(--font); letter-spacing: .06em; text-transform: uppercase; padding: 10px 0; cursor: pointer; }
 .tabs button[aria-selected="true"] { color: var(--fg); border-color: var(--blue); }
@@ -276,6 +278,7 @@ footer a { color: inherit; margin-right: 16px; }
         </div>
         <div class="duel-wrap">
           <div class="picker">
+            <label class="same-toggle"><input type="checkbox" id="riv-same"> Bare samme klasse som meg</label>
             <div class="tabs" role="tablist" aria-label="Rivaler etter rittype" id="riv-tabs"></div>
             <ol id="riv-list"></ol>
           </div>
@@ -493,7 +496,9 @@ render();
 (() => {
   if (!RIVALS.opponents) { document.getElementById("rivaler").hidden = true; return; }
   const OPP = new Map(RIVALS.opponents.map(([id, name, club, w, l, med, ms]) => [id, { id, name, club, w, l, med,
-    ms: ms.map(([race, date, type, res, gs, gp, pl]) => ({ race, date, type, res, gs, gp, pl })) }]));
+    ms: ms.map(([race, date, type, res, gs, gp, pl, mc, tc, same]) => ({ race, date, type, res, gs, gp, pl, mc, tc, same: !!same })) }]));
+  let sameOnly = false;
+  const pool = o => sameOnly ? o.ms.filter(m => m.same) : o.ms;
   const INS = RIVALS.insights;
   const TYPE_LC = { Road: "landevei", Gravel: "gravel", TT: "tempo", TTT: "lagtempo" };
   const list = a => a.length > 1 ? `${a.slice(0, -1).join(", ")} og ${a[a.length - 1]}` : a.join("");
@@ -502,7 +507,7 @@ render();
     return h ? `${h}:${String(m).padStart(2, "0")}:${String(x).padStart(2, "0")}` : `${m}:${String(x).padStart(2, "0")}`; };
   const recOf = ms => ({ w: ms.filter(m => m.res === "w").length, l: ms.filter(m => m.res === "l").length });
   const mini = ms => `<span class="mini" aria-hidden="true">${ms.map(m => `<i class="${m.res === "w" ? "" : m.res}"></i>`).join("")}</span>`;
-  const ofType = (o, t) => t ? o.ms.filter(m => m.type === t) : o.ms;
+  const ofType = (o, t) => t ? pool(o).filter(m => m.type === t) : pool(o);
 
   const nOpp = OPP.size, nMeet = [...OPP.values()].reduce((s, o) => s + o.ms.length, 0);
   document.getElementById("riv-sub").textContent =
@@ -533,9 +538,11 @@ render();
   function renderDuel() {
     const o = OPP.get(current), el = document.getElementById("duel");
     if (!o) { el.innerHTML = ""; return; }
-    const t = tabType(), ms = [...o.ms].sort((a, b) => a.date.localeCompare(b.date)), r = recOf(ms);
+    const t = tabType(), ms = [...pool(o)].sort((a, b) => a.date.localeCompare(b.date)), r = recOf(ms);
+    if (!ms.length) { el.innerHTML = `<p class="empty">Du har ikke møtt ${esc(o.name)} i samme klasse ennå. Slå av «Bare samme klasse» for å se alle møtene.</p>`; return; }
+    const same = recOf(o.ms.filter(m => m.same)), nOther = ms.filter(m => !m.same).length;
     const timed = ms.filter(m => m.gp != null), lastM = ms[ms.length - 1];
-    const med = o.med;
+    const med = (g => g.length ? median(g) : null)(ms.filter(m => m.gp != null).map(m => m.gp));
     const medTxt = med == null ? "–" : med === 0 ? "Helt likt" : med < 0 ? `${Math.abs(med).toFixed(1)} % foran` : `${med.toFixed(1)} % bak`;
     const resTxt = m => m.res === "w" ? "du slo hen" : m.res === "l" ? "hen slo deg" : "likt";
     el.innerHTML =
@@ -544,10 +551,10 @@ render();
       `<div class="side"><b>${esc(o.name)}</b><small>${esc(o.club || "Uten klubb")}</small></div></div>` +
       `<div class="strip" aria-hidden="true">${ms.map((m, i) => `<i class="${m.res === "w" ? "" : m.res}" style="animation-delay:${i * 50}ms"></i>`).join("")}</div>` +
       `<div class="facts"><div><small>Møtt i</small><b>${ms.length} ritt</b></div><div><small>Typisk tidsforskjell</small><b>${medTxt}</b></div>` +
-      `<div><small>Siste møte</small><b>${esc(lastM.race)} ${lastM.date.slice(0, 4)}, ${resTxt(lastM)}</b></div></div>` +
+      `<div><small>I samme klasse som deg</small><b>${same.w}–${same.l}</b></div><div><small>Siste møte</small><b>${esc(lastM.race)} ${lastM.date.slice(0, 4)}, ${resTxt(lastM)}</b></div></div>` +
       `<div class="gap"><svg id="gap-svg" role="img" aria-label="Tidsforskjell mot ${esc(o.name)} per ritt"></svg></div>` +
       `<div class="gap-cap"><span><i style="background:var(--win)"></i>Du var raskere</span><span><i style="background:var(--loss)"></i>${esc(o.name.split(" ")[0])} var raskere</span>` +
-      `<span>Høyde: prosent av vinnertiden mellom dere${t ? `. Uthevet: ${TYPE_LC[t]}` : ""}</span></div>`;
+      `${nOther ? `<span><i style="border:2px solid var(--muted)"></i>Hul: annen klasse enn deg</span>` : ""}<span>Høyde: prosent av vinnertiden mellom dere${t ? `. Uthevet: ${TYPE_LC[t]}` : ""}</span></div>`;
     drawGap(ms, t);
   }
 
@@ -569,7 +576,7 @@ render();
       if (m.gp == null) g += `<circle data-m="${i}" cx="${cx.toFixed(1)}" cy="${y0}" r="5" fill="var(--muted)" opacity="${dim}"/>`;
       else {
         const v = -m.gp, yy = y(v), h = Math.max(2, Math.abs(yy - y0));
-        g += `<rect data-m="${i}" class="${v >= 0 ? "bar-up" : "bar-down"}" x="${(cx - bw / 2).toFixed(1)}" y="${(v >= 0 ? y0 - h : y0).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${v >= 0 ? "var(--win)" : "var(--loss)"}" opacity="${dim}" style="animation-delay:${i * 50}ms"/>`;
+        g += `<rect data-m="${i}" class="${v >= 0 ? "bar-up" : "bar-down"}" x="${(cx - bw / 2).toFixed(1)}" y="${(v >= 0 ? y0 - h : y0).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${m.same ? (v >= 0 ? "var(--win)" : "var(--loss)") : "var(--card)"}" stroke="${v >= 0 ? "var(--win)" : "var(--loss)"}" stroke-width="${m.same ? 0 : 2}" opacity="${dim}" style="animation-delay:${i * 50}ms"/>`;
       }
       if (i % every === 0 || i === n - 1) g += `<text x="${cx.toFixed(1)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--fg-2)">${esc(m.race.split(/[\s-]/)[0].slice(0, 10))}</text>` +
         `<text x="${cx.toFixed(1)}" y="${H - B + 32}" text-anchor="middle" font-size="10" fill="var(--muted)">${m.date.slice(0, 4)}</text>`;
@@ -582,7 +589,8 @@ render();
     const m = svg._ms[+b.dataset.m], o = OPP.get(current);
     const who = m.res === "w" ? "Du" : m.res === "l" ? esc(o.name.split(" ")[0]) : "Ingen";
     showTip(e, `<b>${esc(m.race)} ${m.date.slice(0, 4)}</b><span>${TYPES[m.type] || m.type}. ${m.gs != null ? `${who} var ${mmss(m.gs)} raskere (${Math.abs(m.gp).toFixed(1)} %)` : "Ingen tid for den ene"}` +
-      `${m.pl ? `, ${Math.abs(m.pl)} plasser ${m.pl > 0 ? "foran deg" : "bak deg"}` : ""}.</span>`);
+      `${m.pl ? `, ${Math.abs(m.pl)} plasser ${m.pl > 0 ? "foran deg" : "bak deg"}` : ""}.` +
+      `${m.mc || m.tc ? `<br>Du: ${esc(m.mc || "–")}. ${esc(o.name.split(" ")[0])}: ${esc(m.tc || "–")}${m.same ? "" : " (annen klasse)"}.` : ""}</span>`);
   });
   duelEl.addEventListener("pointerleave", hideTip);
 
@@ -640,6 +648,7 @@ render();
   hits.addEventListener("click", e => { const b = e.target.closest("[data-id]"); if (b) pickHit(b.dataset.id); });
   document.addEventListener("click", e => { if (!e.target.closest(".search")) hits.hidden = true; });
 
+  document.getElementById("riv-same").addEventListener("change", e => { sameOnly = e.target.checked; renderRivals(); });
   function renderRivals() { renderPicker(); renderDuel(); }
   renderRivals();
 })();

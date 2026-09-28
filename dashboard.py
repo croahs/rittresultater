@@ -66,7 +66,8 @@ def rivals_payload(path):
     iso = lambda d: f"20{d[6:8]}-{d[3:5]}-{d[0:2]}"  # "14.09.25" -> "2025-09-14"
     opps = [[o["turritt_id"], o["name"], o["club"], o["wins"], o["losses"], o["median_gap_pct"],
              [[re.sub(r"\s+20\d\d$", "", m["race"]), iso(m["date"]), m["type"], m["result"][0],
-               m["gap_s"], m["gap_pct"], m["places"]] for m in o["meetings"]]]
+               m["gap_s"], m["gap_pct"], m["places"],
+               m.get("my_class"), m.get("their_class"), int(m.get("same_class", True))] for m in o["meetings"]]]
             for o in r["opponents"]]
     ins = {k: v for k, v in r["insights"].items() if k != "gap_curves"}
     ins["closest"] = r["rivals"][:10]
