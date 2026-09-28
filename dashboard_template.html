@@ -1,5 +1,7 @@
 <title>Pedårs rittresultater</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>/*LEAFLET_CSS*/</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
 <style>
 /* Layout: app shell after Pedår's reference shot. Top bar, a race feed down the left,
@@ -15,6 +17,8 @@
   --pts-a: #2fb5c9; --pts-b: #34d3a2;
   --good: #1f9d63; --bad: #d8465b;
   --win: #4f7fe8; --loss: #f0506e;
+  /* names season_clip.js reads */
+  --road: var(--blue); --gravel: var(--gravel-b); --tempo: var(--tt-a); --panel: var(--card); --grid: var(--raised); --body: var(--font); --display: var(--font);
   --font: "Mulish", "Segoe UI", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
@@ -235,6 +239,7 @@ footer a { color: inherit; margin-right: 16px; }
       <a href="#oversikt" aria-current="true">Oversikt</a>
       <a href="#typer">Rittyper</a>
       <a href="#rivaler">Rivaler</a>
+      <a href="#sesongklipp">Sesongklipp</a>
       <a href="#sammenlign">2025 mot 2026</a>
       <a href="#alle">Alle ritt</a>
     </nav>
@@ -289,6 +294,11 @@ footer a { color: inherit; margin-right: 16px; }
           <div class="panel"><h3>Klubbtabellen</h3><p class="sub">Dine møter mot hver klubb, i antall ryttere slått og tapt mot. Klubber med minst 15 møter.</p><div class="clubs" id="clubs"></div></div>
           <div class="panel"><h3>Spesialister og forbikjørt</h3><p class="sub">Ryttere som er sterkere enn deg på én type ritt og svakere på en annen, og de du har gått forbi fra ett år til det neste.</p><ul class="odd" id="odd"></ul></div>
         </div>
+      </section>
+
+      <section class="riv" id="sesongklipp">
+        <div class="riv-head"><div class="ghost-word" data-ghost="Klipp"><h2>Sesongklipp</h2><p>Alle årets ritt kjørt samtidig på én felles rittklokke, fra startskuddet til din offisielle sluttid. Korte ritt er ferdige først.</p></div></div>
+        <div id="season-clip"></div>
       </section>
 
       <section id="sammenlign" style="display:grid;gap:12px">
@@ -491,6 +501,7 @@ function render(keepEq) {
   else renderEq(rows);
 }
 render();
+const CLIP = /*CLIP*/null;
 
 /* Rivals: everything below reads RIVALS (built from rivals.json). gap_pct > 0 means the rival was faster. */
 (() => {
@@ -651,5 +662,12 @@ render();
   document.getElementById("riv-same").addEventListener("change", e => { sameOnly = e.target.checked; renderRivals(); });
   function renderRivals() { renderPicker(); renderDuel(); }
   renderRivals();
+})();
+</script>
+<script>
+/*CLIP_JS*/
+(() => {
+  if (!CLIP || !window.L || !window.SeasonClip) { document.getElementById("sesongklipp").hidden = true; return; }
+  SeasonClip.mount(document.getElementById("season-clip"), CLIP, { seconds: 30 });
 })();
 </script>

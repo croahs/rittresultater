@@ -1,7 +1,7 @@
 """Build the results dashboard (one self-contained HTML page) from the rebuilt sheet.
 
 Usage:
-  python3 dashboard.py race_results_auto.csv dashboard.html   (also reads points_races.csv and rivals.json)
+  python3 dashboard.py race_results_auto.csv dashboard.html   (also reads points_races.csv, rivals.json and season_clip.json)
 """
 import csv
 import json
@@ -74,13 +74,23 @@ def rivals_payload(path):
     return {"opponents": opps, "insights": ins}
 
 
-def main(src, dst, points="points_races.csv", rivals="rivals.json"):
+def main(src, dst, points="points_races.csv", rivals="rivals.json", clip="season_clip.json"):
     data = rows(src)
     with open(__file__.replace("dashboard.py", "dashboard_template.html"), encoding="utf-8") as f:
         html = f.read()
     html = html.replace("/*DATA*/[]", json.dumps(data, ensure_ascii=False))
     html = html.replace("/*POINTS*/[]", json.dumps(points_rows(points), ensure_ascii=False))
     html = html.replace("/*RIVALS*/{}", json.dumps(rivals_payload(rivals), ensure_ascii=False, separators=(",", ":")))
+    here = __file__.replace("dashboard.py", "")
+    with open(here + "vendor/leaflet-1.9.4.css", encoding="utf-8") as f:
+        html = html.replace("/*LEAFLET_CSS*/", f.read())
+    try:
+        with open(clip, encoding="utf-8") as f:
+            html = html.replace("/*CLIP*/null", f.read().strip())
+        with open(here + "season_clip.js", encoding="utf-8") as f:
+            html = html.replace("/*CLIP_JS*/", f.read().replace("</script", "<\\/script"))
+    except OSError:
+        pass
     with open(dst, "w", encoding="utf-8") as f:
         f.write(html)
 
