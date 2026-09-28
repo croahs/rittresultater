@@ -81,6 +81,9 @@ Hvis Zero Trust-registreringen er et hinder, kan en liten Pages Function i `func
 1. Slett Access-applikasjonen, eller endre policyen til **Everyone**.
 2. Fjern `X-Robots-Tag: noindex` fra `web/public/_headers` og push.
 3. Valgfritt: legg til eget domene under **Custom domains** i Pages-prosjektet.
+4. Lenker til dine egne økter i intervals.icu er skjult som standard. Vil du vise dem, sett `"activity_links": True` i `site.json`-linja i `export_web.py`.
+
+Watt for andre ryttere: på Utvikling kan en rytter lime inn sin egen API-nøkkel fra intervals.icu. Nettleseren henter da watt for rittene direkte fra intervals.icu og regner ut NP for selve rittet. Nøkkelen sendes bare til intervals.icu, lagres ikke, og tallene forsvinner når siden lukkes. Ingenting av dette går via Cloudflare.
 
 Før lansering bør du vite dette:
 - Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Legg inn en kontaktadresse for å be om fjerning.
