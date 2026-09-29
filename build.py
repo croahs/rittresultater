@@ -66,6 +66,24 @@ def race_type(name):
     return "Road"
 
 
+ROAD_MIN_KMH = 29  # no road race in the lists has a winner slower than this
+
+
+def checked_type(r):
+    """A guessed "Road" whose winner rode slower than any road race is "Unknown", not road.
+
+    Names without a keyword fall back to road (race_type), but a slow winner means it may be
+    a hill climb or a terrain race, so the dashboard says we don't know. Types typed into a
+    rider's own sheet are kept as they are."""
+    if r.get("Type") != "Road" or not str(r.get("Match note", "")).startswith("new from"):
+        return r.get("Type")
+    km, w = r.get("Distance (km)"), sync.secs(r["Class winner"]) if r.get("Class winner") else 0
+    try:
+        return "Unknown" if km and w and float(km) / (w / 3600) < ROAD_MIN_KMH else "Road"
+    except ValueError:
+        return "Road"
+
+
 def intervals_client(rider):
     """An intervals.icu client for this rider, or None when no key is available."""
     key = os.environ.get(rider.get("intervals_key_env") or "", "")
@@ -204,6 +222,7 @@ def build_rider(rider, log=print):
         if not r.get("_gps_speed") and r.get("Distance (km)"):
             r["Average speed (km/h)"] = ""  # derive() then uses official distance / time
         sync.derive(r)
+        r["Type"] = checked_type(r)
     return rows, changes
 
 
