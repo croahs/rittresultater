@@ -1,10 +1,10 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import MoreRaces from "../MoreRaces";
 import { median, mean, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, hms, pct, span } from "../format";
 import { useState } from "react";
 import { raceKey, useSel } from "../state";
-import { flags } from "../data";
+import { flags, ridOf } from "../data";
 import type { Tab } from "../App";
 
 export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void }) {
@@ -56,12 +56,16 @@ function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void
   const change = pairs.length >= 3 ? mean(pairs.map(([p, b]) => b.beaten - p!.beaten)) : null;
   const who = isMe ? "Du" : firstName(a.name);
   const { setSeason, setSel } = useSel();
+  // The bib shows our rider id (as in the address); a rider without one yet shows their EQ or Turritt id.
+  const [rid, setRid] = useState<string | null>(null);
+  useEffect(() => { let live = true; setRid(null); ridOf(a.id).then((r) => live && setRid(r)); return () => { live = false; }; }, [a.id]);
+  const [idLabel, idNum] = rid === null ? ["Rytter-ID", ""] : /^r\d+$/.test(rid) ? ["Rytter-ID", rid.slice(1)] : /^eq\d+$/.test(rid) ? ["EQ-ID", rid.slice(2)] : ["Turritt-ID", rid];
   const jump = (t: Tab, id: string) => { go(t); setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 250); };
   return (
     <div className="hero">
       <div className="bib" aria-label={`Startnummer for ${a.name}`}>
-        <div className="bib-top"><span>Turritt-ID</span><span>{a.ageClass || span(ys)}</span></div>
-        <div className="bib-num" aria-label={a.id}>{[...a.id].map((d, i) => <span key={i} aria-hidden="true" style={{ animationDelay: `${120 + i * 70}ms` }}>{d}</span>)}</div>
+        <div className="bib-top"><span>{idLabel}</span><span>{a.ageClass || span(ys)}</span></div>
+        <div className="bib-num" aria-label={idNum}>{[...idNum].map((d, i) => <span key={i} aria-hidden="true" style={{ animationDelay: `${120 + i * 70}ms` }}>{d}</span>)}</div>
         <div className="bib-stripe" aria-hidden="true" />
         <div>
           <div className="bib-name">{a.name}{isMe ? "" : ""}</div>
