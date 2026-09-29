@@ -105,7 +105,8 @@ export default function App() {
           {!home && (
             // The tabs are views of one rider, so they sit in one group with that rider's name in front.
             <div className="rider-nav">
-              {riderName && <span className="who-chip" title={riderName}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span></span>}
+              {riderName && <span className="who-chip" title={riderName}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span>
+                {athlete?.channel && <a className="yt-link" href={athlete.channel} target="_blank" rel="noopener" title={`${firstName(riderName)} på YouTube`} aria-label={`${riderName} på YouTube`}><Icon.play /></a>}</span>}
               <nav className="nav" aria-label={riderName ? `Sider for ${riderName}` : "Sider for rytteren"}>
                 {TABS.map((t) => (
                   <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>

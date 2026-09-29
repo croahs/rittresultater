@@ -13,11 +13,13 @@ export interface Result {
   np: number | null; ap: number | null; speed: number | null; km: number | null; climb: number | null;
   ageClass: string; agePlace: number | null; ageN: number | null;
   link: string; icu: string;
+  video?: string;     // the rider's own video from this race (data/videos.json)
 }
 
 export interface PointsRace {
   name: string; date: string; cls: string; place: string; n: string; pts: string; win: string;
   laps: string; time: string; speed: string; np: string; ap: string; note: string; icu: string;
+  video?: string;
 }
 
 export interface Meeting {
@@ -47,6 +49,7 @@ export interface Athlete {
   savedPower?: boolean; // watts come from the site's database (the rider saved them), not the static files
   savedHidden?: boolean; // the rider saved watts but keeps them hidden
   savedClipYears?: number[]; // season clips built from GPS tracks the rider saved (api/clip), not static files
+  channel?: string;    // the rider's own video channel (data/videos.json)
   results: Result[]; points: PointsRace[];
   opponents: Map<string, Opponent>; rivals: string[]; insights: Insights;
 }
@@ -133,7 +136,26 @@ function athlete(p: RawProfile, full = false): Athlete {
   };
 }
 
+/* Riders' own videos, hand-kept in data/videos.json: a channel per rider and a video per race, found by race date. */
+export interface VideoFile { riders: Record<string, { channel?: string; videos?: { date: string; race: string; url: string }[] }> }
+
+export function withVideos(a: Athlete, file: VideoFile | null): Athlete {
+  const v = file?.riders?.[a.id];
+  if (!v) return a;
+  const byDate = new Map((v.videos || []).map((x) => [x.date, x.url]));
+  return {
+    ...a, channel: v.channel,
+    results: a.results.map((r) => (byDate.has(r.date) ? { ...r, video: byDate.get(r.date) } : r)),
+    points: a.points.map((p) => (byDate.has(p.date) ? { ...p, video: byDate.get(p.date) } : p)),
+  };
+}
+
 export async function loadAthlete(id: string, site: Site, index: IndexRider[], get: <T>(path: string) => Promise<T> = getJSON): Promise<Athlete> {
+  const videos = get<VideoFile>("videos.json").catch(() => null); // optional: a missing file just means no videos
+  return withVideos(await loadRaw(id, site, index, get), await videos);
+}
+
+async function loadRaw(id: string, site: Site, index: IndexRider[], get: <T>(path: string) => Promise<T>): Promise<Athlete> {
   if (site.profiles.includes(id)) return athlete(await get<RawProfile>(`athletes/${id}.json`), true);
   const entry = index.find((r) => r.id === id);
   if (!entry?.shard) throw new Error("Fant ikke rytteren");

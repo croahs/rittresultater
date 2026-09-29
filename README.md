@@ -27,7 +27,7 @@ python3 update.py      # every rider in riders.json; or: python3 update.py 17110
 
 ## Dashboard (web/)
 
-The dashboard is a static Vite + React + TypeScript site in `web/`. It reads only JSON: `data/riders/` (from `rivals.py`) and `data/site/` (from `python3 export_web.py`: your results with power, points races, rivals and season clips). `cd web && pnpm install && pnpm build` writes `web/dist/`; `pnpm dev` runs it locally. Publishing on Cloudflare Pages is described in `docs/DEPLOY.md`. The older single-file page (`dashboard.py`, `dashboard_template.html`) still builds, but the web app replaces it.
+The dashboard is a static Vite + React + TypeScript site in `web/`. It reads only JSON: `data/riders/` (from `rivals.py`) and `data/site/` (from `python3 export_web.py`: your results with power, points races, rivals and season clips). `cd web && pnpm install && pnpm build` writes `web/dist/`; `pnpm dev` runs it locally. Publishing on Cloudflare Pages is described in `docs/DEPLOY.md`. Riders' own YouTube videos are hand-kept in `data/videos.json`: per rider id a `channel` URL (shown as an icon by the rider's name) and `videos` as `{date, race, url}`, matched to the rider's race on that date (the race name is only a label). Add a line there when a new video is up. The older single-file page (`dashboard.py`, `dashboard_template.html`) still builds, but the web app replaces it.
 
 Output:
 - `data/results.json`: what the dashboard reads (schema below).
