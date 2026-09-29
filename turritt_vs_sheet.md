@@ -25,6 +25,10 @@
 | Dalane Rundt 2025 | Overall participants (not officials or DNS, DNF included) | 70 | 73 |
 | Øksnevad Gravel | Class participants (not officials or DNS, DNF included) | 35 | 33 |
 | Øksnevad Gravel | Overall participants (not officials or DNS, DNF included) | 35 | 33 |
+| Repsol-mila | Placement in class | 24 | 18 (EQ Timing) |
+| Repsol-mila | Overall placement | 24 | 18 (EQ Timing) |
+| Repsol-mila | Class participants (not officials or DNS, DNF included) | 30 | 21 (EQ Timing) |
+| Repsol-mila | Overall participants (not officials or DNS, DNF included) | 30 | 21 (EQ Timing) |
 | KCC Lagtempoen 2026 | Placement in class | 82 | 29 |
 | KCC Lagtempoen 2026 | Overall placement | 87 | 29 |
 | KCC Lagtempoen 2026 | Class participants (not officials or DNS, DNF included) | 97 | 33 |

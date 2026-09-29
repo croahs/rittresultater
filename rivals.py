@@ -48,7 +48,7 @@ MIN_RACES = 3  # to be called a rival
 DNF = 359000
 DNF_TIME = 359500  # a DNF or lapped rider from EQ Timing: behind every finisher, before DNS
 PUBLIC_TURRITT = True  # rider ids on the site stay TurrittIDs until web/ moves to ours ("r123")
-OWN_DISTANCE = re.compile(r"senior|junior|jr\b|^[mkgj]\s?-?(6-9|10|11-12|13-14|15-16)$", re.I)  # classes in a list that ride their own distance
+OWN_DISTANCE = eqtiming.OWN_DISTANCE  # classes in a list that ride their own distance
 SWITCH_LIMIT = 0  # a race moves to its own timer only when none of the followed riders' head-to-heads are lost
 # Women's classes: K 40-44, K30-39, Ke (elite), J 17-19 (jenter; boys are M 17-19 in the same lists), Kvinner, Damer.
 WOMEN = re.compile(r"^(k|j|ke)(\s|\d|$)|kvinne|dame|jente", re.I)
@@ -121,12 +121,14 @@ def original(sources, race_name, ids):
                 return None
             bad = eqtiming.timing_errors([x[5] for x in lst if x[4] == "TIME"], (cache.get(f"km:{src['event']}") or {}).get(str(stage)),
                                           bool(re.search(r"tempo|\bmila\b|klostermil", f"{race_name} {stage_name}", re.I)))
-            for uid, nm, club, age, status, ms, group in lst:
+            for uid, nm, club, age, status, ms, group, *lap in lst:
                 if nm is None or status not in ("TIME", "DNF", "LAP") or (status == "TIME" and (not ms or ms in bad)) \
                         or turritt.EXCLUDE_GROUP.search(f"{group} {age}"):
                     continue
                 t = int(ms // 1000) if status == "TIME" else DNF_TIME
-                rows.append(([0, "", ids.get(("eq", str(uid)), f"eq{uid}"), group, "", nm, "", club, age, t, stage],
+                # A lapped rider (eqtiming.lap_times): ranked by t, shown with the official time.
+                down = [lap[0], int(lap[1] // 1000)] if status == "TIME" and lap and lap[0] else []
+                rows.append(([0, "", ids.get(("eq", str(uid)), f"eq{uid}"), group, "", nm, "", club, age, t, stage, *down],
                              category(stage_name or race_name, group)))
     if any(c == "CX/Gravel" for _, c in rows):  # as in pool()
         rows = [(r, c if c == "CX/Gravel" else "MTB/åpen") for r, c in rows]
@@ -805,6 +807,7 @@ def write_all(evs):
             "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else None,
             "turritt": sh["Turritt"],
             "rows": [[r[2], name(r), r[7].strip(), r[8], c, int(r[9]) if int(r[9]) < DNF else None, x]
+                     + (r[11:13] if ev["race_id"].startswith("eq:") and len(r) == 13 else [])
                      for (r, c), x in sorted(zip(ev["cats"], ev["sex"]), key=lambda rcx: int(rcx[0][0][9]))],
         })
         for tid, (r, _) in ev["by_id"].items():
@@ -814,7 +817,9 @@ def write_all(evs):
         "scope": "Turritt result lists of every race ridden by the riders in riders.json (data/results.json). "
                  "Other riders' histories only cover these races.",
         "row_fields": ["turritt_id", "name", "club", "age_class", "class", "time_s (null = DNF)",
-                       "sex (K | M | null = unclear; from the classes the rider rode in)"],
+                       "sex (K | M | null = unclear; from the classes the rider rode in)",
+                       "laps down (lap races, lapped riders only; time_s is then the ranking time)",
+                       "official time_s (lapped riders only)"],
         "races": races_out})
 
     index = []

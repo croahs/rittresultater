@@ -45,7 +45,7 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
         <div className="card"><div className="table-wrap"><table className="sticky race-table">
           <thead><tr><th>Plass</th><th className="l">Rytter</th><th>Tid</th><th>Bak</th><th className="l">Klubb</th><th className="l">Klasse</th></tr></thead>
           <tbody>{rows.map((r, i) => {
-            const t = r[5];
+            const t = r[5], down = r[7], shown = down ? r[8]! : t;
             return (
               <Fragment key={`${r[0]}-${i}`}>
               <tr>
@@ -53,8 +53,8 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
                 <td className="l">{known.has(r[0]) ? <button type="button" className="linkish" onClick={() => onRider(r[0])}>{r[1]}</button> : r[1]}
                   {vids.has(r[0]) && <button type="button" className="vid media-btn name-vid" aria-expanded={open === r[0]} title={`Video fra ${r[1]}`} aria-label={`Video fra ${r[1]}`}
                     onClick={() => setOpen(open === r[0] ? null : r[0])}><Icon.play /></button>}</td>
-                <td className="tnum">{t == null ? "–" : clock(t)}</td>
-                <td className="tnum muted">{t == null || best == null || i === 0 ? "" : `+${clock(t - best)}`}</td>
+                <td className="tnum">{shown == null ? "–" : clock(shown)}</td>
+                <td className="tnum muted">{down ? `−${down} ${down === 1 ? "runde" : "runder"}` : t == null || best == null || i === 0 ? "" : `+${clock(t - best)}`}</td>
                 <td className="l muted">{r[2]}</td>
                 <td className="l muted">{clsLabel(r[4] || r[3])}</td>
               </tr>

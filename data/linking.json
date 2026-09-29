@@ -1943,6 +1943,19 @@
    "own_id": "r21370"
   },
   {
+   "eq": 566109,
+   "name": "Joakim Skjelde",
+   "club": "CK Haugaland",
+   "candidates": [
+    {
+     "id": "r10490",
+     "club": "Bokn Sykkelklubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r23036"
+  },
+  {
    "eq": 4681830,
    "name": "Johanna Håland",
    "club": "",
@@ -2769,6 +2782,19 @@
    ],
    "id": null,
    "own_id": "r22932"
+  },
+  {
+   "eq": 364777,
+   "name": "Morten Knutsen",
+   "club": "Hafrsfjord SK",
+   "candidates": [
+    {
+     "id": "r8780",
+     "club": "Haugaland Sykkel klubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r23024"
   },
   {
    "eq": 3967589,
