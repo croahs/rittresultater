@@ -14,7 +14,8 @@ A rider can have more than one EQ id ("eq_also"): some riders have had two EQ pr
 An EQ-only rider found later to be a Turritt rider keeps their id, as "same_as" that rider.
 Everything else that could be the same rider goes to data/linking.json, which is edited by
 hand ("id": "r123" to link, "id": "new" for a rider of their own) and never guessed.
-An EQ rider matching nobody gets an id of their own.
+Every EQ rider gets an id at once, also those waiting in linking.json ("own_id"); linking
+one by hand later makes that id "same_as" the rider it is linked to.
 
 Usage:
   python3 riderids.py      # add ids for riders not seen before; existing ids stay as they are
@@ -200,13 +201,22 @@ def build(log=print):
             link(uid, cands[0])
         elif uid in eq_id:
             continue
-        elif cands:
+        elif cands:  # an id of their own until linked by hand; linking makes it "same_as" the other
+            eq_id[uid] = new(name=name, club=club, eq=int(uid))
             open_links[uid] = {"eq": int(uid), "name": name, "club": club,
                                "candidates": [{"id": c, "club": riders[c].get("club", "")} for c in cands], "id": None}
         else:
             eq_id[uid] = new(name=name, club=club, eq=int(uid))
 
-    open_links = {u: l for u, l in open_links.items() if u not in eq_id}
+    # Every EQ rider in the lists has an id, also those waiting in linking.json.
+    for uid, (name, club, _) in sorted(seen.items()):
+        if uid not in eq_id:
+            eq_id[uid] = new(name=name, club=club, eq=int(uid))
+
+    # Still to decide: EQ riders who so far only have an id of their own.
+    open_links = {u: l for u, l in open_links.items() if u in eq_id and not riders[eq_id[u]].get("turritt")}
+    for u, l in open_links.items():
+        l["own_id"] = eq_id[u]
     data = {"_help": "Our rider ids (riderids.py). Each id is given once and never reused or changed. "
                      "turritt: TurrittID (only while the site still uses Turritt data), eq: EQ Timing participant id.",
             "next": nxt, "riders": riders}

@@ -20,7 +20,8 @@ for (const f of ["races.json", "summary.json", "videos.json"]) if (existsSync(ro
 // while the data files are still keyed by TurrittID. Only the ids go out, not names or clubs.
 if (existsSync(root + "aliases.json")) {
   const { riders } = JSON.parse(readFileSync(root + "aliases.json", "utf8"));
-  const ids = Object.fromEntries(Object.entries(riders).filter(([, r]) => r.turritt).map(([id, r]) => [id, String(r.turritt)]));
+  // Riders without a TurrittID map to "eq<id>", so old #/eq<id> links still find them.
+  const ids = Object.fromEntries(Object.entries(riders).filter(([, r]) => r.turritt || r.eq).map(([id, r]) => [id, r.turritt ? String(r.turritt) : `eq${r.eq}`]));
   writeFileSync(out + "ids.json", JSON.stringify(ids));
 }
 console.log("copied data/site and data/riders into web/public/data");

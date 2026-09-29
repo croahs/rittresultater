@@ -84,7 +84,7 @@ def pipeline_profiles(me_id, index):
             "np": r.get("np"), "ap": r.get("avg_power"), "speed": r.get("speed_kmh"),
             "km": r.get("distance_km"), "climb": r.get("elevation_m"),
             "age_class": r.get("age_class") or "", "age_place": r.get("age_place"), "age_n": r.get("age_n"),
-            "turritt": links(r).get("turritt") or links(r).get("eqtiming") or "", "icu": links(r).get("intervals") or "",
+            "turritt": links(r).get("turritt") or links(r).get("eqtiming") or links(r).get("raceresult") or "", "icu": links(r).get("intervals") or "",
         } for r in rows if r.get("class_place") and r.get("class_n")]
         dump(os.path.join(OUT, "athletes", f"{rid}.json"), {
             "id": rid, "name": shard.get("name") or rider["name"], "club": shard.get("club", ""),

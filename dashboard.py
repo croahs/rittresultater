@@ -38,7 +38,7 @@ def rows(path):
                 "age_class": r.get("Age class", ""),
                 "age_place": int(r["Age class placement"]) if r.get("Age class placement") else None,
                 "age_n": int(r["Age class participants"]) if r.get("Age class participants") else None,
-                "turritt": r.get("Turritt", "") or r.get("EQ Timing", ""),
+                "turritt": r.get("Turritt", "") or r.get("EQ Timing", "") or r.get("raceresult", ""),
                 "icu": r.get("intervals.icu activity", ""),
             })
     return out
