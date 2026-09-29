@@ -59,6 +59,10 @@ def race_type(name):
         return "TT"
     if "gravel" in n or "cx" in n:
         return "Gravel"
+    # Neither Turritt nor EQ Timing says what kind of race it is, so the name decides.
+    # Terrain races: "MTB", "Terrengcup", XC classes ("CC Elite"), and forest loops ("-skogen").
+    if re.search(r"\bmtb\b|terreng|\bcc (elite|sport)\b|skogen\b", n):
+        return "MTB"
     return "Road"
 
 
