@@ -43,7 +43,7 @@ DNF = 359000
 DNF_TIME = 359500  # a DNF or lapped rider from EQ Timing: behind every finisher, before DNS
 PUBLIC_TURRITT = True  # rider ids on the site stay TurrittIDs until web/ moves to ours ("r123")
 OWN_DISTANCE = re.compile(r"senior|junior|jr\b|^[mkgj]\s?-?(6-9|10|11-12|13-14|15-16)$", re.I)  # classes in a list that ride their own distance
-SWITCH_LIMIT = 3  # a race moves to its own timer only if at most this many head-to-heads are lost
+SWITCH_LIMIT = 0  # a race moves to its own timer only when none of the followed riders' head-to-heads are lost
 
 
 def races():
@@ -75,13 +75,18 @@ def races():
 def aliases():
     """{("turritt" | "eq", id at the timer): the rider's id here}, from our alias table (riderids.py).
     The id here is the TurrittID while the site still uses it (PUBLIC_TURRITT), else ours ("r123")."""
-    out = {}
-    for rid, a in riderids.load().items():
-        pub = a["turritt"] if PUBLIC_TURRITT and a.get("turritt") else rid
-        if a.get("turritt"):
-            out["turritt", a["turritt"]] = pub
-        if a.get("eq"):
-            out["eq", str(a["eq"])] = pub
+    riders = riderids.load()
+
+    def pub(rid):
+        seen = set()
+        while riders.get(rid, {}).get("same_as") and rid not in seen:  # an id merged into another
+            seen.add(rid)
+            rid = riders[rid]["same_as"]
+        a = riders.get(rid, {})
+        return a["turritt"] if PUBLIC_TURRITT and a.get("turritt") else rid
+
+    out = {("turritt", a["turritt"]): pub(rid) for rid, a in riders.items() if a.get("turritt")}
+    out.update({("eq", uid): pub(rid) for uid, rid in riderids.by_eq().items()})
     return out
 
 

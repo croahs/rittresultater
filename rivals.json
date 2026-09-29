@@ -200,6 +200,7 @@
   "168184",
   "64253",
   "29153",
+  "146346",
   "52876",
   "167192",
   "139851",
@@ -216,7 +217,6 @@
   "25310",
   "162404",
   "22901",
-  "146346",
   "60275",
   "59170",
   "134041",
@@ -1136,10 +1136,10 @@
    },
    {
     "club": "Sandnes",
-    "riders": 124,
+    "riders": 123,
     "wins": 118,
-    "losses": 27,
-    "win_pct": 81.4
+    "losses": 26,
+    "win_pct": 81.9
    },
    {
     "club": "Farsund Sykleklubb",
@@ -1152,106 +1152,106 @@
     "club": "Dalane SK",
     "riders": 47,
     "wins": 62,
-    "losses": 51,
-    "win_pct": 54.9
+    "losses": 47,
+    "win_pct": 56.9
    },
    {
     "club": "Vigrestad SK",
     "riders": 13,
-    "wins": 17,
+    "wins": 16,
     "losses": 16,
-    "win_pct": 51.5
+    "win_pct": 50.0
    },
    {
     "club": "Bryne CK",
     "riders": 32,
     "wins": 20,
-    "losses": 22,
-    "win_pct": 47.6
+    "losses": 23,
+    "win_pct": 46.5
    },
    {
     "club": "Sandnes Sykleklubb",
-    "riders": 81,
-    "wins": 97,
-    "losses": 137,
-    "win_pct": 41.5
+    "riders": 80,
+    "wins": 92,
+    "losses": 128,
+    "win_pct": 41.8
    },
    {
     "club": "Bryne Cykleklubb",
     "riders": 30,
-    "wins": 50,
-    "losses": 75,
-    "win_pct": 40.0
+    "wins": 49,
+    "losses": 69,
+    "win_pct": 41.5
    },
    {
     "club": "Klepp Cykle Club",
     "riders": 54,
-    "wins": 78,
-    "losses": 144,
-    "win_pct": 35.1
+    "wins": 77,
+    "losses": 139,
+    "win_pct": 35.6
    },
    {
     "club": "Rennesøy SK",
-    "riders": 21,
-    "wins": 31,
-    "losses": 60,
-    "win_pct": 34.1
+    "riders": 19,
+    "wins": 27,
+    "losses": 52,
+    "win_pct": 34.2
    },
    {
     "club": "CK Haugaland",
     "riders": 30,
     "wins": 18,
-    "losses": 42,
-    "win_pct": 30.0
+    "losses": 39,
+    "win_pct": 31.6
    },
    {
     "club": "Tasta & omegn sykkelklubb",
-    "riders": 100,
-    "wins": 75,
-    "losses": 244,
-    "win_pct": 23.5
+    "riders": 93,
+    "wins": 69,
+    "losses": 209,
+    "win_pct": 24.8
    },
    {
     "club": "Vigesaa SK",
     "riders": 6,
-    "wins": 10,
-    "losses": 35,
-    "win_pct": 22.2
+    "wins": 9,
+    "losses": 32,
+    "win_pct": 22.0
    },
    {
     "club": "Stavanger SK",
     "riders": 20,
-    "wins": 10,
-    "losses": 40,
+    "wins": 9,
+    "losses": 36,
     "win_pct": 20.0
    },
    {
-    "club": "Ryfylke SK",
-    "riders": 15,
-    "wins": 14,
-    "losses": 87,
-    "win_pct": 13.9
+    "club": "(ingen klubb)",
+    "riders": 122,
+    "wins": 25,
+    "losses": 122,
+    "win_pct": 17.0
    },
    {
     "club": "Aalgaard Sykkel og Spaserlaug",
     "riders": 8,
     "wins": 5,
-    "losses": 33,
-    "win_pct": 13.2
+    "losses": 26,
+    "win_pct": 16.1
+   },
+   {
+    "club": "Ryfylke SK",
+    "riders": 14,
+    "wins": 13,
+    "losses": 78,
+    "win_pct": 14.3
    },
    {
     "club": "Bogafjell Sykleklubb",
     "riders": 61,
     "wins": 20,
-    "losses": 142,
-    "win_pct": 12.3
-   },
-   {
-    "club": "(ingen klubb)",
-    "riders": 41,
-    "wins": 5,
-    "losses": 36,
-    "win_pct": 12.2
+    "losses": 138,
+    "win_pct": 12.7
    }
   ],
   "right_ahead": [
@@ -2078,7 +2078,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 38
+     "places": 39
     },
     {
      "race": "Dalane Rundt 2025",
@@ -2548,9 +2548,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1826,
+     "gap_s": 1825,
      "gap_pct": 36.7,
-     "their_time": "01:22:49",
+     "their_time": "01:22:50",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -3082,7 +3082,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 23
+     "places": 25
     },
     {
      "race": "Toskaskabet 2025",
@@ -3215,7 +3215,7 @@
    "same_class_races": 17,
    "same_class_wins": 0,
    "same_class_losses": 17,
-   "avg_gap_s": 771,
+   "avg_gap_s": 770,
    "median_gap_pct": 9.7,
    "meetings": [
     {
@@ -3301,9 +3301,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 793,
+     "gap_s": 792,
      "gap_pct": 13.2,
-     "their_time": "01:40:02",
+     "their_time": "01:40:03",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -4839,9 +4839,9 @@
    "wins": 0,
    "losses": 16,
    "draws": 0,
-   "same_class_races": 10,
+   "same_class_races": 11,
    "same_class_wins": 0,
-   "same_class_losses": 10,
+   "same_class_losses": 11,
    "avg_gap_s": 893,
    "median_gap_pct": 20.4,
    "meetings": [
@@ -4915,9 +4915,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1509,
+     "gap_s": 1508,
      "gap_pct": 28.5,
-     "their_time": "01:28:06",
+     "their_time": "01:28:07",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -4932,8 +4932,8 @@
      "gap_pct": 14.5,
      "their_time": "00:19:50",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": 31
     },
     {
@@ -5153,9 +5153,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1509,
+     "gap_s": 1508,
      "gap_pct": 28.5,
-     "their_time": "01:28:06",
+     "their_time": "01:28:07",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -5501,8 +5501,8 @@
    "wins": 13,
    "losses": 1,
    "draws": 0,
-   "same_class_races": 9,
-   "same_class_wins": 9,
+   "same_class_races": 10,
+   "same_class_wins": 10,
    "same_class_losses": 0,
    "avg_gap_s": -577,
    "median_gap_pct": -3.3,
@@ -5581,8 +5581,8 @@
      "gap_pct": -3.3,
      "their_time": "00:23:30",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": -7
     },
     {
@@ -5975,13 +5975,13 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "win",
-     "gap_s": -936,
+     "gap_s": -937,
      "gap_pct": -12.1,
-     "their_time": "02:08:51",
+     "their_time": "02:08:52",
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": -7
+     "places": -8
     },
     {
      "race": "Toskaskabet 2025",
@@ -6894,9 +6894,9 @@
    "wins": 0,
    "losses": 13,
    "draws": 0,
-   "same_class_races": 5,
+   "same_class_races": 6,
    "same_class_wins": 0,
-   "same_class_losses": 5,
+   "same_class_losses": 6,
    "avg_gap_s": 694,
    "median_gap_pct": 19.7,
    "meetings": [
@@ -6974,8 +6974,8 @@
      "gap_pct": 17.4,
      "their_time": "00:19:21",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": 33
     },
     {
@@ -7439,9 +7439,9 @@
    "wins": 4,
    "losses": 8,
    "draws": 0,
-   "same_class_races": 4,
+   "same_class_races": 5,
    "same_class_wins": 1,
-   "same_class_losses": 3,
+   "same_class_losses": 4,
    "avg_gap_s": 39,
    "median_gap_pct": 3.0,
    "meetings": [
@@ -7506,8 +7506,8 @@
      "gap_pct": 3.9,
      "their_time": "00:21:52",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": 5
     },
     {
@@ -8559,7 +8559,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 48
+     "places": 52
     },
     {
      "race": "Toskaskabet 2025",
@@ -9141,9 +9141,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1141,
+     "gap_s": 1140,
      "gap_pct": 20.2,
-     "their_time": "01:34:14",
+     "their_time": "01:34:15",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -9441,7 +9441,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 69
+     "places": 70
     },
     {
      "race": "Dalane Rundt 2025",
@@ -10218,7 +10218,7 @@
    "same_class_races": 9,
    "same_class_wins": 0,
    "same_class_losses": 9,
-   "avg_gap_s": 996,
+   "avg_gap_s": 995,
    "median_gap_pct": 21.1,
    "meetings": [
     {
@@ -10252,9 +10252,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1776,
-     "gap_pct": 35.4,
-     "their_time": "01:23:39",
+     "gap_s": 1774,
+     "gap_pct": 35.3,
+     "their_time": "01:23:41",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -10673,7 +10673,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 76
+     "places": 77
     },
     {
      "race": "Toskaskabet 2025",
@@ -12074,6 +12074,127 @@
    ]
   },
   {
+   "turritt_id": "146346",
+   "name": "Morten Ahlborn",
+   "club": "Tasta & omegn sykkelklubb",
+   "age_class": "M 45-49",
+   "races": 8,
+   "wins": 1,
+   "losses": 7,
+   "draws": 0,
+   "same_class_races": 8,
+   "same_class_wins": 1,
+   "same_class_losses": 7,
+   "avg_gap_s": 1031,
+   "median_gap_pct": 22.2,
+   "meetings": [
+    {
+     "race": "Garborgriket Rundt 2025",
+     "date": "10.05.25",
+     "type": "Gravel",
+     "result": "loss",
+     "gap_s": 1785,
+     "gap_pct": 22.2,
+     "their_time": "02:14:05",
+     "my_class": "CX/Gravel",
+     "their_class": "CX/Gravel",
+     "same_class": true,
+     "places": 39
+    },
+    {
+     "race": "Ryfylkerittet 2025",
+     "date": "06.09.25",
+     "type": "Road",
+     "result": "loss",
+     "gap_s": 1379,
+     "gap_pct": 25.5,
+     "their_time": "01:30:16",
+     "my_class": null,
+     "their_class": null,
+     "same_class": true,
+     "places": 49
+    },
+    {
+     "race": "Toskaskabet 2025",
+     "date": "14.09.25",
+     "type": "TT",
+     "result": "win",
+     "gap_s": null,
+     "gap_pct": null,
+     "their_time": "DNF",
+     "my_class": "Racer",
+     "their_class": "Racer",
+     "same_class": true,
+     "places": null
+    },
+    {
+     "race": "Dalane Rundt 2025",
+     "date": "21.09.25",
+     "type": "Road",
+     "result": "loss",
+     "gap_s": 1485,
+     "gap_pct": 26.3,
+     "their_time": "01:34:16",
+     "my_class": "Racer",
+     "their_class": "Racer",
+     "same_class": true,
+     "places": 38
+    },
+    {
+     "race": "Repsol-mila 2026",
+     "date": "12.04.26",
+     "type": "TT",
+     "result": "loss",
+     "gap_s": 226,
+     "gap_pct": 25.6,
+     "their_time": "00:14:43",
+     "my_class": null,
+     "their_class": null,
+     "same_class": true,
+     "places": 15
+    },
+    {
+     "race": "KlostermilÅ 2026",
+     "date": "23.04.26",
+     "type": "TT",
+     "result": "loss",
+     "gap_s": 177,
+     "gap_pct": 18.0,
+     "their_time": "00:16:23",
+     "my_class": "Racer",
+     "their_class": "Racer",
+     "same_class": true,
+     "places": 22
+    },
+    {
+     "race": "Spinnsprinten 2026",
+     "date": "26.04.26",
+     "type": "Road",
+     "result": "loss",
+     "gap_s": 530,
+     "gap_pct": 13.5,
+     "their_time": "01:05:22",
+     "my_class": null,
+     "their_class": null,
+     "same_class": true,
+     "places": 33
+    },
+    {
+     "race": "Nordsjørittet 2026",
+     "date": "13.06.26",
+     "type": "Gravel",
+     "result": "loss",
+     "gap_s": 1637,
+     "gap_pct": 16.2,
+     "their_time": "02:48:14",
+     "my_class": "CX/Gravel",
+     "their_class": "CX/Gravel",
+     "same_class": true,
+     "places": 114
+    }
+   ]
+  },
+  {
    "turritt_id": "167763",
    "name": "Leif Bjarne Sjøvoll",
    "club": "Sunnhordland Sykkelklubb",
@@ -12082,9 +12203,9 @@
    "wins": 0,
    "losses": 8,
    "draws": 0,
-   "same_class_races": 4,
+   "same_class_races": 5,
    "same_class_wins": 0,
-   "same_class_losses": 4,
+   "same_class_losses": 5,
    "avg_gap_s": 1016,
    "median_gap_pct": 25.9,
    "meetings": [
@@ -12149,8 +12270,8 @@
      "gap_pct": 24.7,
      "their_time": "00:18:13",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": 36
     },
     {
@@ -12888,9 +13009,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 793,
+     "gap_s": 792,
      "gap_pct": 13.2,
-     "their_time": "01:40:02",
+     "their_time": "01:40:03",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -13487,114 +13608,6 @@
      "their_class": "Racer",
      "same_class": true,
      "places": 38
-    }
-   ]
-  },
-  {
-   "turritt_id": "146346",
-   "name": "Morten Ahlborn",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 45-49",
-   "races": 7,
-   "wins": 0,
-   "losses": 7,
-   "draws": 0,
-   "same_class_races": 7,
-   "same_class_wins": 0,
-   "same_class_losses": 7,
-   "avg_gap_s": 1032,
-   "median_gap_pct": 22.2,
-   "meetings": [
-    {
-     "race": "Garborgriket Rundt 2025",
-     "date": "10.05.25",
-     "type": "Gravel",
-     "result": "loss",
-     "gap_s": 1785,
-     "gap_pct": 22.2,
-     "their_time": "02:14:05",
-     "my_class": "CX/Gravel",
-     "their_class": "CX/Gravel",
-     "same_class": true,
-     "places": 39
-    },
-    {
-     "race": "Ryfylkerittet 2025",
-     "date": "06.09.25",
-     "type": "Road",
-     "result": "loss",
-     "gap_s": 1381,
-     "gap_pct": 25.5,
-     "their_time": "01:30:14",
-     "my_class": null,
-     "their_class": null,
-     "same_class": true,
-     "places": 48
-    },
-    {
-     "race": "Dalane Rundt 2025",
-     "date": "21.09.25",
-     "type": "Road",
-     "result": "loss",
-     "gap_s": 1485,
-     "gap_pct": 26.3,
-     "their_time": "01:34:16",
-     "my_class": "Racer",
-     "their_class": "Racer",
-     "same_class": true,
-     "places": 38
-    },
-    {
-     "race": "Repsol-mila 2026",
-     "date": "12.04.26",
-     "type": "TT",
-     "result": "loss",
-     "gap_s": 226,
-     "gap_pct": 25.6,
-     "their_time": "00:14:43",
-     "my_class": null,
-     "their_class": null,
-     "same_class": true,
-     "places": 15
-    },
-    {
-     "race": "KlostermilÅ 2026",
-     "date": "23.04.26",
-     "type": "TT",
-     "result": "loss",
-     "gap_s": 177,
-     "gap_pct": 18.0,
-     "their_time": "00:16:23",
-     "my_class": "Racer",
-     "their_class": "Racer",
-     "same_class": true,
-     "places": 22
-    },
-    {
-     "race": "Spinnsprinten 2026",
-     "date": "26.04.26",
-     "type": "Road",
-     "result": "loss",
-     "gap_s": 530,
-     "gap_pct": 13.5,
-     "their_time": "01:05:22",
-     "my_class": null,
-     "their_class": null,
-     "same_class": true,
-     "places": 33
-    },
-    {
-     "race": "Nordsjørittet 2026",
-     "date": "13.06.26",
-     "type": "Gravel",
-     "result": "loss",
-     "gap_s": 1637,
-     "gap_pct": 16.2,
-     "their_time": "02:48:14",
-     "my_class": "CX/Gravel",
-     "their_class": "CX/Gravel",
-     "same_class": true,
-     "places": 114
     }
    ]
   },
@@ -14242,9 +14255,9 @@
    "wins": 3,
    "losses": 3,
    "draws": 0,
-   "same_class_races": 2,
+   "same_class_races": 3,
    "same_class_wins": 1,
-   "same_class_losses": 1,
+   "same_class_losses": 2,
    "avg_gap_s": -60,
    "median_gap_pct": 0.3,
    "meetings": [
@@ -14257,8 +14270,8 @@
      "gap_pct": 1.2,
      "their_time": "00:22:27",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": 3
     },
     {
@@ -15002,9 +15015,9 @@
    "wins": 0,
    "losses": 6,
    "draws": 0,
-   "same_class_races": 0,
+   "same_class_races": 1,
    "same_class_wins": 0,
-   "same_class_losses": 0,
+   "same_class_losses": 1,
    "avg_gap_s": 88,
    "median_gap_pct": 5.4,
    "meetings": [
@@ -15030,8 +15043,8 @@
      "gap_pct": 9.3,
      "their_time": "00:20:47",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": 17
     },
     {
@@ -17195,7 +17208,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 23
+     "places": 25
     },
     {
      "race": "Øksnevad Gravel 2026",
@@ -17435,13 +17448,13 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1381,
+     "gap_s": 1380,
      "gap_pct": 25.5,
-     "their_time": "01:30:14",
+     "their_time": "01:30:15",
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 48
+     "places": 50
     },
     {
      "race": "Nordsjørittet 2026",
@@ -17720,8 +17733,8 @@
   {
    "turritt_id": "53680",
    "name": "Tore Frøyland",
-   "club": "Sandnes BMX",
-   "age_class": "M 40-44",
+   "club": "Sandnes kommune BIL",
+   "age_class": "Menn",
    "races": 5,
    "wins": 0,
    "losses": 5,
@@ -17789,9 +17802,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1149,
-     "gap_pct": 20.4,
-     "their_time": "01:34:06",
+     "gap_s": 1148,
+     "gap_pct": 20.3,
+     "their_time": "01:34:07",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -18781,9 +18794,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 797,
-     "gap_pct": 13.3,
-     "their_time": "01:39:58",
+     "gap_s": 795,
+     "gap_pct": 13.2,
+     "their_time": "01:40:00",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -18912,7 +18925,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 8
+     "places": 9
     },
     {
      "race": "Dalane Rundt 2025",
@@ -19527,13 +19540,13 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 797,
+     "gap_s": 796,
      "gap_pct": 13.3,
-     "their_time": "01:39:58",
+     "their_time": "01:39:59",
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 27
+     "places": 28
     },
     {
      "race": "KCC Lagtempoen 2026",
@@ -22807,8 +22820,8 @@
   {
    "turritt_id": "141569",
    "name": "Morten Ege",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 55-59",
+   "club": "",
+   "age_class": "Menn",
    "races": 3,
    "wins": 2,
    "losses": 1,
@@ -23093,9 +23106,9 @@
    "wins": 0,
    "losses": 3,
    "draws": 0,
-   "same_class_races": 1,
+   "same_class_races": 2,
    "same_class_wins": 0,
-   "same_class_losses": 1,
+   "same_class_losses": 2,
    "avg_gap_s": 670,
    "median_gap_pct": 10.9,
    "meetings": [
@@ -23121,8 +23134,8 @@
      "gap_pct": 10.9,
      "their_time": "00:20:29",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": 22
     },
     {
@@ -23851,7 +23864,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 27
+     "places": 29
     },
     {
      "race": "Dalane Rundt 2025",
@@ -25392,17 +25405,17 @@
    "same_class_races": 3,
    "same_class_wins": 0,
    "same_class_losses": 3,
-   "avg_gap_s": 1123,
-   "median_gap_pct": 25.5,
+   "avg_gap_s": 1122,
+   "median_gap_pct": 25.4,
    "meetings": [
     {
      "race": "Ryfylkerittet 2025",
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1381,
-     "gap_pct": 25.5,
-     "their_time": "01:30:14",
+     "gap_s": 1378,
+     "gap_pct": 25.4,
+     "their_time": "01:30:17",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -25495,8 +25508,8 @@
   {
    "turritt_id": "151317",
    "name": "Thomas Goa",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 35-39",
+   "club": "",
+   "age_class": "M35-39",
    "races": 3,
    "wins": 0,
    "losses": 3,
@@ -25581,9 +25594,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1509,
+     "gap_s": 1508,
      "gap_pct": 28.5,
-     "their_time": "01:28:06",
+     "their_time": "01:28:07",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -28725,8 +28738,8 @@
   {
    "turritt_id": "23764",
    "name": "Ivar Askeli",
-   "club": "Sola CK",
-   "age_class": "M 65-69",
+   "club": "",
+   "age_class": "M65-69",
    "races": 2,
    "wins": 2,
    "losses": 0,
@@ -34230,7 +34243,7 @@
    "turritt_id": "171185",
    "name": "Lukasz Adamski",
    "club": "Imenco AS",
-   "age_class": "M 40-44",
+   "age_class": "Menn",
    "races": 2,
    "wins": 0,
    "losses": 2,
@@ -34874,8 +34887,8 @@
   {
    "turritt_id": "167534",
    "name": "Frank Jakobsen",
-   "club": "CK Haugaland",
-   "age_class": "M 55-59",
+   "club": "Veidekke",
+   "age_class": "Menn",
    "races": 2,
    "wins": 0,
    "losses": 2,
@@ -34910,7 +34923,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 40
+     "places": 41
     }
    ]
   },
@@ -35863,8 +35876,8 @@
   {
    "turritt_id": "46687",
    "name": "Jens Hæreid",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 40-44",
+   "club": "",
+   "age_class": "M40-44",
    "races": 2,
    "wins": 0,
    "losses": 2,
@@ -35872,7 +35885,7 @@
    "same_class_races": 2,
    "same_class_wins": 0,
    "same_class_losses": 2,
-   "avg_gap_s": 757,
+   "avg_gap_s": 756,
    "median_gap_pct": 18.1,
    "meetings": [
     {
@@ -35880,13 +35893,13 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 1381,
+     "gap_s": 1380,
      "gap_pct": 25.5,
-     "their_time": "01:30:14",
+     "their_time": "01:30:15",
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 48
+     "places": 50
     },
     {
      "race": "Toskaskabet 2025",
@@ -38100,7 +38113,7 @@
    "turritt_id": "171772",
    "name": "Tora Vestvik",
    "club": "Aker solutions",
-   "age_class": "K 30-34",
+   "age_class": "Kvinner",
    "races": 2,
    "wins": 2,
    "losses": 0,
@@ -40530,7 +40543,7 @@
      "my_class": null,
      "their_class": null,
      "same_class": true,
-     "places": 63
+     "places": 66
     },
     {
      "race": "Ryfylkerittet 2026",
@@ -42592,8 +42605,8 @@
   {
    "turritt_id": "29634",
    "name": "Torbjørn Selanger",
-   "club": "Sandnes",
-   "age_class": "M 50-54",
+   "club": "",
+   "age_class": "Menn",
    "races": 1,
    "wins": 0,
    "losses": 1,
@@ -43940,7 +43953,7 @@
    ]
   },
   {
-   "turritt_id": "r20406",
+   "turritt_id": "139827",
    "name": "VALSKAAR, Niklas",
    "club": "",
    "age_class": "M45-49",
@@ -44453,7 +44466,7 @@
    "turritt_id": "75236",
    "name": "Sindre Aarhuus Amundsen",
    "club": "Æge Energy AS",
-   "age_class": "M 30-34",
+   "age_class": "Menn",
    "races": 1,
    "wins": 1,
    "losses": 0,
@@ -44632,14 +44645,14 @@
   {
    "turritt_id": "77285",
    "name": "Kåre Drechsler-Torkelsen",
-   "club": "Rennesøy SK",
-   "age_class": "M 40-44",
+   "club": "",
+   "age_class": "M40-44",
    "races": 1,
    "wins": 1,
    "losses": 0,
    "draws": 0,
-   "same_class_races": 0,
-   "same_class_wins": 0,
+   "same_class_races": 1,
+   "same_class_wins": 1,
    "same_class_losses": 0,
    "avg_gap_s": -41,
    "median_gap_pct": -2.9,
@@ -44653,8 +44666,8 @@
      "gap_pct": -2.9,
      "their_time": "00:23:24",
      "my_class": "Racer",
-     "their_class": "Temposykkel",
-     "same_class": false,
+     "their_class": "Racer",
+     "same_class": true,
      "places": -6
     }
    ]
@@ -46672,8 +46685,8 @@
   {
    "turritt_id": "167106",
    "name": "Thea Masdal",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "K 30-34",
+   "club": "Equinor BIL",
+   "age_class": "K30-34",
    "races": 1,
    "wins": 0,
    "losses": 1,
@@ -46972,8 +46985,8 @@
   {
    "turritt_id": "125943",
    "name": "Jan Olav Sørensen",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 55-59",
+   "club": "",
+   "age_class": "Menn",
    "races": 1,
    "wins": 0,
    "losses": 1,
@@ -46981,7 +46994,7 @@
    "same_class_races": 1,
    "same_class_wins": 0,
    "same_class_losses": 1,
-   "avg_gap_s": 338,
+   "avg_gap_s": 337,
    "median_gap_pct": 5.2,
    "meetings": [
     {
@@ -46989,9 +47002,9 @@
      "date": "06.09.25",
      "type": "Road",
      "result": "loss",
-     "gap_s": 338,
+     "gap_s": 337,
      "gap_pct": 5.2,
-     "their_time": "01:47:37",
+     "their_time": "01:47:38",
      "my_class": null,
      "their_class": null,
      "same_class": true,
@@ -47242,8 +47255,8 @@
   {
    "turritt_id": "157288",
    "name": "Svein Ole Maldal",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 40-44",
+   "club": "",
+   "age_class": "M40-44",
    "races": 1,
    "wins": 0,
    "losses": 1,
@@ -49012,8 +49025,8 @@
   {
    "turritt_id": "169063",
    "name": "Børge Andreassen",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 45-49",
+   "club": "",
+   "age_class": "M45-49",
    "races": 1,
    "wins": 0,
    "losses": 1,
@@ -49102,8 +49115,8 @@
   {
    "turritt_id": "28834",
    "name": "Svein Ravndal",
-   "club": "Ryfylke SK",
-   "age_class": "M 70-74",
+   "club": "",
+   "age_class": "Menn",
    "races": 1,
    "wins": 0,
    "losses": 1,
@@ -50392,8 +50405,8 @@
   {
    "turritt_id": "108748",
    "name": "Jan Egil Magelie",
-   "club": "Sandnes Sykleklubb",
-   "age_class": "M 50-54",
+   "club": "",
+   "age_class": "M50-54",
    "races": 1,
    "wins": 1,
    "losses": 0,
@@ -53902,8 +53915,8 @@
   {
    "turritt_id": "157216",
    "name": "Leif Helge Årthun",
-   "club": "Rennesøy SK",
-   "age_class": "M 65-69",
+   "club": "",
+   "age_class": "Menn",
    "races": 1,
    "wins": 0,
    "losses": 1,
@@ -75382,8 +75395,8 @@
   {
    "turritt_id": "122444",
    "name": "Frode Heigre",
-   "club": "Tasta & omegn sykkelklubb",
-   "age_class": "M 55-59",
+   "club": "",
+   "age_class": "M55-59",
    "races": 1,
    "wins": 0,
    "losses": 0,
@@ -75402,6 +75415,36 @@
      "gap_s": 0,
      "gap_pct": 0.0,
      "their_time": "00:22:43",
+     "my_class": "Racer",
+     "their_class": "Racer",
+     "same_class": true,
+     "places": null
+    }
+   ]
+  },
+  {
+   "turritt_id": "r20596",
+   "name": "Eirik Mella",
+   "club": "Stormlight AS",
+   "age_class": "M45-49",
+   "races": 1,
+   "wins": 1,
+   "losses": 0,
+   "draws": 0,
+   "same_class_races": 1,
+   "same_class_wins": 1,
+   "same_class_losses": 0,
+   "avg_gap_s": null,
+   "median_gap_pct": null,
+   "meetings": [
+    {
+     "race": "Toskaskabet 2025",
+     "date": "14.09.25",
+     "type": "TT",
+     "result": "win",
+     "gap_s": null,
+     "gap_pct": null,
+     "their_time": "DNF",
      "my_class": "Racer",
      "their_class": "Racer",
      "same_class": true,
