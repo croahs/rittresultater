@@ -240,8 +240,8 @@ def main(only=()):
     # Our own rider ids (data/aliases.json): new riders from the lists fetched above get one.
     aliases = riderids.build(log)
     by_tt = {a["turritt"]: k for k, a in aliases.items() if a.get("turritt")}
-    by_eq = {str(a["eq"]): k for k, a in aliases.items() if a.get("eq")}
-    rid_of = lambda r: by_tt.get(str(r.get("turritt_id"))) or by_eq.get(str(r.get("eq_id")))
+    by_eq = {str(u): k for k, a in aliases.items() for u in riderids._eqs(a)}
+    rid_of = lambda r: r.get("rid") or by_tt.get(str(r.get("turritt_id"))) or by_eq.get(str(r.get("eq_id")))
     data = {
         "schema": SCHEMA,
         "riders": [{"id": r["id"], "rid": rid_of(r), "name": r["name"], "turritt_id": r.get("turritt_id"),
