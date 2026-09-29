@@ -197,7 +197,8 @@ def build(log=print):
         # A rider may have more than one EQ id (a new profile), so riders who have one already count.
         cands = by_name.get(" ".join(raceresult.fold(name)), [])
         tid = riders[cands[0]]["turritt"] if len(cands) == 1 else None
-        if tid and (tid in race_riders or any(_club(club) & _club(c) for c in clubs.get(tid, ()) if c)):
+        held = open_links.get(uid, {}).get("no_auto")  # checked by hand: same name and club, but not surely the same rider
+        if tid and not held and (tid in race_riders or any(_club(club) & _club(c) for c in clubs.get(tid, ()) if c)):
             link(uid, cands[0])
         elif uid in eq_id:
             continue
