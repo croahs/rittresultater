@@ -55,11 +55,17 @@ def _cached(key, fetch):
     return _cache[key]
 
 
+_blocked = False
+
+
 def _request(method, **kw):
-    global _last
+    global _last, _blocked
+    if _blocked:  # after one 403, don't knock again this run
+        raise requests.HTTPError("403 Forbidden (Turritt blocks this network)")
     time.sleep(max(0, _last + PAUSE - time.time()))
     r = s.request(method, BASE, timeout=60, **kw)
     _last = time.time()
+    _blocked = r.status_code == 403
     r.raise_for_status()
     r.encoding = "utf-8"
     return r
@@ -100,6 +106,11 @@ def rider_races(rid):
                     for m in [re.search(r"Turritt=(\d+)", td)] if m]
         out += [tuple(x) for x in _cached(f"history:{rid}:{series}:{count}", fetch)]
     return out
+
+
+def cached_races(rid):
+    """rider_races() from the cache alone, for when Turritt can't be reached."""
+    return [tuple(x) for k, v in _cache.items() if k.startswith(f"history:{rid}:") for x in v]
 
 
 def year_list(year, need=None):

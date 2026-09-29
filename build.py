@@ -20,6 +20,8 @@ import re
 import sys
 from datetime import timedelta
 
+import requests
+
 import sync
 import eqtiming
 import raceresult
@@ -131,11 +133,21 @@ def build_rider(rider, log=print):
     exclude = re.compile(rider["exclude"], re.I) if rider.get("exclude") else None
 
     tt = []
+    rider["_turritt_blocked"] = False
     if rider.get("turritt_id"):
-        rid = turritt.find_rider(rider["turritt_id"], rider["name"])
-        if rid:
+        try:
+            rid = turritt.find_rider(rider["turritt_id"], rider["name"])
+            pairs = turritt.rider_races(rid) if rid else []
+        except requests.RequestException as e:
+            # Turritt turns GitHub's runners away (403). Go on with what is cached and
+            # with EQ Timing and raceresult; the next run that gets through adds the rest.
+            log(f"{rider['id']}: Turritt unreachable ({e}), using cached Turritt lists only")
+            rider["_turritt_blocked"] = True
+            rid = turritt._cache.get(f"rider:{rider['turritt_id']}")
+            pairs = turritt.cached_races(rid) if rid else []
+        if rid or rider["_turritt_blocked"]:
             since = int(rider.get("since") or 0)  # older seasons cost a request per race list
-            for race_id, year in turritt.rider_races(rid):
+            for race_id, year in pairs:
                 if int(year) < since:
                     continue
                 try:

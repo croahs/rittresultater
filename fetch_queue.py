@@ -4,6 +4,9 @@ The site only queues a request (D1 table fetch_requests, behind a bot check and 
 cap); it never scrapes. This script, run by .github/workflows/fetch-queue.yml, takes at
 most MAX_PER_RUN requests, adds each rider to riders.json (history from SINCE) and builds
 them with update.py, which fetches only result lists that aren't cached yet, 2 s apart.
+If Turritt turns the job away (it blocks GitHub's runners with a 403), the rider is built
+from EQ Timing and raceresult alone and the note says so; the rider stays in riders.json,
+so their Turritt races come with the first run Turritt lets through.
 Sources: Turritt (by the id they gave), EQ Timing including kermesse (when exactly one
 EQ profile has their name), and on raceresult SSK Cup and NM Landevei 2026 (when their name
 is in those lists).
@@ -28,6 +31,7 @@ import requests
 
 import eqtiming
 import sskcup
+import turritt
 import update
 
 MAX_PER_RUN = 3
@@ -108,7 +112,11 @@ def main():
             with contextlib.redirect_stdout(sys.stderr):  # stdout is only the built ids
                 data = update.main((tid,))
             n = sum(1 for r in data["races"] if r["rider_id"] == tid)
-            finish(req["id"], "done", f"{n} ritt")
+            n += sum(1 for r in data["points_races"] if r["rider_id"] == tid)
+            if turritt._blocked and not n:
+                raise RuntimeError("Turritt stenger ute GitHub, og vi fant ingen ritt hos EQ Timing eller raceresult.")
+            finish(req["id"], "done", f"{n} ritt fra EQ Timing og raceresult. Turritt stenger ute GitHub, "
+                                      "så rittene derfra kommer når de slipper oss inn." if turritt._blocked else f"{n} ritt")
             known.add(tid)
             built.append(tid)
         except Exception as e:  # keep the rider out rather than half-built
