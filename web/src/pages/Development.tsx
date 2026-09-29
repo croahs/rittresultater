@@ -188,7 +188,7 @@ function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPo
   const [owner, setOwner] = useState<string | null>(null);
   // Saving is offered only when the site has its database (functions/api/power.ts).
   const [canSave, setCanSave] = useState(false);
-  const [save, setSave] = useState(true);
+  const [save, setSave] = useState(false); // power is private by default (architecture decision)
   useEffect(() => { let live = true; getSaved(a.id).then((s) => live && setCanSave(s.enabled)); return () => { live = false; }; }, [a.id]);
   const name = firstName(a.name);
   const run = async (e: React.FormEvent) => {

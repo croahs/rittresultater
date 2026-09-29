@@ -1,6 +1,6 @@
 /* Rittresultater. Concept: a race-day kit. Each rider is a start bib (condensed numerals, pin holes),
    the ring is a timing dial of the field you beat, the race list reads like a finish sheet.
-   Layout: left rail nav on desktop, bottom tab bar on phones; top bar holds rider search + theme. */
+   Layout: one top bar on desktop (brand, tabs, rider search, theme); on phones the tabs become a bottom tab bar. */
 :root {
   --bg: #eef0f6; --surface: #ffffff; --surface-2: #e6e8f2; --sunk: #f6f7fb;
   --ink: #16172c; --ink-2: #474a68; --muted: #5d6083; --line: #d9dcea; --ghost: rgb(22 23 44 / .05);
@@ -46,36 +46,36 @@ a { color: inherit; text-underline-offset: 3px; text-decoration-color: var(--mut
 h1, h2, h3 { text-wrap: balance; }
 
 /* ---------- shell ---------- */
-.app { display: grid; grid-template-columns: 208px minmax(0, 1fr); min-height: 100vh; }
-.rail { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; padding: 18px 12px; border-right: 1px solid var(--line); background: var(--surface); }
-.brand { display: flex; align-items: center; gap: 10px; padding: 4px 10px 22px; font: 800 1.05rem/1 var(--display); font-stretch: 75%; letter-spacing: .04em; text-transform: uppercase; }
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+.topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 10px max(clamp(16px, 3vw, 32px), calc((100% - 1320px) / 2 + clamp(16px, 3vw, 32px))); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; flex: none; margin-right: 12px; font: 800 1.05rem/1 var(--display); font-stretch: 75%; letter-spacing: .04em; text-transform: uppercase; }
 .brand-mark { width: 30px; height: 30px; flex: none; }
 .brand small { display: block; font: 600 .68rem/1.2 var(--body); letter-spacing: .08em; color: var(--muted); }
-.nav { display: flex; flex-direction: column; gap: 2px; }
-.nav button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink-2); font-weight: 600; text-align: left; cursor: pointer; }
-.nav button svg { width: 20px; height: 20px; flex: none; }
+.nav { display: flex; gap: 2px; }
+.nav button { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink-2); font-weight: 600; white-space: nowrap; cursor: pointer; }
+.nav button svg { width: 18px; height: 18px; flex: none; }
 .nav button:hover { background: var(--ghost); color: var(--ink); }
 .nav button[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
-.rail-foot { margin-top: auto; padding: 10px; color: var(--muted); font-size: .75rem; }
-.rail-foot a { display: block; margin-top: 2px; }
-
-.main { min-width: 0; display: flex; flex-direction: column; }
-.topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 10px clamp(16px, 3vw, 32px); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar .brand { display: none; padding: 0; }
 .page { padding: 24px clamp(16px, 3vw, 32px) 48px; display: grid; gap: 28px; max-width: 1320px; width: 100%; margin: 0 auto; }
 
+@media (max-width: 1180px) and (min-width: 861px) {
+  .nav button svg { display: none; }
+  .nav button { padding: 8px 10px; }
+  .brand > div { display: none; }
+}
 @media (max-width: 860px) {
-  .app { grid-template-columns: 1fr; }
-  .rail { position: fixed; inset: auto 0 0 0; top: auto; height: auto; z-index: 30; flex-direction: row; padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px)); border-right: 0; border-top: 1px solid var(--line); }
-  .rail .brand, .rail-foot { display: none; }
-  .nav { flex-direction: row; width: 100%; }
+  /* no backdrop-filter here: it would make the fixed tab bar position against the top bar */
+  .topbar { backdrop-filter: none; background: var(--bg); }
+  .brand { margin-right: 0; }
+  .brand > div { display: none; }
+  .nav { position: fixed; inset: auto 0 0 0; z-index: 30; padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px)); background: var(--surface); border-top: 1px solid var(--line); }
   .nav button { flex: 1; flex-direction: column; gap: 2px; padding: 7px 2px; font-size: .68rem; text-align: center; min-width: 0; }
-  .topbar .brand { display: flex; }
+  .nav button svg { width: 20px; height: 20px; }
   .page { padding-bottom: 96px; }
 }
 
 /* rider search */
-.picker { position: relative; flex: 1; max-width: 420px; margin-left: auto; }
+.picker { position: relative; flex: 1; min-width: 150px; max-width: 360px; margin-left: auto; }
 .picker input { width: 100%; padding: 9px 12px 9px 36px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
 .picker input::placeholder { color: var(--muted); }
 .picker > svg { position: absolute; left: 11px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
