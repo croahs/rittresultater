@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { flags, getJSON, loadAthlete, withPower, type Athlete, type IndexRider, type Site } from "./data";
-import { fold } from "./format";
+import { flags, getJSON, loadAthlete, withPower, withSaved, type Athlete, type IndexRider, type Site } from "./data";
+import { firstName, fold, initials } from "./format";
 import { BrandMark, Icon, TipProvider } from "./ui";
 import Overview from "./pages/Overview";
 import Development from "./pages/Development";
@@ -10,6 +10,7 @@ import Clip from "./pages/Clip";
 import Welcome from "./pages/Welcome";
 import { SelProvider } from "./state";
 import type { RacePower } from "./intervals";
+import { getSaved } from "./saved";
 
 export type Tab = "oversikt" | "utvikling" | "rivaler" | "ritt" | "klipp";
 const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
@@ -65,7 +66,14 @@ export default function App() {
     if (!site || !riderId) { setAthlete(null); setError(null); return; }
     let live = true;
     setAthlete(null); setError(null);
-    loadAthlete(riderId, site, index).then((a) => live && setAthlete(a)).catch(() => live && setError("Fant ikke denne rytteren i resultatlistene."));
+    loadAthlete(riderId, site, index).then(async (a) => {
+      if (!live) return;
+      setAthlete(a);
+      // Numbers the rider saved on the site (only riders without watts in the static data).
+      if (a.power) return;
+      const saved = await getSaved(a.id);
+      if (live && (saved.power.size || saved.speed.size || saved.clipYears.length || saved.hidden)) setAthlete((x) => (x && x.id === a.id ? withSaved(x, saved) : x));
+    }).catch(() => live && setError("Fant ikke denne rytteren i resultatlistene."));
     return () => { live = false; };
   }, [site, riderId, index]);
 
@@ -85,6 +93,7 @@ export default function App() {
   // Public site: every profile, the owner's included, is written in the third person.
   const isMe = false;
   const home = !riderId;
+  const riderName = athlete?.name || index.find((r) => r.id === riderId)?.name || "";
   const search = <RiderPicker index={index} onPick={(id) => open(id)} />;
 
   return (
@@ -93,13 +102,19 @@ export default function App() {
         <button type="button" className="skip" onClick={() => { const m = document.getElementById("innhold"); m?.focus(); m?.scrollIntoView(); }}>Hopp til innholdet</button>
         <header className="topbar">
           <a className="brand" href="#/" aria-label="Rittresultater, til forsiden" onClick={(e) => { e.preventDefault(); open(null); }}><BrandMark /><div>Ritt<br /><small>resultater</small></div></a>
-          {!home && <nav className="nav" aria-label="Hovedmeny">
-            {TABS.map((t) => (
-              <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
-                <t.icon /><span>{t.label}</span>
-              </button>
-            ))}
-          </nav>}
+          {!home && (
+            // The tabs are views of one rider, so they sit in one group with that rider's name in front.
+            <div className="rider-nav">
+              {riderName && <span className="who-chip" title={riderName}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span></span>}
+              <nav className="nav" aria-label={riderName ? `Sider for ${riderName}` : "Sider for rytteren"}>
+                {TABS.map((t) => (
+                  <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
+                    <t.icon /><span>{t.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+          )}
           {home ? <div className="spacer" /> : search}
           <div className="theme" role="group" aria-label="Fargetema">
             {([["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
@@ -110,12 +125,13 @@ export default function App() {
 
         <main className="page" id="innhold" tabIndex={-1}>
           {error && <div className="card empty"><b>{error}</b><button className="btn" onClick={() => open(null)}>Til forsiden</button></div>}
-          {home && site && <Welcome index={index} example={site.default_rider} onRider={(id, t) => open(id, t)} search={search} />}
+          {home && site && <Welcome example={site.default_rider} onRider={(id, t) => open(id, t)} search={search} />}
           {!home && !error && !athlete && <div className="loading">Henter resultater …</div>}
           {athlete && (
             <SelProvider key={athlete.id} a={athlete}>
               <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index}
-                onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))} />
+                onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))}
+                onSaved={async (id) => { const s = await getSaved(id); setAthlete((a) => (a && a.id === id ? withSaved(a, s) : a)); }} />
             </SelProvider>
           )}
           <footer className="site">
@@ -129,10 +145,10 @@ export default function App() {
   );
 }
 
-function Page({ tab, athlete, isMe, go, onRider, index, onPower }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[]; onPower: (p: Map<string, RacePower>) => void }) {
+function Page({ tab, athlete, isMe, go, onRider, index, onPower, onSaved }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[]; onPower: (p: Map<string, RacePower>) => void; onSaved: (id: string) => void }) {
   switch (tab) {
     case "oversikt": return <Overview a={athlete} isMe={isMe} go={go} />;
-    case "utvikling": return <Development a={athlete} isMe={isMe} onPower={onPower} />;
+    case "utvikling": return <Development a={athlete} isMe={isMe} onPower={onPower} onSaved={onSaved} />;
     case "rivaler": return <Rivals a={athlete} isMe={isMe} onRider={onRider} index={index} />;
     case "ritt": return <Races a={athlete} />;
     case "klipp": return <Clip a={athlete} isMe={isMe} />;

@@ -4,8 +4,9 @@ import { IcuError, NameMismatch, fetchRacePower, validKey, type RacePower } from
 import { TYPE_LABEL, TYPE_VAR, dateLong, firstName, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon, useTip } from "../ui";
+import { deleteRides, getSaved, saveRides, showPower } from "../saved";
 
-export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void }) {
+export default function Development({ a, isMe, onPower, onSaved }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void; onSaved: (id: string) => void }) {
   const { rows, season, setSeason } = useSel();
   const ys = years(a);
   const who = isMe ? "du" : firstName(a.name);
@@ -32,9 +33,10 @@ export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: bo
             <RaceChart rows={rows.filter((r) => r.behind != null)} value={(r) => r.behind!} max={niceMax(rows.map((r) => r.behind ?? 0))} unit=" %" label="bak vinneren" invert />
           </section>
           <section className="card card-pad section" id="watt" style={{ scrollMarginTop: 80 }}>
-            <div className="section-head"><div><h2 className="h-card">Watt per ritt</h2><p className="note" style={{ margin: 0 }}>Normalisert watt (NP) og snittwatt over selve rittet{a.livePower ? ". Hentet fra intervals.icu i denne nettleseren, ikke lagret" : ""}</p></div></div>
-            {a.power ? <PowerChart rows={rows} /> : <Connect a={a} isMe={isMe} onPower={onPower} onNote={setPowerNote} />}
+            <div className="section-head"><div><h2 className="h-card">Watt per ritt</h2><p className="note" style={{ margin: 0 }}>Normalisert watt (NP) og snittwatt over selve rittet{a.savedPower ? `. Hentet fra intervals.icu og lagret av ${firstName(a.name)}` : a.livePower ? ". Hentet fra intervals.icu i denne nettleseren, ikke lagret" : ""}</p></div></div>
+            {a.power ? <PowerChart rows={rows} /> : <Connect a={a} isMe={isMe} onPower={onPower} onSaved={onSaved} onNote={setPowerNote} />}
             {a.power && powerNote && <p className="note" role="status" style={{ margin: 0 }}>{powerNote}</p>}
+            {(a.savedPower || a.savedHidden || !!a.savedClipYears?.length) && <Manage a={a} />}
           </section>
         </>
       )}
@@ -177,22 +179,43 @@ function PowerChart({ rows }: { rows: Result[] }) {
   );
 }
 
-function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void; onNote: (s: string) => void }) {
+function Connect({ a, isMe, onPower, onSaved, onNote }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void; onSaved: (id: string) => void; onNote: (s: string) => void }) {
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   // Held in memory only while the person confirms an unfamiliar account name, then dropped.
   const pending = useRef<string | null>(null);
   const [owner, setOwner] = useState<string | null>(null);
+  // Saving is offered only when the site has its database (functions/api/power.ts).
+  const [canSave, setCanSave] = useState(false);
+  const [save, setSave] = useState(false); // power is private by default (architecture decision)
+  const [show, setShow] = useState(false); // saved watts are shown to others only if the rider says so
+  useEffect(() => { let live = true; getSaved(a.id).then((s) => live && setCanSave(s.enabled)); return () => { live = false; }; }, [a.id]);
   const name = firstName(a.name);
   const run = async (e: React.FormEvent) => {
     e.preventDefault();
     const k = key.trim();
     setKey(""); // the key lives only in this function call from here on
     if (!validKey(k)) { setMsg({ ok: false, text: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }); return; }
-    fetchWith(k, a.name);
+    if (canSave && save) saveWith(k); else fetchWith(k, a.name);
   };
   const drop = () => { pending.current = null; setOwner(null); };
+  const saveWith = async (k: string) => {
+    setMsg(null); setBusy("Kobler til intervals.icu …");
+    try {
+      // Worked out here in the browser; the server checks the key is this rider's before storing.
+      const res = await fetchRacePower(k, a.results, a.name, (d, n) => setBusy(`Henter ritt ${d} av ${n} …`), true);
+      if (!res.power.size && !res.tracks.size) { setMsg({ ok: false, text: "Fant ingen økter på rittdatoene i intervals.icu-kontoen din." }); return; }
+      setBusy("Lagrer …");
+      const s = await saveRides(k, a.id, res, show, (d, n) => setBusy(`Lagrer GPS-spor ${d} av ${n} …`));
+      onNote(`Lagret watt for ${s.power} og fart og GPS-spor for ${s.tracks} av ${a.results.length} ritt.${res.failed ? ` ${res.failed} ${res.failed === 1 ? "fil" : "filer"} fikk vi ikke lastet; lagre på nytt senere for dem.` : ""} ${show ? "Alle som ser siden, ser nå wattene." : "Wattene er skjult for andre; du kan vise dem senere med samme nøkkel."}${s.tracks ? " Sesongklippet er klart." : ""}`);
+      if (res.power.size) onPower(res.power);
+      onSaved(a.id);
+    } catch (err) {
+      if (err instanceof NameMismatch) { setMsg({ ok: false, text: `Nøkkelen tilhører «${err.owner}» i intervals.icu, ikke ${a.name}. Bare rytteren selv kan lagre. Fjern krysset hvis du bare vil se wattene.` }); return; }
+      setMsg({ ok: false, text: err instanceof IcuError || (err instanceof Error && !(err instanceof TypeError)) ? err.message : "Fikk ikke kontakt med intervals.icu. Prøv igjen." });
+    } finally { setBusy(null); }
+  };
   const fetchWith = async (k: string, rider: string | null) => {
     drop();
     setMsg(null); setBusy("Kobler til intervals.icu …");
@@ -207,6 +230,7 @@ function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPo
       setMsg({ ok: false, text: err instanceof IcuError ? err.message : "Fikk ikke kontakt med intervals.icu. Prøv igjen." });
     } finally { setBusy(null); }
   };
+  const saving = canSave && save;
   return (
     <div className="connect">
       <span className="eyebrow" style={{ display: "flex", alignItems: "center", gap: 6 }}><Icon.bolt /> Wattdata</span>
@@ -214,8 +238,16 @@ function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPo
       <form className="keyform" onSubmit={run}>
         <input type="password" id="icu-key" aria-label="API-nøkkel fra intervals.icu" placeholder="API-nøkkel fra intervals.icu" autoComplete="off" spellCheck={false}
           value={key} onChange={(e) => setKey(e.target.value)} disabled={!!busy} />
-        <button type="submit" className="btn" disabled={!!busy || !key.trim()}>{busy ? "Henter …" : "Hent watt"}</button>
+        <button type="submit" className="btn" disabled={!!busy || !key.trim()}>{busy ? "Henter …" : saving ? "Hent og lagre" : "Hent watt"}</button>
       </form>
+      {canSave && <label className="fine" style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+        <input type="checkbox" checked={save} onChange={(e) => setSave(e.target.checked)} disabled={!!busy} />
+        <span>Lagre wattene, farten og GPS-sporet fra rittene på siden, så de er her neste gang og du får sesongklipp. Du kan slette dem igjen.</span>
+      </label>}
+      {saving && <label className="fine" style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+        <input type="checkbox" checked={show} onChange={(e) => setShow(e.target.checked)} disabled={!!busy} />
+        <span>Vis wattene for alle som besøker siden. Uten kryss lagres de skjult, og du kan vise eller skjule dem senere med samme nøkkel.</span>
+      </label>}
       {busy && <p className="fine" role="status">{busy}</p>}
       {msg && <p className={msg.ok ? "ok" : "err"} role="alert">{msg.text}</p>}
       {owner && <div className="confirm" role="alert">
@@ -223,7 +255,61 @@ function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPo
         <div className="keyform"><button type="button" className="btn" onClick={() => pending.current && fetchWith(pending.current, null)}>Det er meg, hent likevel</button>
           <button type="button" className="btn ghost" onClick={drop}>Avbryt</button></div>
       </div>}
-      <p className="fine">Nøkkelen finner du under Settings, Developer Settings i intervals.icu. Den sendes bare til intervals.icu, lagres ikke, og wattallene forsvinner når du lukker siden.</p>
+      <p className="fine">Nøkkelen finner du under Settings, Developer Settings i intervals.icu. {saving
+        ? "Den brukes bare mens tallene hentes og lagres, og blir ikke lagret. Vi lagrer snittwatt, NP, fart og GPS-sporet fra start til mål per ritt, aldri hele ridefilene, og bare hvis navnet i intervals.icu stemmer med navnet i resultatlistene."
+        : "Den sendes bare til intervals.icu, lagres ikke, og wattallene forsvinner når du lukker siden."}</p>
+    </div>
+  );
+}
+
+type Act = "show" | "hide" | "delete";
+const ACT: Record<Act, { label: string; busy: string; ask: string; done: string }> = {
+  show: { label: "Vis wattene for alle", busy: "Viser …", ask: "så vises de lagrede wattene for alle som besøker siden", done: "Wattene vises nå for alle." },
+  hide: { label: "Skjul wattene", busy: "Skjuler …", ask: "så skjuler vi wattene. De blir liggende lagret til du viser dem igjen", done: "Wattene er skjult." },
+  delete: { label: "Slett lagrede watt og spor", busy: "Sletter …", ask: "så sletter vi watt, fart og GPS-spor", done: "Slettet watt, fart og GPS-spor." },
+};
+
+/** Show, hide or delete saved watts. Takes the key again: whoever saved them is whoever holds that intervals.icu account. */
+function Manage({ a }: { a: Athlete }) {
+  const [act, setAct] = useState<Act | null>(null);
+  const [key, setKey] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const run = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const k = key.trim();
+    setKey("");
+    if (!act) return;
+    if (!validKey(k)) { setMsg({ ok: false, text: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }); return; }
+    setBusy(true); setMsg(null);
+    try {
+      if (act === "delete") {
+        const n = await deleteRides(k, a.id);
+        if (!n) { setMsg({ ok: false, text: "Denne intervals.icu-kontoen har ikke lagret noe her." }); return; }
+      } else await showPower(k, a.id, act === "show");
+      setMsg({ ok: true, text: ACT[act].done });
+      setTimeout(() => location.reload(), 1200);
+    } catch (err) {
+      setMsg({ ok: false, text: err instanceof Error ? err.message : "Noe gikk galt. Prøv igjen." });
+    } finally { setBusy(false); }
+  };
+  const acts: Act[] = [...(a.savedHidden ? ["show" as const] : []), ...(a.savedPower ? ["hide" as const] : []), "delete"];
+  if (!act) return (
+    <div className="keyform" style={{ flexWrap: "wrap" }}>
+      {a.savedHidden && <p className="fine" style={{ margin: 0, flexBasis: "100%" }}>{firstName(a.name)} har lagret watt, men valgt å ikke vise dem.</p>}
+      {acts.map((x) => <button key={x} type="button" className="btn ghost" onClick={() => setAct(x)}>{ACT[x].label}</button>)}
+    </div>
+  );
+  return (
+    <div className="connect">
+      <p>Lim inn den samme API-nøkkelen fra intervals.icu som ble brukt til å lagre, {ACT[act].ask}.</p>
+      <form className="keyform" onSubmit={run}>
+        <input type="password" aria-label="API-nøkkel fra intervals.icu" placeholder="API-nøkkel fra intervals.icu" autoComplete="off" spellCheck={false}
+          value={key} onChange={(e) => setKey(e.target.value)} disabled={busy} />
+        <button type="submit" className="btn" disabled={busy || !key.trim()}>{busy ? ACT[act].busy : "OK"}</button>
+        <button type="button" className="btn ghost" onClick={() => { setAct(null); setMsg(null); }} disabled={busy}>Avbryt</button>
+      </form>
+      {msg && <p className={msg.ok ? "ok" : "err"} role="alert">{msg.text}</p>}
     </div>
   );
 }

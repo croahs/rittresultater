@@ -3,3 +3,5 @@ dist/
 dist-single/
 public/data/
 *.tsbuildinfo
+.wrangler/
+wrangler.toml

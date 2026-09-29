@@ -1,7 +1,7 @@
 """Rivals: head-to-head against every rider you have met, from cached Turritt lists.
 
-No network: every result list is already in cache/turritt.json (the races in
-race_results_auto.csv plus their sibling races). Riders are matched on
+No network: every result list is already in cache/turritt.json (every Turritt race of
+every rider in riders.json, read from data/results.json, plus sibling races). Riders are matched on
 TurrittID, which is stable across years. EQ Timing-only races (Repsol-mila,
 Atlantic Gravel) are left out for now: their cached lists have rider ids but no
 names. SSK Cup is points only and is left out too.
@@ -524,6 +524,57 @@ def write_all(evs):
     return len(index), sum(e["id"] in follow for e in index)
 
 
+def write_summary(evs, index_ids):
+    """data/summary.json: the front page's numbers, from every race any followed rider rode.
+    Small on purpose, so the page doesn't load every result list. index_ids: riders with a page."""
+    iso_ = lambda sh: iso(sh["Date"])
+    fin = lambda ev: sorted((int(r[9]), r) for r, _ in ev["cats"] if int(r[9]) < DNF)
+    title = lambda sh: re.sub(r"\s+20\d\d$", "", sh["Race"]) + " " + iso_(sh)[:4]
+    who = lambda r: {"id": r[2], "name": name(r), "page": r[2] in index_ids}
+    evs = sorted(evs, key=lambda ev: iso_(ev["sheet"]))
+    count = defaultdict(int)
+    last = {}
+    for ev in evs:
+        for tid, (r, _) in ev["by_id"].items():
+            count[tid] += 1
+            last[tid] = r
+    km = sum(float(ev["sheet"]["Distance (km)"] or 0) * len(fin(ev)) for ev in evs)
+    recent = []
+    for ev in evs[-4:][::-1]:
+        f, sh = fin(ev), ev["sheet"]
+        recent.append({"id": ev["race_id"], "name": re.sub(r"\s+20\d\d$", "", sh["Race"]), "date": iso_(sh),
+                       "type": sh["Type"], "km": float(sh["Distance (km)"] or 0) or None, "finishers": len(f),
+                       "fastest": dict(who(f[0][1]), time=f[0][0]) if f else None})
+    biggest = max(evs, key=lambda ev: len(ev["cats"]))
+    tts = []
+    for ev in evs:
+        f = fin(ev)
+        if ev["sheet"]["Type"] == "TT" and len(f) > 1 and f[1][0] > f[0][0]:
+            tts.append((f[1][0] - f[0][0], ev, f))
+    quick = []
+    for ev in evs:
+        f, dist = fin(ev), float(ev["sheet"]["Distance (km)"] or 0)
+        if f and dist and ev["sheet"]["Type"] != "TTT":
+            quick.append((dist / (f[0][0] / 3600), ev, f))
+    busiest = sorted(count, key=lambda t: (-count[t], name(last[t])))[:8]
+    out = {
+        "races": len(evs), "results": sum(len(ev["cats"]) for ev in evs), "riders": len(count), "km": round(km),
+        "years": sorted({int(iso_(ev["sheet"])[:4]) for ev in evs}),
+        "recent": recent,
+        "biggest": {"name": title(biggest["sheet"]), "riders": len(biggest["cats"])},
+        "busiest": [dict(who(last[t]), club=last[t][7].strip(), races=count[t]) for t in busiest],
+    }
+    if tts:
+        gap, ev, f = min(tts, key=lambda x: x[0])
+        out["closest_tt"] = {"name": title(ev["sheet"]), "gap_s": gap, "a": who(f[0][1]), "b": who(f[1][1])}
+    if quick:
+        kmh, ev, f = max(quick, key=lambda x: x[0])
+        out["fastest_avg"] = {"name": title(ev["sheet"]), "kmh": round(kmh, 1), "rider": who(f[0][1])}
+    json.dump(out, open(os.path.join(HERE, "data", "summary.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    return out
+
+
 def summary(opps, analysis):
     print(f"{len(opps)} motstandere i {len(analysis)} Turritt-ritt.\n")
     print("Mest møtt:")
@@ -590,5 +641,8 @@ if __name__ == "__main__":
     else:
         write(opps, analysis)
         n, written = write_all(evs)
+        index_ids = {r["id"] for r in json.load(open(os.path.join(HERE, "data", "riders", "index.json"), encoding="utf-8"))}
+        s = write_summary(evs, index_ids)
         summary(opps, analysis)
         print(f"\ndata/: {n} ryttere i indeksen, {written} med rivaler (ryttere i riders.json)")
+        print(f"forsiden: {s['races']} ritt, {s['riders']} ryttere, {s['results']} resultater")
