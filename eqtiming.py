@@ -54,18 +54,32 @@ def history(rider=RIDER_ID):
     return _get("Participant/Results", id=rider)
 
 
+def _total(event, stage):
+    """Fetch one race's full result list once and cache both shapes of it (results: for races(),
+    named: for registry races), so a list read for one is never fetched again for the other."""
+    items = _get(f"Result/Total/{event}/{stage}", count=99999)["Items"]
+    _cache[f"results:{event}:{stage}"] = [[i["Deltaker"]["Utover"]["UID"], i["Deltaker"]["Klasse"]["Navn"],
+                                           i["StatusTekst"], i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
+                                          for i in items]
+    _cache.setdefault(f"named:{event}:{stage}", [
+        [i["Deltaker"]["Utover"]["UID"]] + ([None, None] if i["Deltaker"].get("Anonym") else
+         [i["Deltaker"]["Utover"].get("NavnFormatert") or "", i["Deltaker"].get("Klubbnavn") or ""])
+        + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
+        for i in items])
+    _save()
+
+
+def _save():
+    os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
+    with open(CACHE_FILE, "w", encoding="utf-8") as f:
+        json.dump(_cache, f, ensure_ascii=False)
+
+
 def result_list(event, stage):
     """[(rider id, age class, status, time in ms, start group)] for one race, cached forever."""
-    key = f"results:{event}:{stage}"
-    if key not in _cache:
-        items = _get(f"Result/Total/{event}/{stage}", count=99999)["Items"]
-        _cache[key] = [[i["Deltaker"]["Utover"]["UID"], i["Deltaker"]["Klasse"]["Navn"],
-                        i["StatusTekst"], i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
-                       for i in items]
-        os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
-        with open(CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump(_cache, f, ensure_ascii=False)
-    return _cache[key]
+    if f"results:{event}:{stage}" not in _cache:
+        _total(event, stage)
+    return _cache[f"results:{event}:{stage}"]
 
 
 def _hms(ms):
@@ -82,10 +96,11 @@ def _rank(rows, me):
     return 1 + sum(1 for r in field if r[2] == "TIME" and r[3] < mine[3]), len(field)
 
 
-def races(rider=RIDER_ID, since=0):
-    """One dict per race in the rider's EQ Timing history from season `since`, newest first."""
+def profile_races(rider, since=0, max_lists=None):
+    """The timed cycling races with results in a rider's EQ Timing history (one request), newest
+    first, at most max_lists of them: [{"ArrangementUID", "EtappeUID", "ArrangementNavn", ...}]."""
     out = []
-    for h in history(rider):
+    for h in sorted(history(rider), key=lambda h: h["ArrangementDato"], reverse=True):
         if not h.get("HasResult") or int(h["ArrangementDato"][:4]) < since:
             continue
         # EQ Timing also times ski and running races; keep the cycling federation's events only.
@@ -93,6 +108,15 @@ def races(rider=RIDER_ID, since=0):
             continue
         if POINTS_RACE.search(h["ArrangementNavn"]):
             continue
+        out.append(h)
+    return out[:max_lists] if max_lists else out
+
+
+def races(rider=RIDER_ID, since=0, max_lists=None):
+    """One dict per race in the rider's EQ Timing history from season `since`, newest first.
+    max_lists caps how many result lists are read (riders added from the site's queue)."""
+    out = []
+    for h in profile_races(rider, since, max_lists):
         rows = result_list(h["ArrangementUID"], h["EtappeUID"])
         me = next((r for r in rows if r[0] == rider), None)
         if not me or me[2] == "DNS":  # did not start: not a race for this rider
@@ -120,13 +144,17 @@ def named_list(event, stage):
     cached forever. For registry races (registry.py), where riders are matched by name because
     EQ links only some results to a profile. Anonymised rows (the rider asked EQ) keep their
     place in the list but have no name or club (None), so they are never shown or matched."""
-    def fetch():
-        items = _get(f"Result/Total/{event}/{stage}", count=99999)["Items"]
-        return [[i["Deltaker"]["Utover"]["UID"]] + ([None, None] if i["Deltaker"].get("Anonym") else
-                 [i["Deltaker"]["Utover"].get("NavnFormatert") or "", i["Deltaker"].get("Klubbnavn") or ""])
-                + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
-                for i in items]
-    return _cached(f"named:{event}:{stage}", fetch)
+    if f"named:{event}:{stage}" not in _cache:
+        _total(event, stage)
+    return _cache[f"named:{event}:{stage}"]
+
+
+def find_events(query, year):
+    """EQ Timing's calendar searched by name (one request, not cached): [(event id, name, date)]
+    of the cycling federation's events in that year. For «Fant du deg ikke?» requests naming a race."""
+    hits = _get("Events", query=query)
+    return [(e["Id"], (e.get("Name") or "").strip(), e["Starttime"][:10]) for e in hits
+            if (e.get("Organization") or {}).get("Name") == "Norges Cykleforbund" and e["Starttime"][:4] == str(year)]
 
 
 def event_stages(event_id):
@@ -174,9 +202,7 @@ def registry_races(entry, name, rider=None):
 def _cached(key, fetch):
     if key not in _cache:
         _cache[key] = fetch()
-        os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
-        with open(CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump(_cache, f, ensure_ascii=False)
+        _save()
     return _cache[key]
 
 
