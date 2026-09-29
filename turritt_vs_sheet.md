@@ -25,7 +25,10 @@
 | Dalane Rundt 2025 | Overall participants (not officials or DNS, DNF included) | 70 | 73 |
 | Øksnevad Gravel | Class participants (not officials or DNS, DNF included) | 35 | 33 |
 | Øksnevad Gravel | Overall participants (not officials or DNS, DNF included) | 35 | 33 |
-| KCC Lagtempoen 2026 | Overall participants (not officials or DNS, DNF included) | 103 | 102 |
+| KCC Lagtempoen 2026 | Placement in class | 82 | 29 |
+| KCC Lagtempoen 2026 | Overall placement | 87 | 29 |
+| KCC Lagtempoen 2026 | Class participants (not officials or DNS, DNF included) | 97 | 33 |
+| KCC Lagtempoen 2026 | Overall participants (not officials or DNS, DNF included) | 103 | 33 |
 | Nordsjørittet 2026 | Placement in class | 92 | 96 |
 | Nordsjørittet 2026 | Overall placement | 147 | 146 |
 | Nordsjørittet 2026 | Class participants (not officials or DNS, DNF included) | 255 | 260 |

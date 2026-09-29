@@ -292,12 +292,12 @@
    "year": 2013,
    "type": "TTT",
    "class_name": "KCC Lagtempoen",
-   "class_place": 21,
-   "class_n": 171,
-   "overall_place": 21,
-   "overall_n": 171,
-   "percentile": 12.28,
-   "overall_percentile": 12.28,
+   "class_place": 6,
+   "class_n": 40,
+   "overall_place": 6,
+   "overall_n": 40,
+   "percentile": 15.0,
+   "overall_percentile": 15.0,
    "time": "00:54:48",
    "time_s": 3288,
    "winner_time": "00:50:55",
@@ -3028,12 +3028,12 @@
    "year": 2026,
    "type": "TTT",
    "class_name": "KCC Lagtempoen - Racer",
-   "class_place": 82,
-   "class_n": 97,
-   "overall_place": 87,
-   "overall_n": 102,
-   "percentile": 84.54,
-   "overall_percentile": 85.29,
+   "class_place": 29,
+   "class_n": 33,
+   "overall_place": 29,
+   "overall_n": 33,
+   "percentile": 87.88,
+   "overall_percentile": 87.88,
    "time": "01:07:43",
    "time_s": 4063,
    "winner_time": "00:54:12",
@@ -3631,6 +3631,31 @@
  "points_races": [
   {
    "rider_id": "171101",
+   "race_id": "eqtiming:81156/330991",
+   "name": "Kermesse ritt 1",
+   "series": "kermesse",
+   "date": "2026-04-19",
+   "year": 2026,
+   "class_name": "Sort",
+   "place": "7-53 (shared)",
+   "field": 53,
+   "points": 0,
+   "winner_points": 18,
+   "laps": null,
+   "race_time": "1:57:00",
+   "distance_km": 66.8,
+   "speed_kmh": 34.3,
+   "avg_power": 210,
+   "np": 238,
+   "note": "kermesse: no points; the list has only the riders who scored; power and speed over the race time",
+   "links": {
+    "raceresult": null,
+    "eqtiming": "https://live.eqtiming.com/81156#result",
+    "intervals": "https://intervals.icu/activities/i141136777"
+   }
+  },
+  {
+   "rider_id": "171101",
    "race_id": "raceresult:391696:cup1",
    "name": "SSK Cup 1",
    "series": "ssk cup",
@@ -3650,6 +3675,7 @@
    "note": "rode Sort klasse, dropped after 3 laps (not in its results list); power, speed and time over the race laps only",
    "links": {
     "raceresult": "https://my.raceresult.com/391696/",
+    "eqtiming": null,
     "intervals": "https://intervals.icu/activities/i142121692"
    }
   },
@@ -3674,6 +3700,7 @@
    "note": "power, speed and time over the race laps only",
    "links": {
     "raceresult": "https://my.raceresult.com/391696/",
+    "eqtiming": null,
     "intervals": "https://intervals.icu/activities/i177653179"
    }
   },
@@ -3698,6 +3725,7 @@
    "note": "power, speed and time over the race laps only",
    "links": {
     "raceresult": "https://my.raceresult.com/391696/",
+    "eqtiming": null,
     "intervals": "https://intervals.icu/activities/i182583963"
    }
   },
@@ -3722,6 +3750,7 @@
    "note": "rode Sort klasse, dropped after 4 laps (not in its results list); power, speed and time over the race laps only",
    "links": {
     "raceresult": "https://my.raceresult.com/391696/",
+    "eqtiming": null,
     "intervals": "https://intervals.icu/activities/i187378317"
    }
   }

@@ -146,6 +146,37 @@ def _base(name):
     return re.sub(r"( - (Racer|Tempo)| CX/Gravel)$", "", name).strip()
 
 
+def is_team(name):
+    """Team time trials (lagtempo) are ranked by team, not by rider."""
+    return "lagtempo" in (name or "").lower()
+
+
+def as_teams(rows, key=lambda r: ""):
+    """Team time trial rows with each rider's time set to their team's time, plus the team times.
+
+    Turritt lists every rider, with the team name in the group column. A team is ranked by its
+    fastest counted time (riders who are dropped keep a slower time of their own, but the team's
+    result is theirs too), so teammates share a place and the field is the number of teams.
+    key separates teams with the same name in different races (sibling races)."""
+    best = {}
+    for r in rows:
+        k = (key(r), team_name(r))
+        best[k] = min(best.get(k, DNS_TIME), int(r[9]))
+    out = []
+    for r in rows:
+        r = list(r)
+        r[9] = str(best[(key(r), team_name(r))])
+        out.append(r)
+    return out, sorted(best.values())
+
+
+def team_name(r):
+    """The team: the group column, or in older lists the club column ("Team / club"), or
+    else the shared time, which is all teammates have in common there."""
+    club = r[7] or ""
+    return (r[3] or "").strip() or (club.split(" / ")[0].strip() if " / " in club else f"time {r[9]}")
+
+
 def race_row(race_id, year, turritt_id):
     rows = results(race_id)
     me = next(r for r in rows if r[2] == str(turritt_id))
@@ -158,6 +189,11 @@ def race_row(race_id, year, turritt_id):
     siblings = [v for v, n in names.items() if name and _base(n) == _base(name)] or [race_id]
     overall = [r for v in siblings for r in (rows if v == race_id else results(v)) if _counts(r)]
     rank = lambda pool: 1 + sum(int(r[9]) < t for r in pool)
+    if is_team(name):
+        # Placed by team, within this race only: the Racer and Tempo team races are separate.
+        teamed, team_times = as_teams(cls)
+        t = next((int(r[9]) for r in teamed if r[2] == str(turritt_id)), t)
+        cls = overall = [[""] * 9 + [str(x)] for x in team_times]
     date, dist = race_info(race_id)
     finished = t < 359000
     return {
