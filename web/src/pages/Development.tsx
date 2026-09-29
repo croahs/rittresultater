@@ -1,6 +1,6 @@
 import { useMemo, useRef, useEffect, useState } from "react";
 import { median, years, type Athlete, type Result } from "../data";
-import { fetchRacePower, validKey, type RacePower } from "../intervals";
+import { IcuError, NameMismatch, fetchRacePower, validKey, type RacePower } from "../intervals";
 import { TYPE_LABEL, TYPE_VAR, dateLong, firstName, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon, useTip } from "../ui";
@@ -10,6 +10,8 @@ export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: bo
   const ys = years(a);
   const who = isMe ? "du" : firstName(a.name);
   const types = [...new Set(rows.map((r) => r.type))];
+  const [powerNote, setPowerNote] = useState<string | null>(null);
+  useEffect(() => { if (location.hash.endsWith("#watt")) document.getElementById("watt")?.scrollIntoView(); }, []);
   return (
     <>
       <div className="section-head">
@@ -29,9 +31,10 @@ export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: bo
             <div className="section-head"><div><h2 className="h-card">Tid bak vinneren</h2><p className="note" style={{ margin: 0 }}>Lavere er bedre</p></div></div>
             <RaceChart rows={rows.filter((r) => r.behind != null)} value={(r) => r.behind!} max={niceMax(rows.map((r) => r.behind ?? 0))} unit=" %" label="bak vinneren" invert />
           </section>
-          <section className="card card-pad section">
+          <section className="card card-pad section" id="watt" style={{ scrollMarginTop: 80 }}>
             <div className="section-head"><div><h2 className="h-card">Watt per ritt</h2><p className="note" style={{ margin: 0 }}>Normalisert watt (NP) og snittwatt over selve rittet{a.power && !isMe ? ". Hentet fra intervals.icu i denne nettleseren, ikke lagret" : ""}</p></div></div>
-            {a.power ? <PowerChart rows={rows} /> : <Connect a={a} isMe={isMe} onPower={onPower} />}
+            {a.power ? <PowerChart rows={rows} /> : <Connect a={a} isMe={isMe} onPower={onPower} onNote={setPowerNote} />}
+            {a.power && powerNote && <p className="note" role="status" style={{ margin: 0 }}>{powerNote}</p>}
           </section>
         </>
       )}
@@ -88,7 +91,7 @@ function RaceChart({ rows, value, max, ticks, unit, label, invert }: { rows: Res
           );
         })}
         {rows.map((r, i) => (i % labelEvery === 0 || (i === n - 1 && (n - 1) % labelEvery > labelEvery / 2)) && (
-          <text key={i} x={x(i)} y={H - B + 18} textAnchor="middle" fontSize="10.5" fill="var(--muted)">{r.race.split(/[\s-]/)[0].slice(0, 11)}</text>
+          <text key={i} x={i === n - 1 && n > 1 ? x(i) + 6 : x(i)} y={H - B + 18} textAnchor={i === n - 1 && n > 1 ? "end" : "middle"} fontSize="10.5" fill="var(--muted)">{r.race.split(/[\s-]/)[0].slice(0, 11)}</text>
         ))}
       </svg>
       <div className="chart-foot"><span>{rows[0] && dateLong(rows[0].date)}</span><span>Trykk på et punkt for å velge rittet</span><span>{rows[n - 1] && dateLong(rows[n - 1].date)}</span></div>
@@ -133,7 +136,7 @@ function PowerChart({ rows }: { rows: Result[] }) {
           );
         })}
         {withNp.map((r, i) => (i % labelEvery === 0 || (i === n - 1 && (n - 1) % labelEvery > labelEvery / 2)) && (
-          <text key={`l${i}`} x={x(i)} y={H - B + 18} textAnchor="middle" fontSize="10.5" fill="var(--muted)">{r.race.split(/[\s-]/)[0].slice(0, 11)}</text>
+          <text key={`l${i}`} x={i === n - 1 && n > 1 ? x(i) + 6 : x(i)} y={H - B + 18} textAnchor={i === n - 1 && n > 1 ? "end" : "middle"} fontSize="10.5" fill="var(--muted)">{r.race.split(/[\s-]/)[0].slice(0, 11)}</text>
         ))}
       </svg>
       <div className="chart-foot"><span className="legend">
@@ -145,23 +148,34 @@ function PowerChart({ rows }: { rows: Result[] }) {
   );
 }
 
-function Connect({ a, isMe, onPower }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void }) {
+function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void; onNote: (s: string) => void }) {
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  // Held in memory only while the person confirms an unfamiliar account name, then dropped.
+  const pending = useRef<string | null>(null);
+  const [owner, setOwner] = useState<string | null>(null);
   const name = firstName(a.name);
   const run = async (e: React.FormEvent) => {
     e.preventDefault();
     const k = key.trim();
     setKey(""); // the key lives only in this function call from here on
     if (!validKey(k)) { setMsg({ ok: false, text: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }); return; }
+    fetchWith(k, a.name);
+  };
+  const drop = () => { pending.current = null; setOwner(null); };
+  const fetchWith = async (k: string, rider: string | null) => {
+    drop();
     setMsg(null); setBusy("Kobler til intervals.icu …");
     try {
-      const res = await fetchRacePower(k, a.results, (d, n) => setBusy(`Henter ritt ${d} av ${n} …`));
+      const res = await fetchRacePower(k, a.results, rider, (d, n) => setBusy(`Henter ritt ${d} av ${n} …`));
       if (!res.power.size) { setMsg({ ok: false, text: `Fant ingen økter med watt på rittdatoene i kontoen${res.athlete ? ` til ${res.athlete}` : ""}.` }); return; }
+      const got = res.power.size, n = a.results.length;
+      onNote(`Hentet watt for ${got} av ${n} ritt fra intervals.icu.${res.failed ? ` ${res.failed} ${res.failed === 1 ? "fil" : "filer"} fikk vi ikke lastet; prøv igjen senere for dem.` : ""} Tallene lagres ikke.`);
       onPower(res.power);
     } catch (err) {
-      setMsg({ ok: false, text: err instanceof Error && /intervals/.test(err.message) ? `${err.message}.` : "Fikk ikke kontakt med intervals.icu. Prøv igjen." });
+      if (err instanceof NameMismatch) { pending.current = k; setOwner(err.owner); return; }
+      setMsg({ ok: false, text: err instanceof IcuError ? err.message : "Fikk ikke kontakt med intervals.icu. Prøv igjen." });
     } finally { setBusy(null); }
   };
   return (
@@ -175,6 +189,11 @@ function Connect({ a, isMe, onPower }: { a: Athlete; isMe: boolean; onPower: (p:
       </form>
       {busy && <p className="fine" role="status">{busy}</p>}
       {msg && <p className={msg.ok ? "ok" : "err"} role="alert">{msg.text}</p>}
+      {owner && <div className="confirm" role="alert">
+        <p>Nøkkelen tilhører kontoen «{owner}» i intervals.icu, ikke {a.name}. Watt skal bare vises på rytterens egen side.</p>
+        <div className="keyform"><button type="button" className="btn" onClick={() => pending.current && fetchWith(pending.current, null)}>Det er meg, hent likevel</button>
+          <button type="button" className="btn ghost" onClick={drop}>Avbryt</button></div>
+      </div>}
       <p className="fine">Nøkkelen finner du under Settings, Developer Settings i intervals.icu. Den sendes bare til intervals.icu, lagres ikke, og wattallene forsvinner når du lukker siden.</p>
     </div>
   );

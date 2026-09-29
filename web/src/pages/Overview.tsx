@@ -15,7 +15,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
 
   return (
     <>
-      <Hero a={a} isMe={isMe} />
+      <Hero a={a} isMe={isMe} go={go} />
       {!isMe && <p className="note" style={{ margin: "-12px 0 0" }}>Viser {a.results.length === 1 ? "det ene rittet" : `de ${a.results.length} rittene`} med {firstName(a.name)} som er hentet inn så langt. {firstName(a.name)} kan ha kjørt flere ritt som ikke er med her. Watt vises når rytteren kobler til intervals.icu.</p>}
       {last && (
         <div className="latest" role="note">
@@ -45,7 +45,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
   );
 }
 
-function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
+function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void }) {
   const ys = years(a);
   const best = a.results.reduce<Result | null>((b, r) => (!b || r.beaten > b.beaten ? r : b), null);
   const typical = median(a.results.map((r) => r.beaten));
@@ -73,7 +73,7 @@ function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
           <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `prosentpoeng ${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></div>
         <div className="card stat"><span className="eyebrow">{a.power ? "Snitt NP" : "Watt"}</span>
           <b>{a.power ? `${Math.round(mean(a.results.filter((r) => r.np).map((r) => r.np!)))} W` : "–"}</b>
-          <small>{a.power ? "normalisert watt i rittene med wattdata" : "Kommer når rytteren kobler til intervals.icu"}</small></div>
+          <small>{a.power ? "normalisert watt i rittene med wattdata" : <>Ikke delt. <button type="button" className="linkish" onClick={() => { go("utvikling"); setTimeout(() => document.getElementById("watt")?.scrollIntoView({ behavior: "smooth" }), 300); }}>Hent watt fra intervals.icu</button></>}</small></div>
       </div>
     </div>
   );

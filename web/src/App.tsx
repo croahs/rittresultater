@@ -121,6 +121,7 @@ export default function App() {
             <footer className="site">
               <span>Plassering: DNF telles med i feltet. Watt og fart gjelder bare selve rittet.</span>
               <span>Resultater fra Turritt, EQ Timing og raceresult. Watt fra intervals.icu.</span>
+              {site?.contact && <span>Feil i dataene, eller vil du ikke være med? Skriv til <a href={`mailto:${site.contact}`}>{site.contact}</a>.</span>}
             </footer>
           </main>
         </div>

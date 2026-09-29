@@ -19,13 +19,14 @@ Innhold i `web/public/_headers`:
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.basemaps.cartocdn.com; connect-src 'self' https://intervals.icu; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 /data/*
   Cache-Control: public, max-age=300
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 ```
 
-Linja med `noindex` fjernes den dagen siden skal være offentlig.
+Linja med `noindex` fjernes den dagen siden skal være offentlig. `Content-Security-Policy` sørger for at siden bare kan kjøre sine egne skript og bare snakke med intervals.icu. Det beskytter API-nøkkelen som en rytter limer inn. Legger du til en ny tjeneste, må den også legges inn her.
 
 ## Bygg og test lokalt
 
@@ -86,9 +87,15 @@ Hvis Zero Trust-registreringen er et hinder, kan en liten Pages Function i `func
 Watt for andre ryttere: på Utvikling kan en rytter lime inn sin egen API-nøkkel fra intervals.icu. Nettleseren henter da watt for rittene direkte fra intervals.icu og regner ut NP for selve rittet. Nøkkelen sendes bare til intervals.icu, lagres ikke, og tallene forsvinner når siden lukkes. Ingenting av dette går via Cloudflare.
 
 Før lansering bør du vite dette:
-- Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Legg inn en kontaktadresse for å be om fjerning.
+- Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Sett en kontaktadresse i `"contact"` i `site.json`-linja i `export_web.py`. Den vises da nederst på siden, slik at folk kan be om retting eller fjerning.
 - Kartflisene i sesongklippet kommer fra CARTO (basert på OpenStreetMap). Gratis bruk er begrenset og krever kildehenvisning, som vises nederst i kartet. Ved mye trafikk bør vi bytte til en fliskilde med egen nøkkel.
 
 ## 4. Nye ritt
 
-Når nye data committes til `main` (manuelt nå, eller av den ukentlige GitHub Action-jobben når den er på plass), bygger Cloudflare siden på nytt av seg selv. Du trenger ikke gjøre noe mer.
+Når nye data committes til `main`, bygger Cloudflare siden på nytt av seg selv.
+
+Jobben `.github/workflows/update-data.yml` kjører hver mandag klokka 05:00 UTC. Den henter nye plasseringer, oppdaterer rivaler og sidedata, committer og pusher til `main`.
+
+- **Watt:** legg inn API-nøkkelen din som repo-secret. Gå til **Settings → Secrets and variables → Actions → New repository secret**, med navn `INTERVALS_API_KEY`. Uten nøkkelen oppdateres plasseringene likevel, og watt blir stående som før.
+- **Kjør nå:** under **Actions → Update race data → Run workflow** kan du starte jobben med en gang.
+- **Beskyttet `main`:** jobben pusher rett til `main`. Slår du på branch protection som krever PR, stopper den. Da må jobben lage en PR i stedet.

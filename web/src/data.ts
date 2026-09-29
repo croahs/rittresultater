@@ -47,7 +47,7 @@ export interface Athlete {
 }
 
 export interface IndexRider { id: string; name: string; club: string; races: number; shard: string | null }
-export interface Site { default_rider: string; profiles: string[]; activity_links?: boolean }
+export interface Site { default_rider: string; profiles: string[]; activity_links?: boolean; contact?: string }
 
 /** Site-wide switches from site.json. Links to intervals.icu activities are off unless the owner turns them on. */
 export const flags = { activityLinks: false };
