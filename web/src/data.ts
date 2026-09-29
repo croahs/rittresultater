@@ -1,6 +1,6 @@
 // Data model and loading. The site only reads static JSON under data/ (written by export_web.py).
 
-export type RaceType = "Road" | "Gravel" | "TT" | "TTT";
+export type RaceType = "Road" | "Gravel" | "MTB" | "TT" | "TTT";
 
 export interface Result {
   race: string; date: string; year: number; type: RaceType; cls: string | null;

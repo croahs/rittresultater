@@ -1,8 +1,8 @@
 Race,Placement in class,Overall placement,Percentile in class,Overall percentile,Average speed (km/h),Date,Average Power,Normalized Power,"Class participants (not officials or DNS, DNF included)","Overall participants (not officials or DNS, DNF included)",Type,Time,% behind winner,Distance (km),Elevation gain (m),Climbing per km,Class winner,Age class,Age class placement,Age class participants,Turritt,EQ Timing,intervals.icu activity,Match note
 Ungdommens Nordsjøritt 2012,2,2,3.17,3.17,33.0,09.06.12,,,63,63,Road,00:54:32,0,30.0,,,00:54:27,,,,https://turritt.com/index.php?Turritt=1792&page=resultat&current=2&su=2,,,new from Turritt
 Rogaland tredagers,68,68,80.95,80.95,,17.06.12,,,84,84,TT,00:09:13,73,,,,00:05:19,M15-16,16,19,,https://live.eqtiming.com/1032#result,,new from EQ Timing
-CCC 2012-2 (CC Elite) 2012,8,8,61.54,61.54,13.6,18.11.12,,,13,13,Road,01:06:08,11,15.0,,,00:59:22,,,,https://turritt.com/index.php?Turritt=1846&page=resultat&current=2&su=2,,,new from Turritt
-CCC 2012-4 (CC Sport) 2013,3,3,37.50,37.50,16.3,27.01.13,,,8,8,Road,00:40:02,12,10.9,,,00:35:42,,,,https://turritt.com/index.php?Turritt=1881&page=resultat&current=2&su=2,,,new from Turritt
+CCC 2012-2 (CC Elite) 2012,8,8,61.54,61.54,13.6,18.11.12,,,13,13,MTB,01:06:08,11,15.0,,,00:59:22,,,,https://turritt.com/index.php?Turritt=1846&page=resultat&current=2&su=2,,,new from Turritt
+CCC 2012-4 (CC Sport) 2013,3,3,37.50,37.50,16.3,27.01.13,,,8,8,MTB,00:40:02,12,10.9,,,00:35:42,,,,https://turritt.com/index.php?Turritt=1881&page=resultat&current=2&su=2,,,new from Turritt
 Mairittet 2013,10,10,3.40,3.40,,01.05.13,,,294,294,Road,01:40:24,1,,,,01:39:49,M 17-19,1,4,,https://live.eqtiming.com/2774#result,,new from EQ Timing
 Jærtrillen 2013,83,83,41.92,41.92,37.2,05.05.13,,,198,198,Road,02:09:12,9,80.0,,,01:58:33,,,,https://turritt.com/index.php?Turritt=1907&page=resultat&current=2&su=2,,,new from Turritt
 Garborgriket Rundt 2013,183,183,12.54,12.54,31.1,20.05.13,,,1459,1459,Road,02:38:18,10,82.0,,,02:23:33,,,,https://turritt.com/index.php?Turritt=1919&page=resultat&current=2&su=2,,,new from Turritt
@@ -35,7 +35,7 @@ Lysebotn - Bryne Rittet 2015,31,31,7.75,7.75,32.9,08.08.15,,,400,400,Road,04:33:
 HS:VAGLE RITTET 2015,58,58,23.67,23.67,31.3,16.08.15,,,245,245,Road,01:21:30,10,42.5,,,01:13:52,,,,https://turritt.com/index.php?Turritt=2258&page=resultat&current=2&su=2,,,new from Turritt
 Jæren Hausttur 2015,8,8,5.76,5.76,37.7,06.09.15,,,139,139,Road,02:16:44,2,86.0,,,02:13:54,,,,https://turritt.com/index.php?Turritt=2286&page=resultat&current=2&su=2,,,new from Turritt
 Sport1-Rittet - racer 2015,1,1,0.83,0.83,37.6,13.09.15,,,120,120,Road,01:20:34,0,50.5,,,01:20:34,M17-19,1,4,https://turritt.com/index.php?Turritt=2289&page=resultat&current=2&su=2,https://live.eqtiming.com/19613#result,,new from Turritt
-Eskelandskogen Rundt 2016,12,12,40.00,40.00,9.3,27.02.16,,,30,30,Road,00:40:03,19,6.2,,,00:33:47,,,,https://turritt.com/index.php?Turritt=2300&page=resultat&current=2&su=2,,,new from Turritt
+Eskelandskogen Rundt 2016,12,12,40.00,40.00,9.3,27.02.16,,,30,30,MTB,00:40:03,19,6.2,,,00:33:47,,,,https://turritt.com/index.php?Turritt=2300&page=resultat&current=2&su=2,,,new from Turritt
 Mairittet 2016,47,47,16.97,16.97,39.9,01.05.16,,,277,277,Road,01:38:27,4,65.5,,,01:34:53,M 20-24,5,8,https://turritt.com/index.php?Turritt=2357&page=resultat&current=2&su=2,https://live.eqtiming.com/24964#result,,new from Turritt
 Dalane Rundt 2016,31,31,13.19,13.19,38.2,05.05.16,,,235,235,Road,01:59:17,3,76.0,,,01:56:14,,,,https://turritt.com/index.php?Turritt=2365&page=resultat&current=2&su=2,https://live.eqtiming.com/24138#result,,new from Turritt
 Jærtrillen 2016,22,22,11.76,11.76,40.5,08.05.16,,,187,187,Road,01:58:23,1,80.0,,,01:56:55,,,,https://turritt.com/index.php?Turritt=2368&page=resultat&current=2&su=2,,,new from Turritt
@@ -44,7 +44,7 @@ Garborgriket Rundt 2016,14,14,1.50,1.50,33.3,21.05.16,,,933,933,Road,02:27:33,2,
 Haugesund - Sauda 2016,7,7,1.90,1.90,40.7,28.05.16,,,369,369,Road,02:37:51,1,107.0,,,02:36:19,M20-24,6,15,https://turritt.com/index.php?Turritt=2388&page=resultat&current=2&su=2,https://live.eqtiming.com/20936#result,,new from Turritt
 "Regionsmesterskap Sør, Fellesstart",97,97,78.23,78.23,,05.06.16,,,124,124,Road,02:38:17,,,,,00:00:00,M Senior,10,22,,https://live.eqtiming.com/25365#result,,new from EQ Timing
 SSK Rankingritt Jun/Sen,121,121,65.41,65.41,,11.06.16,,,185,185,Road,00:57:23,27,,,,00:45:06,M Senior,37,85,,https://live.eqtiming.com/21234#result,,new from EQ Timing
-Mississippiskogen MTB 2016,16,16,61.54,61.54,8.2,17.08.16,,,26,26,Road,00:55:50,34,7.6,,,00:41:40,,,,https://turritt.com/index.php?Turritt=2459&page=resultat&current=2&su=2,,,new from Turritt
+Mississippiskogen MTB 2016,16,16,61.54,61.54,8.2,17.08.16,,,26,26,MTB,00:55:50,34,7.6,,,00:41:40,,,,https://turritt.com/index.php?Turritt=2459&page=resultat&current=2&su=2,,,new from Turritt
 Steinsvikrittet 2016,5,5,1.38,1.38,30.5,20.08.16,,,362,362,Road,01:53:55,5,58.0,,,01:48:12,M20-24,1,10,https://turritt.com/index.php?Turritt=2462&page=resultat&current=2&su=2,https://live.eqtiming.com/25894#result,,new from Turritt
 HS:VAGLE RITTET 2016,5,5,3.07,3.07,33.7,21.08.16,,,163,163,Road,01:14:56,1,42.1,,,01:14:20,,,,https://turritt.com/index.php?Turritt=2468&page=resultat&current=2&su=2,,,new from Turritt
 Gilderunden 2016,1,1,1.52,1.52,40.0,23.08.16,,,66,66,Road,01:26:00,0,57.4,,,01:26:00,,,,https://turritt.com/index.php?Turritt=2474&page=resultat&current=2&su=2,,,new from Turritt
@@ -52,13 +52,12 @@ Tour des Fjords Classic 2016,10,10,1.82,1.82,38.6,03.09.16,,,548,548,Road,02:50:
 Kleppeloen 2017,6,6,15.38,15.38,26.2,18.03.17,,,39,39,Road,00:42:23,5,18.5,,,00:40:26,,,,https://turritt.com/index.php?Turritt=2516&page=resultat&current=2&su=2,,,new from Turritt
 Dalane Rundt 2017,14,14,9.21,9.21,39.1,14.05.17,,,152,152,Road,01:56:34,2,76.0,,,01:54:29,,,,https://turritt.com/index.php?Turritt=2542&page=resultat&current=2&su=2,https://live.eqtiming.com/35424#result,,new from Turritt
 Hårfagrerittet 2017,24,24,8.00,8.00,27.6,03.06.17,,,300,300,Road,02:32:23,10,70.0,,,02:18:37,M20-24,1,3,https://turritt.com/index.php?Turritt=2563&page=resultat&current=2&su=2,https://live.eqtiming.com/32305#result,,new from Turritt
-"Terrengcupen Rogaland #5, Vigrestad",31,31,63.27,63.27,,03.09.17,,,49,49,Road,00:14:56,166,,,,00:05:37,M Senior,3,4,,https://live.eqtiming.com/35261#result,,new from EQ Timing
+"Terrengcupen Rogaland #5, Vigrestad",31,31,63.27,63.27,,03.09.17,,,49,49,MTB,00:14:56,166,,,,00:05:37,M Senior,3,4,,https://live.eqtiming.com/35261#result,,new from EQ Timing
 Ryfylkerittet 2017,5,5,4.39,4.39,38.0,09.09.17,,,114,114,Road,01:24:44,2,53.7,,,01:22:45,M20-29,2,11,https://turritt.com/index.php?Turritt=2629&page=resultat&current=2&su=2,https://live.eqtiming.com/31912#result,,new from Turritt
-Terrengcupen Rogaland #2 Bogafjell SK_,20,20,30.77,30.77,,15.05.18,,,65,65,Road,00:06:33,164,,,,00:02:29,M Senior,5,5,,https://live.eqtiming.com/42210#result,,new from EQ Timing
-Sesilåmi 2019,244,244,24.67,24.67,,09.03.19,,,989,989,Road,04:08:15,52,,,,02:43:03,M21-25,17,50,,https://live.eqtiming.com/44420#result,,new from EQ Timing
+Terrengcupen Rogaland #2 Bogafjell SK_,20,20,30.77,30.77,,15.05.18,,,65,65,MTB,00:06:33,164,,,,00:02:29,M Senior,5,5,,https://live.eqtiming.com/42210#result,,new from EQ Timing
 PreTour Sandnes 2019,29,32,21.01,21.92,29.3,10.04.19,,,138,146,Road,01:19:09,12,38.6,,,01:10:54,M20-29,1,6,https://turritt.com/index.php?Turritt=2767&page=resultat&current=2&su=2,https://live.eqtiming.com/47518#result,,new from Turritt
-Terrengcupen Rogaland #2 Sola Ck,6,6,8.82,8.82,,30.04.19,,,68,68,Road,00:04:45,124,,,,00:02:07,M Senior,2,6,,https://live.eqtiming.com/47067#result,,new from EQ Timing
-Hålandsskogen (sommer) 2019,5,5,12.82,12.82,,14.05.19,,,39,39,Road,00:50:30,11,0.0,,,00:45:30,,,,https://turritt.com/index.php?Turritt=2803&page=resultat&current=2&su=2,,,new from Turritt
+Terrengcupen Rogaland #2 Sola Ck,6,6,8.82,8.82,,30.04.19,,,68,68,MTB,00:04:45,124,,,,00:02:07,M Senior,2,6,,https://live.eqtiming.com/47067#result,,new from EQ Timing
+Hålandsskogen (sommer) 2019,5,5,12.82,12.82,,14.05.19,,,39,39,MTB,00:50:30,11,0.0,,,00:45:30,,,,https://turritt.com/index.php?Turritt=2803&page=resultat&current=2&su=2,,,new from Turritt
 Smaalenene Rundt 2025,49,49,50.52,50.52,,27.04.25,,,97,97,Road,02:09:31,6,,,,02:01:40,M20-29,11,20,,https://live.eqtiming.com/74698#result,,new from EQ Timing
 Garborgriket Rundt 2025,11,29,16.67,28.71,31.4,10.05.25,,,66,101,Road,02:13:37,5,70.0,,,02:07:25,,,,https://turritt.com/index.php?Turritt=3205&page=resultat&current=2&su=2,,,new from Turritt
 Bergen-Voss 2025,494,494,38.81,38.81,29.5,31.05.25,,,1273,1273,Road,05:29:46,36,162.0,,,04:02:31,,,,https://turritt.com/index.php?Turritt=3216&page=resultat&current=2&su=2,,,new from Turritt
