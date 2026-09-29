@@ -255,12 +255,40 @@ def events(log=lambda m: print(m, file=sys.stderr)):
     log(f"rivals: {len(moved)} races from their own timer instead of Turritt: {', '.join(moved)}")
     if kept:
         log(f"rivals: kept on Turritt (too many head-to-heads would be lost): {', '.join(kept)}")
-    global SEX, SEX_UNSURE
+    global SEX, SEX_UNSURE, CLUB
     SEX, SEX_UNSURE = genders(out, log)
+    CLUB = clubs(out)
     return out
 
 
 SEX, SEX_UNSURE = {}, {}  # set by events(): each rider's sex from their classes, and the unclear ones
+CLUB = {}  # set by events(): each rider's club (clubs())
+
+
+def clubs(evs):
+    """{rider id: club}: the club most of their results name in the latest year that names one,
+    spelling variants counted as one (club_key) and shown as most often written. Lists that leave
+    the club out (some timers do) don't make a rider clubless."""
+    seen = defaultdict(lambda: defaultdict(list))  # rider -> year -> [(date, club)]
+    for ev in evs:
+        d = iso(ev["sheet"]["Date"])
+        for rid, (r, _) in ev["by_id"].items():
+            c = (r[7] or "").strip()
+            if c:
+                seen[rid][d[:4]].append((d, c))
+    out = {}
+    for rid, years in seen.items():
+        rows = years[max(years)]
+        votes = Counter(club_key(c) for _, c in rows)
+        best = max(votes, key=lambda k: (votes[k], max(d for d, c in rows if club_key(c) == k)))
+        spell = Counter(c for _, c in rows if club_key(c) == best)
+        out[rid] = max(spell, key=lambda c: (spell[c], max(d for d, x in rows if x == c)))
+    return out
+
+
+def club(r):
+    """A rider's club (clubs()), else what this result row says."""
+    return CLUB.get(r[2]) or (r[7] or "").strip()
 
 
 def class_sex(r):
@@ -429,7 +457,7 @@ def build(me=ME, evs=None, keep=None):
             else:
                 res = "win" if t < o else "loss" if t > o else "draw"
                 gap = t - o  # seconds; negative = you were faster
-            opp[r[2]] = {"turritt_id": r[2], "name": name(r), "club": r[7].strip(), "age_class": r[8],
+            opp[r[2]] = {"turritt_id": r[2], "name": name(r), "club": club(r), "age_class": r[8],
                          "sex": SEX.get(r[2])}
             if o < t < DNF:  # places between you: 1 = finished right ahead of you, -1 = right behind
                 places = 1 + lo - bisect.bisect_right(times, o)
@@ -489,9 +517,13 @@ def _who(o, **extra):
 
 
 def club_key(club):
-    """Same club, different spelling: "Bogafjell SK" = "Bogafjell Sykleklubb" = "bogafjell sykleklubb"."""
-    c = re.sub(r"\b(sykleklubb|sykkelklubb|sykkelklub|sykleklub)\b", "sk", club.lower())
-    return re.sub(r"\s+", " ", c).strip() or "(ingen klubb)"
+    """Same club, different spelling: "Bogafjell SK" = "Bogafjell Sykleklubb" = "bogafjell sykleklubb",
+    "Bryne CK" = "Bryne Cykleklubb", "Sportsklubben Rye" = "SK Rye sykkel"."""
+    c = re.sub(r"\b(sykleklubb|sykkelklubb|sykkelklub|sykleklub|sportsklubben|sportsklubb)\b", "sk", club.lower())
+    c = re.sub(r"\b(cykleklubb|cykkelklubb|cykleklub)\b", "ck", c)
+    c = re.sub(r"\s+", " ", c).strip()
+    c = re.sub(r"(?<=\S) sykkel$", "", c)  # "SK Rye sykkel": the club's cycling group
+    return " ".join(sorted(c.split())) if c.startswith("sk ") else c or "(ingen klubb)"
 
 
 def insights(opps, clubs=None):
@@ -720,7 +752,7 @@ def update_rider(tid):
     if not rows:
         raise SystemExit(f"{tid} er ikke i noen av resultatlistene")
     last = max(rows, key=lambda x: x[0])[1]
-    entry = {"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
+    entry = {"id": tid, "name": name(last), "club": club(last), "age_class": last[8],
              "races": len(rows), "shard": shard(tid), "sex": SEX.get(tid)}
     index = [e for e in index if e["id"] != tid] + [entry]
     index.sort(key=lambda r: (-r["races"], r["name"]))
@@ -767,7 +799,7 @@ def write_all(evs):
     index = []
     for tid, rs in seen.items():
         last = max(rs, key=lambda x: x[0])[1]
-        index.append({"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
+        index.append({"id": tid, "name": name(last), "club": club(last), "age_class": last[8],
                       "races": len(rs), "shard": shard(tid), "sex": SEX.get(tid)})
     index.sort(key=lambda r: (-r["races"], r["name"]))
 
@@ -823,7 +855,7 @@ def write_summary(evs, index_ids):
         "years": sorted({int(iso_(ev["sheet"])[:4]) for ev in evs}),
         "recent": recent,
         "biggest": {"name": title(biggest["sheet"]), "riders": len(biggest["cats"])},
-        "busiest": [dict(who(last[t]), club=last[t][7].strip(), races=count[t]) for t in busiest],
+        "busiest": [dict(who(last[t]), club=club(last[t]), races=count[t]) for t in busiest],
     }
     if tts:
         gap, ev, f = min(tts, key=lambda x: x[0])
