@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import MoreRaces from "../MoreRaces";
+import RaceVideos from "../RaceVideos";
 import { median, mean, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, hms, pct, span } from "../format";
 import { useState } from "react";
@@ -181,9 +182,10 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
           {r.behind != null && <div className="fact"><span>Bak vinneren</span><b>{pct(r.behind, r.behind % 1 ? 1 : 0)}</b></div>}
           {r.np && <div className="fact"><span>Watt (NP / snitt)</span><b>{r.np} / {r.ap} W</b></div>}
           {r.speed && <div className="fact"><span>Fart / distanse</span><b>{dec(r.speed)} km/t · {dec(r.km)} km{r.climb ? ` · ${Math.round(r.climb)} hm` : ""}</b></div>}
-          <div className="fact"><span>Kilder</span><b>{r.link && <a href={r.link} target="_blank" rel="noopener">Resultatliste</a>}{r.icu && flags.activityLinks && <> · <a href={r.icu} target="_blank" rel="noopener">intervals.icu</a></>}{r.video && <>{r.link || (r.icu && flags.activityLinks) ? " · " : ""}<a href={r.video} target="_blank" rel="noopener">Video fra rittet</a></>}</b></div>
+          <div className="fact"><span>Kilder</span><b>{r.link && <a href={r.link} target="_blank" rel="noopener">Resultatliste</a>}{r.icu && flags.activityLinks && <> · <a href={r.icu} target="_blank" rel="noopener">intervals.icu</a></>}</b></div>
           <button type="button" className="btn" onClick={() => go("rivaler")}>Se rivalene</button>
         </div>
+        <RaceVideos key={raceKey(r)} videos={r.videos} race={`${r.race} ${r.year}`} />
       </div>
     );
   }

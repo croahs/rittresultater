@@ -15,6 +15,7 @@ export interface Result {
   ageClass: string; agePlace: number | null; ageN: number | null;
   link: string; icu: string;
   video?: string;     // the rider's own video from this race (data/videos.json)
+  videos?: RaceVideo[]; // every rider's video from this race, the rider's own first
 }
 
 export interface PointsRace {
@@ -142,23 +143,38 @@ function athlete(p: RawProfile, full = false): Athlete {
   };
 }
 
-/* Riders' own videos, hand-kept in data/videos.json: a channel per rider and a video per race, found by race date. */
-export interface VideoFile { riders: Record<string, { channel?: string; videos?: { date: string; race: string; url: string }[] }> }
+/* Riders' videos, hand-kept in data/videos.json: a channel per rider, and per race the videos riders made of it.
+   A race is found by date and name, so a video shows on the race for everyone who rode it. */
+export interface VideoFile {
+  channels?: Record<string, string>;
+  races?: { date: string; race: string; videos: { rid: string; url: string }[] }[];
+}
+export interface RaceVideo { rid: string; by: string; url: string; own: boolean }
 
-export function withVideos(a: Athlete, file: VideoFile | null): Athlete {
-  const v = file?.riders?.[a.id];
-  if (!v) return a;
-  const byDate = new Map((v.videos || []).map((x) => [x.date, x.url]));
+const plain = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ø/g, "o").replace(/æ/g, "ae").replace(/[^a-z0-9]/g, "");
+
+export function withVideos(a: Athlete, file: VideoFile | null, names: (rid: string) => string): Athlete {
+  const races = file?.races || [];
+  const channel = file?.channels?.[a.id];
+  if (!races.length && !channel) return a;
+  const find = (date: string, name: string): RaceVideo[] | undefined => {
+    const n = plain(name);
+    const race = races.find((x) => x.date === date && (n.startsWith(plain(x.race)) || plain(x.race).startsWith(n)));
+    if (!race?.videos.length) return undefined;
+    return race.videos.map((v) => ({ rid: v.rid, by: v.rid === a.id ? a.name : names(v.rid), url: v.url, own: v.rid === a.id }))
+      .sort((x, y) => Number(y.own) - Number(x.own));
+  };
+  const own = (vs?: RaceVideo[]) => vs?.find((v) => v.own)?.url;
   return {
-    ...a, channel: v.channel,
-    results: a.results.map((r) => (byDate.has(r.date) ? { ...r, video: byDate.get(r.date) } : r)),
-    points: a.points.map((p) => (byDate.has(p.date) ? { ...p, video: byDate.get(p.date) } : p)),
+    ...a, channel,
+    results: a.results.map((r) => { const vs = find(r.date, r.race); return vs ? { ...r, videos: vs, video: own(vs) } : r; }),
+    points: a.points.map((p) => { const u = own(find(p.date, p.name)); return u ? { ...p, video: u } : p; }),
   };
 }
 
 export async function loadAthlete(id: string, site: Site, index: IndexRider[], get: <T>(path: string) => Promise<T> = getJSON): Promise<Athlete> {
   const videos = get<VideoFile>("videos.json").catch(() => null); // optional: a missing file just means no videos
-  return withVideos(await loadRaw(id, site, index, get), await videos);
+  return withVideos(await loadRaw(id, site, index, get), await videos, (rid) => index.find((r) => r.id === rid)?.name || "");
 }
 
 async function loadRaw(id: string, site: Site, index: IndexRider[], get: <T>(path: string) => Promise<T>): Promise<Athlete> {
