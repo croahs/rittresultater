@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { getHistory, requestHistory, type HistoryState } from "../history";
 import { median, mean, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, hms, pct, span } from "../format";
 import { useState } from "react";
@@ -16,7 +17,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
   return (
     <>
       <Hero a={a} isMe={isMe} go={go} />
-      {!a.full && <p className="note" style={{ margin: "-12px 0 0" }}>Viser {a.results.length === 1 ? "det ene rittet" : `de ${a.results.length} rittene`} med {firstName(a.name)} som er hentet inn så langt. {firstName(a.name)} kan ha kjørt flere ritt som ikke er med her. Watt vises når rytteren kobler til intervals.icu.</p>}
+      {!a.full && <MoreRaces a={a} />}
       {last && (
         <div className="latest" role="note">
           <span>Siste ritt: {last.race} {last.year}, {last.place}. av {last.field}. {who} slo {Math.round(last.beaten)} % av feltet.</span>
@@ -222,6 +223,36 @@ function TypeCards({ rows }: { rows: Result[] }) {
           </article>
         );
       })}
+    </div>
+  );
+}
+
+/* Riders rebuilt from the shared result lists only have the races the site already covers.
+   The button asks for the rest; the weekly data job fetches it later, never during the visit. */
+function MoreRaces({ a }: { a: Athlete }) {
+  const [h, setH] = useState<HistoryState | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  useEffect(() => { let live = true; getHistory(a.id).then((x) => live && setH(x)); return () => { live = false; }; }, [a.id]);
+  const name = firstName(a.name);
+  const shown = `Viser ${a.results.length === 1 ? "det ene rittet" : `de ${a.results.length} rittene`} med ${name} som er hentet inn så langt.`;
+  if (!h?.enabled) return <p className="note" style={{ margin: "-12px 0 0" }}>{shown} {name} kan ha kjørt flere ritt som ikke er med her. Watt vises når rytteren kobler til intervals.icu.</p>;
+  const ask = async () => {
+    setBusy(true); setErr(null);
+    try { setH(await requestHistory(a.id)); } catch (e) { setErr((e as Error).message); } finally { setBusy(false); }
+  };
+  return (
+    <div className="more-races card card-pad" role="note">
+      <div>
+        <b>Mangler det ritt?</b>
+        {h.status === "none" && <p>{shown} Er du {name}? Da kan du be om alle rittene dine fra Turritt, helt tilbake til 2005. De hentes rolig ved neste oppdatering av dataene, ikke med en gang.</p>}
+        {h.status === "queued" && <p>Alle rittene til {name} står i kø{h.ahead ? `, med ${h.ahead} ${h.ahead === 1 ? "rytter" : "ryttere"} foran` : ""}. De kommer med neste oppdatering av dataene.</p>}
+        {h.status === "running" && <p>Rittene til {name} hentes nå. De vises når oppdateringen er ferdig.</p>}
+        {h.status === "done" && <p>Alle rittene til {name} er hentet. De vises når siden er bygget på nytt.</p>}
+        {h.status === "failed" && <p>Vi fikk ikke hentet alle rittene til {name}.{h.note ? ` ${h.note}` : ""}</p>}
+        {err && <p className="err" role="alert">{err}</p>}
+      </div>
+      {h.status === "none" && <button type="button" className="btn primary" onClick={ask} disabled={busy}>{busy ? "Sender …" : "Hent alle mine ritt"}</button>}
     </div>
   );
 }

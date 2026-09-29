@@ -385,3 +385,9 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .busy .who { min-width: 0; }
 .busy .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .busy .who small { display: block; color: var(--muted); font-size: .78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* "Hent alle mine ritt" */
+.more-races { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: -8px; }
+.more-races > div { flex: 1 1 320px; }
+.more-races p { margin: 4px 0 0; color: var(--ink-2); font-size: .9rem; max-width: 70ch; }
+.more-races .err { color: var(--loss); }
