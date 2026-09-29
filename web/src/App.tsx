@@ -11,6 +11,7 @@ import Clip from "./pages/Clip";
 import Welcome from "./pages/Welcome";
 import FindMe from "./pages/FindMe";
 import Race from "./pages/Race";
+import Top, { TOP_KINDS, type TopKind } from "./pages/Top";
 import { SelProvider } from "./state";
 import { KlasseProvider } from "./klasse";
 import type { RacePower } from "./intervals";
@@ -28,11 +29,12 @@ const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
 
 /* Hash: #/r/<our id without the r>/<tab>, e.g. #/r/17179/oversikt. No rider means the front page.
    Old links (#/<TurrittID>/<tab>) still open the right rider and are rewritten to the new form. */
-function readHash(): { rid?: string; legacy?: string; tab?: Tab; find?: boolean; race?: string } {
+function readHash(): { rid?: string; legacy?: string; tab?: Tab; find?: boolean; race?: string; top?: TopKind } {
   try {
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
     if (parts[0] === "finn") return { find: true }; // «Fant du deg ikke?»
     if (parts[0] === "ritt" && parts[1]) return { race: decodeURIComponent(parts[1]) }; // one race's result list
+    if (parts[0] === "topp" && TOP_KINDS.includes(parts[1] as TopKind)) return { top: parts[1] as TopKind }; // a front-page top list
     const tab = parts.find((p): p is Tab => TABS.some((t) => t.id === p));
     if (parts[0] === "r" && /^\d+$/.test(parts[1] || "")) return { rid: "r" + parts[1], tab };
     const legacy = parts.find((p) => /^(eq)?\d+$/.test(p)); // a TurrittID, or eq<id> for a rider not yet given an id of ours
@@ -78,13 +80,14 @@ export default function App() {
   // «Åpen | Kvinner»: kept while browsing, so women can compare women with women; only women's pages use it.
   const [women, setWomen] = useState(false);
   const [race, setRace] = useState<string | null>(() => readHash().race ?? null);
+  const [top, setTop] = useState<TopKind | null>(() => readHash().top ?? null);
   const [missing, setMissing] = useState(false); // the link named a rider we don't have
 
   useEffect(() => {
     Promise.all([getJSON<Site>("site.json"), getJSON<IndexRider[]>("riders/index.json")])
       .then(async ([s, i]) => { flags.activityLinks = !!s.activity_links; indexRef.current = i; const r = await hashRider(i); const h = readHash(); setMissing(!r && !!(h.rid || h.legacy)); setSite(s); setIndex(i); setRiderId(r); })
       .catch(() => setError("Fant ikke dataene. Kjør python3 export_web.py og bygg på nytt."));
-    const onHash = async () => { const h = readHash(); const r = await hashRider(indexRef.current); setMissing(!r && !!(h.rid || h.legacy)); setTab(h.tab || "oversikt"); setRiderId(r); setFind((f) => (h.find ? f ?? "" : null)); setRace(h.race ?? null); if (h.race) window.scrollTo({ top: 0 }); };
+    const onHash = async () => { const h = readHash(); const r = await hashRider(indexRef.current); setMissing(!r && !!(h.rid || h.legacy)); setTab(h.tab || "oversikt"); setRiderId(r); setFind((f) => (h.find ? f ?? "" : null)); setRace(h.race ?? null); setTop(h.top ?? null); if (h.race || h.top) window.scrollTo({ top: 0 }); };
     addEventListener("hashchange", onHash);
     return () => removeEventListener("hashchange", onHash);
   }, []);
@@ -111,25 +114,25 @@ export default function App() {
     (async () => {
       const rid = riderId ? (await ids()).toRid(riderId) : null;
       if (!live) return;
-      const want = race !== null ? `#/ritt/${encodeURIComponent(race)}` : find !== null ? "#/finn" : !riderId ? "#/" : rid ? `#/r/${rid.slice(1)}/${tab}` : `#/${riderId}/${tab}`;
+      const want = top !== null ? `#/topp/${top}` : race !== null ? `#/ritt/${encodeURIComponent(race)}` : find !== null ? "#/finn" : !riderId ? "#/" : rid ? `#/r/${rid.slice(1)}/${tab}` : `#/${riderId}/${tab}`;
       try {
-        if (location.hash === want || (!riderId && find === null && race === null && !location.hash)) return;
+        if (location.hash === want || (!riderId && find === null && race === null && top === null && !location.hash)) return;
         // Same rider (a tab change, or an old link being rewritten): replace. A new rider: its own history entry.
         const h = readHash();
-        const same = find === null && race === null && ((h.rid && h.rid === rid) || (h.legacy && h.legacy === riderId) || (!h.rid && !h.legacy && !h.find && !h.race && !riderId));
+        const same = find === null && race === null && top === null && ((h.rid && h.rid === rid) || (h.legacy && h.legacy === riderId) || (!h.rid && !h.legacy && !h.find && !h.race && !h.top && !riderId));
         if (same) history.replaceState(null, "", want);
         else history.pushState(null, "", want);
       } catch { /* sandboxed preview */ }
     })();
     return () => { live = false; };
-  }, [site, riderId, tab, find, race]);
+  }, [site, riderId, tab, find, race, top]);
 
   const go = (t: Tab) => { setTab(t); window.scrollTo({ top: 0 }); };
-  const open = (id: string | null, t: Tab = "oversikt") => { setMissing(false); setFind(null); setRace(null); setRiderId(id); setTab(t); window.scrollTo({ top: 0 }); };
-  const findMe = (q: string) => { setRiderId(null); setRace(null); setFind(q); window.scrollTo({ top: 0 }); };
+  const open = (id: string | null, t: Tab = "oversikt") => { setMissing(false); setFind(null); setRace(null); setTop(null); setRiderId(id); setTab(t); window.scrollTo({ top: 0 }); };
+  const findMe = (q: string) => { setRiderId(null); setRace(null); setTop(null); setFind(q); window.scrollTo({ top: 0 }); };
   // Public site: every profile, the owner's included, is written in the third person.
   const isMe = false;
-  const home = !riderId && find === null && race === null;
+  const home = !riderId && find === null && race === null && top === null;
   const riderName = athlete?.name || index.find((r) => r.id === riderId)?.name || "";
   const isWoman = athlete?.sex === "K";
   const shown = useMemo(() => (athlete && isWoman && women ? womenOnly(athlete) : athlete), [athlete, isWoman, women]);
@@ -175,6 +178,7 @@ export default function App() {
           {home && site && <Welcome example={site.default_rider} onRider={(id, t) => open(id, t)} search={search} />}
           {missing && home && <div className="card empty" role="alert"><b>Fant ikke rytteren</b>Lenken kan være gammel, eller rytteren er ikke med i resultatlistene ennå. Søk etter navnet under.</div>}
           {race !== null && <KlasseProvider value={raceKlasse}><Race id={race} index={index} onRider={(id) => open(id)} /></KlasseProvider>}
+          {top !== null && <Top kind={top} onRider={(id) => open(id)} />}
           {find !== null && <FindMe key={find} name={find} onDone={() => open(null)} />}
           {riderId && !error && !athlete && <div className="loading">Henter resultater …</div>}
           {shown && (
