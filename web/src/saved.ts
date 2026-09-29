@@ -45,15 +45,21 @@ async function call<T>(method: "POST" | "DELETE", path: string, payload: object)
 /** Save watts, then speed and GPS track one race at a time. Returns how many of each were saved. */
 export async function saveRides(key: string, rider: string, res: PowerFetch, onProgress?: (done: number, total: number) => void): Promise<{ power: number; tracks: number }> {
   cache.delete(rider);
-  const rows = [...res.power].map(([race_key, p]) => ({ race_key, np: p.np, ap: p.ap }));
-  const { saved } = await call<{ saved: number }>("POST", "power", { key, rider, rows });
+  const keys = new Set([...res.power.keys(), ...res.tracks.keys()]);
+  const rows = [...keys].map((race_key) => {
+    const p = res.power.get(race_key), t = res.tracks.get(race_key);
+    return { race_key, np: p?.np, ap: p?.ap, speed: t?.speed ?? undefined, km: t?.km ?? undefined };
+  });
+  // The key goes to the site once; the tracks use the short-lived token it answers with.
+  const { saved, rides, token } = await call<{ saved: number; rides: string[]; token: string }>("POST", "power", { key, rider, rows });
+  const withPts = [...res.tracks].filter(([k, t]) => t.pts.length && rides.includes(k));
   let tracks = 0, done = 0;
-  for (const [race_key, t] of res.tracks) {
+  for (const [race_key, t] of withPts) {
     try {
-      await call("POST", "track", { key, rider, race_key, speed: t.speed, km: t.km, pts: t.pts });
+      await call("POST", "track", { token, rider, race_key, pts: t.pts });
       tracks++;
     } catch { /* one track failing shouldn't lose the rest */ }
-    onProgress?.(++done, res.tracks.size);
+    onProgress?.(++done, withPts.length);
   }
   cache.delete(rider);
   return { power: saved, tracks };
