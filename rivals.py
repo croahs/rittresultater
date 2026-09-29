@@ -118,8 +118,11 @@ def original(sources, race_name, ids):
             lst = cache.get(f"named:{src['event']}:{stage}")
             if lst is None:
                 return None
+            bad = eqtiming.timing_errors([x[5] for x in lst if x[4] == "TIME"], (cache.get(f"km:{src['event']}") or {}).get(str(stage)),
+                                          bool(re.search(r"tempo|\bmila\b|klostermil", f"{race_name} {stage_name}", re.I)))
             for uid, nm, club, age, status, ms, group in lst:
-                if nm is None or status not in ("TIME", "DNF", "LAP") or (status == "TIME" and not ms) or turritt.EXCLUDE_GROUP.search(f"{group} {age}"):
+                if nm is None or status not in ("TIME", "DNF", "LAP") or (status == "TIME" and (not ms or ms in bad)) \
+                        or turritt.EXCLUDE_GROUP.search(f"{group} {age}"):
                     continue
                 t = int(ms // 1000) if status == "TIME" else DNF_TIME
                 rows.append(([0, "", ids.get(("eq", str(uid)), f"eq{uid}"), group, "", nm, "", club, age, t, stage],
