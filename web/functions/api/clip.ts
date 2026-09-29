@@ -1,16 +1,17 @@
 // GET /api/clip?rider=<id>&year=<yyyy>: the season clip (the same shape as the static
 // data/clips/<id>-<year>.json) built from GPS tracks the rider saved through /api/track.
 
-import { athleteFor, json, riderOk, tables, type Ctx } from "../../server/lib";
+import { athleteFor, json, riderFrom, tables, type Ctx } from "../../server/lib";
 import { TRACK_STEP, raceKeyOf } from "../../src/intervals";
 
 const secs = (t: string) => t.split(":").reduce((s, p) => s * 60 + Number(p), 0);
 
 export async function onRequestGet(ctx: Ctx) {
   const { request, env } = ctx;
-  const q = new URL(request.url).searchParams, rider = q.get("rider"), year = Number(q.get("year"));
+  const q = new URL(request.url).searchParams, year = Number(q.get("year"));
   if (!env.DB) return json({ error: "Lagring er ikke satt opp." }, 404);
-  if (!riderOk(rider) || !(year > 2000 && year < 2100)) return json({ error: "Ukjent rytter eller år." }, 400);
+  const rider = await riderFrom(ctx, q.get("rider"));
+  if (!rider || !(year > 2000 && year < 2100)) return json({ error: "Ukjent rytter eller år." }, 400);
   await tables(env.DB, ctx);
   const { results } = await env.DB.prepare("SELECT race_key, km, pts FROM ride WHERE rider_id = ? AND race_key LIKE ?")
     .bind(rider, `${year}-%`).all<{ race_key: string; km: number | null; pts: string }>();

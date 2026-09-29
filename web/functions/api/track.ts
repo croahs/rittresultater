@@ -15,9 +15,9 @@ const okPts = (p: unknown): p is [number, number][] => Array.isArray(p) && p.len
   && p.every((x) => Array.isArray(x) && x.length === 2 && Math.abs(x[0]) <= 90 && Math.abs(x[1]) <= 180);
 
 export async function onRequestPost(ctx: Ctx) {
-  const { request, env } = ctx;
+  const { env } = ctx;
   if (!env.DB) return NO_DB();
-  const b = await body<{ token?: unknown; race_key?: unknown; pts?: unknown }>(request, 400_000, true);
+  const b = await body<{ token?: unknown; race_key?: unknown; pts?: unknown }>(ctx, 400_000, true);
   if (!b) return json({ error: "Ugyldig forespørsel." }, 400);
   if (typeof b.race_key !== "string" || !/^\d{4}-\d\d-\d\d\|.{1,120}$/.test(b.race_key)
     || !okPts(b.pts)) return json({ error: "Ugyldig spor." }, 400);
