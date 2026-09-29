@@ -5,6 +5,7 @@ export type RaceType = "Road" | "Gravel" | "TT" | "TTT";
 export interface Result {
   race: string; date: string; year: number; type: RaceType; cls: string | null;
   place: number; field: number;
+  basis: "i klassen" | "totalt"; // what place/field count: the rider's class or the whole field
   top: number;        // place as % of field, lower is better
   beaten: number;     // % of the field beaten (100 - top), higher is better
   behind: number | null; // % behind the winner
@@ -107,7 +108,7 @@ function result(r: Record<string, unknown>): Result {
   return {
     race: String(r.name ?? r.race).replace(/\s+20\d\d$/, ""), date, year: Number(date.slice(0, 4)),
     type: r.type as RaceType, cls: (r.class as string) ?? null,
-    place, field, top, beaten: Math.max(0, Math.min(100, beaten)),
+    place, field, basis: overall || r.class == null && r.top === undefined ? "totalt" : "i klassen", top, beaten: Math.max(0, Math.min(100, beaten)),
     behind: num(r.behind ?? r.behind_pct), time: String(r.time ?? ""), winner: String(r.winner ?? ""),
     np: num(r.np), ap: num(r.ap), speed: num(r.speed), km: num(r.km), climb: num(r.climb),
     ageClass: String(r.age_class ?? ""), agePlace: num(r.age_place), ageN: num(r.age_n),

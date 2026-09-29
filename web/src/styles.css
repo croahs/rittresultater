@@ -324,3 +324,11 @@ table.sticky th:first-child, table.sticky td:first-child { position: sticky; lef
 table.sticky tr[aria-selected="true"] td:first-child { background: color-mix(in oklab, var(--accent) 14%, var(--surface)); }
 tr[tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
 @media (max-width: 600px) { table.sticky td:first-child { max-width: 150px; white-space: normal; } }
+
+/* The bib lands like a number being pinned on: card tilts in, digits roll up one by one. */
+@media (prefers-reduced-motion: no-preference) {
+  .bib { animation: bib-in .6s cubic-bezier(.2, .8, .2, 1) both; transform-origin: 20% 0; }
+  .bib-num span { display: inline-block; animation: digit-roll .5s cubic-bezier(.2, .9, .3, 1.2) both; }
+}
+@keyframes bib-in { from { opacity: 0; transform: rotate(-4deg) translateY(-14px); } to { opacity: 1; transform: none; } }
+@keyframes digit-roll { from { opacity: 0; transform: translateY(60%); clip-path: inset(0 0 100% 0); } to { opacity: 1; transform: none; clip-path: inset(0); } }

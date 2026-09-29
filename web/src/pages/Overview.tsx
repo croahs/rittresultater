@@ -47,7 +47,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
 
 function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
   const ys = years(a);
-  const best = a.results.reduce<Result | null>((b, r) => (!b || r.top < b.top ? r : b), null);
+  const best = a.results.reduce<Result | null>((b, r) => (!b || r.beaten > b.beaten ? r : b), null);
   const typical = median(a.results.map((r) => r.beaten));
   // Development = the same races in the last two seasons, so a change in race mix does not fool it.
   const [y0, y1] = [ys[ys.length - 2], ys[ys.length - 1]];
@@ -58,7 +58,7 @@ function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
     <div className="hero">
       <div className="bib" aria-label={`Startnummer for ${a.name}`}>
         <div className="bib-top"><span>Turritt-ID</span><span>{a.ageClass || span(ys)}</span></div>
-        <div className="bib-num">{a.id}</div>
+        <div className="bib-num" aria-label={a.id}>{[...a.id].map((d, i) => <span key={i} aria-hidden="true" style={{ animationDelay: `${120 + i * 70}ms` }}>{d}</span>)}</div>
         <div className="bib-stripe" aria-hidden="true" />
         <div>
           <div className="bib-name">{a.name}{isMe ? "" : ""}</div>
@@ -67,10 +67,10 @@ function Hero({ a, isMe }: { a: Athlete; isMe: boolean }) {
       </div>
       <div className="stats">
         <div className="card stat"><span className="eyebrow">Slår typisk</span><b>{pct(typical)}</b><small>av feltet, median over alle ritt</small></div>
-        <div className="card stat"><span className="eyebrow">Beste ritt</span><b>{best ? `Topp ${Math.round(best.top)} %` : "–"}</b><small>{best ? `${best.place}. av ${best.field} i ${best.race} ${best.year}` : "Ingen ritt ennå"}</small></div>
+        <div className="card stat"><span className="eyebrow">Beste ritt</span><b>{best ? `Slo ${pct(best.beaten)}` : "–"}</b><small>{best ? `${best.place}. av ${best.field} ${best.basis} i ${best.race} ${best.year}` : "Ingen ritt ennå"}</small></div>
         <div className="card stat"><span className="eyebrow">Utvikling</span>
-          <b className={change == null ? "" : change >= 0 ? "pos" : "neg"}>{change == null ? "–" : `${change >= 0 ? "+" : "−"}${Math.abs(change).toFixed(0)} pp`}</b>
-          <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></div>
+          <b className={change == null ? "" : change >= 0 ? "pos" : "neg"}>{change == null ? "–" : `${change >= 0 ? "+" : "−"}${Math.abs(change).toFixed(0)}`}</b>
+          <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `prosentpoeng ${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></div>
         <div className="card stat"><span className="eyebrow">{a.power ? "Snitt NP" : "Watt"}</span>
           <b>{a.power ? `${Math.round(mean(a.results.filter((r) => r.np).map((r) => r.np!)))} W` : "–"}</b>
           <small>{a.power ? "normalisert watt i rittene med wattdata" : "Kommer når rytteren kobler til intervals.icu"}</small></div>
@@ -168,7 +168,7 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
         <Dial value={r.beaten} label={`${r.race} ${r.year}`} sub={`av feltet slått (${r.place}. av ${r.field})`} />
         <div className="facts">
           <span className="eyebrow">{TYPE_LABEL[r.type]} · {dateLong(r.date)}</span>
-          <div className="fact"><span>Plassering</span><b>{r.place}. av {r.field}{r.cls ? ` (${r.cls})` : ""}</b></div>
+          <div className="fact"><span>Plassering</span><b>{r.place}. av {r.field} {r.basis}{r.cls ? ` (${r.cls})` : ""}</b></div>
           {r.agePlace && <div className="fact"><span>Aldersklasse</span><b>{r.agePlace}. av {r.ageN} i {r.ageClass}</b></div>}
           <div className="fact"><span>Tid / vinnertid</span><b>{hms(r.time)} / {hms(r.winner)}</b></div>
           {r.behind != null && <div className="fact"><span>Bak vinneren</span><b>{pct(r.behind, r.behind % 1 ? 1 : 0)}</b></div>}
@@ -182,7 +182,7 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
   }
   const typical = median(rows.map((x) => x.beaten));
   const behind = median(rows.filter((x) => x.behind != null).map((x) => x.behind!));
-  const best = rows.reduce((b, x) => (x.top < b.top ? x : b));
+  const best = rows.reduce((b, x) => (x.beaten > b.beaten ? x : b));
   const np = rows.filter((x) => x.np).map((x) => x.np!);
   return (
     <div className="card dial-card" id="race-detail">

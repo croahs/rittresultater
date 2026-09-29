@@ -9,7 +9,7 @@ export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: bo
   const { rows, season, setSeason } = useSel();
   const ys = years(a);
   const who = isMe ? "du" : firstName(a.name);
-  const types = [...new Set(rows.map((r) => (r.type === "TTT" ? "TT" : r.type)))];
+  const types = [...new Set(rows.map((r) => r.type))];
   return (
     <>
       <div className="section-head">
@@ -111,7 +111,7 @@ function PowerChart({ rows }: { rows: Result[] }) {
   for (let v = Math.ceil(LO / every) * every; v <= HI; v += every) ticks.push(v);
   const yearStarts = withNp.map((r, i) => (i && r.year !== withNp[i - 1].year ? i : -1)).filter((i) => i > 0);
   const labelEvery = Math.ceil(n / Math.max(1, Math.floor((W - L - R) / 70)));
-  const types = [...new Set(withNp.map((r) => (r.type === "TTT" ? "TT" : r.type)))];
+  const types = [...new Set(withNp.map((r) => r.type))];
   return (
     <div className="chart" ref={ref}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Normalisert watt og snittwatt per ritt">
@@ -197,15 +197,15 @@ function SameRace({ a, who }: { a: Athlete; who: string }) {
   };
   return (
     <section className="card section" style={{ gap: 0 }}>
-      <div className="card-pad"><h2 className="h-card">Samme ritt, {y0} mot {y1}</h2><p className="note" style={{ margin: "4px 0 0" }}>Ritt {who} har kjørt begge år. Pilen viser om tallet gikk opp eller ned; grønn betyr bedre.</p></div>
+      <div className="card-pad"><h2 className="h-card">Samme ritt, {y0} mot {y1}</h2><p className="note" style={{ margin: "4px 0 0" }}>Ritt {who} har kjørt begge år. Pilen viser om tallet gikk opp eller ned; grønn betyr bedre. Endringer i prosent står i prosentpoeng.</p></div>
       <div className="table-wrap"><table>
         <thead><tr><th>Ritt</th><th>Slått {y0}</th><th>{y1}</th><th>Bak vinner {y0}</th><th>{y1}</th>{a.power && <><th>NP {y0}</th><th>{y1}</th></>}</tr></thead>
         <tbody>{pairs.map((rs) => {
           const p = rs.find((r) => r.year === y0), b = rs.find((r) => r.year === y1);
           if (!p || !b) return null;
           return (
-            <tr key={b.race}><td>{b.race}</td><td>{pct(p.beaten)}</td><td>{pct(b.beaten)}{chg(b.beaten - p.beaten, " pp", false)}</td>
-              <td>{pct(p.behind)}</td><td>{pct(b.behind)}{p.behind != null && b.behind != null && chg(b.behind - p.behind, " pp", true)}</td>
+            <tr key={b.race}><td>{b.race}</td><td>{pct(p.beaten)}</td><td>{pct(b.beaten)}{chg(b.beaten - p.beaten, " poeng", false)}</td>
+              <td>{pct(p.behind)}</td><td>{pct(b.behind)}{p.behind != null && b.behind != null && chg(b.behind - p.behind, " poeng", true)}</td>
               {a.power && <><td>{p.np ?? "–"}</td><td>{b.np ?? "–"}{p.np && b.np && chg(b.np - p.np, " W", false)}</td></>}</tr>
           );
         })}</tbody>
