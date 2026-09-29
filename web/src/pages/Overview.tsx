@@ -62,21 +62,28 @@ function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void
   const change = pairs.length >= 3 ? mean(pairs.map(([p, b]) => b.beaten - p!.beaten)) : null;
   const who = isMe ? "Du" : firstName(a.name);
   const { setSeason, setSel } = useSel();
-  // The bib shows our rider id (as in the address); a rider without one yet shows their EQ or Turritt id.
+  // The rider card: three numbers that say something about the rider; our id is only small print at the bottom.
   const [rid, setRid] = useState<string | null>(null);
   useEffect(() => { let live = true; setRid(null); ridOf(a.id).then((r) => live && setRid(r)); return () => { live = false; }; }, [a.id]);
-  const [idLabel, idNum] = rid === null ? ["Rytter-ID", ""] : /^r\d+$/.test(rid) ? ["Rytter-ID", rid.slice(1)] : /^eq\d+$/.test(rid) ? ["EQ-ID", rid.slice(2)] : ["Turritt-ID", rid];
+  const idText = rid === null ? "" : /^r\d+$/.test(rid) ? `Rytter ${rid.slice(1)}` : /^eq\d+$/.test(rid) ? `EQ-ID ${rid.slice(2)}` : `Turritt-ID ${rid}`;
+  const top = a.results.reduce<Result | null>((b, r) => (!b || r.place < b.place || (r.place === b.place && r.field > b.field) ? r : b), null);
+  const roll = (text: string, from: number) => [...text].map((d, i) => <span key={i} aria-hidden="true" style={{ animationDelay: `${from + i * 70}ms` }}>{d}</span>);
   const jump = (t: Tab, id: string) => { go(t); setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 250); };
   return (
     <div className="hero">
-      <div className="bib" aria-label={`Startnummer for ${a.name}`}>
-        <div className="bib-top"><span>{idLabel}</span><span>{a.ageClass || span(ys)}</span></div>
-        <div className="bib-num" aria-label={idNum}>{[...idNum].map((d, i) => <span key={i} aria-hidden="true" style={{ animationDelay: `${120 + i * 70}ms` }}>{d}</span>)}</div>
-        <div className="bib-stripe" aria-hidden="true" />
+      <div className="bib" aria-label={`Rytterkort for ${a.name}`}>
+        <div className="bib-top"><span>Rytterkort</span><span>{a.ageClass || span(ys)}</span></div>
         <div>
           <h1 className="bib-name">{a.name}</h1>
-          <div className="bib-meta">{a.club || "Uten klubb"} · {a.results.length} ritt på tid{a.points.length ? ` og ${a.points.length} poengritt` : ""}{ys.length ? ` · ${span(ys)}` : ""}</div>
+          <div className="bib-meta">{a.club || "Uten klubb"}{a.points.length ? ` · ${a.points.length} poengritt i tillegg` : ""}</div>
         </div>
+        <div className="bib-stripe" aria-hidden="true" />
+        <dl className="bib-trio">
+          <div><dt>ritt på tid</dt><dd aria-label={String(a.results.length)}>{roll(String(a.results.length), 120)}</dd></div>
+          <div title={top ? `${top.place}. av ${top.field} ${top.basis} i ${top.race} ${top.year}` : undefined}><dt>beste plass</dt><dd aria-label={top ? `${top.place}. av ${top.field} i ${top.race} ${top.year}` : "ingen"}>{top ? roll(`${top.place}.`, 260) : "–"}</dd></div>
+          <div><dt>slår typisk</dt><dd aria-label={pct(typical)}>{a.results.length ? roll(pct(typical), 400) : "–"}</dd></div>
+        </dl>
+        <div className="bib-foot">{[idText, span(ys)].filter(Boolean).join(" · ")}</div>
       </div>
       <div className="stats">
         <button type="button" className="card stat" onClick={() => go("utvikling")}><span className="eyebrow">Slår typisk <i aria-hidden="true">→</i></span><b>{pct(typical)}</b><small>av {felt}, median over alle ritt. Se utviklingen.</small></button>
