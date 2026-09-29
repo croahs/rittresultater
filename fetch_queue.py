@@ -4,11 +4,13 @@ The site only queues a request (D1 table fetch_requests, behind a bot check and 
 cap); it never scrapes. This script, run by .github/workflows/fetch-queue.yml, takes at
 most MAX_PER_RUN requests, adds each rider to riders.json (history from SINCE) and builds
 them with update.py, which fetches only result lists that aren't cached yet, 2 s apart.
+Sources: Turritt (by the id they gave), EQ Timing including kermesse (when exactly one
+EQ profile has their name) and SSK Cup on raceresult (when their name is in its lists).
 rivals.py and export_web.py then refresh the site data.
 
-The queue is read through Cloudflare's D1 REST API, because GitHub Actions can't reach
-the site's /api behind Cloudflare Access. Needs CF_API_TOKEN (D1 edit), CF_ACCOUNT_ID and
-CF_D1_DATABASE_ID; without them it does nothing.
+The queue is read through Cloudflare's D1 REST API, so the site needs no endpoint for
+the job. Needs CF_API_TOKEN (Account · D1 · Edit), CF_ACCOUNT_ID and CF_D1_DATABASE_ID
+(docs/DEPLOY.md section 6); without them it does nothing.
 
 Usage:
   python3 fetch_queue.py         # prints the ids it built, one per line
@@ -24,6 +26,7 @@ from datetime import datetime, timezone
 import requests
 
 import eqtiming
+import sskcup
 import update
 
 MAX_PER_RUN = 3
@@ -57,6 +60,14 @@ def eq_id_for(name):
     return same[0] if len(same) == 1 else None
 
 
+def ssk_name_for(name):
+    """The rider's name in the SSK Cup lists on raceresult, when it is there."""
+    try:
+        return sskcup.name_for(name)
+    except Exception:
+        return None
+
+
 def finish(req_id, status, note):
     d1("UPDATE fetch_requests SET status = ?, done_at = ?, note = ? WHERE id = ?",
        status, datetime.now(timezone.utc).isoformat(timespec="seconds"), note[:500], req_id)
@@ -85,6 +96,9 @@ def main():
         eq = eq_id_for(name)
         if eq:
             rider["eq_id"] = eq
+        ssk = ssk_name_for(name)
+        if ssk:
+            rider["ssk_cup"] = {"name": ssk}
         conf["riders"].append(rider)
         with open(update.RIDERS_FILE, "w", encoding="utf-8") as f:
             json.dump(conf, f, ensure_ascii=False, indent=2)

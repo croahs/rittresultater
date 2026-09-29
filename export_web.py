@@ -47,6 +47,16 @@ def bike_class(r):
     return c
 
 
+def points_for(pipe, rider_id):
+    """A followed rider's points races (kermesse, SSK Cup) from data/results.json, in the page's format."""
+    s = lambda v: "" if v is None else str(v)
+    return [{"name": p["name"], "date": p["date"], "cls": p["class_name"], "place": s(p["place"]), "n": s(p["field"]),
+             "pts": s(p["points"]), "win": s(p["winner_points"]), "laps": s(p["laps"]), "time": s(p["race_time"]),
+             "speed": s(p["speed_kmh"]), "np": s(p["np"]), "ap": s(p["avg_power"]), "note": p.get("note") or "",
+             "icu": s((p.get("links") or {}).get("intervals"))}
+            for p in pipe.get("points_races", []) if p["rider_id"] == rider_id]
+
+
 def pipeline_profiles(me_id, index):
     path = os.path.join(HERE, "data", "results.json")
     if not os.path.exists(path):
@@ -79,7 +89,7 @@ def pipeline_profiles(me_id, index):
         dump(os.path.join(OUT, "athletes", f"{rid}.json"), {
             "id": rid, "name": shard.get("name") or rider["name"], "club": shard.get("club", ""),
             "age_class": shard.get("age_class", ""), "power": bool(rider.get("power")) and any(x["np"] for x in results),
-            "clips": [], "results": results, "points": [],
+            "clips": [], "results": results, "points": points_for(pipe, rider["id"]),
             "opponents": shard.get("opponents", []), "rivals": shard.get("rivals", []), "insights": shard.get("insights", {}),
         })
         written.append(rid)

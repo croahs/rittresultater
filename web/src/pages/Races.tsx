@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { flags, years, type Athlete, type RaceType, type Result } from "../data";
+import { flags, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon } from "../ui";
@@ -65,12 +65,12 @@ export default function Races({ a }: { a: Athlete }) {
       </section>
       {a.points.length > 0 && (
         <section className="card">
-          <div className="card-pad"><h2 className="h-card">Poengritt</h2><p className="note" style={{ margin: "4px 0 0" }}>SSK Cup telles i poeng, ikke tid, og er ikke med i plasseringstallene over. Watt og fart gjelder bare rundene i selve rittet.</p></div>
+          <div className="card-pad"><h2 className="h-card">Poengritt</h2><p className="note" style={{ margin: "4px 0 0" }}>SSK Cup og kermesse telles i poeng, ikke tid, og er ikke med i plasseringstallene over. Kermesse-listene har ofte bare dem som fikk poeng, så de uten poeng deler plassene etter dem. Watt og fart gjelder bare selve rittet.</p></div>
           <div className="table-wrap"><table className="sticky">
             <thead><tr><th className="l">Ritt</th><th>Dato</th><th className="l">Klasse</th><th>Plass</th><th>Poeng</th><th>Runder</th><th>Tid</th><th>Fart</th><th>NP</th><th>Snitt W</th>{pv && <th>Video</th>}</tr></thead>
             <tbody>{a.points.map((p) => (
               <tr key={p.date}><td>{p.name}</td><td>{dateLong(p.date)}</td><td className="l">{p.cls}</td>
-                <td>{p.place ? `${p.place}/${p.n}` : "Datt av"}</td><td>{p.pts ? `${p.pts} (vinner ${p.win})` : "–"}</td><td>{p.laps}</td><td>{p.time}</td><td>{p.speed}</td><td>{p.np}</td><td>{p.ap}</td>
+                <td>{placeText(p)}</td><td>{p.pts ? `${p.pts} (vinner ${p.win})` : "–"}</td><td>{p.laps}</td><td>{p.time}</td><td>{p.speed}</td><td>{p.np}</td><td>{p.ap}</td>
                 {pv && <td className="links">{p.video && <a className="vid" href={p.video} target="_blank" rel="noopener" title="Video fra rittet" aria-label={`Video fra ${p.name}`}><Icon.play /></a>}</td>}</tr>
             ))}</tbody>
           </table></div>
@@ -78,4 +78,11 @@ export default function Races({ a }: { a: Athlete }) {
       )}
     </>
   );
+}
+
+/** "3/10", or "7–53 av 53 (delt)" for riders without points who share the places after the scorers. */
+function placeText(p: PointsRace) {
+  if (!p.place) return "Datt av";
+  const m = p.place.match(/^(\d+)-(\d+)/);
+  return m ? `${m[1]}–${m[2]} av ${p.n} (delt)` : `${p.place}/${p.n}`;
 }

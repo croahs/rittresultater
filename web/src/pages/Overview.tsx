@@ -106,7 +106,7 @@ function FinishSheet({ a }: { a: Athlete }) {
             const p = it.p;
             return (
               <li key={`p${p.date}`} className="pts-row">
-                <span className="place"><i style={{ background: "var(--pts)" }} />{p.place || "–"}<small>{p.n ? `av ${p.n}` : "poeng"}</small></span>
+                <span className="place"><i style={{ background: "var(--pts)" }} />{p.place ? p.place.replace(" (shared)", "").replace("-", "–") : "–"}<small>{p.n ? `av ${p.n}` : "poeng"}</small></span>
                 <div><div className="t" style={{ display: "flex", justifyContent: "space-between", gap: 8, fontWeight: 600 }}><span>{p.name}</span><small className="muted">{dateShort(p.date)} {p.date.slice(2, 4)}</small></div>
                   <p style={{ margin: "1px 0 0", color: "var(--ink-2)", fontSize: ".82rem" }}>{p.cls}. {p.pts ? `${p.pts} poeng` : `Datt av etter ${p.laps} runder`}. NP {p.np} W.</p></div>
               </li>
