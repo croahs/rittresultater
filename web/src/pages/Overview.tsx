@@ -244,11 +244,11 @@ function MoreRaces({ a }: { a: Athlete }) {
   return (
     <div className="more-races card card-pad" role="note">
       <div>
-        <b>Mangler det ritt?</b>
-        {h.status === "none" && <p>{shown} Er du {name}? Da kan du be om alle rittene dine fra Turritt, helt tilbake til 2005. De hentes rolig i løpet av et døgn, ikke med en gang.</p>}
-        {h.status === "queued" && <p>Alle rittene til {name} står i kø{h.ahead ? `, med ${h.ahead} ${h.ahead === 1 ? "rytter" : "ryttere"} foran` : ""}. Vi henter rittene i løpet av et døgn.</p>}
-        {h.status === "running" && <p>Rittene til {name} hentes nå. De vises når oppdateringen er ferdig.</p>}
-        {h.status === "done" && <p>Alle rittene til {name} er hentet. De vises når siden er bygget på nytt.</p>}
+        <b>{h.status === "none" || h.status === "failed" || h.status === "skipped" ? "Mangler det ritt?" : "Under behandling"}</b>
+        {h.status === "none" && <p>{shown} Er du {name}? Da kan du be om alle rittene dine fra Turritt, helt tilbake til 2005. Vi henter dem rolig i natt og regner ut rivalene dine på nytt, så kom tilbake i morgen.</p>}
+        {h.status === "queued" && <p>Alle rittene til {name} står i kø{h.ahead ? `, med ${h.ahead} ${h.ahead === 1 ? "rytter" : "ryttere"} foran` : ""}. Vi henter ritt og rivaler i natt. Kom tilbake i morgen, så ligger alt her.</p>}
+        {h.status === "running" && <p>Ritt og rivaler for {name} hentes nå. Kom tilbake i morgen, så ligger alt her.</p>}
+        {h.status === "done" && <p>Alle rittene til {name} er hentet. Ritt og rivaler vises når siden er bygget på nytt, senest i morgen.</p>}
         {(h.status === "failed" || h.status === "skipped") && <p>Vi fikk ikke hentet alle rittene til {name}.{h.note ? ` ${h.note}` : ""}</p>}
         {err && <p className="err" role="alert">{err}</p>}
       </div>
