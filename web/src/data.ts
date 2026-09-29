@@ -284,8 +284,11 @@ interface RacesFile { races: RaceList[] }
 export const raceLists = async () => (await getJSON<RacesFile>("races.json")).races;
 /** The shared result list for one of a rider's races (same date, same name), if there is one. */
 export async function raceFor(r: { date: string; race: string }): Promise<RaceList | undefined> {
+  return findRace(await raceLists(), r);
+}
+export function findRace(lists: RaceList[], r: { date: string; race: string }): RaceList | undefined {
   const n = fold(r.race);
-  return (await raceLists()).find((x) => x.date === r.date && fold(x.name.replace(/\s+20\d\d$/, "")) === n);
+  return lists.find((x) => x.date === r.date && fold(x.name.replace(/\s+20\d\d$/, "")) === n);
 }
 export async function headToHead(meId: string, other: IndexRider): Promise<Opponent> {
   const { races } = await getJSON<RacesFile>("races.json");
