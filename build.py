@@ -125,8 +125,7 @@ def build_rider(rider, log=print):
     eq_all = []
     if rider.get("eq_id"):
         try:
-            eq_all = [e for e in eqtiming.races(int(rider["eq_id"]))
-                      if e["class_place"] and int(e["date"][:4]) >= int(rider.get("since") or 0)]
+            eq_all = [e for e in eqtiming.races(int(rider["eq_id"]), int(rider.get("since") or 0)) if e["class_place"]]
         except Exception as e:  # placings still come from Turritt
             log(f"{rider['id']}: EQ Timing skipped: {e}")
     eq_by_date = {sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"): e for e in eq_all}

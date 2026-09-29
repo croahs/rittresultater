@@ -14,7 +14,22 @@
       "csv": "race_results_auto.csv",
       "report": "turritt_vs_sheet.md",
       "exclude": "kermesse",
-      "ssk_cup": {"name": "SOLLAND Peder Holterman", "rode_sort": [1, 6], "csv": "points_races.csv"}
+      "ssk_cup": {
+        "name": "SOLLAND Peder Holterman",
+        "rode_sort": [
+          1,
+          6
+        ],
+        "csv": "points_races.csv"
+      }
+    },
+    {
+      "id": "125529",
+      "name": "Jo Henrik Egeland Jarstø",
+      "turritt_id": "125529",
+      "eq_id": 364828,
+      "since": 2025,
+      "publish_power": false
     }
   ]
 }
