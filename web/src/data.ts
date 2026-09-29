@@ -1,6 +1,6 @@
 // Data model and loading. The site only reads static JSON under data/ (written by export_web.py).
 
-export type RaceType = "Road" | "Gravel" | "MTB" | "TT" | "TTT";
+export type RaceType = "Road" | "Gravel" | "MTB" | "TT" | "TTT" | "Unknown";
 
 export interface Result {
   race: string; date: string; year: number; type: RaceType; cls: string | null;
@@ -44,6 +44,9 @@ export interface Athlete {
   power: boolean; clips: number[];
   full: boolean;       // own profile from the pipeline (every race), not rebuilt from the shared result lists
   livePower?: boolean; // watt fetched in this browser from intervals.icu
+  savedPower?: boolean; // watts come from the site's database (the rider saved them), not the static files
+  savedHidden?: boolean; // the rider saved watts but keeps them hidden
+  savedClipYears?: number[]; // season clips built from GPS tracks the rider saved (api/clip), not static files
   results: Result[]; points: PointsRace[];
   opponents: Map<string, Opponent>; rivals: string[]; insights: Insights;
 }
@@ -130,19 +133,30 @@ function athlete(p: RawProfile, full = false): Athlete {
   };
 }
 
-export async function loadAthlete(id: string, site: Site, index: IndexRider[]): Promise<Athlete> {
-  if (site.profiles.includes(id)) return athlete(await getJSON<RawProfile>(`athletes/${id}.json`), true);
+export async function loadAthlete(id: string, site: Site, index: IndexRider[], get: <T>(path: string) => Promise<T> = getJSON): Promise<Athlete> {
+  if (site.profiles.includes(id)) return athlete(await get<RawProfile>(`athletes/${id}.json`), true);
   const entry = index.find((r) => r.id === id);
   if (!entry?.shard) throw new Error("Fant ikke rytteren");
-  const shard = await getJSON<Record<string, RawProfile>>(`riders/shard-${entry.shard}.json`);
+  const shard = await get<Record<string, RawProfile>>(`riders/shard-${entry.shard}.json`);
   const raw = shard[id];
   if (!raw) throw new Error("Fant ikke rytteren");
   return athlete({ ...raw, id });
 }
 
-/** The athlete with race power fetched in the browser from intervals.icu merged in (not stored anywhere). */
-export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>): Athlete {
-  return { ...a, power: true, livePower: true, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
+/** The athlete with race power from intervals.icu merged in: fetched in this browser, or saved by the rider (saved = true). */
+export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>, saved = false): Athlete {
+  return { ...a, power: true, savedPower: saved || a.savedPower, livePower: !saved || a.livePower, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
+}
+
+/** Numbers the rider saved on the site: watts, GPS speed and the years that have a season clip. */
+export function withSaved(a: Athlete, s: { power: Map<string, { np: number; ap: number }>; speed: Map<string, number>; clipYears: number[]; hidden?: boolean }): Athlete {
+  const b = s.power.size ? withPower(a, s.power, true) : a;
+  const extra = s.clipYears.filter((y) => !a.clips.includes(y));
+  return {
+    ...b,
+    results: b.results.map((r) => { const v = s.speed.get(`${r.date}|${r.race}`); return v != null ? { ...r, speed: v } : r; }),
+    clips: [...a.clips, ...extra].sort(), savedClipYears: extra, savedHidden: !!s.hidden,
+  };
 }
 
 /* ---------- derived numbers ---------- */

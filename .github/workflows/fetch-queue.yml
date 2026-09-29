@@ -1,0 +1,64 @@
+# «Hent alle mine ritt»: riders who asked on the site to have all their races fetched.
+#
+# The site only writes a request to the fetch_requests table in D1, behind a bot check
+# and a daily cap; it never scrapes. Once a day this job takes at most 3 requests
+# (fetch_queue.py), fetches each rider's history from 2005 with the same caching and 2 s
+# pauses as the weekly run, and commits the result; Cloudflare Pages then republishes.
+#
+# Needs the secrets CF_API_TOKEN (a Cloudflare API token with D1 edit), CF_ACCOUNT_ID
+# and CF_D1_DATABASE_ID. Without them the job does nothing.
+name: Fetch requested riders
+
+on:
+  schedule:
+    - cron: "0 4 * * *"  # daily 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Build requested riders
+        id: queue
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_D1_DATABASE_ID: ${{ secrets.CF_D1_DATABASE_ID }}
+        run: |
+          built=$(python3 fetch_queue.py)
+          echo "built=$(echo $built)" >> "$GITHUB_OUTPUT"
+
+      - name: Refresh rivals and site data
+        if: steps.queue.outputs.built != ''
+        run: |
+          python3 rivals.py
+          python3 export_web.py
+
+      - name: Commit if anything changed
+        if: steps.queue.outputs.built != ''
+        run: |
+          git add -A data cache riders.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Add requested riders: ${{ steps.queue.outputs.built }}"
+          git pull --rebase
+          git push

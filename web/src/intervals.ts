@@ -4,17 +4,20 @@
 // then avg/NP over the official race time's stretch that covers the most distance.
 
 import type { Result } from "./data";
-import { raceKey } from "./state";
 
 const API = "https://intervals.icu/api/v1";
+// Same key as state.raceKey; kept here so the server (functions/api) can use this file without React.
+export const raceKeyOf = (r: Result) => `${r.date}|${r.race}`;
+const raceKey = raceKeyOf;
 const RIDE_TYPES = new Set(["Ride", "VirtualRide", "GravelRide", "MountainBikeRide"]);
 
 export interface RacePower { np: number; ap: number }
-export interface PowerFetch { athlete: string; power: Map<string, RacePower>; missing: number; failed: number }
+export interface RaceTrack { speed: number | null; km: number | null; pts: [number, number][] }
+export interface PowerFetch { athlete: string; athleteId: string; power: Map<string, RacePower>; tracks: Map<string, RaceTrack>; missing: number; failed: number }
 
 export const validKey = (k: string) => /^[\x21-\x7e]{8,256}$/.test(k);
 
-const secs = (t: string) => t.split(":").reduce((s, p) => s * 60 + Number(p), 0);
+export const secs = (t: string) => t.split(":").reduce((s, p) => s * 60 + Number(p), 0);
 
 /** An error whose message is written for the reader. */
 export class IcuError extends Error {}
@@ -61,12 +64,11 @@ export function sameName(a: string, b: string): boolean {
 
 interface Activity { id: string; type?: string; start_date_local?: string; distance?: number; elapsed_time?: number; moving_time?: number; race?: boolean }
 
-/** Port of sync.race_window: avg and NP over the race_secs stretch covering the most distance. */
-export function raceWindow(t: number[], w: number[] | undefined, d: number[] | undefined, raceSecs: number): RacePower | null {
-  if (!t?.length || !w?.some((x) => x)) return null;
+/** The race_secs stretch of the file that covers the most distance (sync.race_window's window). */
+export function windowOf(t: number[], d: number[] | undefined, raceSecs: number): { start: number; span: number; metres: number; dist: Float64Array } {
   const n = t[t.length - 1] + 1;
-  const watts = new Float64Array(n), dist = new Float64Array(n);
-  t.forEach((s, i) => { watts[s] = w[i] || 0; dist[s] = d ? d[i] || 0 : 0; });
+  const dist = new Float64Array(n);
+  if (d) t.forEach((s, i) => { dist[s] = d[i] || 0; });
   for (let s = 1; s < n; s++) dist[s] = Math.max(dist[s], dist[s - 1]);
   const span = Math.min(raceSecs, n);
   let start = 0;
@@ -74,6 +76,15 @@ export function raceWindow(t: number[], w: number[] | undefined, d: number[] | u
     let best = -1;
     for (let s = 0; s + span <= n; s++) { const v = dist[s + span - 1] - dist[s]; if (v > best) { best = v; start = s; } }
   }
+  return { start, span, metres: dist[start + span - 1] - dist[start], dist };
+}
+
+/** Port of sync.race_window: avg and NP over the race_secs stretch covering the most distance. */
+export function raceWindow(t: number[], w: number[] | undefined, d: number[] | undefined, raceSecs: number): RacePower | null {
+  if (!t?.length || !w?.some((x) => x)) return null;
+  const { start, span } = windowOf(t, d, raceSecs);
+  const watts = new Float64Array(t[t.length - 1] + 1);
+  t.forEach((s, i) => { watts[s] = w[i] || 0; });
   const win = watts.subarray(start, start + span);
   if (!win.some((x) => x)) return null;
   const avg = win.reduce((a, b) => a + b, 0) / win.length;
@@ -85,14 +96,36 @@ export function raceWindow(t: number[], w: number[] | undefined, d: number[] | u
   return { ap: Math.round(avg), np: Math.round(k ? (sum4 / k) ** 0.25 : avg) };
 }
 
-export async function fetchRacePower(key: string, rows: Result[], rider: string | null, onProgress?: (done: number, total: number) => void): Promise<PowerFetch> {
-  const me = await get<{ name?: string }>(key, "/athlete/0");
+export const TRACK_STEP = 5; // seconds between track points, as season_clip.py
+
+/** Speed and the GPS track over the race window, for the season clip (port of season_clip.track).
+ *  Speed = GPS distance in the window / official time, only when the file covers the whole race. */
+export function raceTrack(t: number[], lat: number[] | undefined, lng: number[] | undefined, d: number[] | undefined, raceSecs: number): RaceTrack | null {
+  if (!t?.length) return null;
+  const { start, span, metres } = windowOf(t, d, raceSecs);
+  const whole = span === raceSecs && metres > 0;
+  const out: RaceTrack = { speed: whole ? Math.round((metres / raceSecs) * 36) / 10 : null, km: metres > 0 ? Math.round(metres / 100) / 10 : null, pts: [] };
+  if (!lat?.length || !lng?.length) return out.speed ? out : null;
+  const pos: ([number, number] | undefined)[] = new Array(t[t.length - 1] + 1);
+  t.forEach((s, i) => { if (lat[i] && lng[i]) pos[s] = [lat[i], lng[i]]; });
+  let last: [number, number] | undefined;
+  for (let s = start; s < start + span && !last; s++) last = pos[s];
+  if (!last) return out.speed ? out : null;
+  for (let s = start; s < start + span; s++) {
+    last = pos[s] || last;
+    if ((s - start) % TRACK_STEP === 0) out.pts.push([Math.round(last[0] * 1e5) / 1e5, Math.round(last[1] * 1e5) / 1e5]);
+  }
+  return out;
+}
+
+export async function fetchRacePower(key: string, rows: Result[], rider: string | null, onProgress?: (done: number, total: number) => void, withTracks = false): Promise<PowerFetch> {
+  const me = await get<{ id?: string; name?: string }>(key, "/athlete/0");
   // A key only shows its owner's rides; never put them on someone else's page.
   // Pass rider = null once the person has confirmed that an unfamiliar account name is theirs.
   if (rider && me.name && !sameName(me.name, rider)) throw new NameMismatch(me.name);
   const dates = rows.map((r) => r.date).sort();
   const acts = await get<Activity[]>(key, `/athlete/0/activities?oldest=${dates[0]}&newest=${dates[dates.length - 1]}`);
-  const power = new Map<string, RacePower>();
+  const power = new Map<string, RacePower>(), tracks = new Map<string, RaceTrack>();
   let done = 0, missing = 0, failed = 0;
   await eachLimited(rows, 3, async (r) => {
     const t = secs(r.time), dm = r.km ? r.km * 1000 : null;
@@ -102,10 +135,14 @@ export async function fetchRacePower(key: string, rows: Result[], rider: string 
     if (!best) missing++;
     else {
       try {
-        const s = await get<{ type: string; data: number[] }[]>(key, `/activity/${best.id}/streams.json?types=time,watts,distance`);
+        const s = await get<{ type: string; data: number[]; data2?: number[] }[]>(key, `/activity/${best.id}/streams.json?types=time,watts,distance${withTracks ? ",latlng" : ""}`);
         const by = Object.fromEntries(s.map((x) => [x.type, x.data]));
         const p = raceWindow(by.time, by.watts, by.distance, t);
         if (p) power.set(raceKey(r), p); else missing++;
+        if (withTracks) {
+          const tr = raceTrack(by.time, by.latlng, s.find((x) => x.type === "latlng")?.data2, by.distance, t);
+          if (tr) tracks.set(raceKey(r), tr);
+        }
       } catch (e) {
         if (e instanceof IcuError) throw e;
         failed++; // one bad file should not lose the rest
@@ -113,5 +150,5 @@ export async function fetchRacePower(key: string, rows: Result[], rider: string 
     }
     onProgress?.(++done, rows.length);
   });
-  return { athlete: me.name || "", power, missing, failed };
+  return { athlete: me.name || "", athleteId: String(me.id || ""), power, tracks, missing, failed };
 }
