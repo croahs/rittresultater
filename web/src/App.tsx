@@ -29,7 +29,7 @@ function readHash(): { rid?: string; legacy?: string; tab?: Tab } {
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
     const tab = parts.find((p): p is Tab => TABS.some((t) => t.id === p));
     if (parts[0] === "r" && /^\d+$/.test(parts[1] || "")) return { rid: "r" + parts[1], tab };
-    const legacy = parts.find((p) => /^\d+$/.test(p));
+    const legacy = parts.find((p) => /^(eq)?\d+$/.test(p)); // a TurrittID, or eq<id> for a rider not yet given an id of ours
     return { legacy, tab };
   } catch { return {}; }
 }
