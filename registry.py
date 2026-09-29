@@ -6,6 +6,7 @@ linked to their EQ profile are found from the profile (eqtiming.races); the regi
 EQ races where the result isn't linked, matched by EQ id or name.
 """
 import json
+import re
 import os
 
 import eqtiming
@@ -50,3 +51,26 @@ def races(rider, log=print):
             continue
         out += [{**f, "source": e["source"], "type": e.get("type")} for f in found]
     return out
+
+
+def _save(data):
+    with open(FILE, "w", encoding="utf-8") as f:
+        f.write("{\n  \"_help\": " + json.dumps(data["_help"], ensure_ascii=False) + ",\n  \"races\": [\n")
+        f.write(",\n".join("    " + json.dumps(r, ensure_ascii=False) for r in data["races"]))
+        f.write("\n  ]\n}\n")
+
+
+def add_eq(event_id, stages, name, date, type_, note):
+    """Add one EQ Timing race (the stages given) as a confirmed row, unless the registry already
+    lists that event, whose row was then made by hand and is left as it is. True if added."""
+    with open(FILE, encoding="utf-8") as f:
+        data = json.load(f)
+    if any(s.get("source") == "eqtiming" and s.get("event") == event_id for r in data["races"] for s in r["sources"]):
+        return False
+    base = re.sub(r"\s*\b20\d\d\b\s*", " ", name).strip()
+    data["races"].append({"series": base.lower(), "year": int(date[:4]), "name": base, "date": date, "type": type_,
+                          "sources": [{"source": "eqtiming", "event": event_id, "stage": s} for s in stages],
+                          "turritt_ids": [], "status": "bekreftet", "note": note})
+    data["races"].sort(key=lambda r: r["date"])
+    _save(data)
+    return True

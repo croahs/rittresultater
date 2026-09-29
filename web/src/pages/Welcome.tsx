@@ -3,13 +3,14 @@ import { getJSON, type RaceType } from "../data";
 import { TYPE_LABEL, TYPE_VAR, clock, dateLong, dec, span } from "../format";
 import { Icon } from "../ui";
 import type { Tab } from "../App";
+import { openRace } from "./Race";
 
 /* The front page: what is in here, a taste of the numbers, and a search box to find yourself. */
 
 type Who = { id: string; name: string; page: boolean };
 interface Summary {
   races: number; results: number; riders: number; km: number; years: number[];
-  recent: { id: string; name: string; date: string; type: RaceType; km: number | null; finishers: number; fastest: (Who & { time: number }) | null }[];
+  recent: { id: string; name: string; date: string; type: RaceType; km: number | null; finishers: number; fastest: (Who & { time: number }) | null; fastest_women?: (Who & { time: number }) | null }[];
   biggest: { name: string; riders: number } | null;
   busiest: (Who & { club: string; races: number })[];
   closest_tt: { name: string; gap_s: number; a: Who; b: Who } | null;
@@ -51,9 +52,10 @@ export default function Welcome({ example, onRider, search }: {
           {facts?.recent.map((r) => (
             <article key={r.id} className="card card-pad recent-card" style={{ ["--c" as string]: TYPE_VAR[r.type] }}>
               <p className="eyebrow">{TYPE_LABEL[r.type]} · {dateLong(r.date)}</p>
-              <h3 className="recent-name">{r.name}</h3>
+              <h3 className="recent-name"><button type="button" className="linkish" onClick={() => openRace(r.id)}>{r.name}</button></h3>
               <p className="muted">{r.finishers} i mål{r.km ? `, ${dec(r.km, 0)} km` : ""}</p>
               {r.fastest && <p className="recent-win"><span className="eyebrow">Raskest</span>{who(r.fastest)}<span className="tnum muted">{clock(r.fastest.time)}</span></p>}
+              {r.fastest_women && <p className="recent-win"><span className="eyebrow">Raskeste kvinne</span>{who(r.fastest_women)}<span className="tnum muted">{clock(r.fastest_women.time)}</span></p>}
             </article>
           ))}
           {!facts && <div className="loading">Henter rittene …</div>}

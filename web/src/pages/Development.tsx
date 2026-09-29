@@ -5,8 +5,10 @@ import { TYPE_LABEL, TYPE_VAR, dateLong, firstName, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon, useTip } from "../ui";
 import { deleteRides, getSaved, saveRides, showPower } from "../saved";
+import { KlasseToggle, useFelt } from "../klasse";
 
 export default function Development({ a, isMe, onPower, onSaved }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void; onSaved: (id: string) => void }) {
+  const felt = useFelt();
   const { rows, season, setSeason } = useSel();
   const ys = years(a);
   const who = isMe ? "du" : firstName(a.name);
@@ -17,14 +19,15 @@ export default function Development({ a, isMe, onPower, onSaved }: { a: Athlete;
     <>
       <div className="section-head">
         <div><h1 className="h-display">Utvikling</h1><p className="lead">Hvordan {who} har plassert {isMe ? "deg" : "seg"} over tid. Hvert punkt er ett ritt, i datorekkefølge. Den tykke linjen er medianen av de siste fem rittene.</p><SelChip /></div>
+        <div className="filters"><KlasseToggle />
         <div className="chips" role="group" aria-label="Sesong">
           {(["all", ...ys] as const).map((y) => <button key={y} type="button" className="chip" aria-pressed={season === y} onClick={() => setSeason(y)}>{y === "all" ? "Alle år" : y}</button>)}
-        </div>
+        </div></div>
       </div>
       {rows.length < 2 ? <div className="card empty"><b>For få ritt til å vise en utvikling</b>Det trengs minst to ritt i perioden.</div> : (
         <>
           <section className="card card-pad section">
-            <div className="section-head"><div><h2 className="h-card">Andel av feltet slått</h2><p className="note" style={{ margin: 0 }}>Høyere er bedre</p></div>
+            <div className="section-head"><div><h2 className="h-card">Andel av {felt} slått</h2><p className="note" style={{ margin: 0 }}>Høyere er bedre</p></div>
               <div className="legend">{types.map((t) => <span key={t} className="swatch"><span className="dot" style={{ background: TYPE_VAR[t] }} />{TYPE_LABEL[t]}</span>)}</div></div>
             <RaceChart rows={rows} value={(r) => r.beaten} max={100} ticks={[0, 25, 50, 75, 100]} unit=" %" label="slått" />
           </section>
