@@ -202,7 +202,7 @@ def insights(opps):
 
     # Rivals per race type: the same closeness score, counting only that type's races.
     out["rivals_by_type"] = {}
-    for typ in ("Road", "TT", "Gravel"):
+    for typ in ("Road", "TT", "Gravel", "MTB"):
         rows = []
         for o in opps:
             ms = [m for m in o["meetings"] if m["type"] == typ]

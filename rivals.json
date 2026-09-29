@@ -532,7 +532,8 @@
      "losses": 0,
      "median_gap_pct": -5.0
     }
-   ]
+   ],
+   "MTB": []
   },
   "gap_curves": [
    {
