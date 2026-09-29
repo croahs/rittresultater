@@ -1,5 +1,5 @@
 """Land cells for the season clip's backdrop: OpenStreetMap land polygons (ODbL, via the npm package
-@geo-maps/earth-lands-100m) clipped to Norway, simplified to about 100 m and cut into 1° cells.
+@geo-maps/earth-lands-100m) clipped to Norway, simplified to about 150 m, lakes and islets under about 0.3 km² left out, and cut into 1° cells.
 
   npm pack @geo-maps/earth-lands-100m && tar xzf geo-maps-earth-lands-100m-*.tgz
   python3 tools/land_cells.py package/map.geo.json data/land
@@ -9,65 +9,71 @@ Each cell file is a list of polygons, each a list of rings, each a flat list of 
 cells with a coast ("part"); cells not listed are sea. Needs shapely.
 """
 import json, os, sys
-from shapely.geometry import shape, box, Polygon, MultiPolygon
-from shapely.prepared import prep
+import shapely
+from shapely.geometry import shape, Polygon
+
 d = json.load(open(sys.argv[1]))
-geoms = d['features'] if 'features' in d else ([{'geometry': g} for g in d['geometries']] if 'geometries' in d else [{'geometry': d}])
-print(len(geoms))
-NOR = box(4, 57, 32, 72)
-polys = []
-for f in geoms:
-    g = shape(f['geometry'])
-    parts = g.geoms if hasattr(g, 'geoms') else [g]
-    for p in parts:
-        if p.intersects(NOR):
-            p = p if p.is_valid else p.buffer(0)
-            c = p.intersection(NOR)
-            polys += [x for x in (c.geoms if hasattr(c, 'geoms') else [c]) if isinstance(x, Polygon) and not x.is_empty]
-print('polys in Norway bbox', len(polys))
-out = sys.argv[2]; os.makedirs(out, exist_ok=True)
-Q = 10000; TOL = 0.0009
+geoms = d['geometries'] if 'geometries' in d else [f['geometry'] for f in d['features']]
+parts = []
+for g in geoms:
+    s = shape(g)
+    parts += list(s.geoms) if hasattr(s, 'geoms') else [s]
+norway = [p for p in parts if p.bounds[2] >= 4 and p.bounds[0] <= 32 and p.bounds[3] >= 57 and p.bounds[1] <= 72]
+print('parts', len(parts), 'near Norway', len(norway), flush=True)
+nor = [shapely.clip_by_rect(p, 4, 57, 32, 72) for p in norway]
+nor = [g for g in nor if not g.is_empty]
+out = sys.argv[2]
+os.makedirs(out, exist_ok=True)
+Q = 10000
+TOL = 0.0015
 index = {"q": Q, "full": [], "part": []}
 total = 0
+
+
+def polys(g):
+    if g.is_empty:
+        return []
+    if isinstance(g, Polygon):
+        return [g]
+    return [x for x in getattr(g, 'geoms', []) if isinstance(x, Polygon)]
+
+
 for lat in range(57, 72):
-    strip = box(4, lat, 32, lat + 1)
-    srow = []
-    for p in polys:
-        if p.intersects(strip):
-            c = p.intersection(strip)
-            srow += [x for x in (c.geoms if hasattr(c, 'geoms') else [c]) if isinstance(x, Polygon) and not x.is_empty]
-    print('row', lat, len(srow), flush=True)
+    row = [g for g in (shapely.clip_by_rect(p, 4, lat, 32, lat + 1) for p in nor) if not g.is_empty]
+    print('row', lat, len(row), flush=True)
     for lon in range(4, 32):
-        cell = box(lon, lat, lon + 1, lat + 1)
-        pc = prep(cell)
-        hits = [p for p in srow if pc.intersects(p)]
-        if not hits: continue
         pieces = []
-        for p in hits:
-            c = p.intersection(cell)
-            if c.is_empty: continue
-            pieces += list(c.geoms) if hasattr(c, 'geoms') else [c]
-        pieces = [x for x in pieces if isinstance(x, Polygon)]
-        area = sum(x.area for x in pieces)
+        for g in row:
+            b = g.bounds
+            if b[2] < lon or b[0] > lon + 1:
+                continue
+            pieces += polys(shapely.clip_by_rect(g, lon, lat, lon + 1, lat + 1))
+        if not pieces:
+            continue
         key = f"{lat}_{lon}"
-        if area > 0.9999: index["full"].append(key); continue
+        if sum(x.area for x in pieces) > 0.9999:
+            index["full"].append(key)
+            continue
         rings_out = []
         for x in pieces:
             x = x.simplify(TOL, preserve_topology=True)
-            if x.is_empty or x.area < 1e-6: continue
-            xs = list(x.geoms) if hasattr(x, 'geoms') else [x]
-            for y in xs:
-                if not isinstance(y, Polygon): continue
+            for y in polys(x):
+                if y.area < 4e-5:
+                    continue
                 rs = []
-                for ring in [y.exterior, *y.interiors]:
+                for ring in [y.exterior]:  # no lakes: land is one flat shape
                     flat = []
                     for (a, b) in ring.coords:
                         flat += [round((b - lat) * Q), round((a - lon) * Q)]
-                    if len(flat) >= 8: rs.append(flat)
-                if rs: rings_out.append(rs)
-        if not rings_out: continue
+                    if len(flat) >= 8:
+                        rs.append(flat)
+                if rs:
+                    rings_out.append(rs)
+        if not rings_out:
+            continue
         s = json.dumps(rings_out, separators=(',', ':'))
-        open(f"{out}/{key}.json", "w").write(s); total += len(s)
+        open(f"{out}/{key}.json", "w").write(s)
+        total += len(s)
         index["part"].append(key)
 json.dump(index, open(f"{out}/index.json", "w"), separators=(',', ':'))
-print('cells', len(index['part']), 'full', len(index['full']), 'bytes', total)
+print('cells', len(index['part']), 'full', len(index['full']), 'bytes', total, flush=True)

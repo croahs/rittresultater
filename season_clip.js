@@ -149,11 +149,11 @@
     const paint = () => {
       const [sea, land] = LAND[dark() ? "dark" : "light"];
       map.getContainer().style.background = sea;
-      landLayer.eachLayer((l) => l.setStyle({ fillColor: land }));
+      landLayer.eachLayer((l) => l.setStyle({ fillColor: land, color: land }));
     };
     const addCell = (polys) => {
       const land = LAND[dark() ? "dark" : "light"][1];
-      for (const rings of polys) L.polygon(rings, { renderer, stroke: false, fill: true, fillColor: land, fillOpacity: 1, interactive: false }).addTo(landLayer);
+      for (const rings of polys) L.polygon(rings, { renderer, stroke: true, color: land, weight: 1, fill: true, fillColor: land, fillOpacity: 1, interactive: false }).addTo(landLayer); // the stroke hides seams between cells
     };
     const loadLand = async () => {
       try {
