@@ -250,22 +250,6 @@
    "id": null
   },
   {
-   "eq": 355188,
-   "name": "Atle Sivertsen",
-   "club": "Statoil BIL",
-   "candidates": [
-    {
-     "id": "r3251",
-     "club": "Cegal"
-    },
-    {
-     "id": "r6718",
-     "club": "Tasta & Omegn Sykkel Klubb / Statoil BIL"
-    }
-   ],
-   "id": null
-  },
-  {
    "eq": 1671346,
    "name": "Atle Thornes",
    "club": "Independent Oil Tools AS",
@@ -1138,18 +1122,6 @@
    "id": null
   },
   {
-   "eq": 6151228,
-   "name": "Ingeborg Hestad",
-   "club": "",
-   "candidates": [
-    {
-     "id": "r16806",
-     "club": "CK Victoria"
-    }
-   ],
-   "id": null
-  },
-  {
    "eq": 1429249,
    "name": "JOHNSEN, Terje",
    "club": "",
@@ -1834,18 +1806,6 @@
    "id": null
   },
   {
-   "eq": 7107301,
-   "name": "Nicolas Jairo Gérald Piriou Haugland",
-   "club": "",
-   "candidates": [
-    {
-     "id": "r18240",
-     "club": "Stavanger Triathlon Klubb"
-    }
-   ],
-   "id": null
-  },
-  {
    "eq": 6614808,
    "name": "Nikolaj Holm Gylling",
    "club": "",
@@ -2021,18 +1981,6 @@
     {
      "id": "r4623",
      "club": "RAFT-klinikken"
-    }
-   ],
-   "id": null
-  },
-  {
-   "eq": 463696,
-   "name": "Per-Arne Jakobsen",
-   "club": "",
-   "candidates": [
-    {
-     "id": "r8500",
-     "club": "Stavanger SK"
     }
    ],
    "id": null
@@ -2237,26 +2185,6 @@
     {
      "id": "r16654",
      "club": "Sykleklubben Lyngdal & Omegn"
-    }
-   ],
-   "id": null
-  },
-  {
-   "eq": 1673597,
-   "name": "Rune Haugland",
-   "club": "IL Trio Triathlon",
-   "candidates": [
-    {
-     "id": "r3775",
-     "club": "Aarbakke BIL"
-    },
-    {
-     "id": "r8409",
-     "club": "Kvinnherad Sykkelklubb"
-    },
-    {
-     "id": "r10269",
-     "club": "Bryne CK"
     }
    ],
    "id": null
@@ -2609,22 +2537,6 @@
     {
      "id": "r2246",
      "club": "Kverneland Group"
-    }
-   ],
-   "id": null
-  },
-  {
-   "eq": 311897,
-   "name": "Terje Gabrielsen",
-   "club": "Port Teknikk AS",
-   "candidates": [
-    {
-     "id": "r2236",
-     "club": "Bryne Cykleklubb"
-    },
-    {
-     "id": "r8177",
-     "club": "Bryne"
     }
    ],
    "id": null
@@ -3201,22 +3113,6 @@
     {
      "id": "r4053",
      "club": "Åsane CK"
-    }
-   ],
-   "id": null
-  },
-  {
-   "eq": 361962,
-   "name": "Øystein Olsen",
-   "club": "Colours",
-   "candidates": [
-    {
-     "id": "r1776",
-     "club": "CK Haugaland / Garp Design"
-    },
-    {
-     "id": "r10089",
-     "club": "Proact IT Norge"
     }
    ],
    "id": null

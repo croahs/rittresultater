@@ -6,7 +6,8 @@ it to the rider's ids elsewhere: TurrittID (from the cached Turritt lists, while
 still uses them), EQ Timing participant id. Links are made only when they are certain:
 - a TurrittID and EQ id given together in riders.json;
 - an EQ result and a Turritt result in the same race (data/registry.json says which) with
-  the same first initial and surname (give or take a typo) and the same time (within 3 s), when no one else fits;
+  the same name (give or take a typo or a middle name) and the same time (within 10 s),
+  when no one else fits;
 - an EQ result whose name matches exactly one Turritt rider who is in the same race's
   Turritt list, or who has ridden for the same club.
 A rider can have more than one EQ id ("eq_also"): some riders have had two EQ profiles.
@@ -80,14 +81,19 @@ def _words(name):
 
 
 def _same_name(a, b):
-    """The same first initial, and a surname that is the same, contained in the other name, or
-    a typo away ("Hellnd", "Pirnhacher"). Only used together with the same race and time."""
+    """One name contained in the other ("Asbjørn Olesen", "Hans Asbjørn Olesen"), or the same
+    first initial and a surname that is the same, contained in the other name, or a typo away
+    ("Hellnd", "Pirnhacher"). Only used together with the same race and time."""
     a, b = _words(a), _words(b)
-    if len(a) < 2 or len(b) < 2 or a[0][0] != b[0][0]:
+    if len(a) < 2 or len(b) < 2:
+        return False
+    if set(a) <= set(b) or set(b) <= set(a):  # a middle name left out: "Asbjørn Olesen"
+        return True
+    if a[0][0] != b[0][0]:
         return False
     if a[-1] == b[-1] or set(a[1:]) <= set(b) or set(b[1:]) <= set(a):
         return True
-    return difflib.SequenceMatcher(None, "".join(a[1:]), "".join(b[1:])).ratio() >= 0.85
+    return difflib.SequenceMatcher(None, "".join(a[1:]), "".join(b[1:])).ratio() >= 0.8
 
 
 def build(log=print):
@@ -146,7 +152,7 @@ def build(log=print):
 
     # The same race on Turritt, from the registry. An EQ rider and a Turritt rider in the same
     # race with the same first initial and surname (give or take a typo) and the same time
-    # (within 3 s) are the same rider, when no one else in either list fits.
+    # (within 10 s) are the same rider, when no one else in either list fits.
     same_race = {}
     for row in registry.load():
         tts = [(r[2], f"{r[5]} {r[6]}", int(r[9])) for x in row["turritt_ids"]
@@ -158,8 +164,8 @@ def build(log=print):
             same_race.setdefault(src["event"], set()).update(t[0] for t in tts)
             for key, rows in eqtiming._cache.items():
                 if key.startswith(f"named:{src['event']}:") and (not src.get("stage") or key.endswith(f":{src['stage']}")):
-                    eqs += [(str(r[0]), r[1], round(r[5] / 1000)) for r in rows if r[4] == "TIME" and r[5]]
-        fits = lambda a, b: abs(a[2] - b[2]) <= 3 and _same_name(a[1], b[1])
+                    eqs += [(str(r[0]), r[1], round(r[5] / 1000)) for r in rows if r[1] and r[4] == "TIME" and r[5]]
+        fits = lambda a, b: abs(a[2] - b[2]) <= 10 and _same_name(a[1], b[1])
         for e in eqs:
             m = [t for t in tts if fits(e, t)]
             if len(m) == 1 and sum(1 for e2 in eqs if fits(e2, m[0])) == 1 and m[0][0] in tt_id:
@@ -174,6 +180,8 @@ def build(log=print):
     for key, rows in eqtiming._cache.items():
         if key.startswith("named:"):
             for r in rows:
+                if r[1] is None:  # anonymised at EQ
+                    continue
                 seen.setdefault(str(r[0]), [r[1], r[2], set()])[2] |= same_race.get(int(key.split(":")[1]), set())
     for uid, (name, club, race_riders) in sorted(seen.items()):
         if uid in decided:

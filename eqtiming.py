@@ -118,13 +118,14 @@ def races(rider=RIDER_ID, since=0):
 def named_list(event, stage):
     """[(rider id, name, club, age class, status, time in ms, start group)] for one race,
     cached forever. For registry races (registry.py), where riders are matched by name because
-    EQ links only some results to a profile. Anonymised rows (the rider asked EQ) are left out."""
+    EQ links only some results to a profile. Anonymised rows (the rider asked EQ) keep their
+    place in the list but have no name or club (None), so they are never shown or matched."""
     def fetch():
         items = _get(f"Result/Total/{event}/{stage}", count=99999)["Items"]
-        return [[i["Deltaker"]["Utover"]["UID"], i["Deltaker"]["Utover"].get("NavnFormatert") or "",
-                 i["Deltaker"].get("Klubbnavn") or "", i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"],
-                 i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
-                for i in items if not i["Deltaker"].get("Anonym")]
+        return [[i["Deltaker"]["Utover"]["UID"]] + ([None, None] if i["Deltaker"].get("Anonym") else
+                 [i["Deltaker"]["Utover"].get("NavnFormatert") or "", i["Deltaker"].get("Klubbnavn") or ""])
+                + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
+                for i in items]
     return _cached(f"named:{event}:{stage}", fetch)
 
 
@@ -148,7 +149,7 @@ def registry_races(entry, name, rider=None):
     for stage, stage_name in event_stages(entry["event"]):
         if (skip and skip.search(stage_name)) or (entry.get("stage") and stage != entry["stage"]):
             continue
-        rows = named_list(entry["event"], stage)
+        rows = [r for r in named_list(entry["event"], stage) if r[1] is not None]  # as before: without anonymised rows
         me = next((r for r in rows if rider and r[0] == rider), None) or \
             next((r for r in rows if raceresult.fold(r[1]) == want), None)
         if not me or me[4] == "DNS":
