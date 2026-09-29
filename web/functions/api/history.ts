@@ -10,7 +10,7 @@
 // own result lists can be queued, each once, a few per visitor per hour and a capped number per
 // day in total. So the worst a bot can do is make the queue longer; the job keeps its own pace.
 
-import { NO_DB, dataKey, json, riderOk, staticJSON, tables, type Ctx, type D1 } from "../../server/lib";
+import { NO_DB, dataKey, json, riderFrom, staticJSON, tables, type Ctx, type D1 } from "../../server/lib";
 import { makeIds, type IdMap } from "../../src/ids";
 import type { IndexRider, Site } from "../../src/data";
 
@@ -49,9 +49,9 @@ async function status(db: D1, rider: string) {
 
 export async function onRequestGet(ctx: Ctx) {
   const { request, env } = ctx;
-  const rider = new URL(request.url).searchParams.get("rider");
   if (!env.DB) return json({ enabled: false, status: "none" });
-  if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
+  const rider = await riderFrom(ctx, new URL(request.url).searchParams.get("rider"));
+  if (!rider) return json({ error: "Ukjent rytter." }, 400);
   await queue(env.DB, ctx);
   return json(await status(env.DB, rider));
 }
@@ -60,9 +60,10 @@ export async function onRequestPost(ctx: Ctx) {
   const { request, env } = ctx;
   if (!env.DB) return NO_DB();
   const text = await request.text();
-  let rider: unknown;
-  try { rider = text.length < 200 ? (JSON.parse(text) as { rider?: unknown }).rider : null; } catch { rider = null; }
-  if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
+  let asked: unknown;
+  try { asked = text.length < 200 ? (JSON.parse(text) as { rider?: unknown }).rider : null; } catch { asked = null; }
+  const rider = await riderFrom(ctx, asked);
+  if (!rider) return json({ error: "Ukjent rytter." }, 400);
   const db = env.DB;
   await tables(db, ctx);
   const map = await queue(db, ctx);
