@@ -1,0 +1,17 @@
+{
+  "riders": {
+    "171101": {
+      "channel": "https://www.youtube.com/@pederhsx",
+      "videos": [
+        {"date": "2025-06-14", "race": "Nordsjørittet", "url": "https://www.youtube.com/watch?v=OPHSPvddoK0"},
+        {"date": "2025-09-06", "race": "Ryfylkerittet", "url": "https://www.youtube.com/watch?v=vM4ciaGsrAU"},
+        {"date": "2025-09-14", "race": "Toskaskabet", "url": "https://www.youtube.com/watch?v=maMSrNd8H-c"},
+        {"date": "2025-09-21", "race": "Dalane Rundt", "url": "https://www.youtube.com/watch?v=0PKJwvlN9xE"},
+        {"date": "2026-08-15", "race": "Lysebotn-Bryne", "url": "https://www.youtube.com/watch?v=-KZP2BQq6vU"},
+        {"date": "2026-08-20", "race": "Rennesøy Tempo", "url": "https://www.youtube.com/shorts/D76P_7olXnY"},
+        {"date": "2026-08-23", "race": "Tysværrittet", "url": "https://www.youtube.com/watch?v=atnMTkx9olw"},
+        {"date": "2026-09-05", "race": "Ryfylkerittet", "url": "https://www.youtube.com/watch?v=aSn5_B2cTB4"}
+      ]
+    }
+  }
+}
