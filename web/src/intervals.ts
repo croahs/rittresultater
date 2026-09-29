@@ -4,13 +4,14 @@
 // then avg/NP over the official race time's stretch that covers the most distance.
 
 import type { Result } from "./data";
-import { raceKey } from "./state";
 
 const API = "https://intervals.icu/api/v1";
+// Same key as state.raceKey; kept here so the server (functions/api/power.ts) can use this file without React.
+const raceKey = (r: Result) => `${r.date}|${r.race}`;
 const RIDE_TYPES = new Set(["Ride", "VirtualRide", "GravelRide", "MountainBikeRide"]);
 
 export interface RacePower { np: number; ap: number }
-export interface PowerFetch { athlete: string; power: Map<string, RacePower>; missing: number; failed: number }
+export interface PowerFetch { athlete: string; athleteId: string; power: Map<string, RacePower>; missing: number; failed: number }
 
 export const validKey = (k: string) => /^[\x21-\x7e]{8,256}$/.test(k);
 
@@ -86,7 +87,7 @@ export function raceWindow(t: number[], w: number[] | undefined, d: number[] | u
 }
 
 export async function fetchRacePower(key: string, rows: Result[], rider: string | null, onProgress?: (done: number, total: number) => void): Promise<PowerFetch> {
-  const me = await get<{ name?: string }>(key, "/athlete/0");
+  const me = await get<{ id?: string; name?: string }>(key, "/athlete/0");
   // A key only shows its owner's rides; never put them on someone else's page.
   // Pass rider = null once the person has confirmed that an unfamiliar account name is theirs.
   if (rider && me.name && !sameName(me.name, rider)) throw new NameMismatch(me.name);
@@ -113,5 +114,5 @@ export async function fetchRacePower(key: string, rows: Result[], rider: string 
     }
     onProgress?.(++done, rows.length);
   });
-  return { athlete: me.name || "", power, missing, failed };
+  return { athlete: me.name || "", athleteId: String(me.id || ""), power, missing, failed };
 }

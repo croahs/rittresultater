@@ -42,6 +42,7 @@ export interface Insights {
 export interface Athlete {
   id: string; name: string; club: string; ageClass: string;
   power: boolean; clips: number[];
+  savedPower?: boolean; // watts come from the site's database (the rider saved them), not the static files
   results: Result[]; points: PointsRace[];
   opponents: Map<string, Opponent>; rivals: string[]; insights: Insights;
 }
@@ -128,19 +129,19 @@ function athlete(p: RawProfile): Athlete {
   };
 }
 
-export async function loadAthlete(id: string, site: Site, index: IndexRider[]): Promise<Athlete> {
-  if (site.profiles.includes(id)) return athlete(await getJSON<RawProfile>(`athletes/${id}.json`));
+export async function loadAthlete(id: string, site: Site, index: IndexRider[], get: <T>(path: string) => Promise<T> = getJSON): Promise<Athlete> {
+  if (site.profiles.includes(id)) return athlete(await get<RawProfile>(`athletes/${id}.json`));
   const entry = index.find((r) => r.id === id);
   if (!entry?.shard) throw new Error("Fant ikke rytteren");
-  const shard = await getJSON<Record<string, RawProfile>>(`riders/shard-${entry.shard}.json`);
+  const shard = await get<Record<string, RawProfile>>(`riders/shard-${entry.shard}.json`);
   const raw = shard[id];
   if (!raw) throw new Error("Fant ikke rytteren");
   return athlete({ ...raw, id });
 }
 
-/** The athlete with race power fetched in the browser from intervals.icu merged in (not stored anywhere). */
-export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>): Athlete {
-  return { ...a, power: true, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
+/** The athlete with race power from intervals.icu merged in: fetched in this browser, or saved by the rider (saved = true). */
+export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>, saved = false): Athlete {
+  return { ...a, power: true, savedPower: saved || a.savedPower, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
 }
 
 /* ---------- derived numbers ---------- */

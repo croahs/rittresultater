@@ -9,6 +9,7 @@ import Races from "./pages/Races";
 import Clip from "./pages/Clip";
 import { SelProvider } from "./state";
 import type { RacePower } from "./intervals";
+import { getSaved } from "./saved";
 
 export type Tab = "oversikt" | "utvikling" | "rivaler" | "ritt" | "klipp";
 const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
@@ -65,7 +66,14 @@ export default function App() {
     if (!site || !riderId) return;
     let live = true;
     setAthlete(null); setError(null);
-    loadAthlete(riderId, site, index).then((a) => live && setAthlete(a)).catch(() => live && setError("Fant ikke denne rytteren i resultatlistene."));
+    loadAthlete(riderId, site, index).then(async (a) => {
+      if (!live) return;
+      setAthlete(a);
+      // Watts the rider saved on the site (only riders without watts in the static data).
+      if (a.power) return;
+      const saved = await getSaved(a.id);
+      if (live && saved.power.size) setAthlete((x) => (x && x.id === a.id ? withPower(x, saved.power, true) : x));
+    }).catch(() => live && setError("Fant ikke denne rytteren i resultatlistene."));
     return () => { live = false; };
   }, [site, riderId, index]);
 
@@ -115,7 +123,7 @@ export default function App() {
             {athlete && (
               <SelProvider key={athlete.id} a={athlete}>
                 <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index}
-                  onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))} />
+                  onPower={(p, saved) => setAthlete((a) => (a ? withPower(a, p, saved) : a))} />
               </SelProvider>
             )}
             <footer className="site">
@@ -130,7 +138,7 @@ export default function App() {
   );
 }
 
-function Page({ tab, athlete, isMe, go, onRider, index, onPower }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[]; onPower: (p: Map<string, RacePower>) => void }) {
+function Page({ tab, athlete, isMe, go, onRider, index, onPower }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[]; onPower: (p: Map<string, RacePower>, saved?: boolean) => void }) {
   switch (tab) {
     case "oversikt": return <Overview a={athlete} isMe={isMe} go={go} />;
     case "utvikling": return <Development a={athlete} isMe={isMe} onPower={onPower} />;

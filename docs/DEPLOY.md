@@ -1,6 +1,6 @@
 # Publisering på Cloudflare Pages
 
-Dashbordet er en statisk side (Vite, React og TypeScript) i mappen `web/`. Den leser bare JSON-filer som ligger i repoet. Det trengs ingen server, ingen database og ingen API-nøkler ved bygging.
+Dashbordet er en statisk side (Vite, React og TypeScript) i mappen `web/`. Den leser JSON-filer som ligger i repoet. Det eneste unntaket er lagrede watt fra andre ryttere, som ligger i en liten database (steg 5). Siden virker også uten den. Det trengs ingen API-nøkler ved bygging.
 
 ## Slik henger det sammen
 
@@ -99,3 +99,24 @@ Jobben `.github/workflows/update-data.yml` kjører hver mandag klokka 05:00 UTC.
 - **Watt:** legg inn API-nøkkelen din som repo-secret. Gå til **Settings → Secrets and variables → Actions → New repository secret**, med navn `INTERVALS_API_KEY`. Uten nøkkelen oppdateres plasseringene likevel, og watt blir stående som før.
 - **Kjør nå:** under **Actions → Update race data → Run workflow** kan du starte jobben med en gang.
 - **Beskyttet `main`:** jobben pusher rett til `main`. Slår du på branch protection som krever PR, stopper den. Da må jobben lage en PR i stedet.
+
+## 5. Lagre andres watt (valgfritt, cirka 3 minutter)
+
+Uten dette steget kan andre ryttere hente wattene sine i nettleseren, men tallene forsvinner når de lukker siden. Med steget får de et avkrysningsfelt, «Lagre wattene på siden». Da blir wattene liggende, og alle som ser siden, ser dem.
+
+1. I Cloudflare-dashbordet: **Storage & Databases → D1 SQL Database → Create**. Kall den `rittresultater`.
+2. Gå til Pages-prosjektet og velg **Settings → Bindings → Add → D1 database**. Sett **Variable name** til `DB`, og velg databasen `rittresultater`. Gjør det for både Production og Preview.
+3. Trykk **Deployments → Retry deployment** på det siste bygget, eller push en endring.
+
+Tabellen lages av seg selv første gang noen lagrer. Du trenger ikke kjøre noe SQL.
+
+Hvordan det virker (`web/functions/api/power.ts`):
+
+- **Lagring:** Rytteren limer inn intervals.icu-nøkkelen sin. Serveren bruker den én gang til å hente ridefilene, regner ut snittwatt og NP over rittvinduet med den samme koden som nettleseren bruker, og lagrer bare de to tallene per ritt. Nøkkelen og ridefilene lagres aldri.
+- **Hvem som kan lagre:** Serveren lagrer bare når navnet på intervals.icu-kontoen stemmer med rytterens navn i resultatlistene. Ingen kan altså legge watt på en annen rytters side. Tallene kommer rett fra intervals.icu, så de kan ikke fylles inn for hånd.
+- **Sletting:** Under grafen står «Slett lagrede watt». Den krever den samme nøkkelen, og sletter det den intervals.icu-kontoen har lagret.
+- **Grense:** Opptil 40 ritt per lagring, de nyeste. Det er fordi Cloudflare sin gratisplan tillater 50 kall ut per forespørsel.
+- **Tilgang:** `/api/power` ligger bak den samme Cloudflare Access-regelen som resten av siden.
+- **Uten databasen:** Svarer API-et at lagring er av, og siden oppfører seg som før.
+
+Lokalt kan det testes med `npx wrangler pages dev` i `web/` etter `pnpm build`, med en `wrangler.toml` som peker `DB` til en lokal D1. Den fila skal ikke committes, for bindingen settes i dashbordet.
