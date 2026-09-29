@@ -2146,6 +2146,21 @@
    "own_id": "r21711"
   },
   {
+   "eq": 4496311,
+   "name": "LARSEN, Andreas",
+   "club": "",
+   "candidates": [
+    {
+     "id": "r16067",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "no_auto": true,
+   "why": "Common name; the age classes point to birth years about 20 years apart (1989 and 2010).",
+   "own_id": "r20875"
+  },
+  {
    "eq": 456392,
    "name": "Lars Aamodt",
    "club": "Søgne skiklubb",
