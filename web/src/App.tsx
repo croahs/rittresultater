@@ -15,6 +15,7 @@ import { SelProvider } from "./state";
 import { KlasseProvider } from "./klasse";
 import type { RacePower } from "./intervals";
 import { getSaved } from "./saved";
+import { addRecent, clearRecent, getRecent, type Recent } from "./recent";
 
 export type Tab = "oversikt" | "utvikling" | "rivaler" | "ritt" | "klipp";
 const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
@@ -134,7 +135,12 @@ export default function App() {
   const shown = useMemo(() => (athlete && isWoman && women ? womenOnly(athlete) : athlete), [athlete, isWoman, women]);
   const klasse = useMemo(() => ({ on: isWoman, women: isWoman && women, setWomen }), [isWoman, women]);
   const raceKlasse = useMemo(() => ({ on: true, women, setWomen }), [women]); // a race list can show the women for anyone
-  const search = <RiderPicker index={index} onPick={(id) => open(id)} onFind={findMe} />;
+  // Remember the rider for the search box's «Sist besøkt» list, once the name is known.
+  useEffect(() => {
+    if (!riderId || !riderName) return;
+    addRecent({ id: riderId, name: riderName, club: athlete?.club || index.find((r) => r.id === riderId)?.club || "" });
+  }, [riderId, riderName]); // eslint-disable-line react-hooks/exhaustive-deps
+  const search = <RiderPicker index={index} current={riderId} onPick={(id) => open(id)} onFind={findMe} />;
 
   return (
     <TipProvider>
@@ -201,10 +207,11 @@ function Page({ tab, athlete, isMe, go, onRider, index, onPower, onSaved }: { ta
   }
 }
 
-function RiderPicker({ index, onPick, onFind }: { index: IndexRider[]; onPick: (id: string) => void; onFind: (q: string) => void }) {
+function RiderPicker({ index, current, onPick, onFind }: { index: IndexRider[]; current: string | null; onPick: (id: string) => void; onFind: (q: string) => void }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [hi, setHi] = useState(0);
+  const [recent, setRecent] = useState<Recent[]>([]);
   const box = useRef<HTMLDivElement>(null);
   const keyed = useMemo(() => index.map((r) => [fold(`${r.name} ${r.club}`), r] as const), [index]);
   const hits = useMemo(() => {
@@ -219,33 +226,39 @@ function RiderPicker({ index, onPick, onFind }: { index: IndexRider[]; onPick: (
     document.addEventListener("mousedown", close);
     return () => document.removeEventListener("mousedown", close);
   }, []);
-  const pick = (r: IndexRider) => { onPick(r.id); setQ(""); setOpen(false); (document.activeElement as HTMLElement)?.blur(); };
+  const pick = (r: { id: string }) => { onPick(r.id); setQ(""); setOpen(false); (document.activeElement as HTMLElement)?.blur(); };
+  // With nothing typed yet, the list shows the riders this browser opened last.
+  const typing = q.trim().length >= 2;
+  const list: { id: string; name: string; club: string; races?: number }[] = typing ? hits : recent.filter((r) => r.id !== current);
+  const show = open && (typing || list.length > 0);
   return (
     <div className="picker" ref={box}>
       <Icon.search />
-      <input type="search" id="rider-search" role="combobox" aria-expanded={open && q.length >= 2} aria-controls="rider-hits" aria-autocomplete="list"
+      <input type="search" id="rider-search" role="combobox" aria-expanded={show} aria-controls="rider-hits" aria-autocomplete="list"
         placeholder="Søk etter rytter …"
         aria-label="Søk etter rytter" value={q} autoComplete="off"
         onChange={(e) => { setQ(e.target.value); setOpen(true); setHi(0); }}
-        onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 150)}
+        onFocus={() => { setRecent(getRecent()); setHi(0); setOpen(true); }} onClick={() => { if (!open) { setRecent(getRecent()); setOpen(true); } }} onBlur={() => setTimeout(() => setOpen(false), 150)}
         onKeyDown={(e) => {
-          if (e.key === "ArrowDown") { e.preventDefault(); setHi((h) => Math.min(h + 1, hits.length - 1)); }
+          if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); setHi((h) => Math.min(h + 1, list.length - 1)); }
           if (e.key === "ArrowUp") { e.preventDefault(); setHi((h) => Math.max(h - 1, 0)); }
-          if (e.key === "Enter" && hits[hi]) { e.preventDefault(); pick(hits[hi]); }
-          else if (e.key === "Enter" && !hits.length && q.trim().length >= 2) { e.preventDefault(); const v = q.trim(); setQ(""); setOpen(false); onFind(v); }
+          if (e.key === "Enter" && show && list[hi]) { e.preventDefault(); pick(list[hi]); }
+          else if (e.key === "Enter" && !hits.length && typing) { e.preventDefault(); const v = q.trim(); setQ(""); setOpen(false); onFind(v); }
           if (e.key === "Escape") setOpen(false);
         }} />
-      {open && q.trim().length >= 2 && (
-        <ul className="hits" id="rider-hits" role="listbox" aria-label="Ryttere">
-          {hits.length === 0 && <li className="none">Ingen ryttere med det navnet i resultatlistene.
+      {show && (
+        <ul className="hits" id="rider-hits" role="listbox" aria-label={typing ? "Ryttere" : "Sist besøkt"}>
+          {!typing && <li className="recent-head" role="presentation"><span>Sist besøkt</span>
+            <button type="button" className="linkish" onMouseDown={(e) => { e.preventDefault(); clearRecent(); setRecent([]); setOpen(false); }}>Tøm listen</button></li>}
+          {typing && hits.length === 0 && <li className="none">Ingen ryttere med det navnet i resultatlistene.
             {" "}<button type="button" className="linkish" onMouseDown={(e) => { e.preventDefault(); const v = q.trim(); setQ(""); setOpen(false); onFind(v); }}>Fant du deg ikke?</button></li>}
-          {hits.map((r, i) => (
+          {list.map((r, i) => (
             <li key={r.id} role="option" aria-selected={i === hi} onMouseEnter={() => setHi(i)} onMouseDown={(e) => { e.preventDefault(); pick(r); }}>
               <span className="who"><b>{r.name}</b><small>{r.club || "Uten klubb"}</small></span>
-              <small className="tnum">{r.races} ritt</small>
+              {r.races != null && <small className="tnum">{r.races} ritt</small>}
             </li>
           ))}
-          {index.length <= 1 && <li className="note">Bare din egen profil er lastet inn ennå.</li>}
+          {typing && index.length <= 1 && <li className="note">Bare din egen profil er lastet inn ennå.</li>}
         </ul>
       )}
     </div>
