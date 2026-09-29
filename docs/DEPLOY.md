@@ -100,7 +100,7 @@ Jobben `.github/workflows/update-data.yml` kjører hver mandag klokka 05:00 UTC.
 
 ## 5. Lagre andres watt, fart og GPS-spor (valgfritt, cirka 3 minutter)
 
-Uten dette steget kan andre ryttere hente wattene sine i nettleseren, men tallene forsvinner når de lukker siden. Med steget får de et avkrysningsfelt, «Lagre … på siden», som er av som standard. Krysser de av, blir watt, fart og GPS-spor per ritt liggende, alle som ser siden ser dem, og de får sitt eget sesongklipp.
+Uten dette steget kan andre ryttere hente wattene sine i nettleseren, men tallene forsvinner når de lukker siden. Med steget får de et avkrysningsfelt, «Lagre … på siden», som er av som standard. Krysser de av, blir watt, fart og GPS-spor per ritt liggende, og de får sitt eget sesongklipp. Wattene vises bare for andre hvis rytteren også krysser av for «Vis wattene for alle».
 
 1. I Cloudflare-dashbordet: **Storage & Databases → D1 SQL Database → Create**. Kall den `rittresultater`.
 2. Gå til Pages-prosjektet og velg **Settings → Bindings → Add → D1 database**. Sett **Variable name** til `DB`, og velg databasen `rittresultater`. Gjør det for både Production og Preview.
@@ -118,8 +118,20 @@ Hvordan det virker (`web/functions/api/`, `web/server/lib.ts`, `web/src/saved.ts
 - **Sesongklipp:** `/api/clip?rider=…&year=…` lager klippet fra de lagrede sporene, i samme format som de faste klippfilene.
 - **Vise eller skjule watt:** Hver rytter velger selv. Wattene lagres skjult med mindre rytteren krysser av for «Vis wattene for alle». Under grafen kan rytteren vise eller skjule dem senere med samme nøkkel. Skjulte watt blir liggende lagret, men siden sender dem ikke til andre. Fart og sesongklipp vises uansett.
 - **Sletting:** Under grafen står «Slett lagrede watt og spor». Den krever den samme nøkkelen, og sletter alt den intervals.icu-kontoen har lagret for rytteren.
-- **Tilgang:** `/api/*` ligger bak den samme Cloudflare Access-regelen som resten av siden.
+- **Tilgang:** Siden er offentlig, så `/api/*` er åpent for alle. Det er derfor nøkkelsjekken, grensene over og den signerte tillatelsen for spor finnes.
 - **Uten databasen:** Svarer API-et at lagring er av, og siden oppfører seg som før.
 - **Senere:** Når rytterne får egne brukerkontoer, kan kontoen erstatte nøkkelsjekken. Tabellene kan stå som de er.
 
 Lokalt kan det testes med `npx wrangler pages dev` i `web/` etter `pnpm build`, med en `wrangler.toml` som peker `DB` til en lokal D1. Den fila skal ikke committes, for bindingen settes i dashbordet.
+
+## 6. «Hent alle mine ritt» (valgfritt, cirka 5 minutter)
+
+Knappen på siden legger bare en forespørsel i tabellen `fetch_requests` i D1. Siden henter aldri noe selv. Jobben `.github/workflows/fetch-queue.yml` kjører hver dag klokka 04:00 UTC. Den tar maks 3 forespørsler, legger rytteren inn i `riders.json`, henter historikken fra 2005 med de vanlige pausene og cachen, bygger rivaler og sidedata, og pusher til `main`.
+
+Jobben leser køen gjennom Cloudflare sitt D1-API, og trenger tre repo-secrets (**Settings → Secrets and variables → Actions → New repository secret**):
+
+1. `CF_API_TOKEN`: I Cloudflare-dashbordet, gå til **My Profile → API Tokens → Create Token → Create Custom Token**. Gi den tilgangen **Account · D1 · Edit**, begrenset til din konto. Den trenger ikke noe annet.
+2. `CF_ACCOUNT_ID`: Står i adressefeltet når du er inne i dashbordet (`dash.cloudflare.com/<account id>/…`), eller under **Account Home**.
+3. `CF_D1_DATABASE_ID`: Under **Storage & Databases → D1 SQL Database → rittresultater**, feltet **Database ID**.
+
+Uten disse gjør jobben ingenting. Du kan kjøre den med en gang under **Actions → Fetch requested riders → Run workflow**.

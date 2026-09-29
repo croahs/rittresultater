@@ -6,9 +6,9 @@ most MAX_PER_RUN requests, adds each rider to riders.json (history from SINCE) a
 them with update.py, which fetches only result lists that aren't cached yet, 2 s apart.
 rivals.py and export_web.py then refresh the site data.
 
-The queue is read through Cloudflare's D1 REST API, because GitHub Actions can't reach
-the site's /api behind Cloudflare Access. Needs CF_API_TOKEN (D1 edit), CF_ACCOUNT_ID and
-CF_D1_DATABASE_ID; without them it does nothing.
+The queue is read through Cloudflare's D1 REST API, so the site needs no endpoint for
+the job. Needs CF_API_TOKEN (Account · D1 · Edit), CF_ACCOUNT_ID and CF_D1_DATABASE_ID
+(docs/DEPLOY.md section 6); without them it does nothing.
 
 Usage:
   python3 fetch_queue.py         # prints the ids it built, one per line
