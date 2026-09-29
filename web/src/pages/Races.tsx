@@ -43,7 +43,7 @@ export default function Races({ a }: { a: Athlete }) {
                 <tr key={k} aria-selected={sel === k} tabIndex={0} style={{ cursor: "pointer" }} onClick={() => setSel(sel === k ? null : k)}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSel(sel === k ? null : k); } }}>
                   <td className="l"><b style={{ fontWeight: 600 }}>{r.race}</b> <span className="muted">{r.year}</span></td>
-                  <td>{r.place}/{r.field}{r.agePlace ? <span className="muted"> ({r.agePlace}/{r.ageN} {r.ageClass})</span> : null}</td>
+                  <td>{r.place}/{r.field}{r.agePlace ? <span className="muted age"> ({r.agePlace}/{r.ageN} {r.ageClass})</span> : null}</td>
                   <td>{pct(r.beaten)}</td><td>{pct(r.behind)}</td>
                   <td>{dateLong(r.date)}</td>
                   <td className="l"><span className="swatch"><span className="dot" style={{ background: TYPE_VAR[r.type] }} />{TYPE_LABEL[r.type]}{r.cls ? ` · ${r.cls}` : ""}</span></td>

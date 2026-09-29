@@ -214,7 +214,7 @@ h1, h2, h3 { text-wrap: balance; }
 .connect p { margin: 0; color: var(--ink-2); max-width: 60ch; }
 
 /* ---------- tables ---------- */
-.table-wrap { overflow-x: auto; }
+.table-wrap { overflow-x: auto; background: linear-gradient(to left, var(--surface), var(--surface)) right / 24px 100% no-repeat local, linear-gradient(to left, rgb(0 0 0 / .22), transparent) right / 16px 100% no-repeat scroll; }
 table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: .88rem; }
 th, td { padding: 10px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
 th { color: var(--muted); font: 700 .7rem/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; position: sticky; top: 0; background: var(--surface); }
@@ -337,3 +337,4 @@ tr[tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: -2
 .linkish:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .connect .confirm { display: grid; gap: 8px; padding: 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
 .connect .confirm p { color: var(--ink); }
+@media (max-width: 600px) { .age { display: none; } }

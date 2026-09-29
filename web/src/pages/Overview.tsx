@@ -146,7 +146,7 @@ function Dial({ value, label, sub }: { value: number; label: string; sub: string
         })}
         {[0, 25, 50, 75].map((v) => {
           const a = ang(v / 100), [x, y] = pt(a, R + 32).split(" ").map(Number);
-          return <text key={v} x={x} y={y + 4} textAnchor="middle" fontSize="11" fill="var(--muted)">{v}</text>;
+          return <text key={v} x={x} y={y + 4} textAnchor="middle" fontSize="11" fill="var(--muted)">{v} %</text>;
         })}
         <circle cx={pt(ang(value / 100), R).split(" ")[0]} cy={pt(ang(value / 100), R).split(" ")[1]} r="8" fill="var(--surface)" stroke="var(--ink)" strokeWidth="3" />
       </svg>
@@ -169,7 +169,7 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
         <div className="facts">
           <span className="eyebrow">{TYPE_LABEL[r.type]} · {dateLong(r.date)}</span>
           <div className="fact"><span>Plassering</span><b>{r.place}. av {r.field} {r.basis}{r.cls ? ` (${r.cls})` : ""}</b></div>
-          {r.agePlace && <div className="fact"><span>Aldersklasse</span><b>{r.agePlace}. av {r.ageN} i {r.ageClass}</b></div>}
+          {r.agePlace && <div className="fact"><span title="Aldersklassen slik resultatlista for dette rittet oppgir den">Aldersklasse</span><b>{r.agePlace}. av {r.ageN} i {r.ageClass}</b></div>}
           <div className="fact"><span>Tid / vinnertid</span><b>{hms(r.time)} / {hms(r.winner)}</b></div>
           {r.behind != null && <div className="fact"><span>Bak vinneren</span><b>{pct(r.behind, r.behind % 1 ? 1 : 0)}</b></div>}
           {r.np && <div className="fact"><span>Watt (NP / snitt)</span><b>{r.np} / {r.ap} W</b></div>}
