@@ -71,6 +71,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1792&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -110,6 +111,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/1032#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -149,6 +151,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1846&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -188,6 +191,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1881&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -227,6 +231,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/2774#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -266,6 +271,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1907&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -305,6 +311,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1919&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -344,6 +351,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1930&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -383,6 +391,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1936&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -422,6 +431,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/3012#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -461,6 +471,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/3494#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -500,6 +511,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1967&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -539,6 +551,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=1974&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -572,12 +585,13 @@
    "age_place": 2,
    "age_n": 4,
    "source_ids": {
-    "turritt": null,
+    "turritt": "1992",
     "eqtiming": "3481/11166"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/3481#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -617,6 +631,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2027&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -650,12 +665,13 @@
    "age_place": 2,
    "age_n": 12,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2033",
     "eqtiming": "5754/17084"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/5754#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -695,6 +711,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2035&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -728,12 +745,13 @@
    "age_place": 1,
    "age_n": 8,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2050",
     "eqtiming": "5266/15977"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/5266#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -767,12 +785,13 @@
    "age_place": null,
    "age_n": null,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2055",
     "eqtiming": "5943/17935"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/5943#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -812,6 +831,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2057&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -851,6 +871,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2066&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -890,6 +911,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/7055#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -929,6 +951,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2111&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -968,6 +991,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2176&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1001,12 +1025,13 @@
    "age_place": 1,
    "age_n": 12,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2178",
     "eqtiming": "15986/37677"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/15986#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1046,6 +1071,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2182&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1079,12 +1105,13 @@
    "age_place": 20,
    "age_n": 43,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2184",
     "eqtiming": "14152/34963"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/14152#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1124,6 +1151,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2196&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1157,12 +1185,13 @@
    "age_place": 1,
    "age_n": 3,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2202",
     "eqtiming": "16994/40531"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/16994#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1202,6 +1231,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2205&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1241,6 +1271,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/16672#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1280,6 +1311,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2249&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1319,6 +1351,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2252&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1358,6 +1391,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2258&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1397,6 +1431,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2286&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1430,12 +1465,13 @@
    "age_place": 1,
    "age_n": 4,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2289",
     "eqtiming": "19613/51304"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/19613#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1475,6 +1511,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2300&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1508,12 +1545,13 @@
    "age_place": 5,
    "age_n": 8,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2357",
     "eqtiming": "24964/86387"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/24964#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1547,12 +1585,13 @@
    "age_place": null,
    "age_n": null,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2365",
     "eqtiming": "24138/83239"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/24138#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1592,6 +1631,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2368&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1631,6 +1671,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/22575#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1670,6 +1711,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2374&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1703,12 +1745,13 @@
    "age_place": 4,
    "age_n": 15,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2388",
     "eqtiming": "20936/57853"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/20936#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1748,6 +1791,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/25365#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1787,6 +1831,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/21234#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1826,6 +1871,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2459&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1859,12 +1905,13 @@
    "age_place": 1,
    "age_n": 10,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2462",
     "eqtiming": "25894/92963"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/25894#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1904,6 +1951,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2468&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1943,6 +1991,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2474&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -1982,6 +2031,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2486&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2021,6 +2071,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2516&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2054,12 +2105,13 @@
    "age_place": null,
    "age_n": null,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2542",
     "eqtiming": "35424/120643"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/35424#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2093,12 +2145,13 @@
    "age_place": 1,
    "age_n": 3,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2563",
     "eqtiming": "32305/102266"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/32305#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2138,6 +2191,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/35261#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2171,12 +2225,13 @@
    "age_place": 2,
    "age_n": 11,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2629",
     "eqtiming": "31912/100641"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/31912#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2216,6 +2271,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/42210#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2249,12 +2305,13 @@
    "age_place": 1,
    "age_n": 6,
    "source_ids": {
-    "turritt": null,
+    "turritt": "2767",
     "eqtiming": "47518/176251"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/47518#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2294,6 +2351,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/47067#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2333,6 +2391,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=2803&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2372,6 +2431,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74698#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2411,6 +2471,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3198&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i75865841"
    }
   },
@@ -2450,6 +2511,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3199&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i76484798"
    }
   },
@@ -2489,6 +2551,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74581#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2528,6 +2591,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3205&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2567,6 +2631,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3204&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i77839090"
    }
   },
@@ -2606,6 +2671,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3216&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2645,6 +2711,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3220&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i82525855"
    }
   },
@@ -2678,12 +2745,13 @@
    "age_place": 2,
    "age_n": 43,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3223",
     "eqtiming": "74590/307789"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74590#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2717,12 +2785,13 @@
    "age_place": 11,
    "age_n": 19,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3224",
     "eqtiming": "74590/307796"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74590#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i83144451"
    }
   },
@@ -2762,6 +2831,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74590#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -2801,6 +2871,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3230&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i91979652"
    }
   },
@@ -2840,6 +2911,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3233&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i92677527"
    }
   },
@@ -2873,12 +2945,13 @@
    "age_place": 16,
    "age_n": 19,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3236",
     "eqtiming": "76543/315059"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/76543#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i93974988"
    }
   },
@@ -2912,12 +2985,13 @@
    "age_place": null,
    "age_n": null,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3241",
     "eqtiming": "74795/308495"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74795#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i96169546"
    }
   },
@@ -2951,12 +3025,13 @@
    "age_place": 3,
    "age_n": 3,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3242",
     "eqtiming": "76098/313379"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/76098#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i97382288"
    }
   },
@@ -2990,12 +3065,13 @@
    "age_place": 14,
    "age_n": 15,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3245",
     "eqtiming": "74587/307772"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74587#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i98280356"
    }
   },
@@ -3035,6 +3111,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3258&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i135363319"
    }
   },
@@ -3074,6 +3151,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80572#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i139144610"
    }
   },
@@ -3107,12 +3185,13 @@
    "age_place": 7,
    "age_n": 9,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3259",
     "eqtiming": "80422/328304"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80422#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i142346312"
    }
   },
@@ -3152,6 +3231,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3262&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i143030185"
    }
   },
@@ -3191,6 +3271,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/77648#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3230,6 +3311,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/77648#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3269,6 +3351,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80724#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3308,6 +3391,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3268&page=resultat&current=2&su=2",
     "eqtiming": "https://live.eqtiming.com/80724#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i145707578"
    }
   },
@@ -3347,6 +3431,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/79614#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3386,6 +3471,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/79614#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3425,6 +3511,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3281&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3464,6 +3551,7 @@
    "links": {
     "turritt": null,
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3503,6 +3591,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3285&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i155777229"
    }
   },
@@ -3542,6 +3631,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3292&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3581,6 +3671,7 @@
    "links": {
     "turritt": null,
     "eqtiming": null,
+    "raceresult": "https://my.raceresult.com/346769/results",
     "intervals": null
    }
   },
@@ -3614,12 +3705,13 @@
    "age_place": null,
    "age_n": null,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3292",
     "eqtiming": null
    },
    "links": {
     "turritt": null,
     "eqtiming": null,
+    "raceresult": "https://my.raceresult.com/346769/results",
     "intervals": "https://intervals.icu/activities/i156900743"
    }
   },
@@ -3659,6 +3751,7 @@
    "links": {
     "turritt": null,
     "eqtiming": null,
+    "raceresult": "https://my.raceresult.com/346769/results",
     "intervals": null
    }
   },
@@ -3698,6 +3791,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80863#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i165023943"
    }
   },
@@ -3737,6 +3831,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3303&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i174811499"
    }
   },
@@ -3776,6 +3871,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3306&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i176120826"
    }
   },
@@ -3815,6 +3911,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/82651#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3854,6 +3951,7 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/82651#result",
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -3887,12 +3985,13 @@
    "age_place": 6,
    "age_n": 6,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3309",
     "eqtiming": "80423/328306"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80423#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i178016829"
    }
   },
@@ -3926,12 +4025,13 @@
    "age_place": 18,
    "age_n": 18,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3311",
     "eqtiming": "81455/332189"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/81455#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i178887159"
    }
   },
@@ -3971,6 +4071,7 @@
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3314&page=resultat&current=2&su=2",
     "eqtiming": null,
+    "raceresult": null,
     "intervals": null
    }
   },
@@ -4004,12 +4105,13 @@
    "age_place": null,
    "age_n": null,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3319",
     "eqtiming": "80763/329680"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80763#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i183536944"
    }
   },
@@ -4043,12 +4145,13 @@
    "age_place": 4,
    "age_n": 6,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3320",
     "eqtiming": "80679/329416"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80679#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i186227986"
    }
   },
@@ -4082,12 +4185,13 @@
    "age_place": 11,
    "age_n": 11,
    "source_ids": {
-    "turritt": null,
+    "turritt": "3325",
     "eqtiming": "81051/330606"
    },
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/81051#result",
+    "raceresult": null,
     "intervals": "https://intervals.icu/activities/i188523806"
    }
   }

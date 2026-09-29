@@ -145,8 +145,9 @@ def race_json(rider, r):
         "age_class": r.get("Age class") or None,
         "age_place": num(r.get("Age class placement"), int),
         "age_n": num(r.get("Age class participants"), int),
-        "source_ids": {"turritt": r.get("_turritt_race_id"), "eqtiming": r.get("_eq")},
+        "source_ids": {"turritt": r.get("_turritt_race_id") or r.get("_turritt_ref"), "eqtiming": r.get("_eq")},
         "links": {"turritt": r.get("Turritt") or None, "eqtiming": r.get("EQ Timing") or None,
+                  "raceresult": r.get("raceresult") or None,
                   "intervals": (r.get("intervals.icu activity") or None) if power else None},
     }
 
