@@ -1,10 +1,13 @@
-"""Rivals: head-to-head against every rider you have met, from cached Turritt lists.
+"""Rivals: head-to-head against every rider you have met, from cached result lists.
 
-No network: every result list is already in cache/turritt.json (every Turritt race of
-every rider in riders.json, read from data/results.json, plus sibling races). Riders are matched on
-TurrittID, which is stable across years. EQ Timing-only races (Repsol-mila,
-Atlantic Gravel) are left out for now: their cached lists have rider ids but no
-names. SSK Cup is points only and is left out too.
+No network. A race is read from its own timer when data/registry.json lists it and that list
+is cached (EQ Timing so far), else from the Turritt cache (cache/turritt.json), which is kept
+until every race is replaced (Pedår, 2026-09-29). A race on both moves to its own timer only
+when no more than SWITCH_LIMIT of the followed riders' head-to-heads would be lost; each run
+logs which races moved and which stayed. Riders are matched on our own rider id
+(data/aliases.json from riderids.py: TurrittID and EQ id as aliases); on the site the id is
+still the TurrittID where the rider has one (PUBLIC_TURRITT), else ours ("r123"), or "eq123"
+for an EQ rider still waiting in data/linking.json. SSK Cup is points only and is left out.
 
 Who counts, per race: the "overall" pool from turritt.py (all sibling races of
 the event, same course, officials/leisure groups and DNS dropped). Faster time
@@ -26,6 +29,9 @@ from collections import Counter, defaultdict
 
 import requests
 
+import eqtiming
+import registry
+import riderids
 import turritt
 
 ME = "171101"
@@ -34,11 +40,16 @@ SHEET = os.path.join(HERE, "race_results_auto.csv")
 RESULTS = os.path.join(HERE, "data", "results.json")
 MIN_RACES = 3  # to be called a rival
 DNF = 359000
+DNF_TIME = 359500  # a DNF or lapped rider from EQ Timing: behind every finisher, before DNS
+PUBLIC_TURRITT = True  # rider ids on the site stay TurrittIDs until web/ moves to ours ("r123")
+OWN_DISTANCE = re.compile(r"senior|junior|jr\b|^[mkgj]\s?-?(6-9|10|11-12|13-14|15-16)$", re.I)  # classes in a list that ride their own distance
+SWITCH_LIMIT = 0  # a race moves to its own timer only when none of the followed riders' head-to-heads are lost
 
 
 def races():
-    """[(race dict in the sheet's columns, turritt race id)] for every Turritt race of every rider
-    in data/results.json (update.py: all riders in riders.json), else of your sheet alone."""
+    """[(race dict in the sheet's columns, (source, id))] for every race of every rider in
+    data/results.json (update.py: all riders in riders.json), else of your sheet alone. source is
+    "turritt" (id: Turritt race id) or "eqtiming" (id: "event/stage")."""
     try:
         with open(RESULTS, encoding="utf-8") as f:
             rows = json.load(f)["races"]
@@ -47,16 +58,78 @@ def races():
             for r in csv.DictReader(f):
                 m = re.search(r"Turritt=(\d+)", r.get("Turritt", ""))
                 if m:
-                    yield r, m.group(1)
+                    yield r, ("turritt", m.group(1))
         return
     for r in sorted(rows, key=lambda r: (r["date"], r["rider_id"] != ME)):
-        tid = (r.get("source_ids") or {}).get("turritt")
-        if not tid:
+        ids, links = r.get("source_ids") or {}, r.get("links") or {}
+        src = ("turritt", str(ids["turritt"])) if ids.get("turritt") else \
+            ("eqtiming", ids["eqtiming"]) if ids.get("eqtiming") else None
+        if not src:
             continue
         y, m, d = r["date"].split("-")
         yield {"Race": f"{r['name']} {r['year']}", "Date": f"{d}.{m}.{y[2:]}", "Type": r["type"],
                "Distance (km)": r.get("distance_km"), "Elevation gain (m)": r.get("elevation_m"),
-               "Turritt": (r.get("links") or {}).get("turritt") or ""}, str(tid)
+               "Turritt": links.get(src[0]) or ""}, src
+
+
+def aliases():
+    """{("turritt" | "eq", id at the timer): the rider's id here}, from our alias table (riderids.py).
+    The id here is the TurrittID while the site still uses it (PUBLIC_TURRITT), else ours ("r123")."""
+    riders = riderids.load()
+
+    def pub(rid):
+        seen = set()
+        while riders.get(rid, {}).get("same_as") and rid not in seen:  # an id merged into another
+            seen.add(rid)
+            rid = riders[rid]["same_as"]
+        a = riders.get(rid, {})
+        return a["turritt"] if PUBLIC_TURRITT and a.get("turritt") else rid
+
+    out = {("turritt", a["turritt"]): pub(rid) for rid, a in riders.items() if a.get("turritt")}
+    out.update({("eq", uid): pub(rid) for uid, rid in riderids.by_eq().items()})
+    return out
+
+
+def original(sources, race_name, ids):
+    """[(row, category)] of one race from its own timer (EQ Timing), in the Turritt row shape
+    (id, group, name, club, age class, seconds; DNF = DNF_TIME), or None when a list isn't cached.
+    Nothing is fetched. A rider EQ can't link to one of ours yet (data/linking.json) is "eq<id>"."""
+    cache, rows = eqtiming._cache, []
+    for src in sources:
+        if src.get("source", "eqtiming") != "eqtiming":
+            return None
+        skip = re.compile(src["skip_classes"], re.I) if src.get("skip_classes") else None
+        stages = [(src["stage"], "")] if src.get("stage") else cache.get(f"stages:{src['event']}")
+        if not stages:
+            return None
+        names = dict(cache.get(f"stages:{src['event']}") or [])
+        for stage, stage_name in stages:
+            stage_name = names.get(stage) or stage_name
+            if skip and skip.search(stage_name):
+                continue
+            lst = cache.get(f"named:{src['event']}:{stage}")
+            if lst is None:
+                return None
+            for uid, nm, club, age, status, ms, group in lst:
+                if nm is None or status not in ("TIME", "DNF", "LAP") or (status == "TIME" and not ms) or turritt.EXCLUDE_GROUP.search(f"{group} {age}"):
+                    continue
+                t = int(ms // 1000) if status == "TIME" else DNF_TIME
+                rows.append(([0, "", ids.get(("eq", str(uid)), f"eq{uid}"), group, "", nm, "", club, age, t, stage],
+                             category(stage_name or race_name, group)))
+    if any(c == "CX/Gravel" for _, c in rows):  # as in pool()
+        rows = [(r, c if c == "CX/Gravel" else "MTB/åpen") for r, c in rows]
+    return rows or None
+
+
+def courses(rows):
+    """The pools in one race from EQ Timing. Youth classes (up to 15-16) and licence classes
+    (senior, junior) ride their own distance even when they share a list, so each is its own
+    pool; every other class (age classes of a mass-start or open race) is one pool."""
+    by = defaultdict(list)
+    for rc in rows:
+        c = (rc[0][8] or "").strip()
+        by[c if OWN_DISTANCE.search(c) else ""].append(rc)
+    return list(by.values())
 
 
 def pool(race_id, year):
@@ -92,47 +165,121 @@ def name(r):
     return f"{r[5]} {r[6]}".strip()
 
 
-def events():
-    """Every race in the sheet that links to Turritt, with its pool of riders, fetched once."""
-    out, done = [], set()
-    for sheet, race_id in races():
-        if race_id in done:  # two riders in the same event (maybe in sibling races): one pool
+def _outcomes(cats, me):
+    """{opponent: -1/0/1} for rider me in one pool (1 = me faster), or {} when me isn't in it."""
+    t = next((int(r[9]) for r, _ in cats if r[2] == me), None)
+    if t is None:
+        return {}
+    return {r[2]: (int(r[9]) > t) - (int(r[9]) < t) if min(t, int(r[9])) < DNF else 0
+            for r, _ in cats if r[2] != me}
+
+
+def changed(old, new, riders):
+    """(lost, other result): the given riders' head-to-heads in pool old that are missing in pools new
+    (usually a rider not linked to one of ours yet), and those with another result (the timers'
+    own times differ from Turritt's by a second or two now and then; the timer's are the official ones)."""
+    lost = other = 0
+    dnf = {r[2] for r, _ in old if int(r[9]) >= DNF}  # a DNF on Turritt that the timer has as DNS or
+    for me in riders:                                  # anonymised: the original wins, not a meeting lost
+        a = _outcomes(old, me)
+        b = next((x for x in (_outcomes(p, me) for p in new) if x), {})
+        lost += sum(1 for o in a if o not in b and o not in dnf) if b else 0
+        other += sum(1 for o, v in a.items() if o in b and b[o] != v)
+    return lost, other
+
+
+def events(log=lambda m: print(m, file=sys.stderr)):
+    """Every race of the followed riders, with its pool of riders. A race is read from its own
+    timer (data/registry.json, EQ Timing) when that list is cached, and else from the Turritt cache.
+    A race on both moves to its own timer only when the followed riders' head-to-heads stay the
+    same (at most SWITCH_LIMIT differ, e.g. a rider not linked yet); the moves are logged."""
+    ids = aliases()
+    reg_tt, reg_eq = {}, {}
+    for row in registry.load():
+        if row.get("status") == "bekreftet" and row.get("type") != "Points":
+            for t in row["turritt_ids"]:
+                reg_tt[t] = row
+            for src in row["sources"]:
+                if src["source"] == "eqtiming" and src.get("stage"):
+                    reg_eq[f"{src['event']}/{src['stage']}"] = row
+    follow = followed()
+    out, done, moved, kept = [], set(), [], []
+    for sheet, (kind, key) in races():
+        row = (reg_tt if kind == "turritt" else reg_eq).get(key)
+        if (kind, key) in done or (row and id(row) in done):  # one pool per event
             continue
-        try:
-            cats, sibs = pool(race_id, 2000 + int(sheet["Date"][-2:]))
-        except requests.RequestException:  # a Turritt list that isn't cached: not fetched any more
-            continue
-        done |= set(sibs)
         team = sheet["Type"] == "TTT" or turritt.is_team(sheet["Race"])
-        if team:
-            # Team time trial: every rider gets the team's time, and the times lists hold one
-            # entry per team, so places, fields and "beaten" count teams, not riders.
-            # Each bike category is its own team race (KCC Lagtempoen - Racer / - Tempo).
-            cats = [(r, c) for c in dict.fromkeys(c for _, c in cats)
-                    for r in turritt.as_teams([r for r, cc in cats if cc == c])[0]]
-        by_cat, by_club = defaultdict(list), defaultdict(list)
-        for r, c in cats:
-            by_cat[c].append(int(r[9]))
-            by_club[club_key((r[7] or "").strip())].append((int(r[9]), (r[7] or "").strip(), r[2]))
-        by_id = {}
-        for r, c in cats:
-            if r[2] not in ("", "0"):
-                by_id.setdefault(r[2], (r, c))  # a few riders are listed twice: keep the first
-        order = [r[2] for r, _ in sorted(cats, key=lambda rc: int(rc[0][9])) if r[2] not in ("", "0")]
-        if team:
-            teams = {(c, turritt.team_name(r)): int(r[9]) for r, c in cats}
-            times = sorted(teams.values())
-            cat_times = {c: sorted(t for (tc, _), t in teams.items() if tc == c) for c in by_cat}
-        else:
-            times = sorted(int(r[9]) for r, _ in cats)
-            cat_times = {c: sorted(v) for c, v in by_cat.items()}
-        out.append({"sheet": sheet, "race_id": race_id, "cats": cats, "order": order, "team": team,
-                    "pos": {x: i for i, x in reversed(list(enumerate(order)))},
-                    "times": times, "cat_times": cat_times,
-                    "club_times": {k: (sorted(x[0] for x in v), v[0][1], {x[2] for x in v} - {"", "0"})
-                                   for k, v in by_club.items()},
-                    "by_id": by_id})
+        tids = (row["turritt_ids"] if row else []) or ([key] if kind == "turritt" else [])
+        cats = sibs = None
+        if tids:
+            try:
+                cats, sibs = pool(tids[0], 2000 + int(sheet["Date"][-2:]))
+            except requests.RequestException:  # a Turritt list that isn't cached: not fetched any more
+                pass
+            if cats:
+                cats = [([*r[:2], ids.get(("turritt", r[2]), r[2]), *r[3:]], c) for r, c in cats]
+        own, srcs = None, []
+        if not team:  # team time trials stay on Turritt for now (teams aren't in EQ's lists the same way)
+            srcs = row["sources"] if row else \
+                [dict(zip(("event", "stage"), map(int, key.split("/"))))] if kind == "eqtiming" else []
+            own = original(srcs, sheet["Race"], ids) if srcs else None
+        if own:
+            # A list with several courses: one pool per class, and only the classes a followed rider rode.
+            own = courses(own)
+            if len(own) > 1:
+                own = [p for p in own if any(r[2] in follow for r, _ in p)]
+        if own and cats:
+            lost, other = changed(cats, own, follow)
+            (moved if lost <= SWITCH_LIMIT else kept).append(f"{sheet['Race']} ({lost} lost, {other} other result)")
+            if lost > SWITCH_LIMIT:
+                own = None
+        done |= {("turritt", t) for t in (sibs or [])} | {(kind, key)}
+        if row:
+            done.add(id(row))
+        if own:
+            src = srcs[0]
+            race_id = f"eq:{src['event']}" + (f"/{src['stage']}" if src.get("stage") else "")
+            sheet = {**sheet, "Turritt": f"https://live.eqtiming.com/{src['event']}#result"}
+            for p in own:
+                out.append(_event(sheet, race_id if len(own) == 1 else f"{race_id}~{p[0][0][8]}", p, False))
+        elif cats:
+            out.append(_event(sheet, key if kind == "turritt" else tids[0], cats, team))
+    log(f"rivals: {len(moved)} races from their own timer instead of Turritt: {', '.join(moved)}")
+    if kept:
+        log(f"rivals: kept on Turritt (too many head-to-heads would be lost): {', '.join(kept)}")
     return out
+
+
+def _event(sheet, race_id, cats, team):
+    """One pool, with what the head-to-heads need counted once."""
+    if team:
+        # Team time trial: every rider gets the team's time, and the times lists hold one
+        # entry per team, so places, fields and "beaten" count teams, not riders.
+        # Each bike category is its own team race (KCC Lagtempoen - Racer / - Tempo).
+        cats = [(r, c) for c in dict.fromkeys(c for _, c in cats)
+                for r in turritt.as_teams([r for r, cc in cats if cc == c])[0]]
+    by_cat, by_club = defaultdict(list), defaultdict(list)
+    for r, c in cats:
+        by_cat[c].append(int(r[9]))
+        by_club[club_key((r[7] or "").strip())].append((int(r[9]), (r[7] or "").strip(), r[2]))
+    by_id = {}
+    for r, c in cats:
+        if r[2] not in ("", "0"):
+            by_id.setdefault(r[2], (r, c))  # a few riders are listed twice: keep the first
+    order = [r[2] for r, _ in sorted(cats, key=lambda rc: int(rc[0][9])) if r[2] not in ("", "0")]
+    if team:
+        teams = {(c, turritt.team_name(r)): int(r[9]) for r, c in cats}
+        times = sorted(teams.values())
+        cat_times = {c: sorted(t for (tc, _), t in teams.items() if tc == c) for c in by_cat}
+    else:
+        times = sorted(int(r[9]) for r, _ in cats)
+        cat_times = {c: sorted(v) for c, v in by_cat.items()}
+    return {"sheet": sheet, "race_id": race_id, "cats": cats, "order": order, "team": team,
+            "pos": {x: i for i, x in reversed(list(enumerate(order)))},
+            "times": times, "cat_times": cat_times,
+            "club_times": {k: (sorted(x[0] for x in v), v[0][1], {x[2] for x in v} - {"", "0"})
+                           for k, v in by_club.items()},
+            "by_id": by_id}
 
 
 def rider_times(ev, me):
@@ -429,6 +576,11 @@ SUMMARY_KEYS = ("turritt_id", "name", "club", "races", "wins", "losses", "draws"
                 "same_class_races", "same_class_wins", "same_class_losses", "avg_gap_s", "median_gap_pct")
 
 
+def shard(rid):
+    """The shard a rider's file is in: by the digits of their id (TurrittID, "r123" or "eq123")."""
+    return f"{int(re.sub(r'[^0-9]', '', rid) or 0) % SHARDS:02}"
+
+
 def followed():
     try:
         with open(os.path.join(HERE, "riders.json"), encoding="utf-8") as f:
@@ -492,20 +644,20 @@ def update_rider(tid):
         raise SystemExit(f"{tid} er ikke i noen av resultatlistene")
     last = max(rows, key=lambda x: x[0])[1]
     entry = {"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
-             "races": len(rows), "shard": f"{int(tid) % SHARDS:02}"}
+             "races": len(rows), "shard": shard(tid)}
     index = [e for e in index if e["id"] != tid] + [entry]
     index.sort(key=lambda r: (-r["races"], r["name"]))
     path = os.path.join(data, f"shard-{entry['shard']}.json")
     try:
         with open(path, encoding="utf-8") as f:
-            shard = json.load(f)
+            riders = json.load(f)
     except OSError:
-        shard = {}
-    shard[tid] = rider_object(entry, evs, True)
-    for p, obj in ((path, shard), (os.path.join(data, "index.json"), index)):
+        riders = {}
+    riders[tid] = rider_object(entry, evs, True)
+    for p, obj in ((path, riders), (os.path.join(data, "index.json"), index)):
         with open(p, "w", encoding="utf-8") as f:
             json.dump(obj, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
-    return shard[tid]
+    return riders[tid]
 
 
 def write_all(evs):
@@ -538,7 +690,7 @@ def write_all(evs):
     for tid, rs in seen.items():
         last = max(rs, key=lambda x: x[0])[1]
         index.append({"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
-                      "races": len(rs), "shard": f"{int(tid) % SHARDS:02}"})
+                      "races": len(rs), "shard": shard(tid)})
     index.sort(key=lambda r: (-r["races"], r["name"]))
 
     follow = followed()
