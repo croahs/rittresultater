@@ -113,6 +113,23 @@ def _hms(ms):
     return f"{t // 3600:02d}:{t % 3600 // 60:02d}:{t % 60:02d}"
 
 
+MAX_KMH = 45  # average speed no rider in these lists holds over a whole mass-start race
+MAX_KMH_TT = 55  # the same for a time trial (Tempo Bue-Bryne, downhill, is won at 52.6)
+
+
+def timing_errors(times, km, tt=False):
+    """Times (ms) that can't be real: from the top of the list, each one faster than MAX_KMH on
+    average and at least 5 % ahead of the next time. A rider timed from the wrong start wave (as
+    in the unranked Enebakk Rundt 2025, where EQ Timing gives one rider 76 km/h) shows up like this.
+    A fast winner well clear of the field but at a believable speed is kept."""
+    t, bad = sorted(set(x for x in times if x)), set()
+    for a, b in zip(t, t[1:]):
+        if not (km and a < 0.95 * b and km / (a / 3_600_000) > (MAX_KMH_TT if tt else MAX_KMH)):
+            break
+        bad.add(a)
+    return bad
+
+
 def _rank(rows, me):
     """(place, field) among rows: DNS dropped, DNF counted and placed behind finishers."""
     field = [r for r in rows if r[2] != "DNS"]
@@ -152,6 +169,15 @@ def races(rider=RIDER_ID, since=0, max_lists=None):
             continue
         if OWN_RACE_GROUP.search(me[4]):
             rows = [r for r in rows if r[4] == me[4]]
+        try:
+            km = stage_km(h["ArrangementUID"], h["EtappeUID"])
+        except requests.RequestException:
+            km = None
+        tt = bool(re.search(r"tempo|\bmila\b|klostermil", f"{h['ArrangementNavn']} {h['EtappeNavn']}", re.I))
+        bad = timing_errors([r[3] for r in rows if r[2] == "TIME"], km, tt)
+        if me[2] == "TIME" and me[3] in bad:
+            continue  # the rider's own time is a timing error: no result to show
+        rows = [r for r in rows if not (r[2] == "TIME" and r[3] in bad)]
         place, n = _rank(rows, rider)
         age_place, age_n = _rank([r for r in rows if r[1] == me[1]], rider)
         finishers = [r[3] for r in rows if r[2] == "TIME"]
