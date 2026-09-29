@@ -50,7 +50,6 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>(() => readHash().tab || "oversikt");
   const [theme, setTheme] = useTheme();
-  const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     Promise.all([getJSON<Site>("site.json"), getJSON<IndexRider[]>("riders/index.json")])
@@ -81,50 +80,38 @@ export default function App() {
     <TipProvider>
       <div className="app">
         <button type="button" className="skip" onClick={() => { const m = document.getElementById("innhold"); m?.focus(); m?.scrollIntoView(); }}>Hopp til innholdet</button>
-        <aside className="rail" aria-label="Hovedmeny">
+        <header className="topbar">
           <div className="brand"><BrandMark /><div>Ritt<br /><small>resultater</small></div></div>
-          <nav className="nav">
+          <nav className="nav" aria-label="Hovedmeny">
             {TABS.map((t) => (
               <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
                 <t.icon /><span>{t.label}</span>
               </button>
             ))}
           </nav>
-          <div className="rail-foot">
-            Data fra
-            <a href="https://turritt.com" target="_blank" rel="noopener">Turritt</a>
-            <a href="https://live.eqtiming.com" target="_blank" rel="noopener">EQ Timing</a>
-            <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>
+          <RiderPicker index={index} me={site?.default_rider} onPick={(id) => setRiderId(id)} />
+          <div className="theme" role="group" aria-label="Fargetema">
+            {([["system", "Følg systemet", Icon.auto], ["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
+              <button key={k} type="button" aria-pressed={theme === k} title={l} aria-label={l} onClick={() => setTheme(k)}><I /></button>
+            ))}
           </div>
-        </aside>
+        </header>
 
-        <div className="main" ref={mainRef}>
-          <header className="topbar">
-            <div className="brand"><BrandMark /></div>
-            <RiderPicker index={index} me={site?.default_rider} onPick={(id) => setRiderId(id)} />
-            <div className="theme" role="group" aria-label="Fargetema">
-              {([["system", "Følg systemet", Icon.auto], ["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
-                <button key={k} type="button" aria-pressed={theme === k} title={l} aria-label={l} onClick={() => setTheme(k)}><I /></button>
-              ))}
-            </div>
-          </header>
-
-          <main className="page" id="innhold" tabIndex={-1}>
-            {error && <div className="card empty"><b>{error}</b>{riderId !== site?.default_rider && site && <button className="btn" onClick={() => setRiderId(site.default_rider)}>Tilbake til min side</button>}</div>}
-            {!error && !athlete && <div className="loading">Henter resultater …</div>}
-            {athlete && (
-              <SelProvider key={athlete.id} a={athlete}>
-                <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index}
-                  onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))} />
-              </SelProvider>
-            )}
-            <footer className="site">
-              <span>Plassering: DNF telles med i feltet. Watt og fart gjelder bare selve rittet.</span>
-              <span>Resultater fra Turritt, EQ Timing og raceresult. Watt fra intervals.icu.</span>
-              {site?.contact && <span>Feil i dataene, eller vil du ikke være med? Skriv til <a href={`mailto:${site.contact}`}>{site.contact}</a>.</span>}
-            </footer>
-          </main>
-        </div>
+        <main className="page" id="innhold" tabIndex={-1}>
+          {error && <div className="card empty"><b>{error}</b>{riderId !== site?.default_rider && site && <button className="btn" onClick={() => setRiderId(site.default_rider)}>Tilbake til min side</button>}</div>}
+          {!error && !athlete && <div className="loading">Henter resultater …</div>}
+          {athlete && (
+            <SelProvider key={athlete.id} a={athlete}>
+              <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index}
+                onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))} />
+            </SelProvider>
+          )}
+          <footer className="site">
+            <span>Plassering: DNF telles med i feltet. Watt og fart gjelder bare selve rittet.</span>
+            <span>Resultater fra <a href="https://turritt.com" target="_blank" rel="noopener">Turritt</a>, <a href="https://live.eqtiming.com" target="_blank" rel="noopener">EQ Timing</a> og raceresult. Watt fra <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>.</span>
+            {site?.contact && <span>Feil i dataene, eller vil du ikke være med? Skriv til <a href={`mailto:${site.contact}`}>{site.contact}</a>.</span>}
+          </footer>
+        </main>
       </div>
     </TipProvider>
   );
