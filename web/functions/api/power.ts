@@ -18,7 +18,7 @@
 // {enabled: false} and the page falls back to watts that aren't saved.
 
 import { BAD_KEY, NO_DB, account, activities, athleteFor, body, isRider, json, limited, riderOk, signToken, tables, type ActivitySummary, type Ctx } from "../../server/lib";
-import { raceKeyOf } from "../../src/intervals";
+import { raceKeyOf, secs } from "../../src/intervals";
 
 type Row = { race_key: string; np: number; ap: number };
 type In = { race_key: string; np?: unknown; ap?: unknown; speed?: unknown; km?: unknown };
@@ -71,31 +71,33 @@ export async function onRequestPost(ctx: Ctx) {
   const a = await athleteFor(ctx, b.rider);
   if (!a) return json({ error: "Fant ikke rytteren." }, 404);
   if (!isRider(me, a)) return json({ error: `Nøkkelen tilhører «${me.name}» i intervals.icu, ikke ${a.name}. Bare rytteren selv kan lagre på sin side.` }, 403);
-  const keys = new Set(a.results.map(raceKeyOf));
+  const raceSecs = new Map(a.results.map((r) => [raceKeyOf(r), secs(r.time) || null]));
+  const keys = new Set(raceSecs.keys());
   const input = (Array.isArray(b.rows) ? b.rows as In[] : []).filter((r) => r && typeof r.race_key === "string" && keys.has(r.race_key)).slice(0, 400);
   const dates = input.map((r) => r.race_key.slice(0, 10)).sort();
   const acts = dates.length ? await activities(b.key, dates[0], dates[dates.length - 1]) : [];
   if (!acts) return json({ error: "Fikk ikke kontakt med intervals.icu. Prøv igjen." }, 502);
   const onDate = (d: string) => acts.filter((x) => RIDES.has(x.type || "") && (x.start_date_local || "").slice(0, 10) === d);
-  const rows: Row[] = [], rides: { race_key: string; speed: number | null; km: number | null }[] = [];
+  const rows: Row[] = [], rides: { race_key: string; speed: number | null; km: number | null; secs: number | null }[] = [];
   for (const r of input) {
     const day = onDate(r.race_key.slice(0, 10));
     if (!day.length) continue; // no ride that day in this account: nothing of it is saved
     const p = checkPower(r, day);
     if (p) rows.push(p);
-    rides.push({ race_key: r.race_key, speed: checkSpeed(r, day), km: checkKm(r, day) });
+    rides.push({ race_key: r.race_key, speed: checkSpeed(r, day), km: checkKm(r, day), secs: raceSecs.get(r.race_key) ?? null });
   }
   const now = new Date().toISOString();
   const put = env.DB.prepare(`INSERT INTO power (rider_id, race_key, np, ap, athlete_id, saved_at) VALUES (?, ?, ?, ?, ?, ?)
     ON CONFLICT (rider_id, race_key) DO UPDATE SET np = excluded.np, ap = excluded.ap, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
-  // A ride row marks a race with a real ride that day; /api/track may then add its GPS track.
-  const ride = env.DB.prepare(`INSERT INTO ride (rider_id, race_key, speed, km, pts, athlete_id, saved_at) VALUES (?, ?, ?, ?, '[]', ?, ?)
-    ON CONFLICT (rider_id, race_key) DO UPDATE SET speed = excluded.speed, km = excluded.km, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
+  // A ride row marks a race with a real ride that day; /api/track may then add its GPS track,
+  // no longer than the official race time (secs) so nothing from before or after the race is kept.
+  const ride = env.DB.prepare(`INSERT INTO ride (rider_id, race_key, speed, km, secs, pts, athlete_id, saved_at) VALUES (?, ?, ?, ?, ?, '[]', ?, ?)
+    ON CONFLICT (rider_id, race_key) DO UPDATE SET speed = excluded.speed, km = excluded.km, secs = excluded.secs, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
   await env.DB.batch([
     env.DB.prepare(`INSERT INTO owner (rider_id, athlete_id, saved_at) VALUES (?, ?, ?)
       ON CONFLICT (rider_id) DO UPDATE SET athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`).bind(b.rider, me.id, now),
     ...rows.map((r) => put.bind(b.rider, r.race_key, r.np, r.ap, me.id, now)),
-    ...rides.map((r) => ride.bind(b.rider, r.race_key, r.speed, r.km, me.id, now)),
+    ...rides.map((r) => ride.bind(b.rider, r.race_key, r.speed, r.km, r.secs, me.id, now)),
   ]);
   return json({ saved: rows.length, rides: rides.map((r) => r.race_key), token: await signToken(env.DB, b.rider, me.id) });
 }

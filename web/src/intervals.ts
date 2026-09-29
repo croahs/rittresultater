@@ -17,7 +17,7 @@ export interface PowerFetch { athlete: string; athleteId: string; power: Map<str
 
 export const validKey = (k: string) => /^[\x21-\x7e]{8,256}$/.test(k);
 
-const secs = (t: string) => t.split(":").reduce((s, p) => s * 60 + Number(p), 0);
+export const secs = (t: string) => t.split(":").reduce((s, p) => s * 60 + Number(p), 0);
 
 /** An error whose message is written for the reader. */
 export class IcuError extends Error {}
