@@ -116,18 +116,25 @@ export const json = (body: unknown, status = 200) =>
 
 /** Our rider id, e.g. "r17179" (see src/ids.ts). */
 export const riderOk = (id: unknown): id is string => isRid(id);
+/** Our rider id from a request: ours as is, or an old TurrittID mapped to ours. A page loaded before the
+    switch to our ids still sends TurrittIDs until it is reloaded, and should keep working. Null when unknown. */
+export async function riderFrom(ctx: Ctx, id: unknown): Promise<string | null> {
+  if (riderOk(id)) return id;
+  if (typeof id !== "string" || !/^\d{1,9}$/.test(id)) return null;
+  return (await siteIds(ctx)).toRid(id);
+}
 export const NO_DB = () => json({ error: "Lagring er ikke satt opp på denne siden ennå." }, 503);
 export const BAD_KEY = () => json({ error: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }, 400);
 
 /** Parse a JSON body with a rider id and (unless noKey) a valid API key, or null. */
-export async function body<T>(request: Request, maxBytes: number, noKey = false): Promise<(T & { key: string; rider: string }) | null> {
-  const text = await request.text();
+export async function body<T>(ctx: Ctx, maxBytes: number, noKey = false): Promise<(T & { key: string; rider: string }) | null> {
+  const text = await ctx.request.text();
   if (text.length > maxBytes) return null;
-  try {
-    const b = JSON.parse(text) as T & { key?: unknown; rider?: unknown };
-    const key = typeof b.key === "string" ? b.key.trim() : "";
-    return (noKey || validKey(key)) && riderOk(b.rider) ? { ...b, key, rider: b.rider } : null;
-  } catch { return null; }
+  let b: T & { key?: unknown; rider?: unknown };
+  try { b = JSON.parse(text); } catch { return null; }
+  const key = typeof b.key === "string" ? b.key.trim() : "";
+  const rider = await riderFrom(ctx, b.rider);
+  return (noKey || validKey(key)) && rider ? { ...b, key, rider } : null;
 }
 
 /** The intervals.icu account behind a key, or an error response. */

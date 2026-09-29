@@ -424,3 +424,19 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .more-races p a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .more-races .err { color: var(--loss); }
 @media (max-width: 400px) { .who-chip .nm { display: none; } .who-btn { padding-right: 3px; } .topbar { gap: 8px; } .picker { min-width: 0; } }
+
+/* «Fant du deg ikke?» */
+.find-me { max-width: 720px; margin: 8px auto 0; display: grid; gap: 16px; }
+.find-me h1 { margin: 0; }
+.find-me .lead a, .find-form small a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.find-form { display: grid; gap: 14px; }
+.find-how { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; }
+.find-how legend { font-weight: 650; margin-bottom: 4px; padding: 0; }
+.find-how label { display: flex; gap: 8px; align-items: center; }
+.find-form .field { display: grid; gap: 6px; font-weight: 600; font-size: .92rem; }
+.find-form .field small { font-weight: 400; color: var(--ink-2); }
+.find-form input:not([type="radio"]), .find-form select { font: inherit; font-weight: 400; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: inherit; min-width: 0; width: 100%; box-sizing: border-box; }
+.find-form .field-row { display: grid; grid-template-columns: 1fr 110px; gap: 12px; }
+.find-form .err { color: var(--loss); margin: 0; }
+.find-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.hits li.none .linkish { font-weight: 650; }
