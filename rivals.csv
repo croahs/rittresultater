@@ -1,110 +1,110 @@
 turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_class_wins,same_class_losses,avg_gap_s,median_gap_pct,rival_rank
 23321,Helge Løge,Bryne Cykleklubb,M 55-59,20,0,20,0,19,0,19,1229,17.9,171
 24711,Karl Todnem,Tasta & omegn sykkelklubb,M 50-54,19,0,19,0,19,0,19,1066,13.5,133
-21618,Dag Skjæveland,Aalgaard Sykkel og Spaserlaug,M 55-59,18,0,18,0,18,0,18,1019,10.0,109
-168439,Atle Wathne Johansen,Klepp Cykle Club,M 35-39,18,0,18,0,18,0,18,1397,18.9,178
+21618,Dag Skjæveland,Aalgaard Sykkel og Spaserlaug,M 55-59,18,0,18,0,18,0,18,1019,9.9,106
+168439,Atle Wathne Johansen,,Menn,18,0,18,0,18,0,18,1397,18.9,179
 100278,Jørgen Ørmen Aanestad,Bogafjell Sykleklubb,M 30-34,18,0,18,0,15,0,15,1548,26.6,236
 148972,Håkon Wisløff,Sandnes Sykleklubb,M 20-24,18,0,18,0,18,0,18,1648,29.0,245
 22501,Gaute Brådli,Vigesaa Sykleklubb,M 55-59,17,4,13,0,14,4,10,679,7.1,63
 26670,Oddbjørn Oaland,Aalgaard Sykkel og Spaserlaug,M 45-49,17,0,17,0,17,0,17,770,9.7,103
 140689,Rune Spilde,Ryfylke SK,M 50-54,17,1,16,0,17,1,16,755,11.6,115
-115894,Arne Andersen,Klepp Cykle Club,M 55-59,17,0,17,0,13,0,13,1388,19.0,180
-167565,Espen Kartevoll,Bogafjell Sykleklubb,M 30-34,17,0,17,0,17,0,17,1171,24.0,223
+115894,Arne Andersen,Klepp Cykle Club,M 55-59,17,0,17,0,13,0,13,1388,19.0,181
+167565,Espen Kartevoll,Bogafjell Sykleklubb,M 30-34,17,0,17,0,17,0,17,1171,24.0,224
 52909,Benjamin A. Walker,Bryne Cykleklubb,M 55-59,16,10,6,0,15,9,6,-200,-1.7,17
 132019,Lars Einar Borsheim,Tasta & omegn sykkelklubb,M 45-49,16,4,12,0,14,4,10,526,7.8,66
 124482,Vidar Laugaland,Ryfylke SK,M 50-54,16,0,16,0,16,0,16,980,15.0,147
 20503,Arild Finnesand,Rennesøy SK,M 50-54,16,0,16,0,11,0,11,893,20.4,195
 21183,Bjarne André Asheim,Klepp Cykle Club,M 50-54,16,0,16,0,16,0,16,1688,26.3,235
 24385,Johnny Vaule,Vigesaa SK,M 55-59,15,0,15,0,13,0,13,1235,16.9,161
-24740,Karl Johan Pedersen,Sandnes Sykleklubb,M 65-69,14,13,1,0,10,10,0,-577,-3.3,52
+27018,Ole-Petter Aareskjold,Sandnes Sykleklubb,M 65-69,15,15,0,0,12,12,0,-1310,-17.7,169
 169112,Ine Skjæveland,Klepp Cykle Club,K 40-44,14,6,8,0,14,6,8,574,6.8,51
-27018,Ole-Petter Aareskjold,Sandnes Sykleklubb,M 65-69,14,14,0,0,11,11,0,-1310,-17.7,169
-161381,Andreas Neverdahl,Ryfylke SK,M 35-39,14,0,14,0,12,0,12,1063,19.3,184
+161381,Andreas Neverdahl,Ryfylke SK,M 35-39,14,0,14,0,12,0,12,1063,19.3,185
 29153,Terje Hegna,Sandnes Sykleklubb,M 55-59,14,1,13,0,14,1,13,1223,21.4,199
 59170,Stig Laland,Klepp Cykle Club,M 50-54,14,0,14,0,14,0,14,2009,23.0,218
 29229,Thomas Nærland,Bryne Cykleklubb,M 45-49,14,0,14,0,14,0,14,1993,26.1,234
-167145,Dag Henning Saurdal,Tasta & omegn sykkelklubb,M 55-59,13,0,13,0,6,0,6,694,19.7,190
-165027,Vegar Løge,Bryne Cykleklubb,M 25-29,13,0,13,0,11,0,11,2147,24.5,226
-58520,Ove Bore,Rennesøy SK,M 55-59,12,9,3,0,11,8,3,-80,-1.5,28
+24740,Karl Johan Pedersen,Sandnes Sykleklubb,M 65-69,13,12,1,0,9,9,0,-577,-3.3,52
+167145,Dag Henning Saurdal,Tasta & omegn sykkelklubb,M 55-59,13,0,13,0,6,0,6,694,19.7,191
+165027,Vegar Løge,Bryne Cykleklubb,M 25-29,13,0,13,0,11,0,11,2147,24.5,227
+58520,Ove Bore,,Menn,12,9,3,0,11,8,3,-80,-1.5,28
 24099,Jarle Vorland,Bryne Cykleklubb,M 60-64,12,4,8,0,5,1,4,39,3.0,30
-170382,Ruben Lilledal,Tasta & omegn sykkelklubb,M 40-44,12,0,12,0,12,0,12,977,16.1,154
-28853,Sven Husveg,Aalgaard Sykkel og Spaserlaug,M 50-54,12,0,12,0,12,0,12,1539,19.7,191
+170382,Ruben Lilledal,Tasta & omegn sykkelklubb,M 40-44,12,0,12,0,12,0,12,976,16.1,154
+28853,Sven Husveg,Aalgaard Sykkel og Spaserlaug,M 50-54,12,0,12,0,12,0,12,1539,19.7,192
 167192,Vegard Frafjord-Larsen,Stavanger SK,M 25-29,12,0,12,0,12,0,12,1214,21.1,202
 167663,Nikolai Håheim,NXN,M 25-29,12,0,12,0,12,0,12,1944,28.3,242
-21586,Christine Hammer Bore,Rennesøy SK,K 50-54,11,10,1,0,10,9,1,-184,-5.6,62
+21586,Christine Hammer Bore,,Kvinner,11,10,1,0,10,9,1,-184,-5.6,62
 171058,Hamid Cheraghali,Ryfylke SK,M 35-39,11,0,11,0,11,0,11,1084,16.8,160
 60275,Ørjan Frøiland,Klepp Cykle Club,M 45-49,11,0,11,0,8,0,8,1390,22.3,217
 170383,Stian Aardal,Tasta & omegn sykkelklubb,M 35-39,11,0,11,0,10,0,10,1465,25.9,232
 171612,Ole Morten Pettersen,Klepp Cykle Club,M 55-59,10,4,6,0,9,3,6,293,5.8,47
-165071,Bjørn Tore Back Håland,Aalgaard Sykkel og Spaserlaug,M 35-39,10,1,9,0,10,1,9,1204,11.7,111
+165071,Bjørn Tore Back Håland,,Menn,10,1,9,0,10,1,9,1204,11.7,111
 21409,Bjørnar André Haug,Bogafjell Sykleklubb,M 50-54,10,0,10,0,7,0,7,1339,14.2,138
 139812,Stefan Pirnbacher,Tasta & omegn sykkelklubb,M 35-39,10,0,10,0,10,0,10,1715,22.0,213
 124007,Tor Erik Lindøe,CK Haugaland,M 40-44,10,0,10,0,10,0,10,2306,26.9,238
-83420,Stine Fikerud,Tasta & omegn sykkelklubb,K 45-49,9,6,2,1,9,6,2,-10,-1.4,22
+83420,Stine Fikerud,Halliburton,Kvinner,9,6,2,1,9,6,2,-10,-1.4,22
 23813,Jan Telstø,Klepp Cykle Club,M 60-64,9,7,2,0,9,7,2,-51,-3.7,45
+171663,Henrik Rødne Midtbø,,Menn,9,8,1,0,7,6,1,-1334,-5.2,57
 165022,Severin Nag,Ryfylke SK,M 30-34,9,1,8,0,9,1,8,515,10.5,100
 21850,Einar Lode,Bryne Cykleklubb,M 55-59,9,1,8,0,6,0,6,423,16.0,145
-139851,Ørjan Klev Ladstein,Rennesøy SK,M 30-34,9,0,9,0,9,0,9,995,21.1,203
-73516,Eirik Tørneng,Stavanger SK,M 40-44,9,0,9,0,9,0,9,1514,23.5,221
-146490,Christian Foder,Tasta & omegn sykkelklubb,M 45-49,9,0,9,0,9,0,9,1720,23.7,222
+139851,Ørjan Ladstein,,Menn,9,0,9,0,9,0,9,995,21.1,203
+73516,Eirik Tørneng,,Menn,9,0,9,0,9,0,9,1513,23.5,221
+146490,Christian Foder,Tasta & omegn sykkelklubb,M 45-49,9,0,9,0,9,0,9,1720,23.7,223
 123246,Jone Hustveit,Tasta & omegn sykkelklubb,M 30-34,9,0,9,0,9,0,9,1512,27.3,240
 58875,Ketil Skogen,Tasta & omegn sykkelklubb,M 65-69,8,4,4,0,3,2,1,158,-0.4,4
 25795,Lillian Løyning,Dalane SK,K 60-64,8,2,6,0,6,1,5,430,5.0,50
-171663,Henrik Rødne Midtbø,Ryfylke SK,M 35-39,8,7,1,0,6,5,1,-1334,-5.2,57
 104165,Bjørn Bryne,Klepp Cykle Club,M 55-59,8,2,6,0,6,0,6,439,7.8,67
-21425,John Børge Skjæveland,Bogafjell Sykleklubb,M 55-59,8,0,8,0,7,0,7,576,8.2,93
+21425,John Børge Skjæveland,,Menn,8,0,8,0,7,0,7,576,8.2,93
 167785,Fred-Olav Mosdal,Sandnes Sykleklubb,M 50-54,8,1,7,0,2,1,1,84,9.4,92
 37703,Alf Henning Haukeland,Vigrestad SK,M 65-69,8,8,0,0,7,7,0,-780,-11.8,117
 164491,Sveinung Pedersen,Rennesøy SK,M 40-44,8,0,8,0,8,0,8,496,14.0,135
 39418,Torunn Elve,Sandnes Sykleklubb,K 60-64,8,8,0,0,6,6,0,-1019,-14.3,139
-38159,Sølve Magnus Skogland,Haugesund Triatlonklubb,M 45-49,8,0,8,0,3,0,3,643,19.0,181
+38159,Sølve Magnus Skogland,Haugesund Triatlonklubb,M 45-49,8,0,8,0,3,0,3,643,19.0,182
+113410,Kim Arild Myklebust,Klepp Cykle Club,M 45-49,8,1,7,0,4,1,3,1087,19.8,176
 168184,Brock William Donovan,Tasta & omegn sykkelklubb,M 40-44,8,0,8,0,8,0,8,1756,20.6,197
 146346,Morten Ahlborn,Tasta & omegn sykkelklubb,M 45-49,8,1,7,0,8,1,7,1031,22.2,200
+143279,Kristoffer Forus,,Menn,8,1,7,0,8,1,7,1725,24.9,222
 167763,Leif Bjarne Sjøvoll,Sunnhordland Sykkelklubb,M 40-44,8,0,8,0,5,0,5,1016,25.9,233
 167177,Lotte Navratil,Tasta & omegn sykkelklubb,K 35-39,7,5,2,0,7,5,2,-107,-3.5,37
 162036,Njål Meling,Rennesøy SK,M 45-49,7,3,4,0,6,3,3,242,4.6,33
 172088,Henning Stedje Larsen,Tasta & omegn sykkelklubb,M 25-29,7,1,6,0,7,1,6,183,5.8,60
 169413,Roger Munoz,Stavanger,M 40-44,7,0,7,0,7,0,7,825,8.1,91
-58625,Rune Refsland,Dalane SK,M 55-59,7,1,6,0,6,1,5,694,9.1,87
+58625,Rune Refsland,Dalane SK,M 55-59,7,1,6,0,6,1,5,693,9.1,87
 23932,Jan Erik Nyman,Bryne Cykleklubb,M 65-69,7,7,0,0,0,0,0,-234,-13.1,124
 24572,Jostein Merkesdal,Vigesaa SK,M 60-64,7,0,7,0,6,0,6,1321,13.2,129
-104800,Kjetil Tjoflåt Borsheim,Nærbø SK,M 40-44,7,0,7,0,7,0,7,1115,14.8,142
+104800,Kjetil Tjoflåt Borsheim,AKVA Group,Menn,7,0,7,0,7,0,7,1115,14.8,142
 151475,Ørjan Sivertsen,Tasta & omegn sykkelklubb,M 35-39,7,0,7,0,7,0,7,1320,17.2,163
-113410,Kim Arild Myklebust,Klepp Cykle Club,M 45-49,7,0,7,0,3,0,3,1087,19.8,192
-73017,Anders Farestveit,Tasta & omegn sykkelklubb,M 40-44,7,1,6,0,7,1,6,1023,20.2,176
+73017,Anders Farestveit,Tasta & omegn sykkelklubb,M 40-44,7,1,6,0,7,1,6,1023,20.2,177
 145745,Sven-Kato Ege,CK Haugaland,M 35-39,7,0,7,0,7,0,7,1085,21.2,206
 134041,André Wærnes,Bogafjell Sykleklubb,M 40-44,7,0,7,0,4,0,4,1718,23.0,219
 26660,Odd Gaute Andreassen,Sandnes Sykleklubb,M 50-54,7,0,7,0,2,0,2,671,23.1,220
-164264,Linus Aksnes,Vigrestad SK,M 20-24,7,0,7,0,6,0,6,1740,24.5,227
-143279,Kristoffer Forus,Sandnes Sykleklubb,M 25-29,7,0,7,0,7,0,7,1725,24.9,228
+164264,Linus Aksnes,Vigrestad SK,M 20-24,7,0,7,0,6,0,6,1740,24.5,228
 168105,Daniel Kartevoll,Bogafjell Sykleklubb,M 17-19,7,1,6,0,5,1,4,1232,31.2,246
 25282,Kjetil Alsvik,Stavanger SK,M 60-64,6,3,3,0,3,2,1,-278,0.1,1
 29641,Torbjørn Tobias Obrestad,Bryne Cykleklubb,M 60-64,6,3,3,0,3,1,2,-60,0.3,2
 76825,Rune Mjøs,Sandnes Sykleklubb,M 70-74,6,3,3,0,4,2,2,-45,0.9,5
-22817,Gunn Anette Skjærpe,Klepp Cykle Club,K 50-54,6,3,3,0,6,3,3,-165,1.1,6
+22817,Gunn Anette Skjærpe,Klepp Cykle Club,K 50-54,6,3,3,0,6,3,3,-167,1.1,6
 28419,Sissel Asheim,Klepp Cykle Club,K 50-54,6,2,4,0,6,2,4,217,1.6,19
-139654,Jan Wersland,Dalane SK,M 55-59,6,1,5,0,6,1,5,250,3.1,43
+139654,Jan Wersland,Dalane SK,M 55-59,6,1,5,0,6,1,5,249,3.1,43
 126293,Jim Henning Gjersdal,Dalane SK,M 50-54,6,2,4,0,4,1,3,356,4.3,38
-30073,Ulf Tjåland,Dalane SK,M 55-59,6,2,4,0,4,1,3,166,4.8,44
+30073,Ulf Tjåland,,Menn,6,2,4,0,4,1,3,166,4.8,44
 52593,Joachim Fidtje,Tasta & omegn sykkelklubb,M 50-54,6,4,2,0,6,4,2,-186,-4.9,46
 27576,Per Terje Tjåland,Dalane SK,M 55-59,6,0,6,0,1,0,1,88,5.4,68
-22638,Geir Henning Larsen,Bryne CK,M 60-64,6,2,4,0,6,2,4,522,6.3,54
+22638,Geir Henning Larsen,,Menn,6,2,4,0,6,2,4,522,6.3,54
 22534,Geir Ravndal,Kvernaland,M 60-64,6,1,5,0,3,1,2,492,7.4,74
 154207,Mario Volkmann,Tasta & omegn sykkelklubb,M 45-49,6,6,0,0,1,1,0,-577,-7.7,88
 152277,Johnny Hansen,Bryne Cykleklubb,M 40-44,6,2,4,0,5,2,3,537,11.6,95
 169433,Hans Petter Lande,Tasta & omegn sykkelklubb,M 35-39,6,0,6,0,6,0,6,667,14.9,146
-136299,Frode Høyvik,CK Haugaland,M 45-49,6,0,6,0,6,0,6,926,16.4,156
+136299,Frode Høyvik,#høyterskel,Menn,6,0,6,0,6,0,6,926,16.4,156
 171105,Jakub Kozakowski,Tasta & omegn sykkelklubb,M 25-29,6,0,6,0,6,0,6,1475,17.8,170
-101216,Fredrik Jørgensen,Klepp Cykle Club,M 35-39,6,0,6,0,6,0,6,1739,18.9,179
-140084,Marcus Søyland,Ryfylke SK,M 35-39,6,0,6,0,6,0,6,799,19.2,183
+101216,Fredrik Jørgensen,Klepp Cykle Club,M 35-39,6,0,6,0,6,0,6,1739,18.9,180
+140084,Marcus Søyland,Ryfylke SK,M 35-39,6,0,6,0,6,0,6,799,19.2,184
 171953,Mathias Nag Rydningen,Sandnes Sykleklubb / Aker Solutions AS,M 25-29,6,0,6,0,6,0,6,2235,20.5,196
 52900,Eirik Mella,Sandnes Sykleklubb,M 45-49,6,0,6,0,1,0,1,428,21.6,208
-111773,Jan Erik Meland,Farsund Sykleklubb,M 35-39,6,0,6,0,3,0,3,1527,24.0,224
+111773,Jan Erik Meland,Farsund Sykleklubb,M 35-39,6,0,6,0,3,0,3,1527,24.0,225
 147557,Svein Inge Lomeland,Klepp Cykle Club,M 35-39,6,0,6,0,6,0,6,1534,26.6,237
-169064,Robert Johansson,Stavanger,M 30-34,5,2,3,0,5,2,3,171,0.2,7
+169064,Robert Johansson,Stavanger,M 30-34,5,2,3,0,5,2,3,170,0.2,7
 126312,Phillip Bunani,Klepp Stasjon,M 45-49,5,4,1,0,2,2,0,-215,-0.3,20
 20457,Arild Sandstøl,Bryne Cykleklubb,M 50-54,5,2,3,0,3,2,1,103,1.4,15
-23096,Harald Nybru,Sandnes Sykleklubb,M 70-74,5,2,3,0,4,2,2,84,2.7,23
+23096,Harald Nybru,Sandnes Sykleklubb,M 70-74,5,2,3,0,4,2,2,83,2.7,23
 28439,Siv Bråten Hauge,Tasta & omegn sykkelklubb,K 55-59,5,2,3,0,3,2,1,720,2.8,24
 20211,Andreas Hoddevik,Sandnes Sykleklubb,M 40-44,5,1,4,0,3,0,3,401,7.5,70
 58308,John Inge Blom Pettersen,Klepp Cykle Club,M 55-59,5,0,5,0,5,0,5,820,9.1,99
@@ -113,11 +113,11 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 167155,Endre Bryne,Klepp Cykle Club,M 25-29,5,0,5,0,5,0,5,362,12.2,120
 113383,Glenn Roger Hisdal,Bogafjell SK,M 45-49,5,0,5,0,5,0,5,800,13.1,125
 172102,Ole Amdal,Ryfylke SK,M 30-34,5,0,5,0,5,0,5,883,13.4,132
-32335,Lars Brovold,Bogafjell Sykleklubb,M 60-64,5,0,5,0,3,0,3,1165,14.7,141
-122879,Per Steinsland,Rennesøy SK,M 45-49,5,0,5,0,4,0,4,870,15.1,148
+32335,Lars Brovold,,Menn,5,0,5,0,3,0,3,1165,14.7,141
+122879,Per Steinsland,,Menn,5,0,5,0,4,0,4,870,15.1,148
 167609,Elise Hay Opsahl,Tasta & omegn sykkelklubb,K 50-54,5,1,4,0,4,1,3,2173,16.0,136
 26215,Marton Digernes,Bryne Cykleklubb,M 60-64,5,5,0,0,3,3,0,-1509,-16.0,153
-172101,Tore André Melberg,Ryfylke SK,M 25-29,5,0,5,0,5,0,5,1351,19.6,189
+172101,Tore André Melberg,Spinn Sykkelshop,Menn,5,0,5,0,5,0,5,1351,19.6,190
 53680,Tore Frøyland,Sandnes kommune BIL,Menn,5,0,5,0,3,0,3,1484,21.8,211
 25310,Knut Skaar,Nærbø SK,M 40-44,5,0,5,0,5,0,5,2252,22.0,214
 73321,Erling Nilsen,Tasta & omegn sykkelklubb,M 45-49,5,1,4,0,5,1,4,1862,23.6,209
@@ -126,8 +126,8 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 162235,Prince Williams Mawanda,Sandnes,M 40-44,4,2,2,0,1,0,1,173,-0.3,3
 23353,Helge Egeland,Dalane SK,M 45-49,4,1,3,0,2,0,2,-19,1.4,27
 25172,Kjersti Vatne,Lye,K 55-59,4,2,2,0,1,0,1,-62,1.5,9
-127362,Gorm Kipperberg,Ryfylke SK,M 55-59,4,2,2,0,4,2,2,186,2.5,16
-170800,Lucian Gheorghe Tamas,Aalgaard Sykkel og Spaserlaug,M 30-34,4,3,1,0,4,3,1,-344,-2.9,35
+127362,Gorm Kipperberg,,Menn,4,2,2,0,4,2,2,186,2.5,16
+170800,Lucian Gheorghe Tamas,,Menn,4,3,1,0,4,3,1,-344,-2.9,35
 28040,Roy Evje,Dalane SK,M 55-59,4,1,3,0,3,1,2,184,3.1,36
 147672,Frode Brekke,Tasta & omegn sykkelklubb,M 55-59,4,1,3,0,4,1,3,252,3.5,39
 126199,Agnar Tengesdal,Dalane SK,M 50-54,4,2,2,0,3,2,1,191,3.8,25
@@ -141,7 +141,7 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 23041,Hans Inge Rege,Bryne Cykleklubb,M 65-69,4,3,1,0,4,3,1,-1950,-6.7,59
 104384,David Andreas Bjørge,Klepp Cykle Club,M 50-54,4,4,0,0,1,1,0,-872,-7.0,84
 126736,Helge Bjelkarøy,5071 CK,M 60-64,4,0,4,0,4,0,4,1318,8.2,94
-147682,Jan Helge Braut,Klepp Cykle Club,M 50-54,4,4,0,0,2,2,0,-1631,-8.4,96
+147682,Jan Helge Braut,Klepp Cycle Club,Menn,4,4,0,0,2,2,0,-1631,-8.4,96
 20547,Arne Tagholdt,Flekkefjord SK,M 55-59,4,1,3,0,1,0,1,435,8.8,77
 77790,Andrew James,Tasta & omegn sykkelklubb,M 50-54,4,0,4,0,4,0,4,660,9.7,104
 38389,Jarle M. Ravnøy,Sandnes Sykleklubb / Equinor BIL,M 60-64,4,0,4,0,2,0,2,810,10.6,110
@@ -155,8 +155,8 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 21194,Bjarte Thorsen,Bogafjell sykleklubb,M 50-54,4,0,4,0,2,0,2,923,16.9,162
 156401,Are Nygårdseter,Tasta & omegn sykkelklubb,M 30-34,4,0,4,0,4,0,4,1270,18.1,172
 23539,Inge Løland,Bryne Cykleklubb,M 60-64,4,3,1,0,2,1,1,-2133,-18.2,152
-123067,Dag Arnesen,Tasta & omegn sykkelklubb,M 55-59,4,0,4,0,2,0,2,1521,19.0,182
-24116,Jarle Pollestad,Bryne Cykleklubb,M 60-64,4,4,0,0,2,2,0,-2042,-19.3,185
+123067,Dag Arnesen,Tasta & omegn sykkelklubb,M 55-59,4,0,4,0,2,0,2,1521,19.0,183
+24116,Jarle Pollestad,Bryne Cykleklubb,M 60-64,4,4,0,0,2,2,0,-2042,-19.3,186
 141135,Torodd Solvang,CK Haugaland,M 50-54,4,0,4,0,4,0,4,1288,19.8,193
 148251,Frank Idsø,Bogafjell Sykleklubb,M 35-39,4,0,4,0,4,0,4,944,19.8,194
 52876,Kenneth Ueland,Bogafjell Sykleklubb,M 35-39,4,0,4,0,4,0,4,1250,21.0,201
@@ -172,7 +172,7 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 39066,Geir Malec,Klepp Cykle Club,M 70-74,3,3,0,0,2,2,0,-36,-1.3,42
 171982,Håkon Martin Eide,Tasta & omegn sykkelklubb,M 35-39,3,1,2,0,3,1,2,156,1.5,18
 26529,Njål Fjotland,Klepp Cykle Club,M 50-54,3,1,2,0,1,0,1,77,1.9,21
-83566,Håkon Aakre Hansen,Ryfylke SK,M 45-49,3,1,2,0,3,1,2,198,2.2,26
+83566,Håkon Hansen,,Menn,3,1,2,0,3,1,2,198,2.2,26
 123011,Trond Jacobsen,CK Haugaland,M 55-59,3,2,0,1,2,1,0,-278,-2.7,40
 20962,Åge Telstø,Klepp Cykle Club,M 60-64,3,1,2,0,3,1,2,32,2.9,29
 29934,Trond Karlson,Lye,M 50-54,3,1,2,0,1,0,1,-67,3.4,31
@@ -196,10 +196,10 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 24650,Jørn-Atle Borsheim,Bogafjell sykleklubb,M 50-54,3,0,3,0,3,0,3,892,8.0,90
 141711,Thomas Bolme,Rogaland Sparebank,M 20-24,3,0,3,0,1,0,1,733,8.6,97
 167792,Hallvar Voilås,Dalane SK,M 25-29,3,1,2,0,2,1,1,575,8.8,69
-51310,Morten Nesvik,Tasta & omegn sykkelklubb,M 50-54,3,3,0,0,3,3,0,-1346,-9.5,102
+51310,Morten Nesvik,,Menn,3,3,0,0,3,3,0,-1346,-9.5,102
 141569,Morten Ege,,Menn,3,2,1,0,2,1,1,-596,-9.8,78
-171592,Daniel Viñolo Karlsen,Stavanger,M 30-34,3,0,3,0,2,0,2,1981,9.9,106
-25946,Magne Melhus,Dalane SK,M 65-69,3,3,0,0,2,2,0,-1312,-9.9,107
+171592,Daniel Viñolo Karlsen,Stavanger,M 30-34,3,0,3,0,2,0,2,1981,9.9,107
+25946,Magne Melhus,Dalane SK,M 65-69,3,3,0,0,2,2,0,-1312,-9.9,108
 22332,Frank Pedersen,Sandnes Sykleklubb,M 40-44,3,1,2,0,3,1,2,1283,10.2,82
 20155,Anders Tornensis,Aalgaard Sykkel og Spaserlaug,M 55-59,3,0,3,0,3,0,3,563,10.8,113
 66410,Alf Kvarme,Sunnhordland Sykkelklubb,M 60-64,3,0,3,0,2,0,2,670,10.9,114
@@ -214,7 +214,7 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 23157,Harry Leo Nøttveit,Sola Cykleklubb / Team Jæren,M 60-64,3,3,0,0,2,2,0,-3160,-13.1,127
 26961,Ole Johan Røykenes,Bryne Cykleklubb,M 60-64,3,2,1,0,3,2,1,-2596,-13.1,105
 22125,Erik Bjørn Svalestad,Dalane SK,M 60-64,3,3,0,0,3,3,0,-1683,-13.1,128
-131953,Enrico Graf,Sandnes Sykleklubb,M 45-49,3,1,2,0,3,1,2,555,13.3,108
+131953,Enrico Graf,Sandnes Sykleklubb,M 45-49,3,1,2,0,3,1,2,555,13.3,109
 141082,Mariusz Robak,Sandnes Sykleklubb,M 35-39,3,0,3,0,3,0,3,830,13.3,131
 28950,Svein Tore Aase,Dalane SK,M 60-64,3,3,0,0,1,1,0,-1923,-14.1,137
 73655,Morten Undheim,Lye,M 55-59,3,3,0,0,1,1,0,-2084,-14.4,140
@@ -230,24 +230,24 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 23620,Inglen Haugland,Sandnes Sykleklubb,K 60-64,3,3,0,0,1,1,0,-3439,-18.2,173
 73616,Johan Siqveland,Bryne,M 35-39,3,3,0,0,0,0,0,-2685,-18.2,174
 171768,Tiril Bjerga,Tasta & omegn sykkelklubb,K 30-34,3,3,0,0,3,3,0,-2072,-18.2,175
-23346,Helge Grannes,CK Haugaland,M 65-69,3,3,0,0,1,1,0,-1993,-18.8,177
-25945,Magne Moi,Klepp Cykle Club,M 70-74,3,3,0,0,0,0,0,-2152,-19.4,186
-23182,Håkon Hauge,Klepp Cykle Club,M 70-74,3,3,0,0,2,2,0,-2881,-19.4,187
-104214,Tor Sølve Laland,Klepp Cykle Club,M 75-79,3,3,0,0,1,1,0,-2880,-19.4,188
+23346,Helge Grannes,CK Haugaland,M 65-69,3,3,0,0,1,1,0,-1993,-18.8,178
+25945,Magne Moi,Klepp Cykle Club,M 70-74,3,3,0,0,0,0,0,-2152,-19.4,187
+23182,Håkon Hauge,Klepp Cykle Club,M 70-74,3,3,0,0,2,2,0,-2881,-19.4,188
+104214,Tor Sølve Laland,Klepp Cykle Club,M 75-79,3,3,0,0,1,1,0,-2880,-19.4,189
 64253,Torjus Ølberg Fongaard,Bogafjell Sykleklubb,M 30-34,3,0,3,0,3,0,3,2394,20.6,198
 170409,Hallvard Folkedal,Kristianborg Cykleklubb,M 30-34,3,0,3,0,3,0,3,2885,21.1,205
 140201,Sigurd Kjellstad Lian,CK Haugaland,M 30-34,3,0,3,0,3,0,3,1289,21.2,207
 169602,Sigrid Vangdal,Stavanger,K 30-34,3,3,0,0,0,0,0,-3390,-21.8,212
 162404,Tobias Brekken,Sandnes Sykleklubb,M 20-24,3,0,3,0,3,0,3,1135,22.1,215
 22901,Gunnleiv Gjøsæter,Sunnhordland Sykkelklubb,M 55-59,3,0,3,0,3,0,3,3010,22.1,216
-136111,Harald Veen Gilje,Stavanger SK,M 25-29,3,0,3,0,3,0,3,2105,24.1,225
+136111,Harald Veen Gilje,Stavanger SK,M 25-29,3,0,3,0,3,0,3,2105,24.1,226
 38229,Bruse Kverneland,Tasta & omegn sykkelklubb,M 50-54,3,0,3,0,0,0,0,1916,25.0,229
 148348,Kjersti Marie Øverland,Sandnes Sykleklubb,K 70-74,3,3,0,0,1,1,0,-4047,-25.2,230
 93509,Esben Eliassen,Tasta & omegn sykkelklubb,M 45-49,3,0,3,0,3,0,3,1122,25.4,231
 105459,Brian Nielsen,Bogafjell Sykleklubb,M 60-64,3,3,0,0,1,1,0,-3367,-27.1,239
 151317,Thomas Goa,,M35-39,3,0,3,0,3,0,3,966,28.4,243
-171175,Olav Thorsen Hustveit,Sandnes Sykleklubb,M 17-19,3,0,3,0,3,0,3,1265,28.5,244
-167283,Ivar Dyngeland Vik,Fana IL Sykkel,M 20-24,3,0,3,0,3,0,3,3314,29.8,247
+171175,Olav Thorsen Hustveit,,Menn,3,0,3,0,3,0,3,1265,28.5,244
+167283,Ivar Dyngeland Vik,Kristianborg ck,Menn,3,0,3,0,3,0,3,3314,29.8,247
 75838,Aurélien Lefèvre,Tasta & omegn sykkelklubb,M 40-44,3,0,3,0,3,0,3,2416,31.3,250
 165293,Joakim Aanensen,Kristiansands Cykleklubb,M 20-24,3,0,3,0,3,0,3,3124,32.0,251
 58234,Svein Georg Sangolt,Bryne Cykleklubb,M 55-59,3,3,0,0,0,0,0,-7064,-36.9,253
@@ -263,7 +263,7 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 172097,Marielle Othelie Seglem Ellingsen,Sandnes Sykleklubb,K 25-29,2,2,0,0,2,2,0,-39,-0.7,
 27666,Ragnar Aga,Stavanger,M 60-64,2,1,1,0,0,0,0,-122,-0.8,
 123995,Kyrre Rødeseike,Haugesund Triathlon Klubb,M 45-49,2,1,1,0,0,0,0,-88,-0.8,
-173604,Kristian Vatne,Bryne,M 40-44,2,1,1,0,2,1,1,-229,-0.8,
+173604,Kristian Vatne,,Menn,2,1,1,0,2,1,1,-229,-0.8,
 30600,Øyvind Svendsen,Vennesla OCK,M 60-64,2,1,1,0,0,0,0,102,0.9,
 21330,Bjørn Chr. Larsen,Bergen Cykleklubb,M 55-59,2,1,1,0,0,0,0,75,0.9,
 171600,Sondre Gevelt Spone,Mjøndalen,M 25-29,2,1,1,0,0,0,0,-123,-1.1,
@@ -274,7 +274,7 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 22093,Erik Klippenberg,Dalane SK,M 45-49,2,1,1,0,0,0,0,150,1.3,
 101687,Jens Kristian Bjørnå,CK Haugaland,M 60-64,2,1,1,0,1,1,0,214,1.5,
 58132,Inge Jakob Hansen,Søgne Cykleklubb,M 55-59,2,1,1,0,0,0,0,-183,-1.5,
-127251,Jo Gill Næss,Tasta & omegn sykkelklubb,M 45-49,2,1,1,0,2,1,1,-252,-1.5,
+127251,Jo Gill Næss,,Menn,2,1,1,0,2,1,1,-252,-1.5,
 127129,Kenneth Seldal,Klepp Cykle Club,M 40-44,2,0,2,0,0,0,0,169,1.6,
 23947,Jan Fredrik Øyen,Sandnes,M 45-49,2,1,1,0,0,0,0,202,1.7,
 21166,Bjarne Salmelid,Tasta & omegn sykkelklubb,M 60-64,2,1,1,0,0,0,0,-224,-1.8,
@@ -296,8 +296,8 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 174301,Vegard Jolma-Stensland,Tasta & omegn sykkelklubb,M 20-24,2,2,0,0,2,2,0,-258,-2.9,
 58076,Tor Kjetil Svaland,Birkenes IL Sykkel,M 55-59,2,2,0,0,0,0,0,-388,-3.1,
 24894,Kenneth Asheim,Bogafjell Sykleklubb,M 60-64,2,1,1,0,2,1,1,-1432,-3.1,
-23521,Ingar Bergeland,Ryfylke SK,M 50-54,2,1,1,0,2,1,1,155,3.1,
-122919,Henrik Huster,Tasta & omegn sykkelklubb,M 55-59,2,1,1,0,1,0,1,-487,-3.2,
+23521,Ingar Bergeland,,Menn,2,1,1,0,2,1,1,155,3.1,
+122919,Henrik Huster,,Menn,2,1,1,0,1,0,1,-487,-3.2,
 29615,Tor-Inge Bøe,Tasta & omegn sykkelklubb,M 50-54,2,0,2,0,0,0,0,368,3.3,
 153463,Hans Ingve Søyland,Vigrestad SK,M 35-39,2,0,2,0,0,0,0,408,3.5,
 170598,Sigurd Malmei Aarsland,Battle Pedal,M 30-34,2,1,1,0,1,0,1,786,3.5,
@@ -332,7 +332,7 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 26378,Morten Johnsen,Sandnes,M 45-49,2,2,0,0,0,0,0,-752,-5.8,
 59879,Asle Havsø Sæstad,Egersund,M 30-34,2,1,1,0,1,0,1,-828,-5.8,
 147492,Kjetil Søvik,Molde CK,M 50-54,2,0,2,0,2,0,2,646,5.8,
-25618,Lars Kristian Lunde,Kvernaland,M 17-19,2,2,0,0,2,2,0,-802,-6.0,
+25618,Lars Kristian Lunde,,Menn,2,2,0,0,2,2,0,-802,-6.0,
 28264,Sigmund Olsen,Sirevåg,M 65-69,2,2,0,0,0,0,0,-796,-6.1,
 22393,Frode Trones,Bogafjell sykleklubb,M 55-59,2,0,2,0,2,0,2,700,6.2,
 32273,Marius André Ambjørndalen,Stavanger SK,M 50-54,2,0,2,0,2,0,2,713,6.3,
@@ -447,7 +447,7 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 23853,Jan Kalsaas,Gjesdal il,M 70-74,2,2,0,0,0,0,0,-2086,-14.7,
 25866,Liv Lende Olsen,Sirevåg,K 65-69,2,2,0,0,0,0,0,-2152,-14.9,
 171185,Lukasz Adamski,Imenco AS,Menn,2,0,2,0,2,0,2,970,15.1,
-173866,Helene Mæhle,Dalane SK,K 55-59,2,2,0,0,1,1,0,-1920,-15.1,
+173866,Helene Mæhle,,Kvinner,2,2,0,0,1,1,0,-1920,-15.1,
 21301,Bjørn Eikeskog,Sandnes Solskjerming,M 55-59,2,2,0,0,1,1,0,-1858,-15.2,
 141533,Remigijus Ratkevicius,Oltedal,M 40-44,2,2,0,0,1,1,0,-2304,-15.2,
 73923,John Vetrhus,Vennesla,M 60-64,2,2,0,0,0,0,0,-2252,-15.2,
@@ -591,8 +591,8 @@ turritt_id,name,club,age_class,races,wins,losses,draws,same_class_races,same_cla
 34051,Ole Terje Thorstensen,Mandal CK,M 65-69,2,2,0,0,0,0,0,-4897,-28.9,
 34568,Jan Petter Christensen,Mandal,M 65-69,2,2,0,0,0,0,0,-4901,-28.9,
 123632,Oddvar Birkeland,Grindheim IL,M 70-74,2,2,0,0,0,0,0,-4930,-29.1,
+171062,Hans Kristian Karlsen,,Menn,2,0,2,0,2,0,2,1518,29.1,
 135111,Rommel L. Peralta,Egersund,M 45-49,2,2,0,0,0,0,0,-5285,-29.2,
-171062,Hans Kristian Karlsen,Stavanger SK,M 17-19,2,0,2,0,2,0,2,1519,29.2,
 153725,Arne Dybo,Mandal CK,M 65-69,2,2,0,0,0,0,0,-5034,-29.5,
 122758,Krzysztof Chruscinski,Ålgård,M 50-54,2,2,0,0,0,0,0,-5139,-29.9,
 59273,Jon Ragnar Aasland,UL Fram,M 60-64,2,2,0,0,0,0,0,-5356,-30.0,
@@ -678,12 +678,12 @@ r18493,Matti Bernitz Pedersen,Mosjonistforeninga,M50-59,1,1,0,0,1,1,0,-65,-0.3,
 30621,Gunnar Sjøberg,Vennesla OCK,M 65-69,1,0,1,0,0,0,0,255,2.1,
 171976,Jørgen Høisæter,Sunnhordland Sykkelklubb,M 25-29,1,0,1,0,1,0,1,173,2.1,
 104350,Hans Olav Myklebust,Haugesund Triatlonklubb,M 55-59,1,0,1,0,1,0,1,173,2.1,
+46581,Sigurd Berge,,Menn,1,0,1,0,1,0,1,139,2.1,
 33918,Rolf Stig Prestvold,Søgne,M 55-59,1,1,0,0,0,0,0,-268,-2.2,
 171602,Kristian Haugland,Ålgård,M 30-34,1,1,0,0,0,0,0,-270,-2.2,
 22109,Erik Evensen,Bogafjell Sykleklubb,M 60-64,1,1,0,0,0,0,0,-279,-2.2,
 38780,Sveinung Berge,Bogafjell SK,M 50-54,1,1,0,0,0,0,0,-264,-2.2,
 172404,Morten Rovik Moe,Bogafjell SK,M 35-39,1,0,1,0,1,0,1,251,2.2,
-46581,Sigurd Berge,Tasta & omegn sykkelklubb,M 50-54,1,0,1,0,1,0,1,141,2.2,
 109053,Pål Roar Dahlman,Sarpsborg SK,M 55-59,1,1,0,0,0,0,0,-290,-2.3,
 123353,Tom Rasmussen,Kristiansand S,M 50-54,1,1,0,0,0,0,0,-292,-2.3,
 171127,Oskar Vik,Kristiansands CK,M 25-29,1,1,0,0,0,0,0,-293,-2.3,
@@ -953,7 +953,7 @@ eq384272,"EIKÅS, Bjarte",,M60-64,1,0,1,0,1,0,1,60,5.7,
 173734,Jone Stornes,Egersund,M 30-34,1,1,0,0,0,0,0,-1366,-10.4,
 173735,Benjamin Bjaanes Svellingen,Sandnes,M 17-19,1,1,0,0,0,0,0,-1368,-10.4,
 24459,Jon Magnar Skårland,Bryne,M 55-59,1,1,0,0,1,1,0,-2349,-10.4,
-174339,Halvard Strandskog,Bogafjell Sykleklubb,M 17-19,1,0,1,0,1,0,1,627,10.4,
+174339,Halvard Strandskog,Bogafjell Sykleklubb,Menn,1,0,1,0,1,0,1,627,10.4,
 76031,Eirik Østbø,Rennesøy SK,M 40-44,1,0,1,0,1,0,1,782,10.5,
 171616,Chris Inge Sand,Mandal CK,M 40-44,1,1,0,0,0,0,0,-1425,-10.5,
 29256,Thomas Aarrestad,Bogafjell Sykleklubb,M 55-59,1,1,0,0,0,0,0,-1425,-10.5,
@@ -1145,7 +1145,7 @@ r19574,Tor Åge Dyrstad Jørgensen,Team Sykkelhuset,M40-49,1,0,1,0,1,0,1,3097,15
 170413,Marcus Karlsen,Vennesla og Omegn Cykleklubb,M 20-24,1,0,1,0,1,0,1,3094,16.3,
 21561,Christian Rugland,Søgne Cykleklubb,M 55-59,1,1,0,0,0,0,0,-2304,-16.4,
 171960,Mathias De Paulis Nilsson,"Trollhättan, Sverige",M 40-44,1,0,1,0,1,0,1,3135,16.5,
-88101,Tormod Rasmussen,Bogafjell Sykleklubb,M 17-19,1,0,1,0,1,0,1,941,16.5,
+88101,Tormod Rasmussen,,Menn,1,0,1,0,1,0,1,941,16.5,
 76347,Magnar Håland,Eikeland SK,M 35-39,1,1,0,0,0,0,0,-2341,-16.6,
 173620,Andreas Bjelland Eriksen,Oslo,M 30-34,1,1,0,0,1,1,0,-2341,-16.6,
 eq1429249,"JOHNSEN, Terje",,M60-64,1,0,1,0,1,0,1,159,16.7,
@@ -1257,7 +1257,7 @@ r19631,"STOKKELAND, Martha",,Ke,1,0,1,0,1,0,1,187,20.3,
 143687,Tomas Torp,Sportsklubben Rye,M 45-49,1,0,1,0,1,0,1,3746,20.4,
 eq131268,William SMITH,Greie Gutter Sykkelklubb,M30-39,1,0,1,0,1,0,1,3847,20.4,
 r20260,Alex Jægersen,,M30-39,1,0,1,0,1,0,1,3847,20.4,
-174338,Regine Solhaug Hansen,Mosjøen og Omegn CK,K 17-19,1,0,1,0,1,0,1,1127,20.4,
+174338,Regine Solhaug Hansen,,Kvinner,1,0,1,0,1,0,1,1127,20.4,
 r19266,Heidi Indergård,,K20-29,1,0,1,0,1,0,1,3856,20.5,
 126190,Justas Acas,Klepp Stasjon,M 45-49,1,1,0,0,0,0,0,-3035,-20.6,
 38755,Kjell Ove Sivertsen,Gand vgs,M 50-54,1,1,0,0,0,0,0,-3038,-20.6,
@@ -1523,7 +1523,7 @@ r20559,Per-Christian Færøvik Grieg,,M20-29,1,0,1,0,1,0,1,5463,31.7,
 53229,Kari Skailand,Dalane SK,K 55-59,1,1,0,0,0,0,0,-5618,-32.4,
 173780,Arnfin Skadsem,Klepp Stasjon,M 65-69,1,1,0,0,0,0,0,-5624,-32.4,
 172276,Jan Olav Rosten,Otra IL,M 25-29,1,1,0,0,1,1,0,-5615,-32.4,
-165291,Mats Holla,Sandnes Sykleklubb,M 20-24,1,0,1,0,1,0,1,1626,32.4,
+165291,Mats Holla,,Menn,1,0,1,0,1,0,1,1626,32.4,
 23773,Iver Tønnesen Mathiesen,Stavanger,M 50-54,1,1,0,0,0,0,0,-5860,-32.5,
 20852,Asle Espeland,Bryneringen gutteklubb,M 55-59,1,1,0,0,0,0,0,-5895,-32.6,
 171689,Terje Roos,Moss sykkelklubb,M 65-69,1,1,0,0,0,0,0,-5903,-32.6,
@@ -1765,3 +1765,5 @@ r20596,Eirik Mella,Stormlight AS,M45-49,1,1,0,0,1,1,0,,,
 29677,Tore Vehus,Dalane SK,M 75-79,1,1,0,0,0,0,0,,,
 r19581,Joakim Knutseth,,M30-39,1,1,0,0,1,1,0,,,
 r20218,Mia Madelen Strømhylden,NTNUI triatlon,K20-29,1,1,0,0,1,1,0,,,
+174340,Gaute Gerhardsen,Jørpeland,Menn,1,1,0,0,1,1,0,,,
+59265,Andreas Kvam,,Menn,1,1,0,0,1,1,0,,,

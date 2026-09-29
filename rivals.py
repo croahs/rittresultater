@@ -179,10 +179,11 @@ def changed(old, new, riders):
     (usually a rider not linked to one of ours yet), and those with another result (the timers'
     own times differ from Turritt's by a second or two now and then; the timer's are the official ones)."""
     lost = other = 0
-    for me in riders:
+    dnf = {r[2] for r, _ in old if int(r[9]) >= DNF}  # a DNF on Turritt that the timer has as DNS or
+    for me in riders:                                  # anonymised: the original wins, not a meeting lost
         a = _outcomes(old, me)
         b = next((x for x in (_outcomes(p, me) for p in new) if x), {})
-        lost += sum(1 for o in a if o not in b) if b else 0
+        lost += sum(1 for o in a if o not in b and o not in dnf) if b else 0
         other += sum(1 for o, v in a.items() if o in b and b[o] != v)
     return lost, other
 
