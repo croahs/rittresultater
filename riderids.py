@@ -97,6 +97,50 @@ def _same_name(a, b):
     return difflib.SequenceMatcher(None, "".join(a[1:]), "".join(b[1:])).ratio() >= 0.8
 
 
+AGE = re.compile(r"(\d\d)\s*[-–]\s*(\d\d)")
+
+
+def _born(spans, year, age_class):
+    """Add the birth years one age class allows ("M 40-44" in 2014: 1970-1974)."""
+    m = AGE.search(age_class or "")
+    if m and year:
+        spans.append((year - int(m.group(2)), year - int(m.group(1))))
+
+
+def _likeliest(spans):
+    """The birth year most of a rider's age classes allow (riders sometimes race up a class, and
+    lists differ on age by a year, so not every class fits one year)."""
+    years = Counter(y for lo, hi in spans for y in range(lo, hi + 1))
+    top = max(years.values())
+    best = [y for y, n in years.items() if n == top]
+    return sum(best) / len(best)
+
+
+def birth_years():
+    """{("turritt", id) | ("eq", uid): likeliest birth year} from the age classes in the cached lists."""
+    spans = {}
+    for key, rows in turritt._cache.items():
+        if key.startswith("results:"):
+            info = turritt._cache.get(f"info:{key.split(':')[1]}")
+            year = int(info[0][-4:]) if info else None
+            for r in rows:
+                _born(spans.setdefault(("turritt", r[2]), []), year, r[8])
+    years = {src["event"]: row["year"] for row in registry.load() for src in row["sources"] if src["source"] == "eqtiming"}
+    for key, rows in eqtiming._cache.items():
+        if key.startswith("named:"):
+            year = years.get(int(key.split(":")[1]))
+            for r in rows:
+                _born(spans.setdefault(("eq", str(r[0])), []), year, r[3])
+    return {k: _likeliest(v) for k, v in spans.items() if v}
+
+
+AGE_SLACK = 5  # years: more than this between the two sides' likeliest birth years is two people
+
+
+def _ages_fit(a, b):
+    return a is None or b is None or abs(a - b) <= AGE_SLACK
+
+
 def build(log=print):
     data = _load(ALIASES, {"riders": {}, "next": 1})
     riders, nxt = data["riders"], data["next"]
@@ -127,12 +171,19 @@ def build(log=print):
     tt_id = {a["turritt"]: rid for rid, a in riders.items() if a.get("turritt")}
     eq_id = {str(u): rid for rid, a in riders.items() for u in _eqs(a)}
 
-    def link(uid, rid):
+    born = birth_years()
+
+    def link(uid, rid, guessed=True):
         """EQ id uid is rider rid. An EQ-only rider we gave uid before is merged into rid:
-        its id stays, as "same_as" rid, so links to it still resolve."""
+        its id stays, as "same_as" rid, so links to it still resolve. A guessed link (not
+        from riders.json or linking.json) is not made when the age classes on the two sides
+        point to different birth years: two people with one name, not one rider."""
         old = eq_id.get(uid)
         if old == rid:
             return
+        if guessed and not _ages_fit(born.get(("eq", uid)), born.get(("turritt", riders[rid].get("turritt")))):
+            log(f"riderids: EQ {uid} not linked to {rid} ({riders[rid].get('name')}): age classes disagree")
+            return False
         if old:
             a = riders[old]
             if a.get("turritt") or [u for u in _eqs(a) if str(u) != uid]:
@@ -149,7 +200,7 @@ def build(log=print):
     # Followed riders: riders.json says which TurrittID and EQ id are the same person.
     for r in _load(RIDERS, {"riders": []})["riders"]:
         if r.get("turritt_id") and r.get("eq_id") and r["turritt_id"] in tt_id and str(r["eq_id"]) not in eq_id:
-            link(str(r["eq_id"]), tt_id[r["turritt_id"]])
+            link(str(r["eq_id"]), tt_id[r["turritt_id"]], guessed=False)
 
     # The same race on Turritt, from the registry. An EQ rider and a Turritt rider in the same
     # race with the same first initial and surname (give or take a typo) and the same time
@@ -190,7 +241,7 @@ def build(log=print):
                 if uid not in eq_id:
                     eq_id[uid] = new(name=name, club=club, eq=int(uid))
             else:
-                link(uid, decided[uid])
+                link(uid, decided[uid], guessed=False)
             continue
         if uid in eq_id and riders[eq_id[uid]].get("turritt"):
             continue
@@ -198,8 +249,9 @@ def build(log=print):
         cands = by_name.get(" ".join(raceresult.fold(name)), [])
         tid = riders[cands[0]]["turritt"] if len(cands) == 1 else None
         held = open_links.get(uid, {}).get("no_auto")  # checked by hand: same name and club, but not surely the same rider
-        if tid and not held and (tid in race_riders or any(_club(club) & _club(c) for c in clubs.get(tid, ()) if c)):
-            link(uid, cands[0])
+        if tid and not held and (tid in race_riders or any(_club(club) & _club(c) for c in clubs.get(tid, ()) if c)) \
+                and link(uid, cands[0]) is not False:
+            pass
         elif uid in eq_id:
             continue
         elif cands:  # an id of their own until linked by hand; linking makes it "same_as" the other
