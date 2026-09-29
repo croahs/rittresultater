@@ -5,8 +5,13 @@ TurrittID. Every rider gets an id of ours, once, that never changes. data/aliase
 it to the rider's ids elsewhere: TurrittID (from the cached Turritt lists, while the site
 still uses them), EQ Timing participant id. Links are made only when they are certain:
 - a TurrittID and EQ id given together in riders.json;
+- an EQ result and a Turritt result in the same race (data/registry.json says which) with
+  the same name (give or take a typo or a middle name) and the same time (within 10 s),
+  when no one else fits;
 - an EQ result whose name matches exactly one Turritt rider who is in the same race's
-  Turritt list (data/registry.json says which), or who has ridden for the same club.
+  Turritt list, or who has ridden for the same club.
+A rider can have more than one EQ id ("eq_also"): some riders have had two EQ profiles.
+An EQ-only rider found later to be a Turritt rider keeps their id, as "same_as" that rider.
 Everything else that could be the same rider goes to data/linking.json, which is edited by
 hand ("id": "r123" to link, "id": "new" for a rider of their own) and never guessed.
 An EQ rider matching nobody gets an id of their own.
@@ -14,10 +19,12 @@ An EQ rider matching nobody gets an id of their own.
 Usage:
   python3 riderids.py      # add ids for riders not seen before; existing ids stay as they are
 """
+import difflib
 import json
 import os
 import re
 import sys
+import unicodedata
 from collections import Counter
 
 import eqtiming
@@ -56,6 +63,39 @@ def _club(c):
                                      r"idrettslag|cykle|club|klubb|team)\b", " ", c)))
 
 
+def _eqs(a):
+    """A rider's EQ ids: "eq", and "eq_also" when they have had more than one EQ profile."""
+    return ([a["eq"]] if a.get("eq") else []) + a.get("eq_also", [])
+
+
+def by_eq():
+    """{EQ id: our id}, for every EQ id a rider has had ("eq" and "eq_also")."""
+    riders = load()
+    return {str(u): rid for rid, a in riders.items() for u in _eqs(a)}
+
+
+def _words(name):
+    """"Bjørgulf Lea Jr." -> ["bjorgulf", "lea", "jr"]: lower case, no accents or punctuation."""
+    folded = unicodedata.normalize("NFD", name.lower().replace("ø", "o").replace("æ", "ae").replace("-", " "))
+    return [w for w in ("".join(c for c in w if c.isalpha() and not unicodedata.combining(c)) for w in folded.split()) if w]
+
+
+def _same_name(a, b):
+    """One name contained in the other ("Asbjørn Olesen", "Hans Asbjørn Olesen"), or the same
+    first initial and a surname that is the same, contained in the other name, or a typo away
+    ("Hellnd", "Pirnhacher"). Only used together with the same race and time."""
+    a, b = _words(a), _words(b)
+    if len(a) < 2 or len(b) < 2:
+        return False
+    if set(a) <= set(b) or set(b) <= set(a):  # a middle name left out: "Asbjørn Olesen"
+        return True
+    if a[0][0] != b[0][0]:
+        return False
+    if a[-1] == b[-1] or set(a[1:]) <= set(b) or set(b[1:]) <= set(a):
+        return True
+    return difflib.SequenceMatcher(None, "".join(a[1:]), "".join(b[1:])).ratio() >= 0.8
+
+
 def build(log=print):
     data = _load(ALIASES, {"riders": {}, "next": 1})
     riders, nxt = data["riders"], data["next"]
@@ -84,44 +124,82 @@ def build(log=print):
         new(name=tt[tid], club=clubs[tid].most_common(1)[0][0], turritt=tid)
 
     tt_id = {a["turritt"]: rid for rid, a in riders.items() if a.get("turritt")}
-    eq_id = {str(a["eq"]): rid for rid, a in riders.items() if a.get("eq")}
+    eq_id = {str(u): rid for rid, a in riders.items() for u in _eqs(a)}
+
+    def link(uid, rid):
+        """EQ id uid is rider rid. An EQ-only rider we gave uid before is merged into rid:
+        its id stays, as "same_as" rid, so links to it still resolve."""
+        old = eq_id.get(uid)
+        if old == rid:
+            return
+        if old:
+            a = riders[old]
+            if a.get("turritt") or [u for u in _eqs(a) if str(u) != uid]:
+                return  # already a rider of their own with more to them; left for linking.json
+            riders[old] = {"name": a.get("name", ""), "club": a.get("club", ""), "same_as": rid}
+            riders[old] = {k: v for k, v in riders[old].items() if v}
+        a = riders[rid]
+        if not a.get("eq"):
+            a["eq"] = int(uid)
+        elif int(uid) not in _eqs(a):
+            a["eq_also"] = sorted(a.get("eq_also", []) + [int(uid)])
+        eq_id[uid] = rid
 
     # Followed riders: riders.json says which TurrittID and EQ id are the same person.
     for r in _load(RIDERS, {"riders": []})["riders"]:
         if r.get("turritt_id") and r.get("eq_id") and r["turritt_id"] in tt_id and str(r["eq_id"]) not in eq_id:
-            riders[tt_id[r["turritt_id"]]]["eq"] = int(r["eq_id"])
-            eq_id[str(r["eq_id"])] = tt_id[r["turritt_id"]]
+            link(str(r["eq_id"]), tt_id[r["turritt_id"]])
+
+    # The same race on Turritt, from the registry. An EQ rider and a Turritt rider in the same
+    # race with the same first initial and surname (give or take a typo) and the same time
+    # (within 10 s) are the same rider, when no one else in either list fits.
+    same_race = {}
+    for row in registry.load():
+        tts = [(r[2], f"{r[5]} {r[6]}", int(r[9])) for x in row["turritt_ids"]
+               for r in turritt._cache.get(f"results:{x}", []) if r[2] not in ("", "0") and r[9].isdigit()]
+        eqs = []
+        for src in row["sources"]:
+            if src["source"] != "eqtiming":
+                continue
+            same_race.setdefault(src["event"], set()).update(t[0] for t in tts)
+            for key, rows in eqtiming._cache.items():
+                if key.startswith(f"named:{src['event']}:") and (not src.get("stage") or key.endswith(f":{src['stage']}")):
+                    eqs += [(str(r[0]), r[1], round(r[5] / 1000)) for r in rows if r[1] and r[4] == "TIME" and r[5]]
+        fits = lambda a, b: abs(a[2] - b[2]) <= 10 and _same_name(a[1], b[1])
+        for e in eqs:
+            m = [t for t in tts if fits(e, t)]
+            if len(m) == 1 and sum(1 for e2 in eqs if fits(e2, m[0])) == 1 and m[0][0] in tt_id:
+                link(e[0], tt_id[m[0][0]])
 
     # EQ riders from the cached named lists (registry races).
     by_name = {}
     for rid, a in riders.items():
         if a.get("turritt"):
             by_name.setdefault(" ".join(raceresult.fold(a["name"])), []).append(rid)
-    # The same race on Turritt, from the registry: an EQ rider whose name matches a Turritt
-    # rider in that very race's Turritt list is the same rider.
-    same_race = {}
-    for row in registry.load():
-        for src in row["sources"]:
-            if src["source"] == "eqtiming":
-                same_race.setdefault(src["event"], set()).update(t for x in row["turritt_ids"] for t in in_race.get(x, ()))
     seen = {}
     for key, rows in eqtiming._cache.items():
         if key.startswith("named:"):
             for r in rows:
+                if r[1] is None:  # anonymised at EQ
+                    continue
                 seen.setdefault(str(r[0]), [r[1], r[2], set()])[2] |= same_race.get(int(key.split(":")[1]), set())
     for uid, (name, club, race_riders) in sorted(seen.items()):
-        if uid in eq_id:
-            continue
         if uid in decided:
-            rid = decided[uid] if decided[uid] != "new" else new(name=name, club=club, eq=int(uid))
-            riders[rid]["eq"] = int(uid)
-            eq_id[uid] = rid
+            if decided[uid] == "new":
+                if uid not in eq_id:
+                    eq_id[uid] = new(name=name, club=club, eq=int(uid))
+            else:
+                link(uid, decided[uid])
             continue
-        cands = [c for c in by_name.get(" ".join(raceresult.fold(name)), []) if not riders[c].get("eq")]
+        if uid in eq_id and riders[eq_id[uid]].get("turritt"):
+            continue
+        # A rider may have more than one EQ id (a new profile), so riders who have one already count.
+        cands = by_name.get(" ".join(raceresult.fold(name)), [])
         tid = riders[cands[0]]["turritt"] if len(cands) == 1 else None
         if tid and (tid in race_riders or any(_club(club) & _club(c) for c in clubs.get(tid, ()) if c)):
-            riders[cands[0]]["eq"] = int(uid)
-            eq_id[uid] = cands[0]
+            link(uid, cands[0])
+        elif uid in eq_id:
+            continue
         elif cands:
             open_links[uid] = {"eq": int(uid), "name": name, "club": club,
                                "candidates": [{"id": c, "club": riders[c].get("club", "")} for c in cands], "id": None}
