@@ -127,7 +127,7 @@ def main():
                                                  # Links to your intervals.icu activities; they are private there anyway.
                                                  "activity_links": False,
                                                  # Shown in the footer for corrections and takedown requests; set before launch.
-                                                 "contact": ""})
+                                                 "contact": "peder@holterman.no"})
     print(f"wrote {OUT}: {len(results)} races, {len(points)} points races, "
           f"{len(profile['opponents'])} opponents, clips {clips}, {len(index)} riders in search")
 
