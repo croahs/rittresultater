@@ -7,9 +7,9 @@
 # first run creates that branch. Nothing on the site can start this job.
 name: Harvest race results
 
+# The nightly schedule is off until Pedår has decided whether we fetch EQ Timing's lists without
+# a key for their official API (2026-09-29). Then add:  schedule: - cron: "30 0 * * *"
 on:
-  schedule:
-    - cron: "30 0 * * *"  # 00:30 UTC, night in Norway
   workflow_dispatch:
     inputs:
       minutes:

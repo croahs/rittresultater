@@ -239,6 +239,7 @@ def main(only=()):
         points += [points_json(rider, r) for r in pts]
         log(f"{rider['id']}: {len(rows)} races, {len(pts)} points races, "
             f"{sum(1 for r in rows if r.get('Average Power'))} with power")
+    sskcup.fetch_earlier(log)  # earlier years of SSK Cup (GeoProvider Cup), for every rider (rivals.py)
     # Our own rider ids (data/aliases.json): new riders from the lists fetched above get one.
     aliases = riderids.build(log)
     by_tt = {a["turritt"]: k for k, a in aliases.items() if a.get("turritt")}

@@ -15,6 +15,7 @@ Riders without an intervals.icu key get placing and points from the lists alone.
 The lap window per ride is cached in cache/metrics.json like the other races.
 """
 import csv
+import datetime
 import json
 import os
 import re
@@ -38,6 +39,12 @@ ROUNDS = range(1, 7)
 # raceresult's lists carry no dates; these are from Stavanger SK's calendar (stavangersk.no/calendar),
 # which matches Pedår's rides in rounds 1, 4, 5 and 6.
 ROUND_DATES = {1: "2026-04-22", 2: "2026-05-20", 3: "2026-06-17", 4: "2026-08-19", 5: "2026-09-02", 6: "2026-09-16"}
+# The same cup in earlier years, then called GeoProvider Cup (found in raceresult's calendar,
+# Norway, cycling). Their lists are shaped like this year's but named differently.
+EARLIER = {2025: "311036", 2024: "263244", 2023: "179392"}
+# The cup runs on the same weeks every year: each of these dates, found in calendars, is this
+# year's date moved back whole years of 52 weeks. The other rounds' dates are estimated that way.
+CONFIRMED = {"2025-04-23", "2025-08-20", "2025-09-03", "2024-04-24", "2024-09-18", "2023-04-26"}
 
 try:
     with open(CACHE_FILE, encoding="utf-8") as f:
@@ -60,6 +67,51 @@ def round_list(n):
         with open(CACHE_FILE, "w", encoding="utf-8") as f:
             json.dump(_cache, f, ensure_ascii=False)
     return _cache[key]
+
+
+def round_date(year, n):
+    """(date, confirmed) of round n in a year of the cup."""
+    if year == 2026:
+        return ROUND_DATES[n], True
+    d = (datetime.date.fromisoformat(ROUND_DATES[n]) - datetime.timedelta(weeks=52 * (2026 - year))).isoformat()
+    return d, d in CONFIRMED
+
+
+def earlier_list(event, n):
+    """{class: [(place, name, points)]} for round n of an earlier year, cached forever. The
+    columns are found from the list's own field names (rank, name, points), which vary by year."""
+    key = f"{event}:cup{n}"
+    if key not in _cache:
+        time.sleep(PAUSE)
+        conf = requests.get(f"https://my.raceresult.com/{event}/RRPublish/data/config",
+                            params={"page": "results", "noVisitor": "1"}, timeout=60).json()
+        listname = next(l["Name"] for l in conf["lists"] if re.search(rf"\|{n} Cup {n}$", l["Name"]))
+        time.sleep(PAUSE)
+        r = requests.get(f"https://{conf['server']}/{event}/results/list",
+                         params={"key": conf["key"], "listname": listname, "contest": "0", "r": "all", "l": "0"},
+                         timeout=60)
+        r.raise_for_status()
+        j = r.json()
+        f = j["DataFields"]
+        pc = next(i for i, x in enumerate(f) if "Rank" in x)
+        nc = next(i for i, x in enumerate(f) if x.startswith("DisplayName"))
+        tc = f.index("ClubAndTeam") + 1  # this round's points follow the club (TIME182, LastSplit5, ...)
+        _cache[key] = {g.split("_", 1)[1]: [[row[pc].rstrip("."), row[nc].split(" (")[0].strip(), row[tc]] for row in rows]
+                       for g, rows in j["data"].items() if "_" in g and g.split("_", 1)[1]}
+        os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
+        with open(CACHE_FILE, "w", encoding="utf-8") as fh:
+            json.dump(_cache, fh, ensure_ascii=False)
+    return _cache[key]
+
+
+def fetch_earlier(log=print):
+    """Fetch the earlier years' round lists not cached yet (2 s apart; 18 lists in all)."""
+    for year, event in EARLIER.items():
+        for n in ROUNDS:
+            try:
+                earlier_list(event, n)
+            except (requests.RequestException, ValueError, StopIteration, KeyError) as x:
+                log(f"GeoProvider Cup {year} round {n}: {x}")
 
 
 def fold(name):
@@ -112,18 +164,23 @@ def scored_rounds():
     from the cached lists only (nothing is fetched). The lists show every rider registered for the
     cup in every round, so only a rider with points surely rode it; 0-point rounds are left out."""
     out = {}
-    for n in ROUNDS:
-        rows_by_class = _cache.get(f"{EVENT}:cup{n}")
-        if not rows_by_class or n not in ROUND_DATES:
-            continue
-        for cls, rows in rows_by_class.items():
-            top = max((int(r[2] or 0) for r in rows), default=0)
-            for place, name, pts in rows:
-                if int(pts or 0) > 0:
-                    out.setdefault(tuple(fold(name)), []).append({
-                        "name": f"SSK Cup {n}", "date": ROUND_DATES[n], "cls": cls, "place": place,
-                        "n": str(len(rows)), "pts": str(pts), "win": str(top), "laps": "", "time": "",
-                        "speed": "", "np": "", "ap": "", "note": "", "icu": ""})
+    for year, event in [(2026, EVENT), *EARLIER.items()]:
+        for n in ROUNDS:
+            rows_by_class = _cache.get(f"{event}:cup{n}")
+            if not rows_by_class or n not in ROUND_DATES:
+                continue
+            date, sure = round_date(year, n)
+            for cls, rows in rows_by_class.items():
+                top = max((int(r[2] or 0) for r in rows), default=0)
+                for place, name, pts in rows:
+                    if int(pts or 0) > 0:
+                        out.setdefault(tuple(fold(name)), []).append({
+                            "name": f"{'SSK' if year == 2026 else 'GeoProvider'} Cup {n}", "date": date, "cls": cls,
+                            "place": place, "n": str(len(rows)), "pts": str(pts), "win": str(top), "laps": "",
+                            "time": "", "speed": "", "np": "", "ap": "",
+                            "note": "" if sure else "dato anslått (samme uker hvert år)", "icu": ""})
+    for rounds in out.values():
+        rounds.sort(key=lambda p: p["date"])
     return out
 
 
