@@ -55,11 +55,16 @@ def _cached(key, fetch):
     return _cache[key]
 
 
+# Pedår, 2026-09-29: Turritt is a competitor, not a source. No requests go to it; what is
+# already cached is still read until the migration to the original timing sources is done.
+LIVE = False
 _blocked = False
 
 
 def _request(method, **kw):
     global _last, _blocked
+    if not LIVE:
+        raise requests.ConnectionError("Turritt is not fetched from (cached lists only)")
     if _blocked:  # after one 403, don't knock again this run
         raise requests.HTTPError("403 Forbidden (Turritt blocks this network)")
     time.sleep(max(0, _last + PAUSE - time.time()))
@@ -121,6 +126,8 @@ def year_list(year, need=None):
         sel = sel[: sel.find("</select>")]
         return [(v, html.unescape(n)) for v, n in re.findall(r'<option value="(\d+)">([^<]*)', sel)]
     key = f"year:{year}"
+    if not LIVE:  # cached lists only; a race outside them takes its name from race_name()
+        return [tuple(x) for x in _cache.get(key, [])]
     if need and need not in dict(_cache.get(key, [])):
         _cache.pop(key, None)
     return [tuple(x) for x in _cached(key, fetch)]

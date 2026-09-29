@@ -4,12 +4,10 @@ The site only queues a request (D1 table fetch_requests, behind a bot check and 
 cap); it never scrapes. This script, run by .github/workflows/fetch-queue.yml, takes at
 most MAX_PER_RUN requests, adds each rider to riders.json (history from SINCE) and builds
 them with update.py, which fetches only result lists that aren't cached yet, 2 s apart.
-If Turritt turns the job away (it blocks GitHub's runners with a 403), the rider is built
-from EQ Timing and raceresult alone and the note says so; the rider stays in riders.json,
-so their Turritt races come with the first run Turritt lets through.
-Sources: Turritt (by the id they gave), EQ Timing including kermesse (when exactly one
-EQ profile has their name), and on raceresult SSK Cup and NM Landevei 2026 (when their name
-is in those lists).
+Sources are the original timing systems, never Turritt (a competitor; turritt.LIVE is off):
+EQ Timing including kermesse (when exactly one EQ profile has their name), and by name in
+the lists we know of on raceresult (SSK Cup, NM Landevei 2026) and Ultimate (Bergen-Voss).
+The Turritt id they give is only their id on the site for now.
 rivals.py and export_web.py then refresh the site data.
 
 The queue is read through Cloudflare's D1 REST API, so the site needs no endpoint for
@@ -31,7 +29,6 @@ import requests
 
 import eqtiming
 import sskcup
-import turritt
 import update
 
 MAX_PER_RUN = 3
@@ -113,10 +110,9 @@ def main():
                 data = update.main((tid,))
             n = sum(1 for r in data["races"] if r["rider_id"] == tid)
             n += sum(1 for r in data["points_races"] if r["rider_id"] == tid)
-            if turritt._blocked and not n:
-                raise RuntimeError("Turritt stenger ute GitHub, og vi fant ingen ritt hos EQ Timing eller raceresult.")
-            finish(req["id"], "done", f"{n} ritt fra EQ Timing og raceresult. Turritt stenger ute GitHub, "
-                                      "så rittene derfra kommer når de slipper oss inn." if turritt._blocked else f"{n} ritt")
+            if not n:
+                raise RuntimeError("Vi fant ingen ritt med dette navnet hos tidtakerne vi henter fra.")
+            finish(req["id"], "done", f"{n} ritt")
             known.add(tid)
             built.append(tid)
         except Exception as e:  # keep the rider out rather than half-built

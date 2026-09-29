@@ -25,6 +25,7 @@ import requests
 import sync
 import eqtiming
 import raceresult
+import ultimate
 import turritt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -139,9 +140,10 @@ def build_rider(rider, log=print):
             rid = turritt.find_rider(rider["turritt_id"], rider["name"])
             pairs = turritt.rider_races(rid) if rid else []
         except requests.RequestException as e:
-            # Turritt turns GitHub's runners away (403). Go on with what is cached and
-            # with EQ Timing and raceresult; the next run that gets through adds the rest.
-            log(f"{rider['id']}: Turritt unreachable ({e}), using cached Turritt lists only")
+            # Turritt isn't fetched from any more (turritt.LIVE). Use what is cached and go on
+            # with the original timing sources: EQ Timing, raceresult, Ultimate.
+            if turritt.LIVE:
+                log(f"{rider['id']}: Turritt unreachable ({e}), using cached Turritt lists only")
             rider["_turritt_blocked"] = True
             rid = turritt._cache.get(f"rider:{rider['turritt_id']}")
             pairs = turritt.cached_races(rid) if rid else []
@@ -218,22 +220,25 @@ def build_rider(rider, log=print):
         taken.add(d)
         changes.append((r["Race"], "(new row)", "", "added from EQ Timing"))
 
-    # Races on raceresult (NM), found by name; there is no rider id to go by.
-    try:
-        rr_all = raceresult.races(rider["name"], int(rider.get("since") or 0))
-    except Exception as e:
-        log(f"{rider['id']}: raceresult skipped: {e}")
-        rr_all = []
-    for e in rr_all:
-        d = sync.parse_date_iso(e["date"])
-        # NM has a race a day, so only the same day is a duplicate. Lapped riders keep their place.
-        if d in taken or not isinstance(e["class_place"], int):
-            continue
-        r = eq_row(e, rider)
-        r["Match note"], r["_rr"] = "new from raceresult", f"{e['event_id']}/{e['stage_id']}"
-        rows.append(r)
-        taken.add(d)
-        changes.append((r["Race"], "(new row)", "", "added from raceresult"))
+    # Races on raceresult (NM) and Ultimate (Bergen-Voss), found by name: no rider id to go by.
+    for src, mod in (("raceresult", raceresult), ("Ultimate", ultimate)):
+        try:
+            found = mod.races(rider["name"], int(rider.get("since") or 0))
+        except Exception as e:
+            log(f"{rider['id']}: {src} skipped: {e}")
+            found = []
+        for e in found:
+            d = sync.parse_date_iso(e["date"])
+            # NM has a race a day, so only the same day is a duplicate. Lapped riders keep their place.
+            if d in taken or not isinstance(e["class_place"], int):
+                continue
+            r = eq_row(e, rider)
+            r["Match note"], r["_rr"] = f"new from {src}", f"{src.lower()}:{e['event_id']}/{e['stage_id']}"
+            if e["age_place"]:
+                r["Age class"], r["Age class placement"], r["Age class participants"] = e["age_class"], str(e["age_place"]), str(e["age_n"])
+            rows.append(r)
+            taken.add(d)
+            changes.append((r["Race"], "(new row)", "", f"added from {src}"))
 
     if exclude:
         rows = [r for r in rows if not exclude.search(r["Race"])]

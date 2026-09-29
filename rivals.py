@@ -24,6 +24,8 @@ import statistics
 import sys
 from collections import Counter, defaultdict
 
+import requests
+
 import turritt
 
 ME = "171101"
@@ -96,7 +98,10 @@ def events():
     for sheet, race_id in races():
         if race_id in done:  # two riders in the same event (maybe in sibling races): one pool
             continue
-        cats, sibs = pool(race_id, 2000 + int(sheet["Date"][-2:]))
+        try:
+            cats, sibs = pool(race_id, 2000 + int(sheet["Date"][-2:]))
+        except requests.RequestException:  # a Turritt list that isn't cached: not fetched any more
+            continue
         done |= set(sibs)
         team = sheet["Type"] == "TTT" or turritt.is_team(sheet["Race"])
         if team:
