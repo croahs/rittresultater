@@ -1,101 +1,72 @@
-// Saved race power, so a rider's watts stay on the site after they close the page.
+// Race numbers a rider has chosen to save on the site, so they stay after the page is closed.
 //
-//   GET    /api/power?rider=<id>      saved watts for that rider (anyone who can see the site)
-//   POST   /api/power {key, rider}    fetch the rider's race power from intervals.icu and save it
-//   DELETE /api/power {key, rider}    delete what that intervals.icu account saved for the rider
+//   GET    /api/power?rider=<id>          saved watts and speed for that rider, and the years with GPS clips
+//   POST   /api/power {key, rider, rows}  save avg power and NP per race
+//   DELETE /api/power {key, rider}        delete everything that intervals.icu account saved for the rider
 //
-// Only the numbers per race are stored (avg power, NP), never the API key or the ride
-// files. The server computes the numbers itself from intervals.icu, with the same code as
-// the browser (src/intervals.ts), so nobody can post made-up watts, and it only saves
-// when the key's intervals.icu name matches the rider's name in the result lists.
-// Needs a D1 database bound as DB in the Pages project (docs/DEPLOY.md); without it
-// GET answers {enabled: false} and the page falls back to watts that aren't saved.
+// The browser works the numbers out from the rider's own intervals.icu rides
+// (src/intervals.ts); the Cloudflare free plan leaves a function too little CPU to
+// parse dozens of ride files itself. The server checks the key instead: it must
+// belong to an intervals.icu account whose name matches the rider's name in the
+// result lists, so nobody can put numbers on someone else's page. The key itself
+// and the ride files are never stored. GPS tracks go through /api/track, one race
+// per call. Needs a D1 database bound as DB (docs/DEPLOY.md); without it GET answers
+// {enabled: false} and the page falls back to watts that aren't saved.
 
-import { IcuError, NameMismatch, fetchRacePower, validKey } from "../../src/intervals";
-import { loadAthlete, type IndexRider, type Site } from "../../src/data";
+import { BAD_KEY, NO_DB, account, athleteFor, body, isRider, json, riderOk, tables, type Ctx } from "../../server/lib";
+import { raceKeyOf } from "../../src/intervals";
 
-interface D1Result<T> { results: T[] }
-interface D1Stmt { bind(...v: unknown[]): D1Stmt; run(): Promise<unknown>; all<T>(): Promise<D1Result<T>>; first<T>(): Promise<T | null> }
-interface D1 { prepare(sql: string): D1Stmt; batch(s: D1Stmt[]): Promise<unknown> }
-interface Env { DB?: D1; ASSETS: { fetch(req: Request | string): Promise<Response> } }
-interface Ctx { request: Request; env: Env }
-
-// Pages Functions may make 50 outside requests per call on the free plan: two go to
-// intervals.icu for the account and the ride list, three to the site's own data files,
-// and one per race for the ride file.
-const MAX_RACES = 40;
-
-const SCHEMA = `CREATE TABLE IF NOT EXISTS power (
-  rider_id TEXT NOT NULL, race_key TEXT NOT NULL, np INTEGER NOT NULL, ap INTEGER NOT NULL,
-  athlete_id TEXT NOT NULL, saved_at TEXT NOT NULL, PRIMARY KEY (rider_id, race_key))`;
-
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
-
-const riderOk = (id: unknown): id is string => typeof id === "string" && /^\d{1,12}$/.test(id);
-
-async function table(db: D1) { await db.prepare(SCHEMA).run(); }
-
-async function body(request: Request): Promise<{ key: string; rider: string } | null> {
-  try {
-    const b = await request.json() as { key?: unknown; rider?: unknown };
-    const key = typeof b.key === "string" ? b.key.trim() : "";
-    return validKey(key) && riderOk(b.rider) ? { key, rider: b.rider } : null;
-  } catch { return null; }
-}
+type Row = { race_key: string; np: number; ap: number };
+const okRow = (r: Row, keys: Set<string>) => keys.has(r.race_key)
+  && Number.isInteger(r.np) && Number.isInteger(r.ap) && r.np >= 30 && r.np <= 800 && r.ap >= 20 && r.ap <= r.np + 5;
 
 export async function onRequestGet({ request, env }: Ctx) {
   const rider = new URL(request.url).searchParams.get("rider");
-  if (!env.DB) return json({ enabled: false, rows: [] });
+  if (!env.DB) return json({ enabled: false, rows: [], rides: [], clipYears: [] });
   if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
-  await table(env.DB);
-  const { results } = await env.DB.prepare("SELECT race_key, np, ap FROM power WHERE rider_id = ?").bind(rider).all<{ race_key: string; np: number; ap: number }>();
-  return json({ enabled: true, rows: results });
+  await tables(env.DB);
+  const [p, r] = await Promise.all([
+    env.DB.prepare("SELECT race_key, np, ap FROM power WHERE rider_id = ?").bind(rider).all<Row>(),
+    env.DB.prepare("SELECT race_key, speed, km, length(pts) > 2 AS gps FROM ride WHERE rider_id = ?").bind(rider).all<{ race_key: string; speed: number | null; km: number | null; gps: number }>(),
+  ]);
+  const clipYears = [...new Set(r.results.filter((x) => x.gps).map((x) => Number(x.race_key.slice(0, 4))))].sort();
+  return json({ enabled: true, rows: p.results, rides: r.results.map(({ race_key, speed, km }) => ({ race_key, speed, km })), clipYears });
 }
 
-export async function onRequestPost({ request, env }: Ctx) {
-  if (!env.DB) return json({ error: "Lagring er ikke satt opp på denne siden ennå." }, 503);
-  const b = await body(request);
-  if (!b) return json({ error: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }, 400);
-  const get = async <T,>(path: string): Promise<T> => {
-    const r = await env.ASSETS.fetch(new URL(`/data/${path}`, request.url).toString());
-    if (!r.ok) throw new Error(`${path}: ${r.status}`);
-    return r.json() as Promise<T>;
-  };
-  let a;
-  try {
-    const [site, index] = await Promise.all([get<Site>("site.json"), get<IndexRider[]>("riders/index.json")]);
-    a = await loadAthlete(b.rider, site, index, get);
-  } catch { return json({ error: "Fant ikke rytteren." }, 404); }
-  const rows = a.results.slice(-MAX_RACES);
-  let res;
-  try {
-    res = await fetchRacePower(b.key, rows, a.name); // throws NameMismatch unless the names match
-  } catch (e) {
-    if (e instanceof NameMismatch) return json({ error: `Nøkkelen tilhører «${e.owner}» i intervals.icu, ikke ${a.name}. Bare rytteren selv kan lagre watt på sin side.` }, 403);
-    if (e instanceof IcuError) return json({ error: e.message }, 400);
-    return json({ error: "Fikk ikke kontakt med intervals.icu. Prøv igjen." }, 502);
-  }
-  await table(env.DB);
+export async function onRequestPost(ctx: Ctx) {
+  const { request, env } = ctx;
+  if (!env.DB) return NO_DB();
+  const b = await body<{ rows?: unknown }>(request, 64_000);
+  if (!b) return BAD_KEY();
+  const me = await account(b.key);
+  if (me instanceof Response) return me;
+  const a = await athleteFor(ctx, b.rider);
+  if (!a) return json({ error: "Fant ikke rytteren." }, 404);
+  if (!isRider(me, a)) return json({ error: `Nøkkelen tilhører «${me.name}» i intervals.icu, ikke ${a.name}. Bare rytteren selv kan lagre på sin side.` }, 403);
+  const keys = new Set(a.results.map(raceKeyOf));
+  const rows = (Array.isArray(b.rows) ? b.rows as Row[] : []).filter((r) => okRow(r, keys));
+  await tables(env.DB);
   const now = new Date().toISOString();
   const put = env.DB.prepare(`INSERT INTO power (rider_id, race_key, np, ap, athlete_id, saved_at) VALUES (?, ?, ?, ?, ?, ?)
     ON CONFLICT (rider_id, race_key) DO UPDATE SET np = excluded.np, ap = excluded.ap, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
-  const saved = [...res.power].map(([k, p]) => ({ race_key: k, np: p.np, ap: p.ap }));
-  if (saved.length) await env.DB.batch(saved.map((p) => put.bind(b.rider, p.race_key, p.np, p.ap, res.athleteId, now)));
-  return json({ saved: saved.length, of: rows.length, skipped: a.results.length - rows.length, failed: res.failed, rows: saved });
+  await env.DB.batch([
+    env.DB.prepare(`INSERT INTO owner (rider_id, athlete_id, saved_at) VALUES (?, ?, ?)
+      ON CONFLICT (rider_id) DO UPDATE SET athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`).bind(b.rider, me.id, now),
+    ...rows.map((r) => put.bind(b.rider, r.race_key, r.np, r.ap, me.id, now)),
+  ]);
+  return json({ saved: rows.length });
 }
 
 export async function onRequestDelete({ request, env }: Ctx) {
-  if (!env.DB) return json({ error: "Lagring er ikke satt opp på denne siden ennå." }, 503);
-  const b = await body(request);
-  if (!b) return json({ error: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }, 400);
-  // Deleting needs the same account that saved: whoever holds the key owns those rows.
-  const r = await fetch("https://intervals.icu/api/v1/athlete/0", { headers: { Authorization: "Basic " + btoa("API_KEY:" + b.key) } });
-  if (r.status === 401 || r.status === 403) return json({ error: "intervals.icu godtok ikke nøkkelen." }, 400);
-  if (!r.ok) return json({ error: "Fikk ikke kontakt med intervals.icu. Prøv igjen." }, 502);
-  const me = await r.json() as { id?: string };
-  await table(env.DB);
-  const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM power WHERE rider_id = ? AND athlete_id = ?").bind(b.rider, String(me.id || "")).first<{ n: number }>();
-  await env.DB.prepare("DELETE FROM power WHERE rider_id = ? AND athlete_id = ?").bind(b.rider, String(me.id || "")).run();
+  if (!env.DB) return NO_DB();
+  const b = await body(request, 4_000);
+  if (!b) return BAD_KEY();
+  // Whoever holds the account that saved the numbers can delete them.
+  const me = await account(b.key);
+  if (me instanceof Response) return me;
+  await tables(env.DB);
+  const n = await env.DB.prepare(`SELECT (SELECT COUNT(*) FROM power WHERE rider_id = ?1 AND athlete_id = ?2)
+    + (SELECT COUNT(*) FROM ride WHERE rider_id = ?1 AND athlete_id = ?2) AS n`).bind(b.rider, me.id).first<{ n: number }>();
+  await env.DB.batch(["power", "ride", "owner"].map((t) => env.DB!.prepare(`DELETE FROM ${t} WHERE rider_id = ? AND athlete_id = ?`).bind(b.rider, me.id)));
   return json({ deleted: n?.n ?? 0 });
 }

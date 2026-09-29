@@ -43,6 +43,7 @@ export interface Athlete {
   id: string; name: string; club: string; ageClass: string;
   power: boolean; clips: number[];
   savedPower?: boolean; // watts come from the site's database (the rider saved them), not the static files
+  savedClipYears?: number[]; // season clips built from GPS tracks the rider saved (api/clip), not static files
   results: Result[]; points: PointsRace[];
   opponents: Map<string, Opponent>; rivals: string[]; insights: Insights;
 }
@@ -142,6 +143,17 @@ export async function loadAthlete(id: string, site: Site, index: IndexRider[], g
 /** The athlete with race power from intervals.icu merged in: fetched in this browser, or saved by the rider (saved = true). */
 export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>, saved = false): Athlete {
   return { ...a, power: true, savedPower: saved || a.savedPower, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
+}
+
+/** Numbers the rider saved on the site: watts, GPS speed and the years that have a season clip. */
+export function withSaved(a: Athlete, s: { power: Map<string, { np: number; ap: number }>; speed: Map<string, number>; clipYears: number[] }): Athlete {
+  const b = s.power.size ? withPower(a, s.power, true) : a;
+  const extra = s.clipYears.filter((y) => !a.clips.includes(y));
+  return {
+    ...b,
+    results: b.results.map((r) => { const v = s.speed.get(`${r.date}|${r.race}`); return v != null ? { ...r, speed: v } : r; }),
+    clips: [...a.clips, ...extra].sort(), savedClipYears: extra,
+  };
 }
 
 /* ---------- derived numbers ---------- */

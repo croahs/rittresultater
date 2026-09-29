@@ -4,9 +4,9 @@ import { IcuError, NameMismatch, fetchRacePower, validKey, type RacePower } from
 import { TYPE_LABEL, TYPE_VAR, dateLong, firstName, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon, useTip } from "../ui";
-import { deletePower, getSaved, savePower } from "../saved";
+import { deleteRides, getSaved, saveRides } from "../saved";
 
-export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>, saved?: boolean) => void }) {
+export default function Development({ a, isMe, onPower, onSaved }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void; onSaved: (id: string) => void }) {
   const { rows, season, setSeason } = useSel();
   const ys = years(a);
   const who = isMe ? "du" : firstName(a.name);
@@ -34,9 +34,9 @@ export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: bo
           </section>
           <section className="card card-pad section" id="watt" style={{ scrollMarginTop: 80 }}>
             <div className="section-head"><div><h2 className="h-card">Watt per ritt</h2><p className="note" style={{ margin: 0 }}>Normalisert watt (NP) og snittwatt over selve rittet{a.power && !isMe ? (a.savedPower ? `. Hentet fra intervals.icu og lagret av ${firstName(a.name)}` : ". Hentet fra intervals.icu i denne nettleseren, ikke lagret") : ""}</p></div></div>
-            {a.power ? <PowerChart rows={rows} /> : <Connect a={a} isMe={isMe} onPower={onPower} onNote={setPowerNote} />}
+            {a.power ? <PowerChart rows={rows} /> : <Connect a={a} isMe={isMe} onPower={onPower} onSaved={onSaved} onNote={setPowerNote} />}
             {a.power && powerNote && <p className="note" role="status" style={{ margin: 0 }}>{powerNote}</p>}
-            {a.savedPower && <Forget a={a} />}
+            {(a.savedPower || !!a.savedClipYears?.length) && <Forget a={a} />}
           </section>
         </>
       )}
@@ -179,7 +179,7 @@ function PowerChart({ rows }: { rows: Result[] }) {
   );
 }
 
-function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>, saved?: boolean) => void; onNote: (s: string) => void }) {
+function Connect({ a, isMe, onPower, onSaved, onNote }: { a: Athlete; isMe: boolean; onPower: (p: Map<string, RacePower>) => void; onSaved: (id: string) => void; onNote: (s: string) => void }) {
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -200,14 +200,19 @@ function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPo
   };
   const drop = () => { pending.current = null; setOwner(null); };
   const saveWith = async (k: string) => {
-    setMsg(null); setBusy("Henter og lagrer watt …");
+    setMsg(null); setBusy("Kobler til intervals.icu …");
     try {
-      const res = await savePower(k, a.id);
-      if (!res.power.size) { setMsg({ ok: false, text: "Fant ingen økter med watt på rittdatoene i intervals.icu-kontoen din." }); return; }
-      onNote(`Lagret watt for ${res.saved} av ${res.of} ritt.${res.skipped ? ` De ${res.skipped} eldste rittene er ikke med.` : ""}${res.failed ? ` ${res.failed} ${res.failed === 1 ? "fil" : "filer"} fikk vi ikke lastet; lagre på nytt senere for dem.` : ""} Alle som ser siden, ser nå wattene.`);
-      onPower(res.power, true);
+      // Worked out here in the browser; the server checks the key is this rider's before storing.
+      const res = await fetchRacePower(k, a.results, a.name, (d, n) => setBusy(`Henter ritt ${d} av ${n} …`), true);
+      if (!res.power.size && !res.tracks.size) { setMsg({ ok: false, text: "Fant ingen økter på rittdatoene i intervals.icu-kontoen din." }); return; }
+      setBusy("Lagrer …");
+      const s = await saveRides(k, a.id, res, (d, n) => setBusy(`Lagrer GPS-spor ${d} av ${n} …`));
+      onNote(`Lagret watt for ${s.power} og fart og GPS-spor for ${s.tracks} av ${a.results.length} ritt.${res.failed ? ` ${res.failed} ${res.failed === 1 ? "fil" : "filer"} fikk vi ikke lastet; lagre på nytt senere for dem.` : ""} Alle som ser siden, ser nå tallene, og sesongklippet er klart.`);
+      if (res.power.size) onPower(res.power);
+      onSaved(a.id);
     } catch (err) {
-      setMsg({ ok: false, text: err instanceof Error ? err.message : "Noe gikk galt. Prøv igjen." });
+      if (err instanceof NameMismatch) { setMsg({ ok: false, text: `Nøkkelen tilhører «${err.owner}» i intervals.icu, ikke ${a.name}. Bare rytteren selv kan lagre. Fjern krysset hvis du bare vil se wattene.` }); return; }
+      setMsg({ ok: false, text: err instanceof IcuError || (err instanceof Error && !(err instanceof TypeError)) ? err.message : "Fikk ikke kontakt med intervals.icu. Prøv igjen." });
     } finally { setBusy(null); }
   };
   const fetchWith = async (k: string, rider: string | null) => {
@@ -236,7 +241,7 @@ function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPo
       </form>
       {canSave && <label className="fine" style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
         <input type="checkbox" checked={save} onChange={(e) => setSave(e.target.checked)} disabled={!!busy} />
-        <span>Lagre wattene på siden, så de er her neste gang og andre også ser dem. Du kan slette dem igjen.</span>
+        <span>Lagre wattene, farten og GPS-sporet fra rittene på siden, så de er her neste gang, andre også ser dem, og du får sesongklipp. Du kan slette dem igjen.</span>
       </label>}
       {busy && <p className="fine" role="status">{busy}</p>}
       {msg && <p className={msg.ok ? "ok" : "err"} role="alert">{msg.text}</p>}
@@ -246,7 +251,7 @@ function Connect({ a, isMe, onPower, onNote }: { a: Athlete; isMe: boolean; onPo
           <button type="button" className="btn ghost" onClick={drop}>Avbryt</button></div>
       </div>}
       <p className="fine">Nøkkelen finner du under Settings, Developer Settings i intervals.icu. {saving
-        ? "Den brukes én gang til å hente wattene og lagres ikke. Vi lagrer bare snittwatt og NP per ritt, aldri ridefilene, og bare hvis navnet i intervals.icu stemmer med navnet i resultatlistene."
+        ? "Den brukes bare mens tallene hentes og lagres, og blir ikke lagret. Vi lagrer snittwatt, NP, fart og GPS-sporet fra start til mål per ritt, aldri hele ridefilene, og bare hvis navnet i intervals.icu stemmer med navnet i resultatlistene."
         : "Den sendes bare til intervals.icu, lagres ikke, og wattallene forsvinner når du lukker siden."}</p>
     </div>
   );
@@ -265,18 +270,18 @@ function Forget({ a }: { a: Athlete }) {
     if (!validKey(k)) { setMsg({ ok: false, text: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }); return; }
     setBusy(true); setMsg(null);
     try {
-      const n = await deletePower(k, a.id);
-      if (!n) { setMsg({ ok: false, text: "Denne intervals.icu-kontoen har ikke lagret watt her." }); return; }
-      setMsg({ ok: true, text: `Slettet watt for ${n} ritt.` });
+      const n = await deleteRides(k, a.id);
+      if (!n) { setMsg({ ok: false, text: "Denne intervals.icu-kontoen har ikke lagret noe her." }); return; }
+      setMsg({ ok: true, text: "Slettet watt, fart og GPS-spor." });
       setTimeout(() => location.reload(), 1200);
     } catch (err) {
       setMsg({ ok: false, text: err instanceof Error ? err.message : "Noe gikk galt. Prøv igjen." });
     } finally { setBusy(false); }
   };
-  if (!open) return <p className="fine" style={{ margin: 0 }}><button type="button" className="btn ghost" onClick={() => setOpen(true)}>Slett lagrede watt</button></p>;
+  if (!open) return <p className="fine" style={{ margin: 0 }}><button type="button" className="btn ghost" onClick={() => setOpen(true)}>Slett lagrede watt og spor</button></p>;
   return (
     <div className="connect">
-      <p>Lim inn den samme API-nøkkelen fra intervals.icu som ble brukt til å lagre wattene, så sletter vi dem.</p>
+      <p>Lim inn den samme API-nøkkelen fra intervals.icu som ble brukt til å lagre, så sletter vi watt, fart og GPS-spor.</p>
       <form className="keyform" onSubmit={run}>
         <input type="password" aria-label="API-nøkkel fra intervals.icu" placeholder="API-nøkkel fra intervals.icu" autoComplete="off" spellCheck={false}
           value={key} onChange={(e) => setKey(e.target.value)} disabled={busy} />

@@ -100,23 +100,25 @@ Jobben `.github/workflows/update-data.yml` kjører hver mandag klokka 05:00 UTC.
 - **Kjør nå:** under **Actions → Update race data → Run workflow** kan du starte jobben med en gang.
 - **Beskyttet `main`:** jobben pusher rett til `main`. Slår du på branch protection som krever PR, stopper den. Da må jobben lage en PR i stedet.
 
-## 5. Lagre andres watt (valgfritt, cirka 3 minutter)
+## 5. Lagre andres watt, fart og GPS-spor (valgfritt, cirka 3 minutter)
 
-Uten dette steget kan andre ryttere hente wattene sine i nettleseren, men tallene forsvinner når de lukker siden. Med steget får de et avkrysningsfelt, «Lagre wattene på siden». Da blir wattene liggende, og alle som ser siden, ser dem.
+Uten dette steget kan andre ryttere hente wattene sine i nettleseren, men tallene forsvinner når de lukker siden. Med steget får de et avkrysningsfelt, «Lagre … på siden», som er av som standard. Krysser de av, blir watt, fart og GPS-spor per ritt liggende, alle som ser siden ser dem, og de får sitt eget sesongklipp.
 
 1. I Cloudflare-dashbordet: **Storage & Databases → D1 SQL Database → Create**. Kall den `rittresultater`.
 2. Gå til Pages-prosjektet og velg **Settings → Bindings → Add → D1 database**. Sett **Variable name** til `DB`, og velg databasen `rittresultater`. Gjør det for både Production og Preview.
 3. Trykk **Deployments → Retry deployment** på det siste bygget, eller push en endring.
 
-Tabellen lages av seg selv første gang noen lagrer. Du trenger ikke kjøre noe SQL.
+Tabellene lages av seg selv første gang noen lagrer. Du trenger ikke kjøre noe SQL.
 
-Hvordan det virker (`web/functions/api/power.ts`):
+Hvordan det virker (`web/functions/api/`, `web/server/lib.ts`, `web/src/saved.ts`):
 
-- **Lagring:** Rytteren limer inn intervals.icu-nøkkelen sin. Serveren bruker den én gang til å hente ridefilene, regner ut snittwatt og NP over rittvinduet med den samme koden som nettleseren bruker, og lagrer bare de to tallene per ritt. Nøkkelen og ridefilene lagres aldri.
-- **Hvem som kan lagre:** Serveren lagrer bare når navnet på intervals.icu-kontoen stemmer med rytterens navn i resultatlistene. Ingen kan altså legge watt på en annen rytters side. Tallene kommer rett fra intervals.icu, så de kan ikke fylles inn for hånd.
-- **Sletting:** Under grafen står «Slett lagrede watt». Den krever den samme nøkkelen, og sletter det den intervals.icu-kontoen har lagret.
-- **Grense:** Opptil 40 ritt per lagring, de nyeste. Det er fordi Cloudflare sin gratisplan tillater 50 kall ut per forespørsel.
-- **Tilgang:** `/api/power` ligger bak den samme Cloudflare Access-regelen som resten av siden.
+- **Utregning:** Nettleseren henter turene fra rytterens intervals.icu-konto og regner ut snittwatt, NP, fart og GPS-sporet (hvert 5. sekund fra start til mål). Det er den samme koden som før. Cloudflare sin gratisplan gir en funksjon for lite CPU-tid til å lese mange ridefiler selv.
+- **Hvem som kan lagre:** Serveren sjekker nøkkelen hos intervals.icu og lagrer bare når navnet på kontoen stemmer med rytterens navn i resultatlistene. Ingen kan altså legge tall på en annen rytters side. Tallene kontrolleres også mot rimelige grenser.
+- **Hva som lagres:** `power` (snittwatt og NP per ritt), `ride` (fart, GPS-distanse og spor per ritt) og `owner` (hvilken intervals.icu-konto som har lagret for rytteren). API-nøkler og hele ridefiler lagres aldri. Rytterne limer inn nøkkelen hver gang de vil synce.
+- **Sesongklipp:** `/api/clip?rider=…&year=…` lager klippet fra de lagrede sporene, i samme format som de faste klippfilene.
+- **Sletting:** Under grafen står «Slett lagrede watt og spor». Den krever den samme nøkkelen, og sletter alt den intervals.icu-kontoen har lagret for rytteren.
+- **Tilgang:** `/api/*` ligger bak den samme Cloudflare Access-regelen som resten av siden.
 - **Uten databasen:** Svarer API-et at lagring er av, og siden oppfører seg som før.
+- **Senere:** Når rytterne får egne brukerkontoer, kan kontoen erstatte nøkkelsjekken. Tabellene kan stå som de er.
 
 Lokalt kan det testes med `npx wrangler pages dev` i `web/` etter `pnpm build`, med en `wrangler.toml` som peker `DB` til en lokal D1. Den fila skal ikke committes, for bindingen settes i dashbordet.
