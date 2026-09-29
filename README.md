@@ -22,8 +22,8 @@ python3 update.py      # every rider in riders.json; or: python3 update.py 17110
 - Every rider, for the dashboard: `python3 rivals.py` also writes `data/`:
   - `data/races.json`: each race (id, name, ISO date, type, distance, climbing) with its full result list as rows `[turritt_id, name, club, age_class, class, time_s]` (time `null` = DNF). Enough to compute head-to-head between any two riders in the browser.
   - `data/riders/index.json`: `[{id, name, club, age_class, races, shard}]` for search, most races first.
-  - `data/riders/shard-NN.json` (64 shards, `int(id) % 64`): `{id: rider}` for every rider. A rider has `results` (class place, `top_pct`, `behind_pct`, time, winner, overall place, share of field beaten, over time) and, with 2+ races, `opponents` (compact head-to-head arrays for opponents met 3+ times or named in rivals/insights), `rivals` (ranked ids), `insights` (as in `rivals.json`, minus gap curves), `record`, `by_type`, `by_year`, `correlations`.
-  - Scope: only the races Pedår rode, so other riders' histories are partial.
+  - `data/riders/shard-NN.json` (64 shards, `int(id) % 64`): `{id: rider}` for every rider. A rider has `results` (class place, `top_pct`, `behind_pct`, time, winner, overall place, share of field beaten, over time), `by_type`, `by_year`, `correlations` and, with 5+ races or when listed in `riders.json`, `opponents` (compact head-to-head arrays for the top 20 rivals, the 15 met most and everyone named in insights), `rivals` (ranked ids), `insights` (as in `rivals.json`, minus gap curves) and `record`.
+  - Scope: every Turritt race of every rider in `riders.json` (read from `data/results.json`, so run `update.py` first), so followed riders get rivals from their whole history; other riders' histories only cover those races.
 
 ## Dashboard (web/)
 
