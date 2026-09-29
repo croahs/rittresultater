@@ -98,6 +98,13 @@ def events():
             continue
         cats, sibs = pool(race_id, 2000 + int(sheet["Date"][-2:]))
         done |= set(sibs)
+        team = sheet["Type"] == "TTT" or turritt.is_team(sheet["Race"])
+        if team:
+            # Team time trial: every rider gets the team's time, and the times lists hold one
+            # entry per team, so places, fields and "beaten" count teams, not riders.
+            # Each bike category is its own team race (KCC Lagtempoen - Racer / - Tempo).
+            cats = [(r, c) for c in dict.fromkeys(c for _, c in cats)
+                    for r in turritt.as_teams([r for r, cc in cats if cc == c])[0]]
         by_cat, by_club = defaultdict(list), defaultdict(list)
         for r, c in cats:
             by_cat[c].append(int(r[9]))
@@ -107,14 +114,29 @@ def events():
             if r[2] not in ("", "0"):
                 by_id.setdefault(r[2], (r, c))  # a few riders are listed twice: keep the first
         order = [r[2] for r, _ in sorted(cats, key=lambda rc: int(rc[0][9])) if r[2] not in ("", "0")]
-        out.append({"sheet": sheet, "race_id": race_id, "cats": cats, "order": order,
+        if team:
+            teams = {(c, turritt.team_name(r)): int(r[9]) for r, c in cats}
+            times = sorted(teams.values())
+            cat_times = {c: sorted(t for (tc, _), t in teams.items() if tc == c) for c in by_cat}
+        else:
+            times = sorted(int(r[9]) for r, _ in cats)
+            cat_times = {c: sorted(v) for c, v in by_cat.items()}
+        out.append({"sheet": sheet, "race_id": race_id, "cats": cats, "order": order, "team": team,
                     "pos": {x: i for i, x in reversed(list(enumerate(order)))},
-                    "times": sorted(int(r[9]) for r, _ in cats),
-                    "cat_times": {c: sorted(v) for c, v in by_cat.items()},
+                    "times": times, "cat_times": cat_times,
                     "club_times": {k: (sorted(x[0] for x in v), v[0][1], {x[2] for x in v} - {"", "0"})
                                    for k, v in by_club.items()},
                     "by_id": by_id})
     return out
+
+
+def rider_times(ev, me):
+    """Every rider's time in the pool; in a team time trial, without your own teammates."""
+    if not ev.get("team"):
+        return ev["times"]
+    mine, cat = ev["by_id"][me]
+    return sorted(int(r[9]) for r, c in ev["cats"]
+                  if r[2] == me or (c, turritt.team_name(r)) != (cat, turritt.team_name(mine)))
 
 
 def tally(times, t):
@@ -157,6 +179,8 @@ def build(me=ME, evs=None, keep=None):
         rows = [r for r, _ in cats]
         me_row, my_cat = ev["by_id"][me]
         t = int(me_row[9])
+        if ev.get("team"):  # teams are ranked within their own race, like on Turritt
+            times = ev["cat_times"][my_cat]
         winner = times[0]
         beaten = tally(times, t)[0]
         cls = ev["cat_times"][my_cat]
@@ -164,8 +188,8 @@ def build(me=ME, evs=None, keep=None):
         elev = float(sheet["Elevation gain (m)"] or 0)
         analysis.append({
             "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"],
-            "field": len(rows), "beaten": beaten,
-            "beaten_pct": round(100 * beaten / (len(rows) - 1), 1) if len(rows) > 1 else 0.0,
+            "field": len(times), "beaten": beaten,
+            "beaten_pct": round(100 * beaten / (len(times) - 1), 1) if len(times) > 1 else 0.0,
             "behind_winner_pct": round(100 * (t / winner - 1), 1) if t < DNF else "",
             "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else "",
             "turritt_race_id": race_id,
@@ -182,6 +206,8 @@ def build(me=ME, evs=None, keep=None):
         for r, cat in (cats if keep is None else [ev["by_id"][x] for x in keep if x in ev["by_id"]]):
             if r[2] == me or r[2] in ("", "0") or r[2] in met:  # a few riders are listed twice
                 continue
+            if ev.get("team") and (cat, turritt.team_name(r)) == (my_cat, turritt.team_name(me_row)):
+                continue  # teammates rode together, not against each other
             met.add(r[2])
             o = int(r[9])
             if t >= DNF and o >= DNF:
@@ -444,7 +470,7 @@ def rider_object(entry, evs, full):
         for o in opps if o["races"] >= 2 or o["turritt_id"] in named]
     obj["rivals"] = ranked
     obj["insights"] = ins
-    wl = [tally(ev["times"], int(ev["by_id"][me][0][9])) for ev in mine]
+    wl = [tally(rider_times(ev, me), int(ev["by_id"][me][0][9])) for ev in mine]
     obj["record"] = {"opponents": len(opps), "wins": sum(w for w, _ in wl), "losses": sum(l for _, l in wl)}
     return obj
 
