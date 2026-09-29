@@ -37,6 +37,7 @@ import requests
 import eqtiming
 import registry
 import riderids
+import sskcup
 import turritt
 
 ME = "171101"
@@ -711,6 +712,8 @@ def rider_object(entry, evs, full):
     } for a in analysis]
     results.sort(key=lambda a: a["date"])
     obj = {k: entry[k] for k in ("id", "name", "club", "age_class", "sex")}
+    if POINTS.get(me):
+        obj["points"] = POINTS[me]
     if me in SEX_UNSURE:  # the classes they rode in disagree or say nothing: {"K": n, "M": n, "?": n}
         obj["sex_votes"] = SEX_UNSURE[me]
     obj["results"] = results
@@ -759,6 +762,7 @@ def update_rider(tid):
              "races": len(rows), "shard": shard(tid), "sex": SEX.get(tid)}
     index = [e for e in index if e["id"] != tid] + [entry]
     index.sort(key=lambda r: (-r["races"], r["name"]))
+    points_by_name(index)
     path = os.path.join(data, f"shard-{entry['shard']}.json")
     try:
         with open(path, encoding="utf-8") as f:
@@ -770,6 +774,20 @@ def update_rider(tid):
         with open(p, "w", encoding="utf-8") as f:
             json.dump(obj, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     return riders[tid]
+
+
+POINTS = {}  # rider id -> SSK Cup rounds they scored in (points_by_name)
+
+
+def points_by_name(index):
+    """SSK Cup rounds for every rider in the index, matched by name (raceresult has no ids) when
+    exactly one rider has that name. A points race is its own kind: never in rivals or share beaten.
+    Followed riders get theirs, with watts, from their own profile (export_web.py)."""
+    names = Counter(tuple(sskcup.fold(e["name"])) for e in index)
+    rounds = sskcup.scored_rounds()
+    POINTS.clear()
+    POINTS.update({e["id"]: rounds[k] for e in index for k in [tuple(sskcup.fold(e["name"]))]
+                   if names[k] == 1 and k in rounds})
 
 
 def write_all(evs):
@@ -806,6 +824,7 @@ def write_all(evs):
                       "races": len(rs), "shard": shard(tid), "sex": SEX.get(tid)})
     index.sort(key=lambda r: (-r["races"], r["name"]))
 
+    points_by_name(index)
     follow = followed()
     shards = defaultdict(dict)
     for entry in index:
