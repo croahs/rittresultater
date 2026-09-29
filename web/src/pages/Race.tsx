@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { raceLists, type IndexRider, type RaceList } from "../data";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { loadVideos, raceLists, videosFor, type IndexRider, type RaceList, type RaceVideo, type VideoFile } from "../data";
 import { TYPE_LABEL, TYPE_VAR, clock, clsLabel, dateLong } from "../format";
 import { KlasseToggle, useKlasse } from "../klasse";
+import RaceVideos from "../RaceVideos";
+import { Icon } from "../ui";
 
 /* One race's whole result list (data/races.json), for anyone: «Åpen» is everybody, «Kvinner» the women only,
    placed among themselves. DNF comes after everyone who finished. */
@@ -13,6 +15,11 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
   const { women } = useKlasse();
   useEffect(() => { let live = true; raceLists().then((l) => live && setRace(l.find((r) => r.id === id) ?? null)).catch(() => live && setRace(null)); return () => { live = false; }; }, [id]);
   const known = useMemo(() => new Set(index.map((r) => r.id)), [index]);
+  // Riders' own videos from this race (data/videos.json), shown by their name.
+  const [vfile, setVfile] = useState<VideoFile | null>(null);
+  const [open, setOpen] = useState<string | null>(null);
+  useEffect(() => { let live = true; loadVideos().then((f) => live && setVfile(f)); return () => { live = false; }; }, []);
+  const vids = useMemo(() => new Map(race ? videosFor(vfile, race.date, race.name).map((v) => [v.rid, v.url]) : []), [vfile, race]);
   const rows = useMemo(() => {
     if (!race) return [];
     const pick = race.rows.filter((r) => !women || r[6] === "K");
@@ -40,14 +47,20 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
           <tbody>{rows.map((r, i) => {
             const t = r[5];
             return (
-              <tr key={`${r[0]}-${i}`}>
+              <Fragment key={`${r[0]}-${i}`}>
+              <tr>
                 <td className="tnum">{t == null ? "DNF" : i + 1}</td>
-                <td className="l">{known.has(r[0]) ? <button type="button" className="linkish" onClick={() => onRider(r[0])}>{r[1]}</button> : r[1]}</td>
+                <td className="l">{known.has(r[0]) ? <button type="button" className="linkish" onClick={() => onRider(r[0])}>{r[1]}</button> : r[1]}
+                  {vids.has(r[0]) && <button type="button" className="vid media-btn name-vid" aria-expanded={open === r[0]} title={`Video fra ${r[1]}`} aria-label={`Video fra ${r[1]}`}
+                    onClick={() => setOpen(open === r[0] ? null : r[0])}><Icon.play /></button>}</td>
                 <td className="tnum">{t == null ? "–" : clock(t)}</td>
                 <td className="tnum muted">{t == null || best == null || i === 0 ? "" : `+${clock(t - best)}`}</td>
                 <td className="l muted">{r[2]}</td>
                 <td className="l muted">{clsLabel(r[4] || r[3])}</td>
               </tr>
+              {open === r[0] && vids.has(r[0]) && <tr className="media-row"><td colSpan={99}>
+                <RaceVideos videos={[{ rid: r[0], by: r[1], url: vids.get(r[0])!, own: false } satisfies RaceVideo]} race={`${name} ${race.date.slice(0, 4)}`} autoOpen /></td></tr>}
+              </Fragment>
             );
           })}</tbody>
         </table></div></div>

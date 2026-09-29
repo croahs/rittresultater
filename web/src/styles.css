@@ -66,6 +66,9 @@ td.links button.media-btn { display: inline-flex; align-items: center; gap: 3px;
 td.links button.media-btn[aria-expanded="true"] { background: var(--ghost); color: #e62117; }
 td.links button.media-btn span { font-size: .75rem; font-weight: 700; }
 td.links button.media-btn svg { width: 18px; height: 18px; }
+button.media-btn.name-vid { display: inline-flex; vertical-align: middle; margin-left: 6px; padding: 2px 4px; border: 0; border-radius: 6px; background: none; color: var(--ink-2); cursor: pointer; }
+button.media-btn.name-vid svg { width: 18px; height: 18px; }
+button.media-btn.name-vid:hover, button.media-btn.name-vid[aria-expanded="true"] { color: #e62117; }
 tr.media-row td { text-align: left; background: var(--surface-2); padding: 12px; }
 tr.media-row td:first-child { position: static; box-shadow: none; }
 tr.media-row .race-videos { position: sticky; left: 12px; max-width: min(720px, calc(100vw - 72px)); }
