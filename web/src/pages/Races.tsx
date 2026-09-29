@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { flags, years, type Athlete, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
+import { Icon } from "../ui";
 
 type SortKey = "date" | "beaten" | "behind" | "np";
 
@@ -11,6 +12,7 @@ export default function Races({ a }: { a: Athlete }) {
   const [q, setQ] = useState("");
   const [type, setType] = useState<RaceType | "all">("all");
   const [sort, setSort] = useState<{ k: SortKey; desc: boolean }>({ k: "date", desc: true });
+  const pv = a.points.some((p) => p.video);
   const types = [...new Set(a.results.map((r) => r.type))];
   const rows = useMemo(() => {
     const s = fold(q.trim());
@@ -40,7 +42,7 @@ export default function Races({ a }: { a: Athlete }) {
         </div>
         {rows.length === 0 ? <div className="empty"><b>Ingen ritt passer filteret</b><button className="btn" onClick={() => { setQ(""); setType("all"); setSeason("all"); }}>Nullstill filter</button></div> : (
           <div className="table-wrap"><table className="sticky">
-            <thead><tr><th className="l">Ritt</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}{th("date", "Dato")}<th className="l">Type</th><th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}<th>Liste</th></tr></thead>
+            <thead><tr><th className="l">Ritt</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}{th("date", "Dato")}<th className="l">Type</th><th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}<th>Lenker</th></tr></thead>
             <tbody>{rows.map((r) => {
               const k = raceKey(r);
               return (
@@ -54,7 +56,7 @@ export default function Races({ a }: { a: Athlete }) {
                   <td>{hms(r.time)}</td><td>{dec(r.km)}</td><td>{dec(r.speed)}</td>
                   {a.power && <td>{r.np ? (r.icu && flags.activityLinks ? <a href={r.icu} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>{r.np}</a> : r.np) : "–"}</td>}
                   {a.power && <td>{r.ap ?? "–"}</td>}
-                  <td>{r.link ? <a href={r.link} target="_blank" rel="noopener" aria-label={`Resultatliste for ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}>↗</a> : ""}</td>
+                  <td className="links">{r.video && <a className="vid" href={r.video} target="_blank" rel="noopener" title="Video fra rittet" aria-label={`Video fra ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}><Icon.play /></a>}{r.link ? <a href={r.link} target="_blank" rel="noopener" aria-label={`Resultatliste for ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}>↗</a> : ""}</td>
                 </tr>
               );
             })}</tbody>
@@ -65,10 +67,11 @@ export default function Races({ a }: { a: Athlete }) {
         <section className="card">
           <div className="card-pad"><h2 className="h-card">Poengritt</h2><p className="note" style={{ margin: "4px 0 0" }}>SSK Cup telles i poeng, ikke tid, og er ikke med i plasseringstallene over. Watt og fart gjelder bare rundene i selve rittet.</p></div>
           <div className="table-wrap"><table className="sticky">
-            <thead><tr><th className="l">Ritt</th><th>Dato</th><th className="l">Klasse</th><th>Plass</th><th>Poeng</th><th>Runder</th><th>Tid</th><th>Fart</th><th>NP</th><th>Snitt W</th></tr></thead>
+            <thead><tr><th className="l">Ritt</th><th>Dato</th><th className="l">Klasse</th><th>Plass</th><th>Poeng</th><th>Runder</th><th>Tid</th><th>Fart</th><th>NP</th><th>Snitt W</th>{pv && <th>Video</th>}</tr></thead>
             <tbody>{a.points.map((p) => (
               <tr key={p.date}><td>{p.name}</td><td>{dateLong(p.date)}</td><td className="l">{p.cls}</td>
-                <td>{p.place ? `${p.place}/${p.n}` : "Datt av"}</td><td>{p.pts ? `${p.pts} (vinner ${p.win})` : "–"}</td><td>{p.laps}</td><td>{p.time}</td><td>{p.speed}</td><td>{p.np}</td><td>{p.ap}</td></tr>
+                <td>{p.place ? `${p.place}/${p.n}` : "Datt av"}</td><td>{p.pts ? `${p.pts} (vinner ${p.win})` : "–"}</td><td>{p.laps}</td><td>{p.time}</td><td>{p.speed}</td><td>{p.np}</td><td>{p.ap}</td>
+                {pv && <td className="links">{p.video && <a className="vid" href={p.video} target="_blank" rel="noopener" title="Video fra rittet" aria-label={`Video fra ${p.name}`}><Icon.play /></a>}</td>}</tr>
             ))}</tbody>
           </table></div>
         </section>
