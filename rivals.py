@@ -13,6 +13,11 @@ Who counts, per race: the "overall" pool from turritt.py (all sibling races of
 the event, same course, officials/leisure groups and DNS dropped). Faster time
 wins. A DNF loses to any finisher (the sheet's rule); two DNFs are a draw.
 
+Two classes in every race: open (everyone, the places above) and women (Kvinner): each rider's
+sex comes from the classes the lists put them in (K 40-44, Kvinner, ...; genders()), never from
+names, and a woman also gets her place among the women of the same pool. Unclear riders keep
+sex null and their class counts ("sex_votes") in their profile.
+
   python3 rivals.py                 writes rivals.json, rivals.csv, race_analysis.csv (you)
                                     and data/ for every rider (races.json, riders/index.json, riders/shard-NN.json)
   python3 rivals.py søk <navn>      head-to-head against riders matching <navn>
@@ -44,6 +49,9 @@ DNF_TIME = 359500  # a DNF or lapped rider from EQ Timing: behind every finisher
 PUBLIC_TURRITT = True  # rider ids on the site stay TurrittIDs until web/ moves to ours ("r123")
 OWN_DISTANCE = re.compile(r"senior|junior|jr\b|^[mkgj]\s?-?(6-9|10|11-12|13-14|15-16)$", re.I)  # classes in a list that ride their own distance
 SWITCH_LIMIT = 0  # a race moves to its own timer only when none of the followed riders' head-to-heads are lost
+# Women's classes: K 40-44, K30-39, Ke (elite), J 17-19 (jenter; boys are M 17-19 in the same lists), Kvinner, Damer.
+WOMEN = re.compile(r"^(k|j|ke)(\s|\d|$)|kvinne|dame|jente", re.I)
+MEN = re.compile(r"^(m|g)(\s|\d|$)|^menn|herre|gutt", re.I)
 
 
 def races():
@@ -247,7 +255,47 @@ def events(log=lambda m: print(m, file=sys.stderr)):
     log(f"rivals: {len(moved)} races from their own timer instead of Turritt: {', '.join(moved)}")
     if kept:
         log(f"rivals: kept on Turritt (too many head-to-heads would be lost): {', '.join(kept)}")
+    global SEX, SEX_UNSURE
+    SEX, SEX_UNSURE = genders(out, log)
     return out
+
+
+SEX, SEX_UNSURE = {}, {}  # set by events(): each rider's sex from their classes, and the unclear ones
+
+
+def class_sex(r):
+    """"K" or "M" from what the list says: the age class (K 40-44, M Junior, Kvinner), else the
+    start group (Elite Kvinner). None when it says neither. First names are never used."""
+    for text in ((r[8] or "").strip(), (r[3] or "").strip()):
+        if WOMEN.search(text):
+            return "K"
+        if MEN.search(text):
+            return "M"
+    return None
+
+
+def genders(evs, log=lambda m: print(m, file=sys.stderr)):
+    """{rider id: "K" | "M" | None} from the classes they rode in, the majority over all their races,
+    and {rider id: {"K": n, "M": n, "?": n}} for those whose lists disagree or say nothing (left
+    None on a tie). Then each pool gets its women's times ("women_times"; none for team time trials,
+    where teams can be mixed) and every row's sex, for women's places next to the open ones."""
+    votes = defaultdict(Counter)
+    for ev in evs:
+        for rid, (r, _) in ev["by_id"].items():
+            votes[rid][class_sex(r) or "?"] += 1
+    sex, unsure = {}, {}
+    for rid, v in votes.items():
+        sex[rid] = "K" if v["K"] > v["M"] else "M" if v["M"] > v["K"] else None
+        if (v["K"] and v["M"]) or not sex[rid]:
+            unsure[rid] = dict(v)
+    for ev in evs:
+        ev["sex"] = [sex.get(r[2]) if r[2] in sex else class_sex(r) for r, _ in ev["cats"]]
+        ev["women_times"] = None if ev.get("team") else \
+            sorted(int(r[9]) for (r, _), x in zip(ev["cats"], ev["sex"]) if x == "K")
+    log(f"kjønn: {sum(x == 'K' for x in sex.values())} kvinner, {sum(x == 'M' for x in sex.values())} menn, "
+        f"{sum(x is None for x in sex.values())} uklare; {sum(1 for v in unsure.values() if v.get('K') and v.get('M'))} "
+        f"med både K- og M-klasse")
+    return sex, unsure
 
 
 def _event(sheet, race_id, cats, team):
@@ -353,6 +401,16 @@ def build(me=ME, evs=None, keep=None):
             "behind_class_winner_pct": round(100 * (t / cls[0] - 1), 1) if t < DNF else "",
             "class_winner": turritt.hms(cls[0]),
         })
+        wt = ev.get("women_times")
+        if SEX.get(me) == "K" and wt:
+            # Women's class: placed among the women of the same pool (DNFs behind the finishers).
+            wb = tally(wt, t)[0]
+            analysis[-1].update({
+                "women_place": bisect.bisect_left(wt, t) + 1 if t < DNF else "", "women_field": len(wt),
+                "women_beaten_pct": round(100 * wb / (len(wt) - 1), 1) if len(wt) > 1 else 0.0,
+                "behind_women_winner_pct": round(100 * (t / wt[0] - 1), 1) if t < DNF else "",
+                "women_winner": turritt.hms(wt[0]) if wt[0] < DNF else "DNF",
+            })
         lo, hi = bisect.bisect_left(times, t), bisect.bisect_right(times, t)
         met = set()
         for r, cat in (cats if keep is None else [ev["by_id"][x] for x in keep if x in ev["by_id"]]):
@@ -371,7 +429,8 @@ def build(me=ME, evs=None, keep=None):
             else:
                 res = "win" if t < o else "loss" if t > o else "draw"
                 gap = t - o  # seconds; negative = you were faster
-            opp[r[2]] = {"turritt_id": r[2], "name": name(r), "club": r[7].strip(), "age_class": r[8]}
+            opp[r[2]] = {"turritt_id": r[2], "name": name(r), "club": r[7].strip(), "age_class": r[8],
+                         "sex": SEX.get(r[2])}
             if o < t < DNF:  # places between you: 1 = finished right ahead of you, -1 = right behind
                 places = 1 + lo - bisect.bisect_right(times, o)
             elif t < o < DNF:
@@ -541,7 +600,7 @@ def write(opps, analysis):
         for o in opps:
             w.writerow({**o, "rival_rank": rank.get(o["turritt_id"], "")})
     with open(os.path.join(HERE, "race_analysis.csv"), "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, list(analysis[0]))
+        w = csv.DictWriter(f, list(analysis[0]), extrasaction="ignore")
         w.writeheader()
         w.writerows(analysis)
 
@@ -559,6 +618,12 @@ def profile(analysis):
         for a in analysis:
             by[f(a)].append(a["beaten_pct"])
         out[key] = {k: {"races": len(v), "avg_beaten_pct": round(statistics.mean(v), 1)} for k, v in sorted(by.items())}
+        wby = defaultdict(list)
+        for a in analysis:
+            if a.get("women_field"):
+                wby[f(a)].append(a["women_beaten_pct"])
+        for k, v in wby.items():  # women only: the share of the women's field beaten
+            out[key][k]["avg_women_beaten_pct"] = round(statistics.mean(v), 1)
     if len(analysis) >= 4:
         y = [a["beaten_pct"] for a in analysis]
         out["correlations"] = {}
@@ -605,9 +670,14 @@ def rider_object(entry, evs, full):
         "winner": a["class_winner"], "overall_place": a["place"], "overall_field": a["field"],
         "beaten_pct": a["beaten_pct"], "distance_km": a["distance_km"], "climb_m_per_km": a["climb_m_per_km"],
         "turritt": urls[a["turritt_race_id"]],
+        **({"women_place": a["women_place"] or None, "women_field": a["women_field"],
+            "women_beaten_pct": a["women_beaten_pct"], "women_behind_pct": a["behind_women_winner_pct"] or None}
+           if "women_field" in a else {}),
     } for a in analysis]
     results.sort(key=lambda a: a["date"])
-    obj = {k: entry[k] for k in ("id", "name", "club", "age_class")}
+    obj = {k: entry[k] for k in ("id", "name", "club", "age_class", "sex")}
+    if me in SEX_UNSURE:  # the classes they rode in disagree or say nothing: {"K": n, "M": n, "?": n}
+        obj["sex_votes"] = SEX_UNSURE[me]
     obj["results"] = results
     obj.update(profile(analysis))
     if not full:
@@ -624,11 +694,18 @@ def rider_object(entry, evs, full):
         [o["turritt_id"], o["name"], o["club"], o["wins"], o["losses"], o["median_gap_pct"],
          [[m["race"], iso(m["date"]), m["type"], m["result"][0], m["gap_s"], m["gap_pct"], m["places"],
            m["my_class"], m["their_class"], int(m["same_class"])] for m in o["meetings"]]]
+         + [o["sex"]]
         for o in opps if o["races"] >= 2 or o["turritt_id"] in named]
     obj["rivals"] = ranked
+    if SEX.get(me) == "K":  # the same ranking among women only
+        obj["rivals_women"] = [o["turritt_id"] for o in rivals(opps) if o["sex"] == "K"]
     obj["insights"] = ins
     wl = [tally(rider_times(ev, me), int(ev["by_id"][me][0][9])) for ev in mine]
     obj["record"] = {"opponents": len(opps), "wins": sum(w for w, _ in wl), "losses": sum(l for _, l in wl)}
+    if SEX.get(me) == "K":
+        wl = [tally(ev["women_times"], int(ev["by_id"][me][0][9])) for ev in mine if ev.get("women_times")]
+        obj["record"].update(women_opponents=sum(o["sex"] == "K" for o in opps),
+                             women_wins=sum(w for w, _ in wl), women_losses=sum(l for _, l in wl))
     return obj
 
 
@@ -644,7 +721,7 @@ def update_rider(tid):
         raise SystemExit(f"{tid} er ikke i noen av resultatlistene")
     last = max(rows, key=lambda x: x[0])[1]
     entry = {"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
-             "races": len(rows), "shard": shard(tid)}
+             "races": len(rows), "shard": shard(tid), "sex": SEX.get(tid)}
     index = [e for e in index if e["id"] != tid] + [entry]
     index.sort(key=lambda r: (-r["races"], r["name"]))
     path = os.path.join(data, f"shard-{entry['shard']}.json")
@@ -674,8 +751,8 @@ def write_all(evs):
             "id": ev["race_id"], "name": sh["Race"], "date": iso(sh["Date"]), "type": sh["Type"],
             "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else None,
             "turritt": sh["Turritt"],
-            "rows": [[r[2], name(r), r[7].strip(), r[8], c, int(r[9]) if int(r[9]) < DNF else None]
-                     for r, c in sorted(ev["cats"], key=lambda rc: int(rc[0][9]))],
+            "rows": [[r[2], name(r), r[7].strip(), r[8], c, int(r[9]) if int(r[9]) < DNF else None, x]
+                     for (r, c), x in sorted(zip(ev["cats"], ev["sex"]), key=lambda rcx: int(rcx[0][0][9]))],
         })
         for tid, (r, _) in ev["by_id"].items():
             seen[tid].append((iso(sh["Date"]), r))
@@ -683,14 +760,15 @@ def write_all(evs):
     dump("races.json", {
         "scope": "Turritt result lists of every race ridden by the riders in riders.json (data/results.json). "
                  "Other riders' histories only cover these races.",
-        "row_fields": ["turritt_id", "name", "club", "age_class", "class", "time_s (null = DNF)"],
+        "row_fields": ["turritt_id", "name", "club", "age_class", "class", "time_s (null = DNF)",
+                       "sex (K | M | null = unclear; from the classes the rider rode in)"],
         "races": races_out})
 
     index = []
     for tid, rs in seen.items():
         last = max(rs, key=lambda x: x[0])[1]
         index.append({"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
-                      "races": len(rs), "shard": shard(tid)})
+                      "races": len(rs), "shard": shard(tid), "sex": SEX.get(tid)})
     index.sort(key=lambda r: (-r["races"], r["name"]))
 
     follow = followed()
