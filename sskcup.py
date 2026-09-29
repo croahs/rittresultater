@@ -107,6 +107,26 @@ def list_rows(rider, log=print):
     return out
 
 
+def scored_rounds():
+    """{folded name: [points race in the site's format]} for everyone who scored in a dated round,
+    from the cached lists only (nothing is fetched). The lists show every rider registered for the
+    cup in every round, so only a rider with points surely rode it; 0-point rounds are left out."""
+    out = {}
+    for n in ROUNDS:
+        rows_by_class = _cache.get(f"{EVENT}:cup{n}")
+        if not rows_by_class or n not in ROUND_DATES:
+            continue
+        for cls, rows in rows_by_class.items():
+            top = max((int(r[2] or 0) for r in rows), default=0)
+            for place, name, pts in rows:
+                if int(pts or 0) > 0:
+                    out.setdefault(tuple(fold(name)), []).append({
+                        "name": f"SSK Cup {n}", "date": ROUND_DATES[n], "cls": cls, "place": place,
+                        "n": str(len(rows)), "pts": str(pts), "win": str(top), "laps": "", "time": "",
+                        "speed": "", "np": "", "ap": "", "note": "", "icu": ""})
+    return out
+
+
 def race_laps(laps, sort_class):
     """The laps that are the race: drop the ride to the start (first lap) and a
     trailing stub lap; in Sort klasse also the neutral laps, up to the first lap
