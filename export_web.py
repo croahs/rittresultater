@@ -38,6 +38,54 @@ def turritt_rider(rider_id):
     return {"name": f"{r[5]} {r[6]}".strip(), "club": r[7].strip(), "age_class": r[8]}
 
 
+def bike_class(r):
+    """The class only when it says something (EQ lists often repeat the race name as the class)."""
+    c = (r.get("class_name") or "").strip()
+    words = set(r["name"].lower().split())
+    if not c or len(c) > 24 or words & set(c.lower().replace("(", " ").replace(")", " ").split()):
+        return None
+    return c
+
+
+def pipeline_profiles(me_id, index):
+    path = os.path.join(HERE, "data", "results.json")
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        pipe = json.load(f)
+    written = []
+    for rider in pipe.get("riders", []):
+        rid = str(rider.get("turritt_id") or rider["id"])
+        if rid == me_id:
+            continue
+        rows = [r for r in pipe.get("races", []) if r["rider_id"] == rider["id"]]
+        if not rows:
+            continue
+        entry = next((r for r in index if r["id"] == rid), None)
+        shard = {}
+        if entry and entry.get("shard"):
+            with open(os.path.join(HERE, "data", "riders", f"shard-{entry['shard']}.json"), encoding="utf-8") as f:
+                shard = json.load(f).get(rid, {})
+        links = lambda r: r.get("links") or {}
+        results = [{
+            "name": r["name"], "date": r["date"], "type": r["type"], "class": bike_class(r),
+            "place": r["class_place"], "field": r["class_n"], "top": r["percentile"], "behind": r.get("behind_pct"),
+            "time": r["time"], "winner": r.get("winner_time") or "",
+            "np": r.get("np"), "ap": r.get("avg_power"), "speed": r.get("speed_kmh"),
+            "km": r.get("distance_km"), "climb": r.get("elevation_m"),
+            "age_class": r.get("age_class") or "", "age_place": r.get("age_place"), "age_n": r.get("age_n"),
+            "turritt": links(r).get("turritt") or links(r).get("eqtiming") or "", "icu": links(r).get("intervals") or "",
+        } for r in rows if r.get("class_place") and r.get("class_n")]
+        dump(os.path.join(OUT, "athletes", f"{rid}.json"), {
+            "id": rid, "name": shard.get("name") or rider["name"], "club": shard.get("club", ""),
+            "age_class": shard.get("age_class", ""), "power": bool(rider.get("power")) and any(x["np"] for x in results),
+            "clips": [], "results": results, "points": [],
+            "opponents": shard.get("opponents", []), "rivals": shard.get("rivals", []), "insights": shard.get("insights", {}),
+        })
+        written.append(rid)
+    return written
+
+
 def main():
     if os.path.isdir(OUT):
         shutil.rmtree(OUT)
@@ -72,7 +120,10 @@ def main():
         "insights": {k: v for k, v in rivals.get("insights", {}).items() if k != "closest"},
     }
     dump(os.path.join(OUT, "athletes", f"{me_id}.json"), profile)
-    dump(os.path.join(OUT, "site.json"), {"default_rider": me_id, "profiles": [me_id],
+    # Other riders the pipeline follows (riders.json -> data/results.json): their full result
+    # history, including races outside the lists rivals.py pools, plus rivals from their shard.
+    profiles = [me_id] + pipeline_profiles(me_id, index)
+    dump(os.path.join(OUT, "site.json"), {"default_rider": me_id, "profiles": profiles,
                                                  # Links to your intervals.icu activities; they are private there anyway.
                                                  "activity_links": False,
                                                  # Shown in the footer for corrections and takedown requests; set before launch.
