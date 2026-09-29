@@ -275,12 +275,14 @@ def build_rider(rider, log=print):
         taken.add(d)
         changes.append((r["Race"], "(new row)", "", f"added from {src_name[e['source']]}"))
 
-    # The registry knows some races' type better than their name does (Nordsjørittet is gravel).
+    # The registry knows a series' type better than its name does (Nordsjørittet is gravel, not
+    # the road race race_type falls back to), whether or not its results come from the timer.
+    # A class the name marks as tempo, or as gravel inside a terrain race, keeps its own type.
     typed = {sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"): e for e in registry.load()
-             if e.get("type") in ("Gravel", "MTB") and e.get("status") == "bekreftet"}
+             if e.get("type") in ("Gravel", "MTB")}
     for r in rows:
         e = typed.get(r["Date"])
-        if e and e["name"].split()[0].lower() in r["Race"].lower():
+        if e and e["name"].split()[0].lower() in r["Race"].lower() and r.get("Type") not in ("TT", "TTT", "Gravel"):
             r["Type"] = e["type"]
 
     if exclude:
