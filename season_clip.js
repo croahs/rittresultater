@@ -33,9 +33,6 @@
   aspect-ratio: 4 / 3; min-height: 320px; background: var(--panel, #fff); }
 .sc-map { position: absolute; inset: 0; }
 .sc-map.leaflet-container { background: var(--grid, #eceef0); }
-/* The map is only a backdrop for the coloured tracks: no colour at all, and a little faded. */
-.sc-tiles { filter: grayscale(1) contrast(.85) brightness(1.05); }
-.sc-tiles.sc-dark { filter: grayscale(1) invert(1) brightness(.8) contrast(.85); }
 .sc-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 450; }
 .sc-clock { position: absolute; top: 10px; left: 12px; z-index: 460; pointer-events: none;
   font: 700 2.4rem/1 var(--display, "Arial Narrow", sans-serif); font-variant-numeric: tabular-nums;
@@ -142,17 +139,47 @@
 
     const map = L.map(root.querySelector(".sc-map"), { zoomControl: false, attributionControl: true });
     L.control.zoom({ position: "topright" }).addTo(map);
-    let tiles;
-    const setTiles = () => {
-      if (tiles) tiles.remove();
-      // Kartverket's open map cache (CC BY 4.0, no key). The grey topo map keeps the coloured tracks
-      // readable; in dark mode the same tiles are inverted by the sc-dark class (CSS below).
-      tiles = L.tileLayer("https://cache.kartverket.no/v1/wmts/1.0.0/topograatone/default/webmercator/{z}/{y}/{x}.png", {
-        maxZoom: 18, className: dark() ? "sc-tiles sc-dark" : "sc-tiles",
-        attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a> (CC BY 4.0)',
-      }).addTo(map);
+    // The backdrop is only land and sea, so the tracks carry all the colour: OpenStreetMap's land polygons
+    // (ODbL), simplified and cut into 1° cells in data/land (tools/land_cells.py). No tiles, roads, borders,
+    // names or terrain. Cells are fetched for what is in view; without them the map is plain sea.
+    const LAND = { light: ["#e6e7e9", "#f7f7f5"], dark: ["#16171b", "#2a2b31"] }; // [sea, land]
+    const landLayer = L.layerGroup().addTo(map), renderer = L.canvas({ padding: 0.5 });
+    const cells = new Map(); // "lat_lon" -> polygons ([lat, lon] rings), once loaded
+    let landIndex = null;
+    const paint = () => {
+      const [sea, land] = LAND[dark() ? "dark" : "light"];
+      map.getContainer().style.background = sea;
+      landLayer.eachLayer((l) => l.setStyle({ fillColor: land, color: land }));
     };
-    setTiles();
+    const addCell = (polys) => {
+      const land = LAND[dark() ? "dark" : "light"][1];
+      for (const rings of polys) L.polygon(rings, { renderer, stroke: true, color: land, weight: 1, fill: true, fillColor: land, fillOpacity: 1, interactive: false }).addTo(landLayer); // the stroke hides seams between cells
+    };
+    const loadLand = async () => {
+      try {
+        landIndex = landIndex || await fetch("data/land/index.json").then((r) => (r.ok ? r.json() : Promise.reject()));
+      } catch { landIndex = { q: 1, full: [], part: [] }; return; }
+      const { q, full, part } = landIndex, b = map.getBounds();
+      const want = [];
+      for (let lat = Math.floor(b.getSouth()); lat <= Math.floor(b.getNorth()); lat++)
+        for (let lon = Math.floor(b.getWest()); lon <= Math.floor(b.getEast()); lon++) want.push([lat, lon, `${lat}_${lon}`]);
+      if (want.length > 80) return; // zoomed far out: leave it
+      for (const [lat, lon, key] of want) {
+        if (cells.has(key)) continue;
+        if (full.includes(key)) { cells.set(key, true); addCell([[[[lat, lon], [lat + 1, lon], [lat + 1, lon + 1], [lat, lon + 1]]]]); continue; }
+        if (!part.includes(key)) { cells.set(key, true); continue; }
+        cells.set(key, true);
+        fetch(`data/land/${key}.json`).then((r) => r.json()).then((polys) => addCell(polys.map((rings) => rings.map((flat) => {
+          const ring = [];
+          for (let i = 0; i < flat.length; i += 2) ring.push([lat + flat[i] / q, lon + flat[i + 1] / q]);
+          return ring;
+        })))).catch(() => cells.delete(key));
+      }
+    };
+    map.attributionControl.addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
+    const setTiles = paint;
+    paint();
+    map.on("moveend", loadLand);
     const home = races.filter((r) => !far.has(r)).flatMap((r) => r.pts);
     map.fitBounds(L.latLngBounds(home.length ? home : races.flatMap((r) => r.pts)), { padding: [24, 24] });
 
