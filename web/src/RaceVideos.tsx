@@ -11,8 +11,9 @@ export function youtubeId(url: string): string | null {
 
 /* Videos riders made of the selected race. Nothing is loaded from YouTube until a video is tapped;
    then it plays in place from youtube-nocookie.com. */
-export default function RaceVideos({ videos, race }: { videos?: RaceVideo[]; race: string }) {
-  const [open, setOpen] = useState<string | null>(null);
+export default function RaceVideos({ videos, race, autoOpen }: { videos?: RaceVideo[]; race: string; autoOpen?: boolean }) {
+  // autoOpen: shown only after a tap (the Media column), so the first video starts right away.
+  const [open, setOpen] = useState<string | null>(autoOpen && videos?.length ? videos[0].url : null);
   if (!videos?.length) return null;
   const playing = videos.find((v) => v.url === open);
   const id = playing && youtubeId(playing.url);
