@@ -55,7 +55,8 @@ for lat in range(57, 72):
             index["full"].append(key)
             continue
         rings_out = []
-        for x in pieces:
+        merged = shapely.union_all([shapely.make_valid(x) for x in pieces]).buffer(0.0003).buffer(-0.0003)  # join the source's own tile pieces, close slivers
+        for x in polys(merged) if not isinstance(merged, Polygon) else [merged]:
             x = x.simplify(TOL, preserve_topology=True)
             for y in polys(x):
                 if y.area < 4e-5:
