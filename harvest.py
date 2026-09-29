@@ -53,6 +53,10 @@ s.headers["User-Agent"] = "rittresultater/0.1 (nightly, 5 s between requests; pe
 _last = 0.0
 
 
+class Blocked(Exception):
+    """A source said no (403 or 429): the whole run stops, and nothing tries to get around it."""
+
+
 def _get(url, **params):
     global _last
     time.sleep(max(0, _last + PAUSE - time.time()))
@@ -60,6 +64,8 @@ def _get(url, **params):
         r = s.get(url, params=params, timeout=120)
     finally:
         _last = time.time()
+    if r.status_code in (403, 429) and not url.startswith(EQ_CAL):
+        raise Blocked(f"{r.status_code} from {url}")
     r.raise_for_status()
     return r.json()
 
@@ -209,6 +215,10 @@ def fetch_lists(minutes, log=print):
         src, eid = key.split(":")
         try:
             got = eq_event(eid) if src == "eq" else rr_event(eid)
+        except Blocked as x:
+            log(f"harvest stopped: {x}. Nothing more is fetched until someone looks at it.")
+            _dump(CALENDAR, cal)
+            sys.exit(1)
         except (requests.RequestException, ValueError, KeyError, TypeError) as x:
             log(f"{key} {cal['events'][key]['name']}: {x}")
             cal["events"][key]["failed"] = today.isoformat()
