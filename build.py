@@ -1,18 +1,22 @@
-"""Rebuild the results sheet: placings from Turritt, power from intervals.icu.
+"""Build one rider's results: placings from Turritt and EQ Timing, power from intervals.icu.
 
-Usage:
-  python3 build.py race_results_original.csv race_results_auto.csv [changes.md]
+Usage (normally via update.py, which runs every rider in riders.json):
+  python3 build.py [rider id]
 
-Starts from the hand sheet, so race names, types, elevation and notes are kept.
-Placings, participants, times and winner times are replaced by what Turritt
-says (differences are listed in changes.md). Turritt races missing from the
-sheet are added. Races Turritt doesn't cover (e.g. Atlantic Gravel) stay as typed.
-Power, speed and missing elevation come from the matching intervals.icu ride
-when INTERVALS_API_KEY is set or the proxy injects the key.
+A rider may start from a hand-kept sheet (Pedår's race_results_original.csv), which
+keeps its race names, types and elevation. Placings, participants, times and winner
+times are replaced by what Turritt or EQ Timing says (differences go to the report).
+Races on Turritt or EQ Timing but not in the sheet are added, so a rider without a
+sheet gets every race from their profiles.
+
+Power and speed come from the matching intervals.icu ride, over the race window only
+(sync.race_window). The computed numbers are cached in cache/metrics.json, which is
+committed, so later runs never refetch old rides.
 """
 import csv
 import json
 import os
+import re
 import sys
 from datetime import timedelta
 
@@ -20,65 +24,111 @@ import sync
 import eqtiming
 import turritt
 
-TURRITT_ID, NAME = "171101", "Peder Holterman Solland"
+HERE = os.path.dirname(os.path.abspath(__file__))
 C_N = "Class participants (not officials or DNS, DNF included)"
 O_N = "Overall participants (not officials or DNS, DNF included)"
 FROM_TURRITT = {
     "Placement in class": "class_place", "Overall placement": "overall_place",
     C_N: "class_n", O_N: "overall_n", "Time": "time", "Class winner": "class_winner",
 }
+# The hand-written Notes column is dropped: future races won't have it.
+CSV_COLS = [c for c in sync.COLS[:-2] if c != "Notes"] + [
+    "Age class", "Age class placement", "Age class participants",
+    "Turritt", "EQ Timing", "intervals.icu activity", "Match note"]
+POWER_COLS = ("Average Power", "Normalized Power", "Average speed (km/h)", "intervals.icu activity", "Match note")
+STREAMS_DIR = os.path.join(HERE, "cache", "intervals")
+METRICS_FILE = os.path.join(HERE, "cache", "metrics.json")
+
+try:
+    with open(METRICS_FILE, encoding="utf-8") as f:
+        METRICS = json.load(f)
+except (OSError, ValueError):
+    METRICS = {}
 
 
-# Fallback when the API is unreachable: the activities list saved from a logged-in
-# browser at https://intervals.icu/api/v1/athlete/0/activities.csv (or the JSON
-# version, .../activities?oldest=2025-01-01), dropped next to this script.
-ACTIVITIES_FILE = next((p for p in (os.path.join(os.path.dirname(os.path.abspath(__file__)), n)
-                        for n in ("activities.csv", "activities.json")) if os.path.exists(p)), "")
-
-
-ACTIVITIES_FILE_USED = False
-STREAMS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache", "intervals")
-
-
-def load_activities(path):
-    if path.endswith(".json"):
-        with open(path, encoding="utf-8") as f:
-            return json.load(f)
-    with open(path, newline="", encoding="utf-8-sig") as f:
-        acts = list(csv.DictReader(f))
-    for a in acts:
-        for k, v in a.items():
-            try:
-                a[k] = float(v) if v not in ("", None) and k not in ("id", "start_date_local", "type", "name") else v
-            except ValueError:
-                pass
-        a["race"] = str(a.get("race", "")).lower() == "true"
-    return acts
+def save_metrics():
+    with open(METRICS_FILE, "w", encoding="utf-8") as f:
+        f.write("{\n" + ",\n".join(f"{json.dumps(k)}: {json.dumps(v)}" for k, v in sorted(METRICS.items())) + "\n}\n")
 
 
 def race_type(name):
     n = name.lower()
     if "lagtempo" in n:
         return "TTT"
-    if "tempo" in n or "klostermil" in n or "toskaskabet" in n:
+    if "tempo" in n or "klostermil" in n or "toskaskabet" in n or re.search(r"\bmila\b", n):
         return "TT"
     if "gravel" in n or "cx" in n:
         return "Gravel"
     return "Road"
 
 
-def main(src, dst, report):
-    with open(src, newline="", encoding="utf-8") as f:
-        rows = [r for r in csv.DictReader(f) if r.get("Time")]
-    rid = turritt.find_rider(TURRITT_ID, NAME)
-    tt = [turritt.race_row(race_id, year, TURRITT_ID) for race_id, year in turritt.rider_races(rid)]
+def intervals_client(rider):
+    """An intervals.icu client for this rider, or None when no key is available."""
+    key = os.environ.get(rider.get("intervals_key_env") or "", "")
+    if not key and not rider.get("intervals_via_proxy"):
+        return None
+    icu = sync.Intervals(key, rider.get("intervals_athlete_id") or "0")
+    if not key:
+        icu.s.auth = None  # the dev container's proxy adds the key
+    return icu
 
-    eq_by_date = {}
-    try:
-        for e in eqtiming.races():
-            eq_by_date[sync.parse_date_iso(e["date"]).strftime("%d.%m.%y")] = e
-    except Exception as e:  # placings still come from Turritt
-        print(f"EQ Timing skipped: {e}", file=sys.stderr)
+
+def window(icu, activity_id, race_s):
+    """sync.race_window for one ride, cached in cache/metrics.json."""
+    k = f"{activity_id}:{race_s}"
+    if k not in METRICS:
+        w = sync.race_window(icu.streams(activity_id, STREAMS_DIR), race_s)
+        METRICS[k] = None if w is None else [w[0], w[1], list(w[2]), w[3]]
+    return METRICS[k]
+
+
+def eq_class(e):
+    """The race an EQ Timing result is in: the stage, plus the start group when that is its own race."""
+    own = eqtiming.OWN_RACE_GROUP.search(e["group"]) and e["group"] not in e["stage"]
+    return e["stage"] + (f" ({e['group']})" if own else "")
+
+
+def eq_row(e, rider):
+    """A new sheet row from an EQ Timing race (class = overall; EQ has no overall list here)."""
+    name = re.sub(r"\s*-\s*(?=20\d\d$)", " ", e["name"]).strip()
+    r = {"Race": name, "Date": sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"),
+         "Type": race_type(f"{e['name']} {e['stage']} {e['group']}"), "Match note": "new from EQ Timing",
+         "_class": eq_class(e)}
+    hit = {**e, "overall_place": e["class_place"], "overall_n": e["class_n"]}
+    r.update({col: str(hit[key]) for col, key in FROM_TURRITT.items()})
+    return r
+
+
+def build_rider(rider, log=print):
+    """Rows (CSV columns plus a few _internal keys) for one rider, oldest first."""
+    rows = []
+    if rider.get("sheet"):
+        with open(os.path.join(HERE, rider["sheet"]), newline="", encoding="utf-8") as f:
+            rows = [r for r in csv.DictReader(f) if r.get("Time")]
+    exclude = re.compile(rider["exclude"], re.I) if rider.get("exclude") else None
+
+    tt = []
+    if rider.get("turritt_id"):
+        rid = turritt.find_rider(rider["turritt_id"], rider["name"])
+        if rid:
+            since = int(rider.get("since") or 0)  # older seasons cost a request per race list
+            for race_id, year in turritt.rider_races(rid):
+                if int(year) < since:
+                    continue
+                try:
+                    tt.append(turritt.race_row(race_id, year, rider["turritt_id"]))
+                except Exception as e:  # one odd list shouldn't stop the rest
+                    log(f"{rider['id']}: Turritt race {race_id} skipped: {e}")
+        else:
+            log(f"{rider['id']}: Turritt rider {rider['turritt_id']} not found by name {rider['name']!r}")
+
+    eq_all = []
+    if rider.get("eq_id"):
+        try:
+            eq_all = [e for e in eqtiming.races(int(rider["eq_id"]), int(rider.get("since") or 0)) if e["class_place"]]
+        except Exception as e:  # placings still come from Turritt
+            log(f"{rider['id']}: EQ Timing skipped: {e}")
+    eq_by_date = {sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"): e for e in eq_all}
 
     changes, used = [], set()
     for r in rows:
@@ -89,9 +139,9 @@ def main(src, dst, report):
             if not eq:
                 r["Match note"] = "not on Turritt or EQ Timing, kept as typed"
                 continue
-            # EQ Timing has no separate overall list here; the sheet uses class = overall.
             hit = {**eq, "overall_place": eq["class_place"], "overall_n": eq["class_n"]}
             r["Match note"] = "placings from EQ Timing"
+            r["_class"] = eq_class(eq)
             for col, key in FROM_TURRITT.items():
                 v = str(hit[key])
                 if r.get(col) != v:
@@ -100,6 +150,7 @@ def main(src, dst, report):
             continue
         used.add(hit["turritt_race_id"])
         r["Turritt"] = f"https://turritt.com/index.php?Turritt={hit['turritt_race_id']}&page=resultat&current=2&su=2"
+        r["_turritt_race_id"], r["_class"] = hit["turritt_race_id"], hit["turritt_name"]
         new_date = hit["date"].strftime("%d.%m.%y")
         if new_date != r["Date"]:
             changes.append((r["Race"], "Date", r["Date"], new_date))
@@ -113,91 +164,108 @@ def main(src, dst, report):
     for t in tt:
         if t["turritt_race_id"] in used or t["time"] == "DNF":
             continue
-        r = {"Race": f"{t['turritt_name']} {t['date'].year}", "Date": t["date"].strftime("%d.%m.%y"),
+        r = {"Race": f"{turritt._base(t['turritt_name'])} {t['date'].year}", "Date": t["date"].strftime("%d.%m.%y"),
              "Type": race_type(t["turritt_name"]), "Distance (km)": str(t["distance_km"]),
              "Turritt": f"https://turritt.com/index.php?Turritt={t['turritt_race_id']}&page=resultat&current=2&su=2",
-             "Match note": "new from Turritt"}
+             "Match note": "new from Turritt", "_turritt_race_id": t["turritt_race_id"], "_class": t["turritt_name"]}
         r.update({col: str(t[key]) for col, key in FROM_TURRITT.items()})
         rows.append(r)
         changes.append((r["Race"], "(new row)", "", "added from Turritt"))
 
+    # EQ Timing races nobody has a row for yet (Turritt covers many of the same races).
+    taken = {sync.parse_date(r["Date"]) for r in rows}
+    for e in eq_all:
+        d = sync.parse_date_iso(e["date"])
+        if any(abs((d - x).days) <= 1 for x in taken) or ":" not in e["time"]:
+            continue
+        r = eq_row(e, rider)
+        rows.append(r)
+        taken.add(d)
+        changes.append((r["Race"], "(new row)", "", "added from EQ Timing"))
+
+    if exclude:
+        rows = [r for r in rows if not exclude.search(r["Race"])]
     rows.sort(key=lambda r: sync.parse_date(r["Date"]))
-    acts, icu = [], None
-    global ACTIVITIES_FILE_USED
-    key = os.environ.get("INTERVALS_API_KEY", "")
-    try:
-        dates = [sync.parse_date(r["Date"]) for r in rows]
-        icu = sync.Intervals(key)
-        if not key:
-            icu.s.auth = None  # let the environment's proxy add the key
-        acts = icu.activities(min(dates), max(dates) + timedelta(days=1))
-    except Exception as e:  # no key / not authorised: placings still get written
-        print(f"intervals.icu API skipped: {e}", file=sys.stderr)
-    if not acts and os.path.exists(ACTIVITIES_FILE):
-        acts = load_activities(ACTIVITIES_FILE)
-        ACTIVITIES_FILE_USED = True
     for r in rows:
-        gps_speed = False
-        if acts:
-            a, note = sync.match(r, acts)
-            r["Match note"] = "; ".join(x for x in (r.get("Match note"), note) if x)
-            if a:
-                r["intervals.icu activity"] = f"https://intervals.icu/activities/{a['id']}"
-                win = None
-                if icu and not ACTIVITIES_FILE_USED:
-                    try:
-                        win = sync.race_window(icu.streams(a["id"], STREAMS_DIR), sync.secs(r["Time"]))
-                    except Exception as e:
-                        print(f"streams for {a['id']} skipped: {e}", file=sys.stderr)
-                if win:
-                    avg, np_, (s0, s1), metres = win
-                    if avg is not None:
-                        r["Average Power"], r["Normalized Power"] = str(round(avg)), str(round(np_))
-                    race_s = sync.secs(r["Time"])
-                    if s1 - s0 == race_s and metres:
-                        # GPS distance in the race window / official time: official
-                        # course lengths are rounded, the Turritt time is exact.
-                        r["Average speed (km/h)"] = f"{metres / race_s * 3.6:.1f}"
-                        gps_speed = True
-                    whole = a.get("elapsed_time") or 0
-                    if avg is not None and whole - (s1 - s0) > 60:
-                        r["Match note"] = "; ".join(x for x in (r.get("Match note"),
-                            f"power over race only ({s0 // 60}-{s1 // 60} min of {whole // 60} min file)") if x)
-                if not win or win[0] is None:
-                    if a.get("icu_average_watts"):
-                        r["Average Power"] = str(round(a["icu_average_watts"]))
-                    if a.get("icu_weighted_avg_watts"):
-                        r["Normalized Power"] = str(round(a["icu_weighted_avg_watts"]))
-                if not r.get("Elevation gain (m)") and a.get("total_elevation_gain"):
-                    r["Elevation gain (m)"] = str(round(a["total_elevation_gain"]))
         eq = eq_by_date.get(r["Date"])
         if eq:
             r["EQ Timing"] = eq["url"]
+            r["_eq"] = f"{eq['event_id']}/{eq['stage_id']}"
             if eq["age_place"] and eq["age_class"] not in ("Menn", "M17+"):
                 r["Age class"] = eq["age_class"]
                 r["Age class placement"], r["Age class participants"] = str(eq["age_place"]), str(eq["age_n"])
-        if not gps_speed and r.get("Distance (km)"):
-            r["Average speed (km/h)"] = ""  # derive() then uses official distance / time
-        if r.get("Elevation gain (m)"):
-            sync.derive(r)
-        else:  # everything but climbing per km
-            r["Elevation gain (m)"] = "0"
-            sync.derive(r)
-            r["Elevation gain (m)"] = r["Climbing per km"] = ""
 
-    # The hand-written Notes column is dropped: future races won't have it.
-    cols = [c for c in sync.COLS[:-2] if c != "Notes"] + ["Age class", "Age class placement", "Age class participants",
-                             "Turritt", "EQ Timing", "intervals.icu activity", "Match note"]
-    with open(dst, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
-        w.writeheader()
-        w.writerows(rows)
-    if report:
-        with open(report, "w", encoding="utf-8") as f:
-            f.write("# Turritt vs hand sheet\n\n| Race | Column | Sheet | Turritt |\n|---|---|---|---|\n")
-            f.writelines(f"| {a} | {b} | {c} | {d} |\n" for a, b, c, d in changes)
+    add_power(rider, rows, log)
+    for r in rows:
+        if not r.get("_gps_speed") and r.get("Distance (km)"):
+            r["Average speed (km/h)"] = ""  # derive() then uses official distance / time
+        sync.derive(r)
     return rows, changes
 
 
+def add_power(rider, rows, log=print):
+    """Watts and GPS speed over the race window from the rider's intervals.icu rides.
+    Marks rows it has fresh power data for with _power = True."""
+    icu = intervals_client(rider)
+    if not icu or not rows:
+        return
+    try:
+        dates = [sync.parse_date(r["Date"]) for r in rows]
+        acts = icu.activities(min(dates), max(dates) + timedelta(days=1))
+    except Exception as e:  # placings still get written; update.py keeps earlier watts
+        log(f"{rider['id']}: intervals.icu skipped: {e}")
+        return
+    for r in rows:
+        a, note = sync.match(r, acts)
+        r["Match note"] = "; ".join(x for x in (r.get("Match note"), note) if x)
+        if not a:
+            continue
+        r["_power"] = True
+        r["intervals.icu activity"] = f"https://intervals.icu/activities/{a['id']}"
+        race_s = sync.secs(r["Time"])
+        try:
+            win = window(icu, a["id"], race_s)
+        except Exception as e:
+            log(f"streams for {a['id']} skipped: {e}")
+            win = None
+        if win:
+            avg, np_, (s0, s1), metres = win
+            if avg is not None:
+                r["Average Power"], r["Normalized Power"] = str(round(avg)), str(round(np_))
+            if s1 - s0 == race_s and metres:
+                # GPS distance in the race window / official time: official
+                # course lengths are rounded, the official time is exact.
+                r["Average speed (km/h)"] = f"{metres / race_s * 3.6:.1f}"
+                r["_gps_speed"] = True
+                if not r.get("Distance (km)"):
+                    r["Distance (km)"] = f"{metres / 1000:.1f}"
+            whole = a.get("elapsed_time") or 0
+            if avg is not None and whole - (s1 - s0) > 60:
+                r["Match note"] = "; ".join(x for x in (r.get("Match note"),
+                    f"power over race only ({s0 // 60}-{s1 // 60} min of {whole // 60} min file)") if x)
+        if not win or win[0] is None:
+            if a.get("icu_average_watts"):
+                r["Average Power"] = str(round(a["icu_average_watts"]))
+            if a.get("icu_weighted_avg_watts"):
+                r["Normalized Power"] = str(round(a["icu_weighted_avg_watts"]))
+        if not r.get("Elevation gain (m)") and a.get("total_elevation_gain"):
+            r["Elevation gain (m)"] = str(round(a["total_elevation_gain"]))
+    save_metrics()
+
+
+def write_csv(rows, path):
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=CSV_COLS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
+
+def write_report(changes, path):
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("# Turritt vs hand sheet\n\n| Race | Column | Sheet | Turritt |\n|---|---|---|---|\n")
+        f.writelines(f"| {a} | {b} | {c} | {d} |\n" for a, b, c, d in changes)
+
+
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)
+    import update
+    update.main(sys.argv[1:])

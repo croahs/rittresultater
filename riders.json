@@ -1,0 +1,35 @@
+{
+  "_help": "One entry per rider. update.py builds data/races.json from every rider here. id: stable rider id (the Turritt ID when the rider has one). name: as written on Turritt/EQ Timing. turritt_id / eq_id: result profiles (leave out if none). intervals_key_env: the env var (GitHub Actions secret) holding this rider's intervals.icu API key; without it the rider gets placings but no new watts. intervals_via_proxy: only for the dev container, whose proxy injects Pedår's key. publish_power: false leaves watts out of races.json. sheet: optional hand-kept CSV to start from. since: first season to fetch (older race lists cost a request each). exclude: regex of race names to leave out. ssk_cup: the rider's name in the raceresult list, and rounds ridden in Sort klasse.",
+  "riders": [
+    {
+      "id": "171101",
+      "name": "Peder Holterman Solland",
+      "turritt_id": "171101",
+      "eq_id": 6753412,
+      "intervals_athlete_id": "0",
+      "intervals_key_env": "INTERVALS_API_KEY",
+      "intervals_via_proxy": true,
+      "publish_power": true,
+      "sheet": "race_results_original.csv",
+      "csv": "race_results_auto.csv",
+      "report": "turritt_vs_sheet.md",
+      "exclude": "kermesse",
+      "ssk_cup": {
+        "name": "SOLLAND Peder Holterman",
+        "rode_sort": [
+          1,
+          6
+        ],
+        "csv": "points_races.csv"
+      }
+    },
+    {
+      "id": "125529",
+      "name": "Jo Henrik Egeland Jarstø",
+      "turritt_id": "125529",
+      "eq_id": 364828,
+      "since": 2025,
+      "publish_power": false
+    }
+  ]
+}

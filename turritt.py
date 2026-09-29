@@ -123,6 +123,15 @@ def race_info(race_id):
     return datetime.strptime(d, "%d.%m.%Y").date(), dist
 
 
+def race_name(race_id):
+    """The name on the race page, for races outside the Rogaland list (year_list)."""
+    def fetch():
+        t = re.sub(r"\s+", " ", _text(_get(Turritt=race_id, page="resultat", current=2, su=2)))
+        m = re.search(r"\} ([^{}]+?) - 20\d\d .*?Dato:", t)
+        return re.sub(r"\s*Resultat$", "", m.group(1)).strip() if m else f"Turritt {race_id}"
+    return _cached(f"name:{race_id}", fetch)
+
+
 def results(race_id):
     """Rows: [place, class place, TurrittID, group, group place, first, last, club, class, seconds, km/h, ...]"""
     return _cached(f"results:{race_id}", lambda: _request(
@@ -130,7 +139,7 @@ def results(race_id):
 
 
 def _counts(r):
-    return int(r[0]) != DNS_PLACE and int(r[9]) != DNS_TIME and not EXCLUDE_GROUP.search(r[3])
+    return int(r[0]) != DNS_PLACE and int(r[9]) != DNS_TIME and not EXCLUDE_GROUP.search(r[3] or "")
 
 
 def _base(name):
@@ -142,10 +151,10 @@ def race_row(race_id, year, turritt_id):
     me = next(r for r in rows if r[2] == str(turritt_id))
     t = int(me[9])
     names = dict(year_list(year, need=race_id))
-    name = names.get(race_id, "")
-    groups = {r[3] for r in rows if _counts(r)}
-    split_by_bike = any(BIKE_GROUP.search(g) for g in groups) and not BIKE_GROUP.search(me[3])
-    cls = [r for r in rows if _counts(r) and not (split_by_bike and BIKE_GROUP.search(r[3]))]
+    name = names.get(race_id) or race_name(race_id)
+    groups = {r[3] or "" for r in rows if _counts(r)}
+    split_by_bike = any(BIKE_GROUP.search(g) for g in groups) and not BIKE_GROUP.search(me[3] or "")
+    cls = [r for r in rows if _counts(r) and not (split_by_bike and BIKE_GROUP.search(r[3] or ""))]
     siblings = [v for v, n in names.items() if name and _base(n) == _base(name)] or [race_id]
     overall = [r for v in siblings for r in (rows if v == race_id else results(v)) if _counts(r)]
     rank = lambda pool: 1 + sum(int(r[9]) < t for r in pool)

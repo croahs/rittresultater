@@ -1,0 +1,64 @@
+# Weekly check for new races. Fetches only what isn't cached (a couple of
+# requests to Turritt and EQ Timing on a normal week), rebuilds data/results.json
+# and commits it; Cloudflare Pages then republishes the site.
+#
+# Placings, rivals and the site data update every week. Watts need the
+# INTERVALS_API_KEY secret (Settings > Secrets and variables > Actions); without
+# it, last run's watts are kept. Another rider's key goes in as its own secret,
+# named as in riders.json ("intervals_key_env"), and is added to env below. That
+# does not scale past a handful of riders: others can fetch their own watts in
+# the browser on the Utvikling tab, and an intervals.icu OAuth app is the later fix.
+name: Update race data
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"  # Mondays 05:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Note a missing intervals.icu key
+        env:
+          KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then echo "::notice::INTERVALS_API_KEY is not set: placings update, watts stay as they were."; fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Rebuild data
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: |
+          python3 update.py
+          python3 rivals.py
+          python3 export_web.py
+
+      - name: Commit if anything changed
+        run: |
+          git add -A data cache riders.json race_results_auto.csv points_races.csv turritt_vs_sheet.md
+          if git diff --cached --quiet; then
+            echo "No new races."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update race data"
+          git push

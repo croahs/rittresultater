@@ -79,11 +79,11 @@ def _rank(rows, me):
     return 1 + sum(1 for r in field if r[2] == "TIME" and r[3] < mine[3]), len(field)
 
 
-def races(rider=RIDER_ID):
-    """One dict per race in the rider's EQ Timing history, newest first."""
+def races(rider=RIDER_ID, since=0):
+    """One dict per race in the rider's EQ Timing history from season `since`, newest first."""
     out = []
     for h in history(rider):
-        if not h.get("HasResult"):
+        if not h.get("HasResult") or int(h["ArrangementDato"][:4]) < since:
             continue
         rows = result_list(h["ArrangementUID"], h["EtappeUID"])
         me = next((r for r in rows if r[0] == rider), None)
