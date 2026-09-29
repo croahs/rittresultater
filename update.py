@@ -18,6 +18,7 @@ import re
 import sys
 
 import build
+import eqtiming
 import sskcup
 import sync
 
@@ -37,7 +38,47 @@ def rider_csv(rider):
 
 
 def points_csv(rider):
-    return os.path.join(HERE, rider["ssk_cup"].get("csv") or os.path.join("data", "csv", f"{rider['id']}-points.csv"))
+    own = (rider.get("ssk_cup") or {}).get("csv")
+    return os.path.join(HERE, own or os.path.join("data", "csv", f"{rider['id']}-points.csv"))
+
+
+POINTS_COLS = ["Race", "Date", "Class", "Placement", "Riders in class", "Points", "Winner points",
+               "Race laps", "Race time", "Distance (km)", "Average speed (km/h)", "Average Power",
+               "Normalized Power", "raceresult", "EQ Timing", "intervals.icu activity", "Note"]
+
+
+def kermesse_rows(rider, log):
+    """Kermesse (points races on EQ Timing) as points-race rows, with watts and speed over the
+    race time from the rider's intervals.icu ride when there is a key. Like SSK Cup they are
+    kept apart from the timed races: the lists often hold only the riders who scored, so a
+    share of the field beaten or a head-to-head would be made up."""
+    if not rider.get("eq_id"):
+        return []
+    try:
+        ks = eqtiming.points_races(int(rider["eq_id"]), int(rider.get("since") or 0), rider.get("eq_points_events") or ())
+    except Exception as e:
+        log(f"{rider['id']}: EQ Timing points races skipped: {e}")
+        return []
+    rows = []
+    for k in ks:
+        d = k["date"]
+        timed = {"Race": k["name"], "Date": f"{d[8:10]}.{d[5:7]}.{d[2:4]}", "Time": k["time"] or "00:00:00"}
+        if k["time"]:
+            build.add_power(rider, [timed], log)
+        secs = sync.secs(k["time"]) if k["time"] else 0
+        rows.append({
+            "Race": re.sub(r"^.*?\s-\s", "", k["name"]) if " - " in k["name"] else k["name"],
+            "Date": d, "Class": k["group"].title(), "Placement": k["place"], "Riders in class": k["field"],
+            "Points": k["points"], "Winner points": k["winner_points"], "Race laps": "",
+            "Race time": re.sub(r"^0(?=\d:)", "", k["time"]) if secs else "",
+            "Distance (km)": timed.get("Distance (km)", "") if timed.get("_gps_speed") else "", "Average speed (km/h)": timed.get("Average speed (km/h)", "") if timed.get("_gps_speed") else "",
+            "Average Power": timed.get("Average Power", ""), "Normalized Power": timed.get("Normalized Power", ""),
+            "raceresult": "", "EQ Timing": k["url"], "intervals.icu activity": timed.get("intervals.icu activity", ""),
+            "Note": "kermesse: " + ("placed by points" if k["points"] else "no points; the list has only the riders who scored")
+                    + ("; power and speed over the race time" if timed.get("_power") else ""),
+            "_race_id": f"eqtiming:{k['event_id']}/{k['stage_id']}",
+        })
+    return rows
 
 
 def read_csv(path):
@@ -109,11 +150,12 @@ def race_json(rider, r):
 def points_json(rider, r):
     power = rider.get("publish_power", False)
     m = re.search(r"(\d+)$", r["Race"])
+    rid = r.get("_race_id") or r.get("Race id")
     return {
         "rider_id": rider["id"],
-        "race_id": f"raceresult:{sskcup.EVENT}:cup{m.group(1) if m else r['Race']}",
+        "race_id": rid or f"raceresult:{sskcup.EVENT}:cup{m.group(1) if m else r['Race']}",
         "name": r["Race"],
-        "series": "ssk cup",
+        "series": "kermesse" if (rid or "").startswith("eqtiming:") else "ssk cup",
         "date": r["Date"],
         "year": int(r["Date"][:4]),
         "class_name": r["Class"],
@@ -128,7 +170,7 @@ def points_json(rider, r):
         "avg_power": num(r["Average Power"], int) if power else None,
         "np": num(r["Normalized Power"], int) if power else None,
         "note": r["Note"],
-        "links": {"raceresult": r["raceresult"],
+        "links": {"raceresult": r.get("raceresult") or None, "eqtiming": r.get("EQ Timing") or None,
                   "intervals": r["intervals.icu activity"] if power else None},
     }
 
@@ -153,9 +195,23 @@ def run_rider(rider, log):
         icu = build.intervals_client(rider)
         points = (sskcup.main(rider, icu, log) if icu else None)
         if points is None:  # no key this run: keep what we had
-            points = read_csv(points_csv(rider))
-        elif points:
-            sskcup.write_csv(points, points_csv(rider))
+            points = [r for r in read_csv(points_csv(rider)) if not r.get("EQ Timing")]
+    points = points + kermesse_rows(rider, log)
+    if points:
+        # Keep last run's watts for kermesse rides we couldn't read this time (no key in this run).
+        prev = {(r["Race"], r["Date"]): r for r in read_csv(points_csv(rider))}
+        for r in points:
+            p = prev.get((r["Race"], r["Date"]))
+            if p and not r.get("intervals.icu activity") and p.get("intervals.icu activity"):
+                for c in ("Average Power", "Normalized Power", "Average speed (km/h)", "intervals.icu activity"):
+                    r[c] = p.get(c, "")
+        points.sort(key=lambda r: r["Date"])
+        path = points_csv(rider)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=POINTS_COLS + ["Race id"], extrasaction="ignore")
+            w.writeheader()
+            w.writerows({**r, "Race id": r.get("_race_id") or r.get("Race id", "")} for r in points)
     return rows, points
 
 

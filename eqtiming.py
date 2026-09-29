@@ -26,6 +26,9 @@ PAUSE = 2
 # Start groups that are separate competitions (distance or bike type), unlike
 # seeded waves ("Pulje 2 - 3.00 til 3.20 timer") which are one race.
 OWN_RACE_GROUP = re.compile(r"\d\s*km|racer|tempo|rekrutt", re.I)
+# Points races: everyone who scores gets the race's time, so the time says nothing about the
+# placing. They are read as points races (kermesse()), not as timed races (races()).
+POINTS_RACE = re.compile(r"kermesse", re.I)
 CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache", "eqtiming.json")
 
 s = requests.Session()
@@ -88,6 +91,8 @@ def races(rider=RIDER_ID, since=0):
         # EQ Timing also times ski and running races; keep the cycling federation's events only.
         if (h.get("Forbund") or {}).get("Navn", "Norges Cykleforbund") != "Norges Cykleforbund":
             continue
+        if POINTS_RACE.search(h["ArrangementNavn"]):
+            continue
         rows = result_list(h["ArrangementUID"], h["EtappeUID"])
         me = next((r for r in rows if r[0] == rider), None)
         if not me or me[2] == "DNS":  # did not start: not a race for this rider
@@ -106,6 +111,86 @@ def races(rider=RIDER_ID, since=0):
             "class_winner": _hms(min(finishers)) if finishers else "",
             "url": f"https://live.eqtiming.com/{h['ArrangementUID']}#result",
         })
+    return out
+
+
+
+def _cached(key, fetch):
+    if key not in _cache:
+        _cache[key] = fetch()
+        os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
+        with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(_cache, f, ensure_ascii=False)
+    return _cache[key]
+
+
+def event(event_id):
+    """(name, date) of one event, cached forever."""
+    return tuple(_cached(f"event:{event_id}", lambda: (lambda e: [e["Navn"], e["Dato"][:10]])(_get(f"Event/{event_id}"))))
+
+
+def startlist(event_id):
+    """{rider id: [start group, stage id]} for everyone registered for one event, cached forever."""
+    def fetch():
+        items = _get(f"Startlist/{event_id}", count=5000)["Items"]
+        items = items.values() if isinstance(items, dict) else items
+        return {str(i["Utover"]["UID"]): [(i["Pulje"]["Navn"] or "").strip(), i["Pulje"]["EtappeUID"]] for i in items}
+    return _cached(f"startlist:{event_id}", fetch)
+
+
+def points_list(event_id, stage):
+    """[(rider id, status, points, time in ms, place)] for one group of a points race, cached
+    forever. The points are in EQ Timing's "Tillegg" column. Some lists hold only the riders
+    who scored; others hold every finisher with an official place."""
+    def fetch():
+        items = _get(f"Result/Total/{event_id}/{stage}", count=99999)["Items"]
+        num = lambda x: int(x) if str(x).strip().isdigit() else 0
+        return [[i["Deltaker"]["Utover"]["UID"], i["StatusTekst"], num(i["Tillegg"]), i["AkkumulertTid"],
+                 (i.get("Plassering") or {}).get("Total") or 0] for i in items]
+    return _cached(f"points:{event_id}:{stage}", fetch)
+
+
+def kermesse(event_id, rider):
+    """A rider's result in a points race (kermesse), or None when they weren't registered.
+
+    The list only has the riders who scored (plus some DNS), so riders without points share
+    the places after the last scorer, as in SSK Cup. Riders in class = registered in the group
+    minus those marked DNS."""
+    me = startlist(event_id).get(str(rider))
+    if not me:
+        return None
+    group, stage = me
+    name, date = event(event_id)
+    rows = points_list(event_id, stage)
+    dns = {r[0] for r in rows if r[1] == "DNS"}
+    if rider in dns:
+        return None
+    field = sum(1 for uid, (_, st) in startlist(event_id).items() if st == stage and int(uid) not in dns)
+    scored = [r for r in rows if r[1] == "TIME" and r[2] > 0]
+    mine = next((r for r in rows if r[0] == rider and r[1] == "TIME"), None)
+    pts = mine[2] if mine else 0
+    if mine and mine[4]:  # the list ranks every finisher: use the official place
+        place = str(mine[4])
+    elif pts:
+        place = str(1 + sum(r[2] > pts for r in scored))
+    else:  # not a scorer, and the list only has scorers: shared places after them
+        place = f"{len(scored) + 1}-{field} (shared)" if field > len(scored) + 1 else str(field)
+    times = [r[3] for r in scored if r[3]]
+    return {"event_id": event_id, "stage_id": stage, "name": name, "date": date, "group": group,
+            "points": pts, "place": place, "field": field, "winner_points": max((r[2] for r in scored), default=0),
+            "time": _hms(max(times)) if times else "", "url": f"https://live.eqtiming.com/{event_id}#result"}
+
+
+def points_races(rider, since=0, extra=()):
+    """kermesse() for every points race in the rider's EQ Timing history (they scored), plus the
+    events in extra (riders who don't score aren't in their EQ history at all)."""
+    ids = [h["ArrangementUID"] for h in history(rider)
+           if POINTS_RACE.search(h["ArrangementNavn"]) and int(h["ArrangementDato"][:4]) >= since]
+    out = []
+    for e in dict.fromkeys(ids + list(extra)):
+        k = kermesse(e, rider)
+        if k:
+            out.append(k)
     return out
 
 
