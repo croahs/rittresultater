@@ -3,6 +3,7 @@ import { flags, years, type Athlete, type PointsRace, type RaceType, type Result
 import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon } from "../ui";
+import { KlasseToggle } from "../klasse";
 
 type SortKey = "date" | "beaten" | "behind" | "np";
 
@@ -31,6 +32,7 @@ export default function Races({ a }: { a: Athlete }) {
       <section className="card">
         <div className="toolbar">
           <input type="search" id="race-filter" placeholder="Filtrer på rittnavn" aria-label="Filtrer på rittnavn" value={q} onChange={(e) => setQ(e.target.value)} />
+          <KlasseToggle />
           <div className="chips" role="group" aria-label="Rittype">
             <button type="button" className="chip" aria-pressed={type === "all"} onClick={() => setType("all")}>Alle typer</button>
             {types.map((t) => <button key={t} type="button" className="chip" aria-pressed={type === t} onClick={() => setType(t)}>{TYPE_LABEL[t]}</button>)}
