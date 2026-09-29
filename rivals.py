@@ -13,6 +13,7 @@ wins. A DNF loses to any finisher (the sheet's rule); two DNFs are a draw.
   python3 rivals.py                 writes rivals.json, rivals.csv, race_analysis.csv (you)
                                     and data/ for every rider (races.json, riders/index.json, riders/shard-NN.json)
   python3 rivals.py søk <navn>      head-to-head against riders matching <navn>
+  python3 rivals.py rytter <id>     rebuild one rider's full profile in data/riders (after "fetch all my races")
 """
 import bisect
 import csv
@@ -392,9 +393,7 @@ def profile(analysis):
 
 
 SHARDS = 64
-MAX_OPPONENTS = 20  # ranked rivals kept per rider; head-to-head with anyone else comes from races.json
 MAX_LIST = 20  # clubs, specialists, overtaken per rider
-FULL_MIN_RACES = 5  # riders with fewer races get results only (plus everyone in riders.json)
 SUMMARY_KEYS = ("turritt_id", "name", "club", "races", "wins", "losses", "draws",
                 "same_class_races", "same_class_wins", "same_class_losses", "avg_gap_s", "median_gap_pct")
 
@@ -405,6 +404,77 @@ def followed():
             return {str(r.get("turritt_id") or r["id"]) for r in json.load(f)["riders"]}
     except (OSError, ValueError, KeyError):
         return {ME}
+
+
+def rider_object(entry, evs, full):
+    """One rider for the site. full (riders in riders.json, who asked for their data): head-to-head
+    with every opponent over all their races. Otherwise results only; the app can still compute
+    head-to-head with anyone from races.json."""
+    me = entry["id"]
+    mine = [ev for ev in evs if me in ev["by_id"]]
+    urls = {ev["race_id"]: ev["sheet"]["Turritt"] for ev in mine}
+    opps, analysis = build(me, mine, None if full else [])
+    results = [{
+        "race": a["race"], "date": iso(a["date"]), "type": a["type"], "class": a["class"],
+        "place": a["class_place"] if a["time"] != "DNF" else None, "field": a["class_n"],
+        "top_pct": round(100 * a["class_place"] / a["class_n"], 2) if a["class_place"] != "" else None,
+        "behind_pct": a["behind_class_winner_pct"] if a["time"] != "DNF" else None, "time": a["time"],
+        "winner": a["class_winner"], "overall_place": a["place"], "overall_field": a["field"],
+        "beaten_pct": a["beaten_pct"], "distance_km": a["distance_km"], "climb_m_per_km": a["climb_m_per_km"],
+        "turritt": urls[a["turritt_race_id"]],
+    } for a in analysis]
+    results.sort(key=lambda a: a["date"])
+    obj = {k: entry[k] for k in ("id", "name", "club", "age_class")}
+    obj["results"] = results
+    obj.update(profile(analysis))
+    if not full:
+        obj.update(opponents=[], rivals=[], insights={})
+        return obj
+    ins = insights(opps, club_table(me, mine))
+    del ins["gap_curves"]  # the app draws them from opponents
+    ranked = [o["turritt_id"] for o in rivals(opps)]
+    named = set(ranked) | {x["turritt_id"] for v in ins.values() if isinstance(v, list)
+                           for x in v if "turritt_id" in x}
+    named |= {x["turritt_id"] for v in ins["rivals_by_type"].values() for x in v}
+    # Everyone met twice or more; riders met once are only in the totals (and in races.json).
+    obj["opponents"] = [
+        [o["turritt_id"], o["name"], o["club"], o["wins"], o["losses"], o["median_gap_pct"],
+         [[m["race"], iso(m["date"]), m["type"], m["result"][0], m["gap_s"], m["gap_pct"], m["places"],
+           m["my_class"], m["their_class"], int(m["same_class"])] for m in o["meetings"]]]
+        for o in opps if o["races"] >= 2 or o["turritt_id"] in named]
+    obj["rivals"] = ranked
+    obj["insights"] = ins
+    wl = [tally(ev["times"], int(ev["by_id"][me][0][9])) for ev in mine]
+    obj["record"] = {"opponents": len(opps), "wins": sum(w for w, _ in wl), "losses": sum(l for _, l in wl)}
+    return obj
+
+
+def update_rider(tid):
+    """Rebuild one rider's full profile in place (for the "fetch all my races" job), leaving the
+    other riders' files as they are."""
+    evs = events()
+    data = os.path.join(HERE, "data", "riders")
+    with open(os.path.join(data, "index.json"), encoding="utf-8") as f:
+        index = json.load(f)
+    rows = [(iso(ev["sheet"]["Date"]), ev["by_id"][tid][0]) for ev in evs if tid in ev["by_id"]]
+    if not rows:
+        raise SystemExit(f"{tid} er ikke i noen av resultatlistene")
+    last = max(rows, key=lambda x: x[0])[1]
+    entry = {"id": tid, "name": name(last), "club": last[7].strip(), "age_class": last[8],
+             "races": len(rows), "shard": f"{int(tid) % SHARDS:02}"}
+    index = [e for e in index if e["id"] != tid] + [entry]
+    index.sort(key=lambda r: (-r["races"], r["name"]))
+    path = os.path.join(data, f"shard-{entry['shard']}.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            shard = json.load(f)
+    except OSError:
+        shard = {}
+    shard[tid] = rider_object(entry, evs, True)
+    for p, obj in ((path, shard), (os.path.join(data, "index.json"), index)):
+        with open(p, "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    return shard[tid]
 
 
 def write_all(evs):
@@ -440,64 +510,10 @@ def write_all(evs):
                       "races": len(rs), "shard": f"{int(tid) % SHARDS:02}"})
     index.sort(key=lambda r: (-r["races"], r["name"]))
 
-    urls = {ev["race_id"]: ev["sheet"]["Turritt"] for ev in evs}
     follow = followed()
-    full = lambda e: e["races"] >= FULL_MIN_RACES or e["id"] in follow
     shards = defaultdict(dict)
     for entry in index:
-        me = entry["id"]
-        mine = [ev for ev in evs if me in ev["by_id"]]
-        # Full meetings only for who rivals and insights can name: riders met 3+ times, the 10 met
-        # most, and riders met twice who finished near you. Keeps 9000-rider fields from costing minutes.
-        co = Counter()
-        near = set()
-        for ev in mine:
-            co.update(ev["by_id"].keys())
-            i = ev["pos"][me]
-            near.update(ev["order"][max(0, i - 6):i + 7])  # candidates for right ahead/behind
-        co.pop(me, None)
-        keep = []
-        if full(entry):
-            keep = {x for x, n in co.items() if n >= MIN_RACES} | {x for x, _ in co.most_common(10)}
-            keep |= {x for x in near if co.get(x, 0) >= 2}
-            keep.discard(me)
-        opps, analysis = build(me, mine, keep)
-        results = [{
-            "race": a["race"], "date": iso(a["date"]), "type": a["type"], "class": a["class"],
-            "place": a["class_place"] if a["time"] != "DNF" else None, "field": a["class_n"],
-            "top_pct": round(100 * a["class_place"] / a["class_n"], 2) if a["class_place"] != "" else None,
-            "behind_pct": a["behind_class_winner_pct"] if a["time"] != "DNF" else None, "time": a["time"], "winner": a["class_winner"],
-            "overall_place": a["place"], "overall_field": a["field"], "beaten_pct": a["beaten_pct"],
-            "distance_km": a["distance_km"], "climb_m_per_km": a["climb_m_per_km"],
-            "turritt": urls[a["turritt_race_id"]],
-        } for a in analysis]
-        results.sort(key=lambda a: a["date"])
-        obj = {k: entry[k] for k in ("id", "name", "club", "age_class")}
-        obj["results"] = results
-        if not full(entry):
-            # Too few races for rivals: results only; head-to-head with anyone comes from races.json.
-            obj.update(opponents=[], rivals=[], insights={})
-            obj.update(profile(analysis))
-        else:
-            ins = insights(opps, club_table(me, mine))
-            del ins["gap_curves"]  # the app draws them from opponents
-            ranked = [o["turritt_id"] for o in rivals(opps)]
-            ranked = ranked[:MAX_OPPONENTS]
-            named = set(ranked) | {o["turritt_id"] for o in opps[:15]}  # rivals and the 15 met most
-            named |= {x["turritt_id"] for v in ins.values() if isinstance(v, list)
-                                         for x in v if "turritt_id" in x}
-            named |= {x["turritt_id"] for v in ins["rivals_by_type"].values() for x in v}
-            obj["opponents"] = [
-                [o["turritt_id"], o["name"], o["club"], o["wins"], o["losses"], o["median_gap_pct"],
-                 [[m["race"], iso(m["date"]), m["type"], m["result"][0], m["gap_s"], m["gap_pct"], m["places"],
-                   m["my_class"], m["their_class"], int(m["same_class"])] for m in o["meetings"]]]
-                for o in opps if o["turritt_id"] in named]
-            obj["rivals"] = ranked
-            obj["insights"] = ins
-            wl = [tally(ev["times"], int(ev["by_id"][me][0][9])) for ev in mine]
-            obj["record"] = {"opponents": len(co), "wins": sum(w for w, _ in wl), "losses": sum(l for _, l in wl)}
-            obj.update(profile(analysis))
-        shards[entry["shard"]][entry["id"]] = obj
+        shards[entry["shard"]][entry["id"]] = rider_object(entry, evs, entry["id"] in follow)
 
     riders_dir = os.path.join(data, "riders")
     for f in os.listdir(riders_dir):  # clear files from earlier layouts
@@ -505,7 +521,7 @@ def write_all(evs):
     dump(os.path.join("riders", "index.json"), index)
     for k, v in shards.items():
         dump(os.path.join("riders", f"shard-{k}.json"), v)
-    return len(index), sum(map(full, index))
+    return len(index), sum(e["id"] in follow for e in index)
 
 
 def summary(opps, analysis):
@@ -563,6 +579,10 @@ def summary(opps, analysis):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 2 and sys.argv[1] in ("rytter", "rider"):
+        o = update_rider(sys.argv[2])
+        print(f"{o['name']}: {len(o['results'])} ritt, {len(o['rivals'])} rivaler, {o['record']['opponents']} motstandere")
+        sys.exit()
     evs = EVS = events()
     opps, analysis = build(ME, evs)
     if len(sys.argv) > 2 and sys.argv[1] in ("søk", "sok", "search"):
@@ -571,4 +591,4 @@ if __name__ == "__main__":
         write(opps, analysis)
         n, written = write_all(evs)
         summary(opps, analysis)
-        print(f"\ndata/: {n} ryttere i indeksen, {written} med rivaler (minst {FULL_MIN_RACES} ritt eller i riders.json)")
+        print(f"\ndata/: {n} ryttere i indeksen, {written} med rivaler (ryttere i riders.json)")
