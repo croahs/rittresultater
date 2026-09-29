@@ -16,18 +16,28 @@ FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "registr
 
 
 def load():
+    """Every row (one race series and year) in the registry."""
     with open(FILE, encoding="utf-8") as f:
         return json.load(f)["races"]
+
+
+def entries():
+    """One entry per source list we read: the confirmed rows' sources, points races left out."""
+    for r in load():
+        if r.get("status") != "bekreftet" or r.get("type") == "Points":
+            continue
+        for src in r["sources"]:
+            yield {**src, "name": f"{r['name']} {r['year']}", "date": r["date"], "type": r.get("type")}
 
 
 def races(rider, log=print):
     """Every registry race the rider rode, shaped like eqtiming.races(), plus "source"."""
     since, eq_id, out = int(rider.get("since") or 0), rider.get("eq_id"), []
-    for e in load():
+    for e in entries():
         if int(e["date"][:4]) < since:
             continue
         try:
-            if e["source"] == "eq":
+            if e["source"] == "eqtiming":
                 found = eqtiming.registry_races(e, rider["name"], int(eq_id) if eq_id else None)
             elif e["source"] == "raceresult":
                 found = raceresult.races(e, rider["name"])

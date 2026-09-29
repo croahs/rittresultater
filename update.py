@@ -19,6 +19,7 @@ import sys
 
 import build
 import eqtiming
+import riderids
 import sskcup
 import sync
 
@@ -236,9 +237,14 @@ def main(only=()):
         points += [points_json(rider, r) for r in pts]
         log(f"{rider['id']}: {len(rows)} races, {len(pts)} points races, "
             f"{sum(1 for r in rows if r.get('Average Power'))} with power")
+    # Our own rider ids (data/aliases.json): new riders from the lists fetched above get one.
+    aliases = riderids.build(log)
+    by_tt = {a["turritt"]: k for k, a in aliases.items() if a.get("turritt")}
+    by_eq = {str(a["eq"]): k for k, a in aliases.items() if a.get("eq")}
+    rid_of = lambda r: by_tt.get(str(r.get("turritt_id"))) or by_eq.get(str(r.get("eq_id")))
     data = {
         "schema": SCHEMA,
-        "riders": [{"id": r["id"], "name": r["name"], "turritt_id": r.get("turritt_id"),
+        "riders": [{"id": r["id"], "rid": rid_of(r), "name": r["name"], "turritt_id": r.get("turritt_id"),
                     "eq_id": r.get("eq_id"), "power": bool(r.get("publish_power"))} for r in riders],
         "races": sorted(races, key=lambda x: (x["date"], x["rider_id"])),
         "points_races": sorted(points, key=lambda x: (x["date"], x["rider_id"])),

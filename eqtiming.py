@@ -146,7 +146,7 @@ def registry_races(entry, name, rider=None):
     want, out = raceresult.fold(name), []
     skip = re.compile(entry["skip_classes"], re.I) if entry.get("skip_classes") else None
     for stage, stage_name in event_stages(entry["event"]):
-        if skip and skip.search(stage_name):
+        if (skip and skip.search(stage_name)) or (entry.get("stage") and stage != entry["stage"]):
             continue
         rows = named_list(entry["event"], stage)
         me = next((r for r in rows if rider and r[0] == rider), None) or \
