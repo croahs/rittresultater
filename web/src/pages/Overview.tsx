@@ -16,7 +16,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
   return (
     <>
       <Hero a={a} isMe={isMe} go={go} />
-      {!isMe && <p className="note" style={{ margin: "-12px 0 0" }}>Viser {a.results.length === 1 ? "det ene rittet" : `de ${a.results.length} rittene`} med {firstName(a.name)} som er hentet inn så langt. {firstName(a.name)} kan ha kjørt flere ritt som ikke er med her. Watt vises når rytteren kobler til intervals.icu.</p>}
+      {!a.full && <p className="note" style={{ margin: "-12px 0 0" }}>Viser {a.results.length === 1 ? "det ene rittet" : `de ${a.results.length} rittene`} med {firstName(a.name)} som er hentet inn så langt. {firstName(a.name)} kan ha kjørt flere ritt som ikke er med her. Watt vises når rytteren kobler til intervals.icu.</p>}
       {last && (
         <div className="latest" role="note">
           <span>Siste ritt: {last.race} {last.year}, {last.place}. av {last.field}. {who} slo {Math.round(last.beaten)} % av feltet.</span>

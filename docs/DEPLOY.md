@@ -8,14 +8,13 @@ Dashbordet er en statisk side (Vite, React og TypeScript) i mappen `web/`. Den l
 - `python3 export_web.py` skriver `data/site/` (din egen profil med watt og poengritt, sesongklipp og `site.json`).
 - `pnpm build` i `web/` kopierer `data/site/` og `data/riders/` inn i siden (`web/scripts/copy-data.mjs`) og bygger til `web/dist/`.
 - Byggingen på Cloudflare kjører bare det siste steget. Den gjør ingen nettverkskall mot Turritt eller intervals.icu, og ingenting fra `.env` eller `INTERVALS_API_KEY` havner i siden.
-- `web/public/_headers` følger med i bygget. Den setter blant annet `X-Robots-Tag: noindex`, slik at siden ikke blir indeksert før lansering.
+- `web/public/_headers` følger med i bygget. Den setter sikkerhetshoder og caching. Siden er offentlig og kan indekseres av søkemotorer.
 - Node-versjonen er låst med `web/.nvmrc` (22), og pnpm-versjonen med `packageManager` i `web/package.json`.
 
 Innhold i `web/public/_headers`:
 
 ```
 /*
-  X-Robots-Tag: noindex
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
@@ -26,7 +25,7 @@ Innhold i `web/public/_headers`:
   Cache-Control: public, max-age=31536000, immutable
 ```
 
-Linja med `noindex` fjernes den dagen siden skal være offentlig. `Content-Security-Policy` sørger for at siden bare kan kjøre sine egne skript og bare snakke med intervals.icu. Det beskytter API-nøkkelen som en rytter limer inn. Legger du til en ny tjeneste, må den også legges inn her.
+`Content-Security-Policy` sørger for at siden bare kan kjøre sine egne skript og bare snakke med intervals.icu. Det beskytter API-nøkkelen som en rytter limer inn. Legger du til en ny tjeneste, må den også legges inn her.
 
 ## Bygg og test lokalt
 
@@ -80,14 +79,13 @@ Hvis Zero Trust-registreringen er et hinder, kan en liten Pages Function i `func
 ## 3. Lansering (når du er fornøyd)
 
 1. Slett Access-applikasjonen, eller endre policyen til **Everyone**.
-2. Fjern `X-Robots-Tag: noindex` fra `web/public/_headers` og push.
-3. Valgfritt: legg til eget domene under **Custom domains** i Pages-prosjektet.
-4. Lenker til dine egne økter i intervals.icu er skjult som standard. Vil du vise dem, sett `"activity_links": True` i `site.json`-linja i `export_web.py`.
+2. Valgfritt: legg til eget domene under **Custom domains** i Pages-prosjektet.
+3. Lenker til dine egne økter i intervals.icu er skjult som standard. Vil du vise dem, sett `"activity_links": True` i `site.json`-linja i `export_web.py`.
 
 Watt for andre ryttere: på Utvikling kan en rytter lime inn sin egen API-nøkkel fra intervals.icu. Nettleseren henter da watt for rittene direkte fra intervals.icu og regner ut NP for selve rittet. Nøkkelen sendes bare til intervals.icu, lagres ikke, og tallene forsvinner når siden lukkes. Ingenting av dette går via Cloudflare.
 
 Før lansering bør du vite dette:
-- Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Sett en kontaktadresse i `"contact"` i `site.json`-linja i `export_web.py`. Den vises da nederst på siden, slik at folk kan be om retting eller fjerning.
+- Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Kontaktadressen står i `"contact"` i `site.json`-linja i `export_web.py` og vises nederst på siden, slik at folk kan be om retting eller fjerning.
 - Kartflisene i sesongklippet kommer fra CARTO (basert på OpenStreetMap). Gratis bruk er begrenset og krever kildehenvisning, som vises nederst i kartet. Ved mye trafikk bør vi bytte til en fliskilde med egen nøkkel.
 
 ## 4. Nye ritt

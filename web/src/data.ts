@@ -42,6 +42,8 @@ export interface Insights {
 export interface Athlete {
   id: string; name: string; club: string; ageClass: string;
   power: boolean; clips: number[];
+  full: boolean;       // own profile from the pipeline (every race), not rebuilt from the shared result lists
+  livePower?: boolean; // watt fetched in this browser from intervals.icu
   savedPower?: boolean; // watts come from the site's database (the rider saved them), not the static files
   savedHidden?: boolean; // the rider saved watts but keeps them hidden
   savedClipYears?: number[]; // season clips built from GPS tracks the rider saved (api/clip), not static files
@@ -119,12 +121,12 @@ function result(r: Record<string, unknown>): Result {
   };
 }
 
-function athlete(p: RawProfile): Athlete {
+function athlete(p: RawProfile, full = false): Athlete {
   const ins = { ...(p.insights || {}) } as Insights & { closest?: string[] };
   const closest = ins.closest; delete ins.closest;
   return {
     id: p.id, name: p.name, club: p.club, ageClass: p.age_class || "",
-    power: !!p.power, clips: p.clips || [],
+    power: !!p.power, clips: p.clips || [], full,
     results: p.results.map(result).filter((r) => r.field > 0 && Number.isFinite(r.top)).sort((a, b) => a.date.localeCompare(b.date)),
     points: p.points || [],
     opponents: opponents(p.opponents), rivals: p.rivals?.length ? p.rivals : closest || [], insights: ins,
@@ -132,7 +134,7 @@ function athlete(p: RawProfile): Athlete {
 }
 
 export async function loadAthlete(id: string, site: Site, index: IndexRider[], get: <T>(path: string) => Promise<T> = getJSON): Promise<Athlete> {
-  if (site.profiles.includes(id)) return athlete(await get<RawProfile>(`athletes/${id}.json`));
+  if (site.profiles.includes(id)) return athlete(await get<RawProfile>(`athletes/${id}.json`), true);
   const entry = index.find((r) => r.id === id);
   if (!entry?.shard) throw new Error("Fant ikke rytteren");
   const shard = await get<Record<string, RawProfile>>(`riders/shard-${entry.shard}.json`);
@@ -143,7 +145,7 @@ export async function loadAthlete(id: string, site: Site, index: IndexRider[], g
 
 /** The athlete with race power from intervals.icu merged in: fetched in this browser, or saved by the rider (saved = true). */
 export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>, saved = false): Athlete {
-  return { ...a, power: true, savedPower: saved || a.savedPower, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
+  return { ...a, power: true, savedPower: saved || a.savedPower, livePower: !saved || a.livePower, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
 }
 
 /** Numbers the rider saved on the site: watts, GPS speed and the years that have a season clip. */
