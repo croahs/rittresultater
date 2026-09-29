@@ -21,7 +21,7 @@ export default function MoreRaces({ a, rivals }: { a: Athlete; rivals?: "some" |
     <div className="more-races card card-pad" role="note">
       <div>
         <b>{h.status === "none" || h.status === "failed" || h.status === "skipped" ? (rivals === "none" ? "Ingen rivaler ennå" : rivals ? "Kan være ufullstendig" : "Mangler det ritt?") : "Under behandling"}</b>
-        {h.status === "none" && <p>{shown} Er du {name}? Da kan du be om alle rittene dine fra Turritt, EQ Timing og SSK Cup, helt tilbake til 2005. Vi henter dem rolig i løpet av noen timer og regner ut rivalene dine på nytt.</p>}
+        {h.status === "none" && <p>{shown} Er du {name}? Da kan du be om alle rittene dine fra Turritt, EQ Timing og raceresult, helt tilbake til 2005. Vi henter dem rolig i løpet av noen timer og regner ut rivalene dine på nytt.</p>}
         {h.status === "queued" && <p>Alle rittene til {name} står i kø{h.ahead ? `, med ${h.ahead} ${h.ahead === 1 ? "rytter" : "ryttere"} foran` : ""}. Vi henter ritt og rivaler i løpet av noen timer. Kom tilbake senere, så ligger alt her.</p>}
         {h.status === "running" && <p>Ritt og rivaler for {name} hentes nå. Kom tilbake om litt, så ligger alt her.</p>}
         {h.status === "done" && <p>Alle rittene til {name} er hentet. Ritt og rivaler vises når siden er bygget på nytt, om noen minutter.</p>}
