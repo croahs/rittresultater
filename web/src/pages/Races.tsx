@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
-import { flags, type Athlete, type RaceType, type Result } from "../data";
+import { flags, years, type Athlete, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 
 type SortKey = "date" | "beaten" | "behind" | "np";
 
 export default function Races({ a }: { a: Athlete }) {
-  const { sel, setSel } = useSel();
+  const { sel, setSel, season, setSeason } = useSel();
+  const ys = years(a);
   const [q, setQ] = useState("");
   const [type, setType] = useState<RaceType | "all">("all");
   const [sort, setSort] = useState<{ k: SortKey; desc: boolean }>({ k: "date", desc: true });
@@ -14,9 +15,9 @@ export default function Races({ a }: { a: Athlete }) {
   const rows = useMemo(() => {
     const s = fold(q.trim());
     const val = (r: Result) => (sort.k === "date" ? r.date : sort.k === "beaten" ? r.beaten : sort.k === "behind" ? r.behind ?? 999 : r.np ?? -1);
-    return a.results.filter((r) => (type === "all" || r.type === type) && (!s || fold(`${r.race} ${r.year}`).includes(s)))
+    return a.results.filter((r) => (season === "all" || r.year === season) && (type === "all" || r.type === type) && (!s || fold(`${r.race} ${r.year}`).includes(s)))
       .sort((x, y) => { const d = val(x) < val(y) ? -1 : val(x) > val(y) ? 1 : 0; return sort.desc ? -d : d; });
-  }, [a, q, type, sort]);
+  }, [a, q, type, sort, season]);
   const th = (k: SortKey, label: string) => (
     <th aria-sort={sort.k === k ? (sort.desc ? "descending" : "ascending") : "none"}>
       <button type="button" onClick={() => setSort((s) => ({ k, desc: s.k === k ? !s.desc : k !== "behind" }))}>{label}{sort.k === k ? (sort.desc ? " ↓" : " ↑") : ""}</button>
@@ -32,9 +33,12 @@ export default function Races({ a }: { a: Athlete }) {
             <button type="button" className="chip" aria-pressed={type === "all"} onClick={() => setType("all")}>Alle typer</button>
             {types.map((t) => <button key={t} type="button" className="chip" aria-pressed={type === t} onClick={() => setType(t)}>{TYPE_LABEL[t]}</button>)}
           </div>
+          {ys.length > 1 && <div className="chips" role="group" aria-label="År">
+            {(["all", ...ys] as const).map((y) => <button key={y} type="button" className="chip" aria-pressed={season === y} onClick={() => setSeason(y)}>{y === "all" ? "Alle år" : y}</button>)}
+          </div>}
           <span className="muted tnum" style={{ marginLeft: "auto" }}>{rows.length} av {a.results.length}</span>
         </div>
-        {rows.length === 0 ? <div className="empty"><b>Ingen ritt passer filteret</b><button className="btn" onClick={() => { setQ(""); setType("all"); }}>Nullstill filter</button></div> : (
+        {rows.length === 0 ? <div className="empty"><b>Ingen ritt passer filteret</b><button className="btn" onClick={() => { setQ(""); setType("all"); setSeason("all"); }}>Nullstill filter</button></div> : (
           <div className="table-wrap"><table className="sticky">
             <thead><tr><th className="l">Ritt</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}{th("date", "Dato")}<th className="l">Type</th><th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}<th>Liste</th></tr></thead>
             <tbody>{rows.map((r) => {

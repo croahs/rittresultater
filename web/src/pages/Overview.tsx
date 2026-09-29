@@ -54,6 +54,8 @@ function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void
   const pairs = a.results.filter((r) => r.year === y1).map((b) => [a.results.find((r) => r.year === y0 && r.race === b.race), b] as const).filter((p) => p[0]);
   const change = pairs.length >= 3 ? mean(pairs.map(([p, b]) => b.beaten - p!.beaten)) : null;
   const who = isMe ? "Du" : firstName(a.name);
+  const { setSeason, setSel } = useSel();
+  const jump = (t: Tab, id: string) => { go(t); setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 250); };
   return (
     <div className="hero">
       <div className="bib" aria-label={`Startnummer for ${a.name}`}>
@@ -66,14 +68,14 @@ function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void
         </div>
       </div>
       <div className="stats">
-        <div className="card stat"><span className="eyebrow">Slår typisk</span><b>{pct(typical)}</b><small>av feltet, median over alle ritt</small></div>
-        <div className="card stat"><span className="eyebrow">Beste ritt</span><b>{best ? `Slo ${pct(best.beaten)}` : "–"}</b><small>{best ? `${best.place}. av ${best.field} ${best.basis} i ${best.race} ${best.year}` : "Ingen ritt ennå"}</small></div>
-        <div className="card stat"><span className="eyebrow">Utvikling</span>
+        <button type="button" className="card stat" onClick={() => go("utvikling")}><span className="eyebrow">Slår typisk <i aria-hidden="true">→</i></span><b>{pct(typical)}</b><small>av feltet, median over alle ritt. Se utviklingen.</small></button>
+        <button type="button" className="card stat" disabled={!best} onClick={() => { if (!best) return; setSeason("all"); setSel(raceKey(best)); setTimeout(() => document.getElementById("race-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); }}><span className="eyebrow">Beste ritt <i aria-hidden="true">→</i></span><b>{best ? `Slo ${pct(best.beaten)}` : "–"}</b><small>{best ? `${best.place}. av ${best.field} ${best.basis} i ${best.race} ${best.year}` : "Ingen ritt ennå"}</small></button>
+        <button type="button" className="card stat" onClick={() => jump("utvikling", "samme-ritt")}><span className="eyebrow">Utvikling <i aria-hidden="true">→</i></span>
           <b className={change == null ? "" : change >= 0 ? "pos" : "neg"}>{change == null ? "–" : `${change >= 0 ? "+" : "−"}${Math.abs(change).toFixed(0)}`}</b>
-          <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `prosentpoeng ${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></div>
-        <div className="card stat"><span className="eyebrow">{a.power ? "Snitt NP" : "Watt"}</span>
+          <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `prosentpoeng ${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></button>
+        <button type="button" className="card stat" onClick={() => jump("utvikling", "watt")}><span className="eyebrow">{a.power ? "Snitt NP" : "Watt"} <i aria-hidden="true">→</i></span>
           <b>{a.power ? `${Math.round(mean(a.results.filter((r) => r.np).map((r) => r.np!)))} W` : "–"}</b>
-          <small>{a.power ? "normalisert watt i rittene med wattdata" : <>Ikke delt. <button type="button" className="linkish" onClick={() => { go("utvikling"); setTimeout(() => document.getElementById("watt")?.scrollIntoView({ behavior: "smooth" }), 300); }}>Hent watt fra intervals.icu</button></>}</small></div>
+          <small>{a.power ? "normalisert watt i rittene med wattdata" : "Ikke delt ennå. Trykk for å hente watt fra intervals.icu."}</small></button>
       </div>
     </div>
   );

@@ -69,6 +69,7 @@ function RaceChart({ rows, value, max, ticks, unit, label, invert }: { rows: Res
   const roll = rows.map((_, i) => median(rows.slice(Math.max(0, i - 4), i + 1).map(value)));
   const yearStarts = rows.map((r, i) => (i && r.year !== rows[i - 1].year ? i : -1)).filter((i) => i > 0);
   const labelEvery = Math.ceil(n / Math.max(1, Math.floor((W - L - R) / 70)));
+  const selI = rows.findIndex((r) => raceKey(r) === sel);
   return (
     <div className="chart" ref={ref}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Prosent ${label} per ritt`}>
@@ -90,11 +91,36 @@ function RaceChart({ rows, value, max, ticks, unit, label, invert }: { rows: Res
             </g>
           );
         })}
+        {selI >= 0 && <SelLabel x={x(selI)} y={y(value(rows[selI]))} W={W} L={L} R={R} text={`${rows[selI].race} ${rows[selI].year}`} />}
         {rows.map((r, i) => (i % labelEvery === 0 || (i === n - 1 && (n - 1) % labelEvery > labelEvery / 2)) && (
           <text key={i} x={i === n - 1 && n > 1 ? x(i) + 6 : x(i)} y={H - B + 18} textAnchor={i === n - 1 && n > 1 ? "end" : "middle"} fontSize="10.5" fill="var(--muted)">{r.race.split(/[\s-]/)[0].slice(0, 11)}</text>
         ))}
       </svg>
-      <div className="chart-foot"><span>{rows[0] && dateLong(rows[0].date)}</span><span>Trykk på et punkt for å velge rittet</span><span>{rows[n - 1] && dateLong(rows[n - 1].date)}</span></div>
+      {selI >= 0 ? <SelDetail r={rows[selI]} extra={`${pct(value(rows[selI]))} ${label}`} onClear={() => setSel(null)} />
+        : <div className="chart-foot"><span>{rows[0] && `${dateLong(rows[0].date)} til ${dateLong(rows[n - 1].date)}`}</span><span>Trykk på et punkt for å se rittet</span></div>}
+    </div>
+  );
+}
+
+/** Name of the selected race above its point, kept inside the chart. */
+function SelLabel({ x, y, W, L, R, text }: { x: number; y: number; W: number; L: number; R: number; text: string }) {
+  const w = Math.min(W - L - R, text.length * 6.6 + 16), bx = Math.max(L, Math.min(W - R - w, x - w / 2)), by = Math.max(0, y - 40);
+  return (
+    <g pointerEvents="none">
+      <rect x={bx} y={by} width={w} height={22} rx={6} fill="var(--accent)" />
+      <text x={bx + w / 2} y={by + 15} textAnchor="middle" fontSize="12" fontWeight="700" fill="var(--accent-ink)">{text}</text>
+    </g>
+  );
+}
+
+/** The selected race under a chart: what it was and how it went, with a way back. */
+function SelDetail({ r, extra, onClear }: { r: Result; extra: string; onClear: () => void }) {
+  return (
+    <div className="chart-sel" role="status">
+      <div><b>{r.race} {r.year}</b>
+        <span>{dateLong(r.date)} · {TYPE_LABEL[r.type]}{r.cls ? ` · ${r.cls}` : ""}</span>
+        <span>{r.place}. av {r.field} {r.basis} · {extra}</span></div>
+      <button type="button" onClick={onClear}>Fjern valg</button>
     </div>
   );
 }
@@ -115,6 +141,7 @@ function PowerChart({ rows }: { rows: Result[] }) {
   const yearStarts = withNp.map((r, i) => (i && r.year !== withNp[i - 1].year ? i : -1)).filter((i) => i > 0);
   const labelEvery = Math.ceil(n / Math.max(1, Math.floor((W - L - R) / 70)));
   const types = [...new Set(withNp.map((r) => r.type))];
+  const selI = withNp.findIndex((r) => raceKey(r) === sel);
   return (
     <div className="chart" ref={ref}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Normalisert watt og snittwatt per ritt">
@@ -135,10 +162,12 @@ function PowerChart({ rows }: { rows: Result[] }) {
             </g>
           );
         })}
+        {selI >= 0 && <SelLabel x={x(selI)} y={y(withNp[selI].np!)} W={W} L={L} R={R} text={`${withNp[selI].race} ${withNp[selI].year}`} />}
         {withNp.map((r, i) => (i % labelEvery === 0 || (i === n - 1 && (n - 1) % labelEvery > labelEvery / 2)) && (
           <text key={`l${i}`} x={i === n - 1 && n > 1 ? x(i) + 6 : x(i)} y={H - B + 18} textAnchor={i === n - 1 && n > 1 ? "end" : "middle"} fontSize="10.5" fill="var(--muted)">{r.race.split(/[\s-]/)[0].slice(0, 11)}</text>
         ))}
       </svg>
+      {selI >= 0 && <SelDetail r={withNp[selI]} extra={`NP ${withNp[selI].np} W${withNp[selI].ap ? `, snitt ${withNp[selI].ap} W` : ""}`} onClear={() => setSel(null)} />}
       <div className="chart-foot"><span className="legend">
         {types.map((t) => <span key={t} className="swatch"><span className="dot" style={{ background: TYPE_VAR[t] }} />{TYPE_LABEL[t]}</span>)}
         <span className="swatch"><span className="dot" style={{ background: "var(--muted)" }} />Fylt: NP</span>
@@ -215,7 +244,7 @@ function SameRace({ a, who }: { a: Athlete; who: string }) {
     return <span className={`chg ${good ? "pos" : "neg"}`} title={good ? "Bedre" : "Dårligere"}>{r > 0 ? "↑" : "↓"} {Math.abs(r)}{unit}</span>;
   };
   return (
-    <section className="card section" style={{ gap: 0 }}>
+    <section className="card section" id="samme-ritt" style={{ gap: 0, scrollMarginTop: 80 }}>
       <div className="card-pad"><h2 className="h-card">Samme ritt, {y0} mot {y1}</h2><p className="note" style={{ margin: "4px 0 0" }}>Ritt {who} har kjørt begge år. Pilen viser om tallet gikk opp eller ned; grønn betyr bedre. Endringer i prosent står i prosentpoeng.</p></div>
       <div className="table-wrap"><table>
         <thead><tr><th>Ritt</th><th>Slått {y0}</th><th>{y1}</th><th>Bak vinner {y0}</th><th>{y1}</th>{a.power && <><th>NP {y0}</th><th>{y1}</th></>}</tr></thead>

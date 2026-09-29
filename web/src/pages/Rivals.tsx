@@ -134,61 +134,91 @@ function Duel({ a, o, ms: all, type, isMe, sameOnly, inIndex, onRider }: { a: At
         {!sameOnly && same.w + same.l > 0 && same.w + same.l !== r.w + r.l && <div><small>I samme klasse</small><b>{same.w}–{same.l}</b></div>}
         <div><small>Siste møte</small><b>{last.race} {last.date.slice(0, 4)}, {resTxt(last)}</b></div>
       </div>
-      <GapChart ms={ms} type={type} them={them} me={me} />
+      <GapChart key={`${o.id}-${type}-${sameOnly}`} ms={ms} them={them} me={me} />
       {inIndex && <div><button type="button" className="btn" onClick={() => onRider(o.id)}>Se siden til {them}</button></div>}
     </div>
   );
 }
 
-function GapChart({ ms, type, them, me }: { ms: Meeting[]; type: RaceType | null; them: string; me: string }) {
+function GapChart({ ms, them, me }: { ms: Meeting[]; them: string; me: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [W, setW] = useState(620);
+  const [pick, setPick] = useState<number | null>(null);
   const tip = useTip();
   useEffect(() => {
     if (!ref.current) return;
     const ro = new ResizeObserver(([e]) => setW(Math.max(300, Math.min(760, Math.round(e.contentRect.width)))));
     ro.observe(ref.current); return () => ro.disconnect();
   }, []);
-  const H = 230, L = 46, R = 10, T = 14, B = 40, n = ms.length;
+  const n = ms.length, L = 46, R = 10, T = 14;
+  const slot = (W - L - R) / Math.max(n, 1), bw = Math.max(8, Math.min(32, slot * 0.6));
+  const tilt = slot < 70; // names turn sideways when they no longer fit under their bar
+  const B = tilt ? 78 : 44, H = 250 + (tilt ? 34 : 0);
   const top = Math.max(2, ...ms.filter((m) => m.gp != null).map((m) => Math.abs(m.gp!)));
   const step = top <= 4 ? 1 : top <= 10 ? 2.5 : top <= 20 ? 5 : 10, M = Math.ceil(top / step) * step;
   const y = (v: number) => T + (H - T - B) / 2 - (v / M) * (H - T - B) / 2, y0 = y(0);
-  const slot = (W - L - R) / Math.max(n, 1), bw = Math.max(6, Math.min(32, slot * 0.55));
-  const every = Math.ceil(n / Math.max(1, Math.floor((W - L - R) / 64)));
   const other = ms.some((m) => !m.same);
   const tv: number[] = [];
   for (let v = -M; v <= M + 1e-9; v += step) tv.push(v);
+  const short = (m: Meeting) => m.race.replace(/^(Tempo|Temporittet|Ritt)\s+/, "").split(/[\s-]/)[0].slice(0, 14);
+  const toggle = (i: number) => setPick((p) => (p === i ? null : i));
+  const m = pick != null ? ms[pick] : null;
   return (
     <div className="chart" ref={ref}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Tidsforskjell mot ${them} per ritt`}>
         {tv.map((v) => <g key={v}><line x1={L} x2={W - R} y1={y(v)} y2={y(v)} stroke={v ? "var(--line)" : "var(--ink-2)"} strokeDasharray={v ? "2 4" : undefined} strokeOpacity={v ? 1 : 0.6} />
-          <text x={L - 8} y={y(v) + 4} textAnchor="end" fontSize="11" fill="var(--muted)">{Math.abs(v)} %</text></g>)}
+          <text x={L - 8} y={y(v) + 4} textAnchor="end" fontSize="11" fill="var(--muted)">{String(Math.abs(v)).replace(".", ",")} %</text></g>)}
         <text x={L + 6} y={T + 11} fontSize="11" fontWeight="700" fill="var(--win)">▲ {me} raskere</text>
         <text x={L + 6} y={H - B - 6} fontSize="11" fontWeight="700" fill="var(--loss)">▼ {them} raskere</text>
-        {ms.map((m, i) => {
-          const cx = L + slot * (i + 0.5), dim = type && m.type !== type && !(type === "TT" && m.type === "TTT") ? 0.3 : 1;
-          const tipC = <><b>{m.race} {m.date.slice(0, 4)}</b><span>{TYPE_LABEL[m.type]}, {dateLong(m.date)}<br />
-            {m.gs != null ? `${m.res === "w" ? me : m.res === "l" ? them : "Ingen"} var ${clock(m.gs)} raskere (${Math.abs(m.gp!).toFixed(1).replace(".", ",")} %)` : "Mangler tid for en av dere"}
-            {m.pl ? `, ${Math.abs(m.pl)} plasser mellom` : ""}.{(m.mc || m.tc) && <><br />Klasse: {m.mc || "–"} mot {m.tc || "–"}{m.same ? "" : " (ulik)"}</>}</span></>;
-          const ev = { onPointerMove: (e: React.PointerEvent) => tip(e, tipC), onPointerLeave: () => tip(null) };
-          if (m.gp == null) return <g key={i} {...ev}><rect x={cx - slot / 2} y={T} width={slot} height={H - T - B} fill="transparent" /><circle cx={cx} cy={y0} r="5" fill="var(--muted)" opacity={dim} /></g>;
-          const v = -m.gp, yy = y(v), h = Math.max(2, Math.abs(yy - y0)), col = v >= 0 ? "var(--win)" : "var(--loss)";
+        {ms.map((mm, i) => {
+          const cx = L + slot * (i + 0.5), on = pick === i, dim = pick != null && !on ? 0.4 : 1;
+          const ev = {
+            onClick: () => toggle(i), tabIndex: 0, role: "button", "aria-label": `${mm.race} ${mm.date.slice(0, 4)}`, "aria-pressed": on,
+            onKeyDown: (e: React.KeyboardEvent) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(i); } },
+            onPointerMove: (e: React.PointerEvent) => e.pointerType === "mouse" && tip(e, <><b>{mm.race} {mm.date.slice(0, 4)}</b><span>Trykk for detaljer</span></>),
+            onPointerLeave: () => tip(null),
+          };
+          const lx = cx, ly = H - B + 14;
+          const label = tilt
+            ? <text x={lx} y={ly} fontSize="10.5" fill={on ? "var(--ink)" : "var(--ink-2)"} fontWeight={on ? 700 : 400} textAnchor="end" transform={`rotate(-40 ${lx} ${ly})`}>{short(mm)} {mm.date.slice(2, 4)}</text>
+            : <><text x={lx} y={ly + 3} textAnchor="middle" fontSize="10.5" fill={on ? "var(--ink)" : "var(--ink-2)"} fontWeight={on ? 700 : 400}>{short(mm)}</text>
+              <text x={lx} y={ly + 17} textAnchor="middle" fontSize="10" fill="var(--muted)">{mm.date.slice(0, 4)}</text></>;
+          if (mm.gp == null) return <g key={i} className="hit" {...ev}><rect x={cx - slot / 2} y={T} width={slot} height={H - T} fill="transparent" /><circle cx={cx} cy={y0} r="5" fill="var(--muted)" opacity={dim} />{label}</g>;
+          const v = -mm.gp, yy = y(v), h = Math.max(2, Math.abs(yy - y0)), col = v >= 0 ? "var(--win)" : "var(--loss)";
           return (
-            <g key={i} {...ev}>
-              <rect x={cx - slot / 2} y={T} width={slot} height={H - T - B} fill="transparent" />
-              <rect x={cx - bw / 2} y={v >= 0 ? y0 - h : y0} width={bw} height={h} rx="3" fill={m.same ? col : "var(--surface)"} stroke={col} strokeWidth={m.same ? 0 : 2} opacity={dim} />
+            <g key={i} className="hit" {...ev}>
+              <rect x={cx - slot / 2} y={T} width={slot} height={H - T} fill="transparent" />
+              {on && <rect x={cx - bw / 2 - 5} y={(v >= 0 ? y0 - h : y0) - 5} width={bw + 10} height={h + 10} rx="6" fill="none" stroke="var(--accent)" strokeWidth="2.5" />}
+              <rect x={cx - bw / 2} y={v >= 0 ? y0 - h : y0} width={bw} height={h} rx="3" fill={mm.same ? col : "var(--surface)"} stroke={col} strokeWidth={mm.same ? 0 : 2} opacity={dim} />
+              {label}
             </g>
           );
         })}
-        {ms.map((m, i) => (i % every === 0 || (i === n - 1 && (n - 1) % every > every / 2)) && <g key={`l${i}`}>
-          <text x={L + slot * (i + 0.5)} y={H - B + 17} textAnchor="middle" fontSize="10.5" fill="var(--ink-2)">{m.race.split(/[\s-]/)[0].slice(0, 10)}</text>
-          <text x={L + slot * (i + 0.5)} y={H - B + 31} textAnchor="middle" fontSize="10" fill="var(--muted)">{m.date.slice(0, 4)}</text></g>)}
       </svg>
+      {m ? <MeetingDetail m={m} me={me} them={them} onClose={() => setPick(null)} /> : <p className="note" style={{ margin: "0 0 4px" }}>Trykk på en stolpe for å se rittet, klassene og tidsforskjellen.</p>}
       <div className="chart-foot"><span className="legend">
         <span className="swatch"><span className="dot" style={{ background: "var(--win)" }} />{me} raskere</span>
         <span className="swatch"><span className="dot" style={{ background: "var(--loss)" }} />{them} raskere</span>
         {other && <span className="swatch"><span className="dot" style={{ border: "2px solid var(--muted)" }} />Hul: ulik klasse</span>}
-      </span><span>Høyde: tidsforskjell i prosent</span></div>
+      </span><span>Høyde: tidsforskjell i prosent av vinnertiden mellom dere</span></div>
+    </div>
+  );
+}
+
+function MeetingDetail({ m, me, them, onClose }: { m: Meeting; me: string; them: string; onClose: () => void }) {
+  const you = me === "Du";
+  const who = m.res === "w" ? me : m.res === "l" ? them : null;
+  const lead = m.pl ? (m.pl < 0 ? me : them) : null;
+  return (
+    <div className="chart-sel" role="status">
+      <div>
+        <b>{m.race} {m.date.slice(0, 4)}</b>
+        <span>{dateLong(m.date)} · {TYPE_LABEL[m.type]}</span>
+        <span>{m.gs != null && who ? `${who} var ${clock(m.gs)} raskere (${Math.abs(m.gp!).toFixed(1).replace(".", ",")} %)` : m.gs === 0 ? "Helt likt i tid" : who ? `${who} fullførte, den andre har ingen tid (DNF)` : "Ingen av dere har tid"}
+          {lead ? `, ${Math.abs(m.pl!)} ${Math.abs(m.pl!) === 1 ? "plass" : "plasser"} foran` : ""}</span>
+        {(m.mc || m.tc) && <span>Klasse: {you ? "du" : me} {m.mc || "ukjent"}, {them} {m.tc || "ukjent"}{m.same ? " (samme klasse)" : " (ulik klasse)"}</span>}
+      </div>
+      <button type="button" onClick={onClose}>Lukk</button>
     </div>
   );
 }
