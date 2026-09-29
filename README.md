@@ -31,7 +31,7 @@ The dashboard is a static Vite + React + TypeScript site in `web/`. It reads onl
 
 Output:
 - `data/results.json`: what the dashboard reads (schema below).
-- `race_results_auto.csv`: Pedår's rebuilt sheet; `turritt_vs_sheet.md` lists where Turritt disagrees with his hand sheet (`race_results_original.csv`). Other riders get `data/riders/<id>.csv`.
+- `race_results_auto.csv`: Pedår's rebuilt sheet; `turritt_vs_sheet.md` lists where Turritt disagrees with his hand sheet (`race_results_original.csv`). Other riders get `data/csv/<id>.csv`.
 - `points_races.csv`: SSK Cup, a points race (no times), from raceresult.
 
 ## Riders

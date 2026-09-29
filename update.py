@@ -33,11 +33,11 @@ def load_riders():
 
 
 def rider_csv(rider):
-    return os.path.join(HERE, rider.get("csv") or os.path.join("data", "riders", f"{rider['id']}.csv"))
+    return os.path.join(HERE, rider.get("csv") or os.path.join("data", "csv", f"{rider['id']}.csv"))
 
 
 def points_csv(rider):
-    return os.path.join(HERE, rider["ssk_cup"].get("csv") or os.path.join("data", "riders", f"{rider['id']}-points.csv"))
+    return os.path.join(HERE, rider["ssk_cup"].get("csv") or os.path.join("data", "csv", f"{rider['id']}-points.csv"))
 
 
 def read_csv(path):
