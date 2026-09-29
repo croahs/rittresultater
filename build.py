@@ -214,7 +214,8 @@ def build_rider(rider, log=print):
         rr_all = []
     for e in rr_all:
         d = sync.parse_date_iso(e["date"])
-        if d in taken or ":" not in e["time"]:  # NM has a race a day, so only the same day is a duplicate
+        # NM has a race a day, so only the same day is a duplicate. Lapped riders keep their place.
+        if d in taken or not isinstance(e["class_place"], int):
             continue
         r = eq_row(e, rider)
         r["Match note"], r["_rr"] = "new from raceresult", f"{e['event_id']}/{e['stage_id']}"
@@ -256,6 +257,8 @@ def add_power(rider, rows, log=print):
         log(f"{rider['id']}: intervals.icu skipped: {e}")
         return
     for r in rows:
+        if ":" not in r["Time"]:  # lapped: no official time to find the ride or race window by
+            continue
         a, note = sync.match(r, acts)
         r["Match note"] = "; ".join(x for x in (r.get("Match note"), note) if x)
         if not a:

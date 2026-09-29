@@ -45,7 +45,8 @@ def _cached(key, fetch):
 
 def result_list(event, listname):
     """{class: [(place or status, name, time)]} for one event, cached forever. Times are
-    H:MM:SS; after the winner, road and criterium lists give the gap, which is added here."""
+    H:MM:SS; after the winner, road and criterium lists give the gap, which is added here.
+    A lapped rider keeps the official place, with "+2 runder" for a time."""
     def fetch():
         conf = requests.get(f"https://my.raceresult.com/{event}/results/config",
                             params={"page": "results", "noVisitor": "1"}, timeout=60).json()
@@ -57,16 +58,21 @@ def result_list(event, listname):
         col = 6 if listname == TT else 5
         out = {}
         for g, rows in r.json()["data"].items():
-            cls, lead = g.split("_", 1)[1], None
+            cls, lead, prev = g.split("_", 1)[1], None, None
             out[cls] = []
             for row in rows:
-                t = row[col]
+                t = row[col].strip()
                 s = _secs(t.lstrip("+"))
-                if t.startswith("+") and lead is not None and s is not None:
+                if t == "''" and row[2].endswith("."):  # same bunch as the rider before: same time
+                    s = prev
+                elif t.startswith("+") and lead is not None and s is not None:
                     s += lead
                 elif not t.startswith("+") and s is not None and lead is None:
                     lead = s
-                out[cls].append([row[2].rstrip("."), row[3].rstrip("*").strip(), _hms(s) if s is not None else ""])
+                prev = s
+                laps = re.fullmatch(r"[+-]?\s*(\d+)\s*(?:RUNDER?|LAPS?)", t.strip(), re.I)
+                shown = _hms(s) if s is not None else f"+{laps.group(1)} {'runde' if laps.group(1) == '1' else 'runder'}" if laps else ""
+                out[cls].append([row[2].rstrip("."), row[3].rstrip("*").strip(), shown])
         return out
     return _cached(f"{event}:{listname}", fetch)
 
@@ -105,7 +111,7 @@ def races(name, since=0):
                 "event_id": event, "stage_id": cls, "name": title, "stage": cls, "group": "", "date": date,
                 "class_place": int(me[0]) if placed else me[0], "class_n": len(started),
                 "age_class": "", "age_place": None, "age_n": None,
-                "time": me[2] if placed and me[2] else me[0],
+                "time": me[2] if placed else me[0],
                 "class_winner": next((r[2] for r in rows if r[0] == "1"), ""),
                 "url": f"https://my.raceresult.com/{event}/results",
             })

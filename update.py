@@ -131,7 +131,7 @@ def race_json(rider, r):
         "percentile": num(r.get("Percentile in class")),
         "overall_percentile": num(r.get("Overall percentile")),
         "time": r["Time"],
-        "time_s": sync.secs(r["Time"]),
+        "time_s": sync.secs(r["Time"]) if ":" in r["Time"] else None,  # lapped: "+2 runder"
         "winner_time": r["Class winner"],
         "behind_pct": num(r.get("% behind winner")),
         "distance_km": num(r.get("Distance (km)")),

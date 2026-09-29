@@ -53,7 +53,7 @@ def rnd(x, places=2):
 def derive(r):
     """Fill the derived columns from the raw ones (same formulas as the hand sheet).
     Columns whose inputs are missing (no distance, no climbing) are left blank."""
-    t = secs(r["Time"])
+    t = secs(r["Time"]) if ":" in r["Time"] else None  # lapped riders have no time
     dist = float(r["Distance (km)"]) if r.get("Distance (km)") else None
     cp, cn = int(r["Placement in class"]), int(r["Class participants (not officials or DNS, DNF included)"])
     op, on = int(r["Overall placement"]), int(r["Overall participants (not officials or DNS, DNF included)"])
@@ -61,7 +61,7 @@ def derive(r):
     r["Overall percentile"] = rnd(op / on * 100)
     # The hand sheet's speed comes from the bike computer, not official distance/time;
     # this is only a fallback, overwritten from the intervals.icu activity when matched.
-    if not r.get("Average speed (km/h)") and dist:
+    if not r.get("Average speed (km/h)") and dist and t:
         r["Average speed (km/h)"] = f"{dist / (t / 3600):.1f}"
     w = secs(r["Class winner"]) if r.get("Class winner") else 0
     r["% behind winner"] = f"{round((t / w - 1) * 100)}" if w and t else ""
