@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { flags, getJSON, loadAthlete, withPower, type Athlete, type IndexRider, type Site } from "./data";
-import { fold } from "./format";
+import { firstName, fold, initials } from "./format";
 import { BrandMark, Icon, TipProvider } from "./ui";
 import Overview from "./pages/Overview";
 import Development from "./pages/Development";
@@ -85,6 +85,7 @@ export default function App() {
   // Public site: every profile, the owner's included, is written in the third person.
   const isMe = false;
   const home = !riderId;
+  const riderName = athlete?.name || index.find((r) => r.id === riderId)?.name || "";
   const search = <RiderPicker index={index} onPick={(id) => open(id)} />;
 
   return (
@@ -93,13 +94,19 @@ export default function App() {
         <button type="button" className="skip" onClick={() => { const m = document.getElementById("innhold"); m?.focus(); m?.scrollIntoView(); }}>Hopp til innholdet</button>
         <header className="topbar">
           <a className="brand" href="#/" aria-label="Rittresultater, til forsiden" onClick={(e) => { e.preventDefault(); open(null); }}><BrandMark /><div>Ritt<br /><small>resultater</small></div></a>
-          {!home && <nav className="nav" aria-label="Hovedmeny">
-            {TABS.map((t) => (
-              <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
-                <t.icon /><span>{t.label}</span>
-              </button>
-            ))}
-          </nav>}
+          {!home && (
+            // The tabs are views of one rider, so they sit in one group with that rider's name in front.
+            <div className="rider-nav">
+              {riderName && <span className="who-chip" title={riderName}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span></span>}
+              <nav className="nav" aria-label={riderName ? `Sider for ${riderName}` : "Sider for rytteren"}>
+                {TABS.map((t) => (
+                  <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
+                    <t.icon /><span>{t.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+          )}
           {home ? <div className="spacer" /> : search}
           <div className="theme" role="group" aria-label="Fargetema">
             {([["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
