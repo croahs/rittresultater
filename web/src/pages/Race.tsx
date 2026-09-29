@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { raceLists, type IndexRider, type RaceList } from "../data";
-import { TYPE_LABEL, TYPE_VAR, clock, dateLong } from "../format";
+import { TYPE_LABEL, TYPE_VAR, clock, clsLabel, dateLong } from "../format";
 import { KlasseToggle, useKlasse } from "../klasse";
 
 /* One race's whole result list (data/races.json), for anyone: «Åpen» is everybody, «Kvinner» the women only,
@@ -46,7 +46,7 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
                 <td className="tnum">{t == null ? "–" : clock(t)}</td>
                 <td className="tnum muted">{t == null || best == null || i === 0 ? "" : `+${clock(t - best)}`}</td>
                 <td className="l muted">{r[2]}</td>
-                <td className="l muted">{r[4] || r[3]}</td>
+                <td className="l muted">{clsLabel(r[4] || r[3])}</td>
               </tr>
             );
           })}</tbody>
