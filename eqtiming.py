@@ -85,6 +85,9 @@ def races(rider=RIDER_ID, since=0):
     for h in history(rider):
         if not h.get("HasResult") or int(h["ArrangementDato"][:4]) < since:
             continue
+        # EQ Timing also times ski and running races; keep the cycling federation's events only.
+        if (h.get("Forbund") or {}).get("Navn", "Norges Cykleforbund") != "Norges Cykleforbund":
+            continue
         rows = result_list(h["ArrangementUID"], h["EtappeUID"])
         me = next((r for r in rows if r[0] == rider), None)
         if not me or me[2] == "DNS":  # did not start: not a race for this rider
