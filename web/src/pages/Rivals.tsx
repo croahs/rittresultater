@@ -88,8 +88,8 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
       <div className="hl-cards">
         <HlCard title="Nemesis" sub={`Jevnbyrdige som slår ${you} oftest`} info={`${level} Nemesis er de blant dem som oftest slår ${you}.`} c="var(--loss)" rows={ins.nemesis} val={(r) => [`${r.wins}–${r.losses}`, `${r.races} ritt`]} onPick={open} />
         <HlCard title="Offer" sub={`Jevnbyrdige ${isMe ? "du slår" : `${firstName(a.name)} slår`} oftest`} info={`${level} Offer er de blant dem som ${isMe ? "du" : firstName(a.name)} oftest slår.`} c="var(--win)" rows={ins.victims} val={(r) => [`${r.wins}–${r.losses}`, `${r.races} ritt`]} onPick={open} />
-        <HlCard title="Jakten" sub={`Ender oftest 1–3 plasser foran ${you}`} info={`Ryttere som oftest kommer i mål én til tre plasser foran ${you}. Dem er det nærmest å ta igjen.`} c="var(--gravel)" rows={ins.right_ahead} val={(r) => [`${(r as Who & { right_ahead?: number }).right_ahead}×`, `av ${r.races} ritt`]} onPick={open} />
-        <HlCard title="I nakken" sub={`Ender oftest 1–3 plasser bak ${you}`} info={`Ryttere som oftest kommer i mål én til tre plasser bak ${you}. De er nærmest å ta ${isMe ? "deg" : firstName(a.name)} igjen.`} c="var(--road)" rows={ins.right_behind} val={(r) => [`${(r as Who & { right_behind?: number }).right_behind}×`, `av ${r.races} ritt`]} onPick={open} />
+        <HlCard title="Jakten" sub={`Ender oftest 1–3 plasser foran ${you}`} info={`Ryttere som oftest kommer i mål én til tre plasser foran ${you}. Det er dem ${isMe ? "du" : firstName(a.name)} har best sjanse til å ta igjen.`} c="var(--gravel)" rows={ins.right_ahead} val={(r) => [`${(r as Who & { right_ahead?: number }).right_ahead}×`, `av ${r.races} ritt`]} onPick={open} />
+        <HlCard title="I nakken" sub={`Ender oftest 1–3 plasser bak ${you}`} info={`Ryttere som oftest kommer i mål én til tre plasser bak ${you}. Det er de som har best sjanse til å ta ${you} igjen.`} c="var(--road)" rows={ins.right_behind} val={(r) => [`${(r as Who & { right_behind?: number }).right_behind}×`, `av ${r.races} ritt`]} onPick={open} />
       </div>
 
       <div className="grid-2">

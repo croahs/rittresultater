@@ -21,7 +21,7 @@
 // the weekly pipeline. Needs a D1 database bound as DB (docs/DEPLOY.md); without it GET answers
 // {enabled: false} and the page falls back to watts that aren't saved.
 
-import { BAD_KEY, NO_DB, account, activities, athleteFor, body, isRider, json, limited, riderOk, signToken, tables, type ActivitySummary, type Ctx } from "../../server/lib";
+import { BAD_KEY, NO_DB, account, activities, athleteFor, body, isRider, json, limited, riderFrom, signToken, tables, type ActivitySummary, type Ctx } from "../../server/lib";
 import { raceKeyOf, secs } from "../../src/intervals";
 
 type Row = { race_key: string; np: number; ap: number };
@@ -51,9 +51,9 @@ function checkKm(r: In, acts: ActivitySummary[]): number | null {
 
 export async function onRequestGet(ctx: Ctx) {
   const { request, env } = ctx;
-  const rider = new URL(request.url).searchParams.get("rider");
   if (!env.DB) return json({ enabled: false, rows: [], rides: [], clipYears: [], hidden: false });
-  if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
+  const rider = await riderFrom(ctx, new URL(request.url).searchParams.get("rider"));
+  if (!rider) return json({ error: "Ukjent rytter." }, 400);
   await tables(env.DB, ctx);
   const [p, r] = await Promise.all([
     env.DB.prepare(`SELECT race_key, np, ap, (SELECT show_power FROM owner WHERE rider_id = ?1) AS shown
@@ -66,9 +66,9 @@ export async function onRequestGet(ctx: Ctx) {
 }
 
 export async function onRequestPost(ctx: Ctx) {
-  const { request, env } = ctx;
+  const { env } = ctx;
   if (!env.DB) return NO_DB();
-  const b = await body<{ rows?: unknown; show?: unknown }>(request, 64_000);
+  const b = await body<{ rows?: unknown; show?: unknown }>(ctx, 64_000);
   if (!b) return BAD_KEY();
   await tables(env.DB, ctx);
   const stop = await limited(ctx);
@@ -110,9 +110,9 @@ export async function onRequestPost(ctx: Ctx) {
 }
 
 export async function onRequestPatch(ctx: Ctx) {
-  const { request, env } = ctx;
+  const { env } = ctx;
   if (!env.DB) return NO_DB();
-  const b = await body<{ show?: unknown }>(request, 4_000);
+  const b = await body<{ show?: unknown }>(ctx, 4_000);
   if (!b || typeof b.show !== "boolean") return BAD_KEY();
   await tables(env.DB, ctx);
   const stop = await limited(ctx);
@@ -126,9 +126,9 @@ export async function onRequestPatch(ctx: Ctx) {
 }
 
 export async function onRequestDelete(ctx: Ctx) {
-  const { request, env } = ctx;
+  const { env } = ctx;
   if (!env.DB) return NO_DB();
-  const b = await body(request, 4_000);
+  const b = await body(ctx, 4_000);
   if (!b) return BAD_KEY();
   await tables(env.DB, ctx);
   const stop = await limited(ctx);
