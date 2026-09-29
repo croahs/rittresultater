@@ -1,8 +1,8 @@
 // "Hent alle mine ritt" (functions/api/history.ts): asking for a rider's full race history.
-// The request only joins a queue; the weekly data job fetches the history later.
+// The request only joins a queue; the daily data job fetches the history later.
 // Without the site's database (local dev, the artifact preview) this says "not enabled".
 
-export interface HistoryState { enabled: boolean; status: "none" | "queued" | "running" | "done" | "failed"; requested_at?: string; done_at?: string | null; note?: string | null; ahead?: number }
+export interface HistoryState { enabled: boolean; status: "none" | "queued" | "running" | "done" | "failed" | "skipped"; requested_at?: string; done_at?: string | null; note?: string | null; ahead?: number }
 
 const off: HistoryState = { enabled: false, status: "none" };
 

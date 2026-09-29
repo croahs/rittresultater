@@ -5,20 +5,21 @@
 //   POST /api/history {rider}      put the rider in the queue
 //
 // A visit never fetches anything from Turritt, EQ Timing or other result sites. This only adds a
-// row to history_queue; the scheduled data job works through the queue slowly and with cache
-// (it owns the fetching and sets status, done_at and note). Only riders already in the site's
+// row to fetch_requests; the daily data job (update-data workflow) works through a few requests per
+// run, slowly and with cache, over Cloudflare's D1 API, and sets status, done_at and note. Only riders already in the site's
 // own result lists can be queued, each once, a few per visitor per hour and a capped number per
 // day in total. So the worst a bot can do is make the queue longer; the job keeps its own pace.
 
 import { NO_DB, json, riderOk, tables, type Ctx } from "../../server/lib";
 import type { IndexRider, Site } from "../../src/data";
 
-// status: queued -> running -> done | failed (the job sets the last three).
-const QUEUE = `CREATE TABLE IF NOT EXISTS history_queue (rider_id TEXT PRIMARY KEY, requested_at TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'queued', done_at TEXT, note TEXT)`;
+// status: queued -> running -> done | failed | skipped (the job sets everything after queued).
+// Agreed with the job's side: one open (queued or running) request per rider; name is the index's.
+const QUEUE = `CREATE TABLE IF NOT EXISTS fetch_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, turritt_id TEXT NOT NULL,
+  name TEXT NOT NULL, requested_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'queued', done_at TEXT, note TEXT)`;
 const PER_IP_HOUR = 3, NEW_PER_DAY = 30;
 
-type Row = { status: string; requested_at: string; done_at: string | null; note: string | null };
+type Row = { id: number; status: string; requested_at: string; done_at: string | null; note: string | null };
 
 async function staticJSON<T>(ctx: Ctx, path: string): Promise<T | null> {
   try {
@@ -28,12 +29,13 @@ async function staticJSON<T>(ctx: Ctx, path: string): Promise<T | null> {
 }
 
 async function status(db: NonNullable<Ctx["env"]["DB"]>, rider: string) {
-  const row = await db.prepare("SELECT status, requested_at, done_at, note FROM history_queue WHERE rider_id = ?").bind(rider).first<Row>();
+  const row = await db.prepare("SELECT id, status, requested_at, done_at, note FROM fetch_requests WHERE turritt_id = ? ORDER BY id DESC LIMIT 1").bind(rider).first<Row>();
   if (!row) return { enabled: true, status: "none" };
   const ahead = row.status === "queued"
-    ? (await db.prepare("SELECT COUNT(*) AS n FROM history_queue WHERE status = 'queued' AND requested_at < ?").bind(row.requested_at).first<{ n: number }>())?.n ?? 0
+    ? (await db.prepare("SELECT COUNT(*) AS n FROM fetch_requests WHERE status = 'queued' AND id < ?").bind(row.id).first<{ n: number }>())?.n ?? 0
     : 0;
-  return { enabled: true, ...row, ahead };
+  const { id: _, ...rest } = row;
+  return { enabled: true, ...rest, ahead };
 }
 
 export async function onRequestGet({ request, env }: Ctx) {
@@ -55,8 +57,8 @@ export async function onRequestPost(ctx: Ctx) {
   await tables(db);
   await db.batch([db.prepare(QUEUE)]);
 
-  const known = await db.prepare("SELECT 1 FROM history_queue WHERE rider_id = ?").bind(rider).first();
-  if (known) return json(await status(db, rider)); // asking twice changes nothing
+  const open = await db.prepare("SELECT 1 FROM fetch_requests WHERE turritt_id = ? AND status IN ('queued', 'running')").bind(rider).first();
+  if (open) return json(await status(db, rider)); // asking twice changes nothing
 
   // Per visitor and hour, in the same counter table as the key checks but under its own prefix.
   const hour = Math.floor(Date.now() / 3_600_000);
@@ -65,15 +67,17 @@ export async function onRequestPost(ctx: Ctx) {
     ON CONFLICT (ip, hour) DO UPDATE SET n = n + 1 RETURNING n`).bind(ip, hour).first<{ n: number }>();
   if ((mine?.n ?? 0) > PER_IP_HOUR) return json({ error: "For mange forespørsler. Prøv igjen om en time." }, 429);
 
-  const [site, index] = await Promise.all([staticJSON<Site>(ctx, "site.json"), staticJSON<IndexRider[]>(ctx, "riders/index.json")]);
+  const [site, index, done] = await Promise.all([staticJSON<Site>(ctx, "site.json"), staticJSON<IndexRider[]>(ctx, "riders/index.json"), staticJSON<string[]>(ctx, "queue-done.json")]);
   if (!site || !index) return json({ error: "Fikk ikke lest resultatlistene. Prøv igjen." }, 502);
-  if (site.profiles.includes(rider)) return json({ error: "Denne rytteren har allerede hele historikken sin her." }, 409);
-  if (!index.some((r) => r.id === rider)) return json({ error: "Fant ikke rytteren i resultatlistene." }, 404);
+  // queue-done.json: riders the job has already added (written by the job, may not exist yet).
+  if (site.profiles.includes(rider) || done?.includes(rider)) return json({ error: "Denne rytteren har allerede hele historikken sin her." }, 409);
+  const entry = index.find((r) => r.id === rider);
+  if (!entry) return json({ error: "Fant ikke rytteren i resultatlistene." }, 404);
 
   const today = new Date().toISOString().slice(0, 10);
-  const n = await db.prepare("SELECT COUNT(*) AS n FROM history_queue WHERE requested_at >= ?").bind(today).first<{ n: number }>();
+  const n = await db.prepare("SELECT COUNT(*) AS n FROM fetch_requests WHERE requested_at >= ?").bind(today).first<{ n: number }>();
   if ((n?.n ?? 0) >= NEW_PER_DAY) return json({ error: "Køen er full for i dag. Prøv igjen i morgen." }, 429);
 
-  await db.prepare("INSERT OR IGNORE INTO history_queue (rider_id, requested_at) VALUES (?, ?)").bind(rider, new Date().toISOString()).run();
+  await db.prepare("INSERT INTO fetch_requests (turritt_id, name, requested_at) VALUES (?, ?, ?)").bind(rider, entry.name, new Date().toISOString()).run();
   return json(await status(db, rider));
 }

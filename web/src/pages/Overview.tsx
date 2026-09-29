@@ -245,14 +245,14 @@ function MoreRaces({ a }: { a: Athlete }) {
     <div className="more-races card card-pad" role="note">
       <div>
         <b>Mangler det ritt?</b>
-        {h.status === "none" && <p>{shown} Er du {name}? Da kan du be om alle rittene dine fra Turritt, helt tilbake til 2005. De hentes rolig ved neste oppdatering av dataene, ikke med en gang.</p>}
-        {h.status === "queued" && <p>Alle rittene til {name} står i kø{h.ahead ? `, med ${h.ahead} ${h.ahead === 1 ? "rytter" : "ryttere"} foran` : ""}. De kommer med neste oppdatering av dataene.</p>}
+        {h.status === "none" && <p>{shown} Er du {name}? Da kan du be om alle rittene dine fra Turritt, helt tilbake til 2005. De hentes rolig i løpet av et døgn, ikke med en gang.</p>}
+        {h.status === "queued" && <p>Alle rittene til {name} står i kø{h.ahead ? `, med ${h.ahead} ${h.ahead === 1 ? "rytter" : "ryttere"} foran` : ""}. Vi henter rittene i løpet av et døgn.</p>}
         {h.status === "running" && <p>Rittene til {name} hentes nå. De vises når oppdateringen er ferdig.</p>}
         {h.status === "done" && <p>Alle rittene til {name} er hentet. De vises når siden er bygget på nytt.</p>}
-        {h.status === "failed" && <p>Vi fikk ikke hentet alle rittene til {name}.{h.note ? ` ${h.note}` : ""}</p>}
+        {(h.status === "failed" || h.status === "skipped") && <p>Vi fikk ikke hentet alle rittene til {name}.{h.note ? ` ${h.note}` : ""}</p>}
         {err && <p className="err" role="alert">{err}</p>}
       </div>
-      {h.status === "none" && <button type="button" className="btn primary" onClick={ask} disabled={busy}>{busy ? "Sender …" : "Hent alle mine ritt"}</button>}
+      {(h.status === "none" || h.status === "failed" || h.status === "skipped") && <button type="button" className="btn primary" onClick={ask} disabled={busy}>{busy ? "Sender …" : h.status === "none" ? "Hent alle mine ritt" : "Prøv igjen"}</button>}
     </div>
   );
 }
