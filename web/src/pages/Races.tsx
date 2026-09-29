@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { flags, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon } from "../ui";
 import { KlasseToggle } from "../klasse";
+import RaceVideos from "../RaceVideos";
 
 type SortKey = "date" | "beaten" | "behind" | "np";
 
@@ -14,6 +15,8 @@ export default function Races({ a }: { a: Athlete }) {
   const [type, setType] = useState<RaceType | "all">("all");
   const [sort, setSort] = useState<{ k: SortKey; desc: boolean }>({ k: "date", desc: true });
   const pv = a.points.some((p) => p.video);
+  const media = a.results.some((r) => r.videos?.length); // videos riders shared from the race, whoever made them
+  const [open, setOpen] = useState<string | null>(null);
   const types = [...new Set(a.results.map((r) => r.type))];
   const rows = useMemo(() => {
     const s = fold(q.trim());
@@ -44,11 +47,12 @@ export default function Races({ a }: { a: Athlete }) {
         </div>
         {rows.length === 0 ? <div className="empty"><b>Ingen ritt passer filteret</b><button className="btn" onClick={() => { setQ(""); setType("all"); setSeason("all"); }}>Nullstill filter</button></div> : (
           <div className="table-wrap"><table className="sticky">
-            <thead><tr><th className="l">Ritt</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}{th("date", "Dato")}<th className="l">Type</th><th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}<th>Lenker</th></tr></thead>
+            <thead><tr><th className="l">Ritt</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}{th("date", "Dato")}<th className="l">Type</th><th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}{media && <th>Media</th>}<th>Lenker</th></tr></thead>
             <tbody>{rows.map((r) => {
-              const k = raceKey(r);
+              const k = raceKey(r), n = r.videos?.length || 0;
               return (
-                <tr key={k} aria-selected={sel === k} tabIndex={0} style={{ cursor: "pointer" }} onClick={() => setSel(sel === k ? null : k)}
+                <Fragment key={k}>
+                <tr aria-selected={sel === k} tabIndex={0} style={{ cursor: "pointer" }} onClick={() => setSel(sel === k ? null : k)}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSel(sel === k ? null : k); } }}>
                   <td className="l"><b style={{ fontWeight: 600 }}>{r.race}</b> <span className="muted">{r.year}</span></td>
                   <td>{r.place}/{r.field}{r.agePlace ? <span className="muted age"> ({r.agePlace}/{r.ageN} {r.ageClass})</span> : null}</td>
@@ -58,8 +62,12 @@ export default function Races({ a }: { a: Athlete }) {
                   <td>{hms(r.time)}</td><td>{dec(r.km)}</td><td>{dec(r.speed)}</td>
                   {a.power && <td>{r.np ? (r.icu && flags.activityLinks ? <a href={r.icu} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>{r.np}</a> : r.np) : "–"}</td>}
                   {a.power && <td>{r.ap ?? "–"}</td>}
-                  <td className="links">{r.video && <a className="vid" href={r.video} target="_blank" rel="noopener" title="Video fra rittet" aria-label={`Video fra ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}><Icon.play /></a>}{r.link ? <a href={r.link} target="_blank" rel="noopener" aria-label={`Resultatliste for ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}>↗</a> : ""}</td>
+                  {media && <td className="links">{n > 0 && <button type="button" className="vid media-btn" aria-expanded={open === k} title={n === 1 ? "Video fra rittet" : `${n} videoer fra rittet`}
+                    aria-label={`${n === 1 ? "Video" : `${n} videoer`} fra ${r.race} ${r.year}`} onClick={(e) => { e.stopPropagation(); setOpen(open === k ? null : k); }}><Icon.play />{n > 1 && <span>{n}</span>}</button>}</td>}
+                  <td className="links">{r.link ? <a href={r.link} target="_blank" rel="noopener" aria-label={`Resultatliste for ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}>↗</a> : ""}</td>
                 </tr>
+                {open === k && <tr className="media-row"><td colSpan={99}><RaceVideos videos={r.videos} race={`${r.race} ${r.year}`} autoOpen /></td></tr>}
+                </Fragment>
               );
             })}</tbody>
           </table></div>
