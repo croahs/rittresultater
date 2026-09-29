@@ -25,3 +25,13 @@ export async function requestHistory(rider: string): Promise<HistoryState> {
   if (!r.ok) throw new Error(b.error || "Noe gikk galt. Prøv igjen.");
   return b;
 }
+
+/** The first sentence of a finished request. The job's note is usually a count like "7 ritt";
+    anything else is shown as its own sentence. */
+export function doneText(name: string, note?: string | null): string {
+  const n = (note || "").trim();
+  const count = /^(\d+) ritt$/i.exec(n);
+  if (count) return count[1] === "0" ? `Vi fant ingen flere ritt for ${name}.` : `Vi fant ${count[1]} ritt for ${name}.`;
+  if (!n) return `Alle rittene til ${name} er hentet.`;
+  return `Rittene til ${name} er hentet. ${n.charAt(0).toUpperCase()}${n.slice(1)}${/[.!?]$/.test(n) ? "" : "."}`;
+}
