@@ -10,7 +10,6 @@ export const Icon = {
   search: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></svg>,
   sun: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" /></svg>,
   moon: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z" /></svg>,
-  auto: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><rect x="3" y="4" width="18" height="13" rx="2" /><path d="M8 21h8M12 17v4" /></svg>,
   bolt: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg>,
 };
 

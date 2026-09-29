@@ -7,6 +7,7 @@ import Development from "./pages/Development";
 import Rivals from "./pages/Rivals";
 import Races from "./pages/Races";
 import Clip from "./pages/Clip";
+import Welcome from "./pages/Welcome";
 import { SelProvider } from "./state";
 import type { RacePower } from "./intervals";
 import { getSaved } from "./saved";
@@ -20,7 +21,7 @@ const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
   { id: "klipp", label: "Sesongklipp", icon: Icon.clip },
 ];
 
-/* Hash: #/<rider id>/<tab>. Plain #<tab> also works. */
+/* Hash: #/<rider id>/<tab>. No rider id means the front page. */
 function readHash(): { rider?: string; tab?: Tab } {
   try {
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
@@ -30,14 +31,14 @@ function readHash(): { rider?: string; tab?: Tab } {
   } catch { return {}; }
 }
 
-type Theme = "system" | "light" | "dark";
+type Theme = "light" | "dark";
 function useTheme(): [Theme, (t: Theme) => void] {
   const [theme, setTheme] = useState<Theme>(() => {
-    try { return (localStorage.getItem("theme") as Theme) || "system"; } catch { return "system"; }
+    try { return localStorage.getItem("theme") === "dark" ? "dark" : "light"; } catch { return "light"; }
   });
   useEffect(() => {
-    if (theme === "system") document.documentElement.removeAttribute("data-theme");
-    else document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#0f1022" : "#eef0f6");
     try { localStorage.setItem("theme", theme); } catch { /* private mode */ }
   }, [theme]);
   return [theme, setTheme];
@@ -54,15 +55,15 @@ export default function App() {
 
   useEffect(() => {
     Promise.all([getJSON<Site>("site.json"), getJSON<IndexRider[]>("riders/index.json")])
-      .then(([s, i]) => { flags.activityLinks = !!s.activity_links; setSite(s); setIndex(i); setRiderId(readHash().rider || s.default_rider); })
+      .then(([s, i]) => { flags.activityLinks = !!s.activity_links; setSite(s); setIndex(i); setRiderId(readHash().rider || null); })
       .catch(() => setError("Fant ikke dataene. Kjør python3 export_web.py og bygg på nytt."));
-    const onHash = () => { const h = readHash(); if (h.tab) setTab(h.tab); if (h.rider) setRiderId(h.rider); };
+    const onHash = () => { const h = readHash(); setTab(h.tab || "oversikt"); setRiderId(h.rider || null); };
     addEventListener("hashchange", onHash);
     return () => removeEventListener("hashchange", onHash);
   }, []);
 
   useEffect(() => {
-    if (!site || !riderId) return;
+    if (!site || !riderId) { setAthlete(null); setError(null); return; }
     let live = true;
     setAthlete(null); setError(null);
     loadAthlete(riderId, site, index).then(async (a) => {
@@ -77,37 +78,48 @@ export default function App() {
   }, [site, riderId, index]);
 
   useEffect(() => {
-    if (!riderId) return;
-    try { history.replaceState(null, "", `#/${riderId}/${tab}`); } catch { /* sandboxed preview */ }
-  }, [riderId, tab]);
+    // A new rider (or the front page) gets its own history entry, so Back returns to where you were; a tab change does not.
+    if (!site) return; // until the data has loaded, the hash is still the link the visitor opened
+    const want = riderId ? `#/${riderId}/${tab}` : "#/";
+    try {
+      if (location.hash === want || (!riderId && !location.hash)) return;
+      if ((readHash().rider || null) === riderId) history.replaceState(null, "", want);
+      else history.pushState(null, "", want);
+    } catch { /* sandboxed preview */ }
+  }, [site, riderId, tab]);
 
   const go = (t: Tab) => { setTab(t); window.scrollTo({ top: 0 }); };
-  const isMe = !!site && athlete?.id === site.default_rider;
+  const open = (id: string | null, t: Tab = "oversikt") => { setRiderId(id); setTab(t); window.scrollTo({ top: 0 }); };
+  // Public site: every profile, the owner's included, is written in the third person.
+  const isMe = false;
+  const home = !riderId;
+  const search = <RiderPicker index={index} onPick={(id) => open(id)} />;
 
   return (
     <TipProvider>
       <div className="app">
         <button type="button" className="skip" onClick={() => { const m = document.getElementById("innhold"); m?.focus(); m?.scrollIntoView(); }}>Hopp til innholdet</button>
         <header className="topbar">
-          <div className="brand"><BrandMark /><div>Ritt<br /><small>resultater</small></div></div>
-          <nav className="nav" aria-label="Hovedmeny">
+          <a className="brand" href="#/" aria-label="Rittresultater, til forsiden" onClick={(e) => { e.preventDefault(); open(null); }}><BrandMark /><div>Ritt<br /><small>resultater</small></div></a>
+          {!home && <nav className="nav" aria-label="Hovedmeny">
             {TABS.map((t) => (
               <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
                 <t.icon /><span>{t.label}</span>
               </button>
             ))}
-          </nav>
-          <RiderPicker index={index} me={site?.default_rider} onPick={(id) => setRiderId(id)} />
+          </nav>}
+          {home ? <div className="spacer" /> : search}
           <div className="theme" role="group" aria-label="Fargetema">
-            {([["system", "Følg systemet", Icon.auto], ["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
+            {([["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
               <button key={k} type="button" aria-pressed={theme === k} title={l} aria-label={l} onClick={() => setTheme(k)}><I /></button>
             ))}
           </div>
         </header>
 
         <main className="page" id="innhold" tabIndex={-1}>
-          {error && <div className="card empty"><b>{error}</b>{riderId !== site?.default_rider && site && <button className="btn" onClick={() => setRiderId(site.default_rider)}>Tilbake til min side</button>}</div>}
-          {!error && !athlete && <div className="loading">Henter resultater …</div>}
+          {error && <div className="card empty"><b>{error}</b><button className="btn" onClick={() => open(null)}>Til forsiden</button></div>}
+          {home && site && <Welcome index={index} example={site.default_rider} onRider={(id, t) => open(id, t)} search={search} />}
+          {!home && !error && !athlete && <div className="loading">Henter resultater …</div>}
           {athlete && (
             <SelProvider key={athlete.id} a={athlete}>
               <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index}
@@ -136,7 +148,7 @@ function Page({ tab, athlete, isMe, go, onRider, index, onPower, onSaved }: { ta
   }
 }
 
-function RiderPicker({ index, me, onPick }: { index: IndexRider[]; me?: string; onPick: (id: string) => void }) {
+function RiderPicker({ index, onPick }: { index: IndexRider[]; onPick: (id: string) => void }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [hi, setHi] = useState(0);
@@ -174,7 +186,7 @@ function RiderPicker({ index, me, onPick }: { index: IndexRider[]; me?: string; 
           {hits.length === 0 && <li className="none">Ingen ryttere med det navnet i resultatlistene.</li>}
           {hits.map((r, i) => (
             <li key={r.id} role="option" aria-selected={i === hi} onMouseEnter={() => setHi(i)} onMouseDown={(e) => { e.preventDefault(); pick(r); }}>
-              <span className="who"><b>{r.name}{r.id === me ? " (deg)" : ""}</b><small>{r.club || "Uten klubb"}</small></span>
+              <span className="who"><b>{r.name}</b><small>{r.club || "Uten klubb"}</small></span>
               <small className="tnum">{r.races} ritt</small>
             </li>
           ))}
