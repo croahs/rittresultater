@@ -10,7 +10,7 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
   const O = useMemo(() => new Map([...a.opponents, ...extra]), [a.opponents, extra]);
   const ins = a.insights;
   const [sameOnly, setSameOnly] = useState(false);
-  const TABS = useMemo(() => ([["closest", "Jevneste"], ["Road", "Landevei"], ["TT", "Tempo"], ["Gravel", "Gravel"]] as [TabKey, string][])
+  const TABS = useMemo(() => ([["closest", "Jevneste"], ["Road", "Landevei"], ["TT", "Tempo"], ["Gravel", "Gravel"], ["MTB", "Terreng"]] as [TabKey, string][])
     .filter(([k]) => ids(k).length), [a]); // eslint-disable-line react-hooks/exhaustive-deps
   function ids(k: TabKey): string[] {
     return (k === "closest" ? a.rivals : (ins.rivals_by_type?.[k] || []).map((r) => r.turritt_id)).filter((id) => O.has(id));

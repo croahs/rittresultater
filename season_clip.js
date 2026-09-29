@@ -8,12 +8,12 @@
  *
  * data comes from season_clip.py: { year, step, races: [{ name, date, type, time,
  * place, field, km, pts: [[lat, lon], ...] }] }, one point every `step` seconds.
- * Colours come from the host page's --road / --gravel / --tempo tokens.
+ * Colours come from the host page's --road / --gravel / --mtb / --tempo tokens.
  */
 (function () {
-  const TYPE_VAR = { Road: "--road", Gravel: "--gravel", TT: "--tempo", TTT: "--tempo" };
-  const TYPE_FALLBACK = { Road: "#2a78d6", Gravel: "#eb6834", TT: "#1baf7a", TTT: "#1baf7a" };
-  const TYPE_NAME = { Road: "Landevei", Gravel: "Gravel", TT: "Tempo", TTT: "Lagtempo" };
+  const TYPE_VAR = { Road: "--road", Gravel: "--gravel", MTB: "--mtb", TT: "--tempo", TTT: "--tempo" };
+  const TYPE_FALLBACK = { Road: "#2a78d6", Gravel: "#eb6834", MTB: "#5b8a2e", TT: "#1baf7a", TTT: "#1baf7a" };
+  const TYPE_NAME = { Road: "Landevei", Gravel: "Gravel", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo" };
   const LENGTHS = [15, 30, 60, 120];
   const FAR_KM = 150; // races this far from the season's centre get their own inset
 
