@@ -54,6 +54,11 @@ h1, h2, h3 { text-wrap: balance; }
 .yt-link:focus-visible, .who-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .yt-link svg { width: 20px; height: 20px; }
 td.links { white-space: nowrap; }
+.race-videos { grid-column: 1 / -1; display: grid; gap: 10px; }
+.vid-chip { display: inline-flex; align-items: center; gap: 6px; }
+.vid-chip svg { width: 16px; height: 16px; }
+.vid-frame { position: relative; aspect-ratio: 16 / 9; max-width: 720px; width: 100%; border-radius: 10px; overflow: hidden; background: #000; }
+.vid-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 td.links a.vid { display: inline-grid; place-items: center; vertical-align: middle; margin-right: 6px; color: var(--ink-2); }
 td.links a.vid:hover { color: #e62117; }
 td.links a.vid svg { width: 18px; height: 18px; }
