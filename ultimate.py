@@ -1,7 +1,7 @@
 """Timed races whose results are on Ultimate (live.ultimate.dk), found by the rider's name.
 
 Ultimate times Bergen-Voss. Like raceresult it has no rider profiles to look up, so the
-events are listed in EVENTS by hand and riders are matched by name. Each event's list is
+races come from data/registry.json (registry.py) and riders are matched by name. Each event's list is
 read once (1000 more riders a page, 2 s apart) and cached for good in cache/ultimate.json.
 The rows have the same shape as eqtiming.races(), so build.py adds them the same way.
 """
@@ -19,11 +19,6 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CACHE_FILE = os.path.join(HERE, "cache", "ultimate.json")
 DATA = "https://live.ultimate.dk/desktop/front/data.php"
 PAUSE = 2
-# (event id, distance id, name, date)
-EVENTS = [
-    (7141, 1, "Bergen-Voss 2026", "2026-06-06"),
-]
-
 try:
     with open(CACHE_FILE, encoding="utf-8") as f:
         _cache = json.load(f)
@@ -64,23 +59,20 @@ def _hms(t):
     return f"{h:02d}:{m:02d}:{s:02d}"
 
 
-def races(name, since=0):
-    """One dict per EVENTS race the rider (by name) rode, shaped like eqtiming.races()."""
-    want, out = raceresult.fold(name), []
-    for event, distance, title, date in EVENTS:
-        if int(date[:4]) < since:
-            continue
-        rows = result_list(event, distance)
-        me = next((r for r in rows if raceresult.fold(r[1]) == want), None)
-        if not me or not me[0].isdigit() or ":" not in me[4]:
-            continue
-        age = [r for r in rows if r[3] == me[3]]
-        timed = [r for r in rows if ":" in r[4]]
-        out.append({
-            "event_id": event, "stage_id": distance, "name": title, "stage": re.sub(r"\s+20\d\d$", "", title), "group": "", "date": date,
-            "class_place": int(me[0]), "class_n": len(rows),
-            "age_class": me[3], "age_place": 1 + sum(1 for r in age if ":" in r[4] and _hms(r[4]) < _hms(me[4])),
-            "age_n": len(age), "time": _hms(me[4]), "class_winner": min(_hms(r[4]) for r in timed),
-            "url": f"https://live.ultimate.dk/desktop/front/?eventid={event}",
-        })
-    return out
+def races(entry, name):
+    """The rider's result (by name) in one registry race, shaped like eqtiming.races()."""
+    want = raceresult.fold(name)
+    rows = result_list(entry["event"], entry.get("distance", 1))
+    me = next((r for r in rows if raceresult.fold(r[1]) == want), None)
+    if not me or not me[0].isdigit() or ":" not in me[4]:
+        return []
+    age = [r for r in rows if r[3] == me[3]]
+    timed = [r for r in rows if ":" in r[4]]
+    return [{
+        "event_id": entry["event"], "stage_id": entry.get("distance", 1), "name": entry["name"],
+        "stage": re.sub(r"\s+20\d\d$", "", entry["name"]), "group": "", "date": entry["date"],
+        "class_place": int(me[0]), "class_n": len(rows),
+        "age_class": me[3], "age_place": 1 + sum(1 for r in age if ":" in r[4] and _hms(r[4]) < _hms(me[4])),
+        "age_n": len(age), "time": _hms(me[4]), "class_winner": min(_hms(r[4]) for r in timed),
+        "url": f"https://live.ultimate.dk/desktop/front/?eventid={entry['event']}",
+    }]

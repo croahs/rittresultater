@@ -1,0 +1,13 @@
+{
+  "_help": "Races we fetch from their own timer, listed by hand (Turritt is not a source). One entry per race: name (with year), date, source (eq, raceresult or ultimate) and event id. eq: every stage of the event is read, riders are matched by EQ id or name; only events with results on EQ count (many are sign-up only). raceresult: list (the list's name on the event page), cols = [place, name, time] columns in that list (default [2, 3, 5]; road and criterium lists give the gap after the winner). ultimate: distance (default 1). type overrides the type guessed from the name. skip_classes: regex of classes or stages without a time. Rider-linked EQ results (the rider's EQ history) and SSK Cup (sskcup.py) are found without this file.",
+  "races": [
+    {"name": "Mairittet 2024", "date": "2024-05-01", "source": "eq", "event": 70471, "skip_classes": "lagkonkurranse"},
+    {"name": "Nordsjørittet 2025", "date": "2025-06-14", "source": "eq", "event": 74590, "type": "Gravel", "skip_classes": "uten tid|ungdom|famil"},
+    {"name": "Bergen-Voss 2026", "date": "2026-06-06", "source": "ultimate", "event": 7141, "distance": 1},
+    {"name": "Nordsjørittet 2026", "date": "2026-06-13", "source": "raceresult", "event": 346769, "list": "03 - Results|01 - Overall Result", "cols": [2, 3, 10], "type": "Gravel", "skip_classes": "uten tid|ungdom|famil"},
+    {"name": "NM Individuell Tempo 2026", "date": "2026-06-25", "source": "raceresult", "event": 378682, "list": "02-Results|Time Trial Results", "cols": [2, 3, 6]},
+    {"name": "NM Gateritt 2026", "date": "2026-06-26", "source": "raceresult", "event": 378683, "list": "02-Results|Criterium Results"},
+    {"name": "NM Fellesstart Junior 2026", "date": "2026-06-27", "source": "raceresult", "event": 378684, "list": "02-Results|Road Race Results"},
+    {"name": "NM Fellesstart Elite 2026", "date": "2026-06-28", "source": "raceresult", "event": 378685, "list": "02-Results|Road Race Results"}
+  ]
+}

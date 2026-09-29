@@ -128,7 +128,7 @@ Lokalt kan det testes med `npx wrangler pages dev` i `web/` etter `pnpm build`, 
 
 Knappen på siden legger bare en forespørsel i tabellen `fetch_requests` i D1. Siden henter aldri noe selv. Jobben `.github/workflows/fetch-queue.yml` kjører annenhver time. Den tar maks 3 forespørsler, legger rytteren inn i `riders.json`, henter historikken fra 2005 med de vanlige pausene og cachen, bygger rivaler og sidedata, og pusher til `main`.
 
-Kildene er tidtakerne selv: EQ Timing med kermesse (når nøyaktig én EQ-profil har navnet), SSK Cup og NM Landevei 2026 på raceresult og Bergen-Voss på Ultimate (når navnet står i listene der). Turritt hentes ikke fra lenger (Pedår 29.09.2026: Turritt er en konkurrent, ikke en kilde); det som allerede ligger i cachen, brukes til vi har flyttet over. Uten intervals.icu-nøkkel får SSK Cup plassering og poeng, men ikke watt.
+Kildene er tidtakerne selv: EQ Timing med kermesse (når nøyaktig én EQ-profil har navnet), SSK Cup, og rittene i `data/registry.json` på EQ Timing, raceresult og Ultimate (når navnet står i listene der). Turritt hentes ikke fra lenger (Pedår 29.09.2026: Turritt er en konkurrent, ikke en kilde); det som allerede ligger i cachen, brukes til vi har flyttet over. Uten intervals.icu-nøkkel får SSK Cup plassering og poeng, men ikke watt.
 
 Jobben leser køen gjennom Cloudflare sitt D1-API, og trenger tre repo-secrets (**Settings → Secrets and variables → Actions → New repository secret**):
 

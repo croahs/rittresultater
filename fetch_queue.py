@@ -5,8 +5,8 @@ cap); it never scrapes. This script, run by .github/workflows/fetch-queue.yml, t
 most MAX_PER_RUN requests, adds each rider to riders.json (history from SINCE) and builds
 them with update.py, which fetches only result lists that aren't cached yet, 2 s apart.
 Sources are the original timing systems, never Turritt (a competitor; turritt.LIVE is off):
-EQ Timing including kermesse (when exactly one EQ profile has their name), and by name in
-the lists we know of on raceresult (SSK Cup, NM Landevei 2026) and Ultimate (Bergen-Voss).
+EQ Timing including kermesse (when exactly one EQ profile has their name), SSK Cup, and by
+name in the races listed in data/registry.json (EQ Timing, raceresult, Ultimate).
 The Turritt id they give is only their id on the site for now.
 rivals.py and export_web.py then refresh the site data.
 

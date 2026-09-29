@@ -115,6 +115,61 @@ def races(rider=RIDER_ID, since=0):
 
 
 
+def named_list(event, stage):
+    """[(rider id, name, club, age class, status, time in ms, start group)] for one race,
+    cached forever. For registry races (registry.py), where riders are matched by name because
+    EQ links only some results to a profile. Anonymised rows (the rider asked EQ) are left out."""
+    def fetch():
+        items = _get(f"Result/Total/{event}/{stage}", count=99999)["Items"]
+        return [[i["Deltaker"]["Utover"]["UID"], i["Deltaker"]["Utover"].get("NavnFormatert") or "",
+                 i["Deltaker"].get("Klubbnavn") or "", i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"],
+                 i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
+                for i in items if not i["Deltaker"].get("Anonym")]
+    return _cached(f"named:{event}:{stage}", fetch)
+
+
+def event_stages(event_id):
+    """[(stage id, stage name)] of an event that has results on EQ (Resultat), else []."""
+    key = f"stages:{event_id}"
+    if key not in _cache:  # an event without results yet is asked again next run
+        e = _get(f"Event/{event_id}")
+        if not e.get("Resultat"):
+            return []
+        _cached(key, lambda: [[int(k), v.get("Navn") or ""] for k, v in e["Etapper"].items()])
+    return [tuple(x) for x in _cache[key]]
+
+
+def registry_races(entry, name, rider=None):
+    """The rider's results in one registry race on EQ, by EQ id or else by name, shaped like
+    races(). Stages matching entry["skip_classes"] (e.g. "uten tid") are left out."""
+    import raceresult
+    want, out = raceresult.fold(name), []
+    skip = re.compile(entry["skip_classes"], re.I) if entry.get("skip_classes") else None
+    for stage, stage_name in event_stages(entry["event"]):
+        if skip and skip.search(stage_name):
+            continue
+        rows = named_list(entry["event"], stage)
+        me = next((r for r in rows if rider and r[0] == rider), None) or \
+            next((r for r in rows if raceresult.fold(r[1]) == want), None)
+        if not me or me[4] == "DNS":
+            continue
+        pool = [[r[0], r[3], r[4], r[5], r[6]] for r in rows]  # the shape _rank() and races() use
+        if OWN_RACE_GROUP.search(me[6]):
+            pool = [r for r in pool if r[4] == me[6]]
+        place, n = _rank(pool, me[0])
+        age_place, age_n = _rank([r for r in pool if r[1] == me[3]], me[0])
+        finishers = [r[3] for r in pool if r[2] == "TIME"]
+        out.append({
+            "event_id": entry["event"], "stage_id": stage, "name": entry["name"], "stage": stage_name,
+            "group": me[6], "date": entry["date"], "class_place": place, "class_n": n,
+            "age_class": me[3], "age_place": age_place, "age_n": age_n,
+            "time": _hms(me[5]) if me[4] == "TIME" else me[4],
+            "class_winner": _hms(min(finishers)) if finishers else "",
+            "url": f"https://live.eqtiming.com/{entry['event']}#result",
+        })
+    return out
+
+
 def _cached(key, fetch):
     if key not in _cache:
         _cache[key] = fetch()

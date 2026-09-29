@@ -12,7 +12,7 @@ python3 update.py      # every rider in riders.json; or: python3 update.py 17110
 ```
 
 - `race_results_original.csv` is the hand-kept sheet.
-- Placings come from the timing systems themselves. Turritt is no longer fetched from (`turritt.LIVE = False`, 2026-09-29: it is a competitor, not a source); its cached lists are still read until the move to the original sources is done. EQ Timing (`eqtiming.py`, cached in `cache/eqtiming.json`) also gives the age-class placing. NM Landevei 2026 comes from raceresult (`raceresult.py`, events listed by hand, riders matched by name, cached in `cache/raceresult_events.json`). Bergen-Voss comes from Ultimate (`ultimate.py`, the same way, `cache/ultimate.json`).
+- Placings come from the timing systems themselves. Turritt is no longer fetched from (`turritt.LIVE = False`, 2026-09-29: it is a competitor, not a source); its cached lists are still read until the move to the original sources is done. EQ Timing (`eqtiming.py`, cached in `cache/eqtiming.json`) also gives the age-class placing. Races from other timers (raceresult, Ultimate) and EQ results not linked to a rider's EQ profile are listed by hand in `data/registry.json` (`registry.py`); riders are matched by name, each list is fetched once and cached (`cache/raceresult_events.json`, `cache/ultimate.json`, `cache/eqtiming.json`).
 - SSK Cup is a points race (no times), so it has its own file: `python3 sskcup.py points_races.csv` (raceresult, cached in `cache/raceresult.json`).
 - `race_results_auto.csv` is the rebuilt sheet; `turritt_vs_sheet.md` lists where Turritt disagrees with it.
 - `cache/turritt.json` caches every Turritt page fetched. Published results never change, so each race is fetched once and never again. Keep this file committed.

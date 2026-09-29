@@ -24,8 +24,7 @@ import requests
 
 import sync
 import eqtiming
-import raceresult
-import ultimate
+import registry
 import turritt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -220,25 +219,32 @@ def build_rider(rider, log=print):
         taken.add(d)
         changes.append((r["Race"], "(new row)", "", "added from EQ Timing"))
 
-    # Races on raceresult (NM) and Ultimate (Bergen-Voss), found by name: no rider id to go by.
-    for src, mod in (("raceresult", raceresult), ("Ultimate", ultimate)):
-        try:
-            found = mod.races(rider["name"], int(rider.get("since") or 0))
-        except Exception as e:
-            log(f"{rider['id']}: {src} skipped: {e}")
-            found = []
-        for e in found:
-            d = sync.parse_date_iso(e["date"])
-            # NM has a race a day, so only the same day is a duplicate. Lapped riders keep their place.
-            if d in taken or not isinstance(e["class_place"], int):
-                continue
-            r = eq_row(e, rider)
-            r["Match note"], r["_rr"] = f"new from {src}", f"{src.lower()}:{e['event_id']}/{e['stage_id']}"
-            if e["age_place"]:
-                r["Age class"], r["Age class placement"], r["Age class participants"] = e["age_class"], str(e["age_place"]), str(e["age_n"])
-            rows.append(r)
-            taken.add(d)
-            changes.append((r["Race"], "(new row)", "", f"added from {src}"))
+    # Races from their own timers listed in data/registry.json (raceresult, Ultimate, EQ
+    # results not linked to a profile), found by name. Only a day nobody has a row for.
+    src_name = {"eq": "EQ Timing", "raceresult": "raceresult", "ultimate": "Ultimate"}
+    for e in registry.races(rider, log):
+        d = sync.parse_date_iso(e["date"])
+        # NM has a race a day, so only the same day is a duplicate. Lapped riders keep their place.
+        if d in taken or not isinstance(e["class_place"], int):
+            continue
+        r = eq_row(e, rider)
+        if e.get("type"):
+            r["Type"] = e["type"]
+        r["Match note"], r["_rr"] = f"new from {src_name[e['source']]}", f"{e['source']}:{e['event_id']}/{e['stage_id']}"
+        if e["source"] == "eq":
+            r["EQ Timing"], r["_eq"] = e["url"], f"{e['event_id']}/{e['stage_id']}"
+        if e["age_place"] and e["age_class"] not in ("Menn", "M17+"):
+            r["Age class"], r["Age class placement"], r["Age class participants"] = e["age_class"], str(e["age_place"]), str(e["age_n"])
+        rows.append(r)
+        taken.add(d)
+        changes.append((r["Race"], "(new row)", "", f"added from {src_name[e['source']]}"))
+
+    # The registry knows some races' type better than their name does (Nordsjørittet is gravel).
+    typed = {sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"): e for e in registry.load() if e.get("type")}
+    for r in rows:
+        e = typed.get(r["Date"])
+        if e and e["name"].split()[0].lower() in r["Race"].lower():
+            r["Type"] = e["type"]
 
     if exclude:
         rows = [r for r in rows if not exclude.search(r["Race"])]
