@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { flags, getJSON, loadAthlete, withPower, withSaved, type Athlete, type IndexRider, type Site } from "./data";
 import { firstName, fold, initials } from "./format";
 import { BrandMark, Icon, TipProvider } from "./ui";
+import { Sources } from "./sources";
 import Overview from "./pages/Overview";
 import Development from "./pages/Development";
 import Rivals from "./pages/Rivals";
@@ -105,8 +106,8 @@ export default function App() {
           {!home && (
             // The tabs are views of one rider, so they sit in one group with that rider's name in front.
             <div className="rider-nav">
-              {riderName && <span className="who-chip" title={riderName}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span>
-                {athlete?.channel && <a className="yt-link" href={athlete.channel} target="_blank" rel="noopener" title={`${firstName(riderName)} på YouTube`} aria-label={`${riderName} på YouTube`}><Icon.play /></a>}</span>}
+              {riderName && <span className="who-chip"><button type="button" className="who-btn" title={`${riderName}: oversikt`} aria-label={`${riderName}, til oversikten`} onClick={() => go("oversikt")}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span></button>
+                {athlete?.channel && <a className="yt-link" href={athlete.channel} target="_blank" rel="noopener" title={`${firstName(riderName)} på YouTube`} aria-label={`${riderName} på YouTube`}><Icon.youtube /></a>}</span>}
               <nav className="nav" aria-label={riderName ? `Sider for ${riderName}` : "Sider for rytteren"}>
                 {TABS.map((t) => (
                   <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>
@@ -137,7 +138,7 @@ export default function App() {
           )}
           <footer className="site">
             <span>Plassering: DNF telles med i feltet. Watt og fart gjelder bare selve rittet.</span>
-            <span>Resultater fra <a href="https://turritt.com" target="_blank" rel="noopener">Turritt</a>, <a href="https://live.eqtiming.com" target="_blank" rel="noopener">EQ Timing</a> og raceresult. Watt fra <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>.</span>
+            <span>Resultater fra <Sources />. Watt fra <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>.</span>
             {site?.contact && <span>Feil i dataene, eller vil du ikke være med? Skriv til <a href={`mailto:${site.contact}`}>{site.contact}</a>.</span>}
           </footer>
         </main>

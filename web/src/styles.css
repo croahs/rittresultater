@@ -44,11 +44,14 @@ h1, h2, h3 { text-wrap: balance; }
 .brand small { display: block; font: 600 .68rem/1.2 var(--body); letter-spacing: .08em; color: var(--muted); }
 /* The tabs belong to the rider named in front of them: one quiet group. */
 .rider-nav { display: flex; align-items: center; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-2); min-width: 0; }
-.who-chip { display: flex; align-items: center; gap: 7px; padding: 0 10px 0 4px; margin-right: 2px; border-right: 1px solid var(--line); font-weight: 700; white-space: nowrap; min-width: 0; }
+.who-chip { display: flex; align-items: center; gap: 2px; padding: 0 6px 0 0; margin-right: 2px; border-right: 1px solid var(--line); font-weight: 700; white-space: nowrap; min-width: 0; }
+.who-btn { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 7px; min-width: 32px; overflow: hidden; padding: 3px 8px 3px 3px; border-radius: 999px; cursor: pointer; }
+.who-btn:hover { background: var(--ghost); }
 .who-chip .ini { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: .7rem; letter-spacing: .02em; flex: none; }
 .who-chip .nm { overflow: hidden; text-overflow: ellipsis; max-width: 9rem; }
 .yt-link { display: grid; place-items: center; width: 30px; height: 30px; margin-left: -2px; border-radius: 8px; color: var(--ink-2); flex: none; }
-.yt-link:hover { background: var(--ghost); color: #e62117; }
+.yt-link:hover { background: var(--ghost); }
+.yt-link:focus-visible, .who-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .yt-link svg { width: 20px; height: 20px; }
 td.links { white-space: nowrap; }
 td.links a.vid { display: inline-grid; place-items: center; vertical-align: middle; margin-right: 6px; color: var(--ink-2); }
@@ -80,7 +83,7 @@ td.links a.vid svg { width: 18px; height: 18px; }
   .rider-nav { padding: 0; border: 0; background: none; flex: none; }
   .who-chip { padding: 0; margin: 0; border: 0; }
   .who-chip .nm { max-width: 6rem; }
-  .picker { min-width: 110px; }
+  .picker { min-width: 96px; }
   .page { padding-bottom: 96px; }
 }
 
@@ -418,4 +421,6 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .more-races { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: -8px; }
 .more-races > div { flex: 1 1 320px; }
 .more-races p { margin: 4px 0 0; color: var(--ink-2); font-size: .9rem; max-width: 70ch; }
+.more-races p a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .more-races .err { color: var(--loss); }
+@media (max-width: 400px) { .who-chip .nm { display: none; } .who-btn { padding-right: 3px; } .topbar { gap: 8px; } .picker { min-width: 0; } }
