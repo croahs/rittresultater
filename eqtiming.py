@@ -74,6 +74,12 @@ def _ms(i):
     return i.get("AkkumulertTidGlattet") or i["AkkumulertTid"]
 
 
+def _club(d):
+    """The club (or team) as the list shows it. Newer lists have no "Klubbnavn", only these."""
+    return (d.get("Klubbnavn") or d.get("KlubbTeamFormatert") or (d.get("Klubb") or {}).get("Navn")
+            or (d["Utover"].get("Klubb") or {}).get("Navn") or "").strip()
+
+
 def _total(event, stage):
     """Fetch one race's full result list once and cache both shapes of it (results: for races(),
     named: for registry races), so a list read for one is never fetched again for the other."""
@@ -83,7 +89,7 @@ def _total(event, stage):
                                           for i in items]
     _cache[f"named:{event}:{stage}"] = [
         [i["Deltaker"]["Utover"]["UID"]] + ([None, None] if i["Deltaker"].get("Anonym") else
-         [i["Deltaker"]["Utover"].get("NavnFormatert") or "", i["Deltaker"].get("Klubbnavn") or ""])
+         [i["Deltaker"]["Utover"].get("NavnFormatert") or "", _club(i["Deltaker"])])
         + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], _ms(i), i["Deltaker"]["Pulje"]["Navn"].strip()]
         for i in items]
     _save()
