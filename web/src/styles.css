@@ -16,15 +16,6 @@
   --panel: var(--surface); --fg: var(--ink); --fg-2: var(--ink-2); --grid: var(--surface-2); --tempo: var(--tt);
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0f1022; --surface: #191a33; --surface-2: #24264a; --sunk: #14152b;
-  --ink: #eceefe; --ink-2: #b7bad9; --muted: #8487ac; --line: #2c2e54; --ghost: rgb(255 255 255 / .04);
-  --accent: #8592ff; --accent-ink: #0f1022; --accent-soft: rgb(133 146 255 / .16);
-  --road: #7194ff; --gravel: #b983ff; --tt: #ff7196; --ttt: #ff9a5c; --pts: #3fcfbd;
-  --win: #43d19f; --loss: #ff7189; --focus: #a3adff;
-  --bib: #eceefe; --bib-ink: #0f1022;
-  --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 12px 30px -14px rgb(0 0 0 / .7);
-  color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #0f1022; --surface: #191a33; --surface-2: #24264a; --sunk: #14152b;
   --ink: #eceefe; --ink-2: #b7bad9; --muted: #8487ac; --line: #2c2e54; --ghost: rgb(255 255 255 / .04);

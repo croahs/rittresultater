@@ -30,14 +30,14 @@ function readHash(): { rider?: string; tab?: Tab } {
   } catch { return {}; }
 }
 
-type Theme = "system" | "light" | "dark";
+type Theme = "light" | "dark";
 function useTheme(): [Theme, (t: Theme) => void] {
   const [theme, setTheme] = useState<Theme>(() => {
-    try { return (localStorage.getItem("theme") as Theme) || "system"; } catch { return "system"; }
+    try { return localStorage.getItem("theme") === "dark" ? "dark" : "light"; } catch { return "light"; }
   });
   useEffect(() => {
-    if (theme === "system") document.documentElement.removeAttribute("data-theme");
-    else document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#0f1022" : "#eef0f6");
     try { localStorage.setItem("theme", theme); } catch { /* private mode */ }
   }, [theme]);
   return [theme, setTheme];
@@ -102,7 +102,7 @@ export default function App() {
           </nav>}
           {home ? <div className="spacer" /> : search}
           <div className="theme" role="group" aria-label="Fargetema">
-            {([["system", "Følg systemet", Icon.auto], ["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
+            {([["light", "Lys modus", Icon.sun], ["dark", "Mørk modus", Icon.moon]] as const).map(([k, l, I]) => (
               <button key={k} type="button" aria-pressed={theme === k} title={l} aria-label={l} onClick={() => setTheme(k)}><I /></button>
             ))}
           </div>
