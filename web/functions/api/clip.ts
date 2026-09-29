@@ -11,7 +11,7 @@ export async function onRequestGet(ctx: Ctx) {
   const q = new URL(request.url).searchParams, rider = q.get("rider"), year = Number(q.get("year"));
   if (!env.DB) return json({ error: "Lagring er ikke satt opp." }, 404);
   if (!riderOk(rider) || !(year > 2000 && year < 2100)) return json({ error: "Ukjent rytter eller år." }, 400);
-  await tables(env.DB);
+  await tables(env.DB, ctx);
   const { results } = await env.DB.prepare("SELECT race_key, km, pts FROM ride WHERE rider_id = ? AND race_key LIKE ?")
     .bind(rider, `${year}-%`).all<{ race_key: string; km: number | null; pts: string }>();
   const a = await athleteFor(ctx, rider);

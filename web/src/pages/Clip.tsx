@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getJSON, type Athlete, type ClipData } from "../data";
+import { getJSON, ridOf, type Athlete, type ClipData } from "../data";
 import { firstName } from "../format";
 import { Empty } from "../ui";
 
@@ -15,7 +15,7 @@ export default function Clip({ a, isMe }: { a: Athlete; isMe: boolean }) {
     setErr(false);
     // Clips from GPS tracks the rider saved on the site come from the API; the rest are static files.
     const data = a.savedClipYears?.includes(year)
-      ? fetch(`api/clip?rider=${encodeURIComponent(a.id)}&year=${year}`).then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json() as Promise<ClipData>; })
+      ? ridOf(a.id).then((rid) => fetch(`api/clip?rider=${encodeURIComponent(rid)}&year=${year}`)).then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json() as Promise<ClipData>; })
       : getJSON<ClipData>(`clips/${a.id}-${year}.json`);
     Promise.all([import("../clip-module"), data])
       .then(([m, data]) => { if (live && el.current) player = m.SeasonClip.mount(el.current, data, { seconds: 30 }); })

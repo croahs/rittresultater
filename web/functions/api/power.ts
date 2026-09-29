@@ -49,11 +49,12 @@ function checkKm(r: In, acts: ActivitySummary[]): number | null {
   return km != null && acts.some((a) => km * 1000 <= (a.distance || 0) * 1.02) ? km : null;
 }
 
-export async function onRequestGet({ request, env }: Ctx) {
+export async function onRequestGet(ctx: Ctx) {
+  const { request, env } = ctx;
   const rider = new URL(request.url).searchParams.get("rider");
   if (!env.DB) return json({ enabled: false, rows: [], rides: [], clipYears: [], hidden: false });
   if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
-  await tables(env.DB);
+  await tables(env.DB, ctx);
   const [p, r] = await Promise.all([
     env.DB.prepare(`SELECT race_key, np, ap, (SELECT show_power FROM owner WHERE rider_id = ?1) AS shown
       FROM power WHERE rider_id = ?1`).bind(rider).all<Row & { shown: number | null }>(),
@@ -69,7 +70,7 @@ export async function onRequestPost(ctx: Ctx) {
   if (!env.DB) return NO_DB();
   const b = await body<{ rows?: unknown; show?: unknown }>(request, 64_000);
   if (!b) return BAD_KEY();
-  await tables(env.DB);
+  await tables(env.DB, ctx);
   const stop = await limited(ctx);
   if (stop) return stop;
   const me = await account(b.key);
@@ -113,7 +114,7 @@ export async function onRequestPatch(ctx: Ctx) {
   if (!env.DB) return NO_DB();
   const b = await body<{ show?: unknown }>(request, 4_000);
   if (!b || typeof b.show !== "boolean") return BAD_KEY();
-  await tables(env.DB);
+  await tables(env.DB, ctx);
   const stop = await limited(ctx);
   if (stop) return stop;
   // Only the account that saved the watts can show or hide them.
@@ -129,7 +130,7 @@ export async function onRequestDelete(ctx: Ctx) {
   if (!env.DB) return NO_DB();
   const b = await body(request, 4_000);
   if (!b) return BAD_KEY();
-  await tables(env.DB);
+  await tables(env.DB, ctx);
   const stop = await limited(ctx);
   if (stop) return stop;
   // Whoever holds the account that saved the numbers can delete them.
