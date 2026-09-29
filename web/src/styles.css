@@ -406,3 +406,9 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .info-pop { display: none; position: absolute; z-index: 20; top: calc(100% - 4px); left: 10px; right: 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 8px 24px rgb(0 0 0 / .18); color: var(--ink); font: 400 .85rem/1.45 var(--body); letter-spacing: normal; text-transform: none; }
 .info:hover + .info-pop, .info:focus-visible + .info-pop, .info[aria-expanded="true"] + .info-pop { display: block; }
 .hl:has(.info:hover), .hl:has(.info:focus-visible), .hl:has(.info[aria-expanded="true"]) { overflow: visible; z-index: 5; }
+
+/* "Hent alle mine ritt" */
+.more-races { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: -8px; }
+.more-races > div { flex: 1 1 320px; }
+.more-races p { margin: 4px 0 0; color: var(--ink-2); font-size: .9rem; max-width: 70ch; }
+.more-races .err { color: var(--loss); }

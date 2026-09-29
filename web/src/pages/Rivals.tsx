@@ -1,3 +1,4 @@
+import MoreRaces from "../MoreRaces";
 import { useMemo, useRef, useState, useEffect } from "react";
 import { headToHead, median, record, type Athlete, type IndexRider, type Meeting, type Opponent, type RaceType, type Who } from "../data";
 import { TYPE_LABEL, TYPE_LC, clock, dateLong, firstName, fold, initials, listNo } from "../format";
@@ -42,7 +43,8 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
   if (!a.opponents.size && !extra.size) return (
     <>
       <h1 className="h-display">Rivaler</h1>
-      <div className="card"><Empty title="Ingen rivaler ennå">Rivaler regnes ut når en rytter har minst to ritt i resultatlistene vi har hentet.</Empty></div>
+      {a.full ? <div className="card"><Empty title="Ingen rivaler ennå">Rivaler regnes ut når en rytter har minst to ritt i resultatlistene vi har hentet.</Empty></div>
+        : <MoreRaces a={a} rivals="none" />}
     </>
   );
 
@@ -55,6 +57,7 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
           <p className="lead">{isMe ? `Du har møtt ${a.opponents.size} ulike ryttere i resultatlistene. ` : ""}Velg en rival i listen, eller søk opp en hvilken som helst rytter for å se hvordan {isMe ? "dere" : `${firstName(a.name)} og rytteren`} har gjort det mot hverandre.</p></div>
         <OppSearch O={O} index={index} self={a.id} onPick={open} />
       </div>
+      {!a.full && <MoreRaces a={a} rivals="some" />}
 
       <section className="card duel-wrap" ref={duelRef} style={{ scrollMarginTop: 80 }}>
         <div className="rpick">
