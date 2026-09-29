@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { flags, getJSON, loadAthlete, withPower, type Athlete, type IndexRider, type Site } from "./data";
+import { flags, getJSON, loadAthlete, withPower, withSaved, type Athlete, type IndexRider, type Site } from "./data";
 import { firstName, fold, initials } from "./format";
 import { BrandMark, Icon, TipProvider } from "./ui";
 import Overview from "./pages/Overview";
@@ -10,6 +10,7 @@ import Clip from "./pages/Clip";
 import Welcome from "./pages/Welcome";
 import { SelProvider } from "./state";
 import type { RacePower } from "./intervals";
+import { getSaved } from "./saved";
 
 export type Tab = "oversikt" | "utvikling" | "rivaler" | "ritt" | "klipp";
 const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
@@ -65,7 +66,14 @@ export default function App() {
     if (!site || !riderId) { setAthlete(null); setError(null); return; }
     let live = true;
     setAthlete(null); setError(null);
-    loadAthlete(riderId, site, index).then((a) => live && setAthlete(a)).catch(() => live && setError("Fant ikke denne rytteren i resultatlistene."));
+    loadAthlete(riderId, site, index).then(async (a) => {
+      if (!live) return;
+      setAthlete(a);
+      // Numbers the rider saved on the site (only riders without watts in the static data).
+      if (a.power) return;
+      const saved = await getSaved(a.id);
+      if (live && (saved.power.size || saved.speed.size || saved.clipYears.length || saved.hidden)) setAthlete((x) => (x && x.id === a.id ? withSaved(x, saved) : x));
+    }).catch(() => live && setError("Fant ikke denne rytteren i resultatlistene."));
     return () => { live = false; };
   }, [site, riderId, index]);
 
@@ -122,7 +130,8 @@ export default function App() {
           {athlete && (
             <SelProvider key={athlete.id} a={athlete}>
               <Page key={tab} tab={tab} athlete={athlete} isMe={isMe} go={go} onRider={(id) => setRiderId(id)} index={index}
-                onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))} />
+                onPower={(p) => setAthlete((a) => (a ? withPower(a, p) : a))}
+                onSaved={async (id) => { const s = await getSaved(id); setAthlete((a) => (a && a.id === id ? withSaved(a, s) : a)); }} />
             </SelProvider>
           )}
           <footer className="site">
@@ -136,10 +145,10 @@ export default function App() {
   );
 }
 
-function Page({ tab, athlete, isMe, go, onRider, index, onPower }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[]; onPower: (p: Map<string, RacePower>) => void }) {
+function Page({ tab, athlete, isMe, go, onRider, index, onPower, onSaved }: { tab: Tab; athlete: Athlete; isMe: boolean; go: (t: Tab) => void; onRider: (id: string) => void; index: IndexRider[]; onPower: (p: Map<string, RacePower>) => void; onSaved: (id: string) => void }) {
   switch (tab) {
     case "oversikt": return <Overview a={athlete} isMe={isMe} go={go} />;
-    case "utvikling": return <Development a={athlete} isMe={isMe} onPower={onPower} />;
+    case "utvikling": return <Development a={athlete} isMe={isMe} onPower={onPower} onSaved={onSaved} />;
     case "rivaler": return <Rivals a={athlete} isMe={isMe} onRider={onRider} index={index} />;
     case "ritt": return <Races a={athlete} />;
     case "klipp": return <Clip a={athlete} isMe={isMe} />;
