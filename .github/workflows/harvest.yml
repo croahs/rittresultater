@@ -7,9 +7,12 @@
 # first run creates that branch. Nothing on the site can start this job.
 name: Harvest race results
 
-# The nightly schedule is off until Pedår has decided whether we fetch EQ Timing's lists without
-# a key for their official API (2026-09-29). Then add:  schedule: - cron: "30 0 * * *"
+# EQ Timing's lists come from the open calls live.eqtiming.com uses until EQ gives us a key for
+# their official API (Pedår chose «Kjør nå», 2026-09-29). A 403 or 429 from a source stops the run
+# (harvest.Blocked) and the job fails, so it shows up; nothing works around a block.
 on:
+  schedule:
+    - cron: "30 0 * * *"  # 00:30 UTC, night in Norway
   workflow_dispatch:
     inputs:
       minutes:
