@@ -63,7 +63,8 @@ def derive(r):
     # this is only a fallback, overwritten from the intervals.icu activity when matched.
     if not r.get("Average speed (km/h)") and dist:
         r["Average speed (km/h)"] = f"{dist / (t / 3600):.1f}"
-    r["% behind winner"] = f"{round((t / secs(r['Class winner']) - 1) * 100)}"
+    w = secs(r["Class winner"]) if r.get("Class winner") else 0
+    r["% behind winner"] = f"{round((t / w - 1) * 100)}" if w and t else ""
     r["Climbing per km"] = rnd(float(r["Elevation gain (m)"]) / dist) if dist and r.get("Elevation gain (m)") else ""
     return r
 

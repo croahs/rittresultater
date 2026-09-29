@@ -18,7 +18,7 @@ Innhold i `web/public/_headers`:
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.basemaps.cartocdn.com; connect-src 'self' https://intervals.icu; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://cache.kartverket.no; connect-src 'self' https://intervals.icu; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 /data/*
   Cache-Control: public, max-age=300
 /assets/*
@@ -86,7 +86,7 @@ Watt for andre ryttere: på Utvikling kan en rytter lime inn sin egen API-nøkke
 
 Før lansering bør du vite dette:
 - Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Kontaktadressen står i `"contact"` i `site.json`-linja i `export_web.py` og vises nederst på siden, slik at folk kan be om retting eller fjerning.
-- Kartflisene i sesongklippet kommer fra CARTO (basert på OpenStreetMap). Gratis bruk er begrenset og krever kildehenvisning, som vises nederst i kartet. Ved mye trafikk bør vi bytte til en fliskilde med egen nøkkel.
+- Kartflisene i sesongklippet kommer fra Kartverkets åpne kartcache (`cache.kartverket.no`, gråtonekartet). De er åpne data under CC BY 4.0, krever ingen nøkkel, og kildehenvisningen «© Kartverket» vises nederst i kartet. Kartet dekker Norge; ritt i utlandet får tom bakgrunn.
 
 ## 4. Nye ritt
 
@@ -113,9 +113,10 @@ Hvordan det virker (`web/functions/api/`, `web/server/lib.ts`, `web/src/saved.ts
 - **Utregning:** Nettleseren henter turene fra rytterens intervals.icu-konto og regner ut snittwatt, NP, fart og GPS-sporet (hvert 5. sekund fra start til mål). Det er den samme koden som før. Cloudflare sin gratisplan gir en funksjon for lite CPU-tid til å lese mange ridefiler selv.
 - **Hvem som kan lagre:** Serveren sjekker nøkkelen hos intervals.icu og lagrer bare når navnet på kontoen stemmer med rytterens navn i resultatlistene. Ingen kan altså legge tall på en annen rytters side.
 - **Kontroll av tallene:** Tallene regnes ut i nettleseren, så serveren sammenligner dem med sammendraget intervals.icu har for den samme turen (hele filen). Det krever én ekstra forespørsel. Watt og fart må ligge innenfor et rimelig spenn rundt tallene for hele filen, ellers blir de ikke lagret. Det finnes også bare spor for ritt der kontoen har en tur samme dag. En rytter kan likevel justere sine egne tall litt innenfor spennet, men bare på sin egen side.
-- **Beskyttelse mot roboter:** Bare lagring og sletting sjekker nøkkelen mot intervals.icu. Det er begrenset til 10 ganger per time per besøkende og 200 per time totalt. GPS-sporene sendes etterpå med en signert tillatelse som varer i 30 minutter, uten nøkkel og uten nye kall til intervals.icu. Siden henter aldri noe fra Turritt, EQ Timing eller andre resultatsider når noen ber om det. Slik henting skjer bare i den ukentlige jobben, sakte og med cache.
+- **Beskyttelse mot roboter:** Bare lagring, vis/skjul og sletting sjekker nøkkelen mot intervals.icu. Det er begrenset til 10 ganger per time per besøkende og 200 per time totalt. GPS-sporene sendes etterpå med en signert tillatelse som varer i 30 minutter, uten nøkkel og uten nye kall til intervals.icu. Siden henter aldri noe fra Turritt, EQ Timing eller andre resultatsider når noen ber om det. Slik henting skjer bare i den ukentlige jobben, sakte og med cache.
 - **Hva som lagres:** `power` (snittwatt og NP per ritt), `ride` (fart, GPS-distanse og spor per ritt) og `owner` (hvilken intervals.icu-konto som har lagret for rytteren). API-nøkler og hele ridefiler lagres aldri. Rytterne limer inn nøkkelen hver gang de vil synce.
 - **Sesongklipp:** `/api/clip?rider=…&year=…` lager klippet fra de lagrede sporene, i samme format som de faste klippfilene.
+- **Vise eller skjule watt:** Hver rytter velger selv. Wattene lagres skjult med mindre rytteren krysser av for «Vis wattene for alle». Under grafen kan rytteren vise eller skjule dem senere med samme nøkkel. Skjulte watt blir liggende lagret, men siden sender dem ikke til andre. Fart og sesongklipp vises uansett.
 - **Sletting:** Under grafen står «Slett lagrede watt og spor». Den krever den samme nøkkelen, og sletter alt den intervals.icu-kontoen har lagret for rytteren.
 - **Tilgang:** `/api/*` ligger bak den samme Cloudflare Access-regelen som resten av siden.
 - **Uten databasen:** Svarer API-et at lagring er av, og siden oppfører seg som før.

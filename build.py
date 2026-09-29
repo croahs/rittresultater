@@ -59,7 +59,29 @@ def race_type(name):
         return "TT"
     if "gravel" in n or "cx" in n:
         return "Gravel"
+    # Neither Turritt nor EQ Timing says what kind of race it is, so the name decides.
+    # Terrain races: "MTB", "Terrengcup", XC classes ("CC Elite"), and forest loops ("-skogen").
+    if re.search(r"\bmtb\b|terreng|\bcc (elite|sport)\b|skogen\b", n):
+        return "MTB"
     return "Road"
+
+
+ROAD_MIN_KMH = 29  # no road race in the lists has a winner slower than this
+
+
+def checked_type(r):
+    """A guessed "Road" whose winner rode slower than any road race is "Unknown", not road.
+
+    Names without a keyword fall back to road (race_type), but a slow winner means it may be
+    a hill climb or a terrain race, so the dashboard says we don't know. Types typed into a
+    rider's own sheet are kept as they are."""
+    if r.get("Type") != "Road" or not str(r.get("Match note", "")).startswith("new from"):
+        return r.get("Type")
+    km, w = r.get("Distance (km)"), sync.secs(r["Class winner"]) if r.get("Class winner") else 0
+    try:
+        return "Unknown" if km and w and float(km) / (w / 3600) < ROAD_MIN_KMH else "Road"
+    except ValueError:
+        return "Road"
 
 
 def intervals_client(rider):
@@ -200,6 +222,7 @@ def build_rider(rider, log=print):
         if not r.get("_gps_speed") and r.get("Distance (km)"):
             r["Average speed (km/h)"] = ""  # derive() then uses official distance / time
         sync.derive(r)
+        r["Type"] = checked_type(r)
     return rows, changes
 
 

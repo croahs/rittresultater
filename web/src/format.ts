@@ -1,8 +1,8 @@
 import type { RaceType } from "./data";
 
-export const TYPE_LABEL: Record<RaceType, string> = { Road: "Landevei", Gravel: "Gravel", TT: "Tempo", TTT: "Lagtempo" };
-export const TYPE_LC: Record<RaceType, string> = { Road: "landevei", Gravel: "gravel", TT: "tempo", TTT: "lagtempo" };
-export const TYPE_VAR: Record<RaceType, string> = { Road: "var(--road)", Gravel: "var(--gravel)", TT: "var(--tt)", TTT: "var(--ttt)" };
+export const TYPE_LABEL: Record<RaceType, string> = { Road: "Landevei", Gravel: "Gravel", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo", Unknown: "Ukjent" };
+export const TYPE_LC: Record<RaceType, string> = { Road: "landevei", Gravel: "gravel", MTB: "terreng", TT: "tempo", TTT: "lagtempo", Unknown: "ukjent type" };
+export const TYPE_VAR: Record<RaceType, string> = { Road: "var(--road)", Gravel: "var(--gravel)", MTB: "var(--mtb)", TT: "var(--tt)", TTT: "var(--ttt)", Unknown: "var(--unknown)" };
 
 const MON = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"];
 export const dateLong = (s: string) => { const [y, m, d] = s.split("-").map(Number); return `${d}. ${MON[m - 1]} ${y}`; };

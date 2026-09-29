@@ -204,7 +204,7 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
 
 function TypeCards({ rows }: { rows: Result[] }) {
   const groups = useMemo(() => {
-    const g: [RaceType[], string][] = [[["Road"], "Landevei"], [["Gravel"], "Gravel"], [["TT", "TTT"], "Tempo"]];
+    const g: [RaceType[], string][] = [[["Road"], "Landevei"], [["Gravel"], "Gravel"], [["MTB"], "Terreng"], [["TT", "TTT"], "Tempo"]];
     return g.map(([ts, label]) => ({ label, t: ts[0], rs: rows.filter((r) => ts.includes(r.type)) })).filter((x) => x.rs.length);
   }, [rows]);
   if (!groups.length) return null;

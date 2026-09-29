@@ -8,12 +8,12 @@
  *
  * data comes from season_clip.py: { year, step, races: [{ name, date, type, time,
  * place, field, km, pts: [[lat, lon], ...] }] }, one point every `step` seconds.
- * Colours come from the host page's --road / --gravel / --tempo tokens.
+ * Colours come from the host page's --road / --gravel / --mtb / --tempo tokens.
  */
 (function () {
-  const TYPE_VAR = { Road: "--road", Gravel: "--gravel", TT: "--tempo", TTT: "--tempo" };
-  const TYPE_FALLBACK = { Road: "#2a78d6", Gravel: "#eb6834", TT: "#1baf7a", TTT: "#1baf7a" };
-  const TYPE_NAME = { Road: "Landevei", Gravel: "Gravel", TT: "Tempo", TTT: "Lagtempo" };
+  const TYPE_VAR = { Road: "--road", Gravel: "--gravel", MTB: "--mtb", TT: "--tempo", TTT: "--tempo", Unknown: "--unknown" };
+  const TYPE_FALLBACK = { Road: "#2a78d6", Gravel: "#eb6834", MTB: "#5b8a2e", TT: "#1baf7a", TTT: "#1baf7a", Unknown: "#8a8f99" };
+  const TYPE_NAME = { Road: "Landevei", Gravel: "Gravel", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo", Unknown: "Ukjent" };
   const LENGTHS = [15, 30, 60, 120];
   const FAR_KM = 150; // races this far from the season's centre get their own inset
 
@@ -33,6 +33,7 @@
   aspect-ratio: 4 / 3; min-height: 320px; background: var(--panel, #fff); }
 .sc-map { position: absolute; inset: 0; }
 .sc-map.leaflet-container { background: var(--grid, #eceef0); }
+.sc-dark { filter: invert(1) hue-rotate(180deg) brightness(.8) contrast(.9); }
 .sc-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 450; }
 .sc-clock { position: absolute; top: 10px; left: 12px; z-index: 460; pointer-events: none;
   font: 700 2.4rem/1 var(--display, "Arial Narrow", sans-serif); font-variant-numeric: tabular-nums;
@@ -142,9 +143,11 @@
     let tiles;
     const setTiles = () => {
       if (tiles) tiles.remove();
-      tiles = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${dark() ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png`, {
-        subdomains: "abcd", maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      // Kartverket's open map cache (CC BY 4.0, no key). The grey topo map keeps the coloured tracks
+      // readable; in dark mode the same tiles are inverted by the sc-dark class (CSS below).
+      tiles = L.tileLayer("https://cache.kartverket.no/v1/wmts/1.0.0/topograatone/default/webmercator/{z}/{y}/{x}.png", {
+        maxZoom: 18, className: dark() ? "sc-tiles sc-dark" : "sc-tiles",
+        attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a> (CC BY 4.0)',
       }).addTo(map);
     };
     setTiles();

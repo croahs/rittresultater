@@ -4,18 +4,19 @@ import { sameName, validKey } from "../src/intervals";
 import { loadAthlete, type Athlete, type IndexRider, type Site } from "../src/data";
 
 export interface D1Result<T> { results: T[] }
-export interface D1Stmt { bind(...v: unknown[]): D1Stmt; run(): Promise<unknown>; all<T>(): Promise<D1Result<T>>; first<T>(): Promise<T | null> }
+export interface D1Stmt { bind(...v: unknown[]): D1Stmt; run(): Promise<{ meta?: { changes?: number } }>; all<T>(): Promise<D1Result<T>>; first<T>(): Promise<T | null> }
 export interface D1 { prepare(sql: string): D1Stmt; batch(s: D1Stmt[]): Promise<unknown> }
 export interface Env { DB?: D1; ASSETS: { fetch(req: Request | string): Promise<Response> } }
 export interface Ctx { request: Request; env: Env }
 
-// owner: the intervals.icu account allowed to save for a rider (set when the names matched).
+// owner: the intervals.icu account allowed to save for a rider (set when the names matched),
+// and whether the rider shows the saved watts to everyone (show_power; hidden by default).
 // power: avg power and NP per race. ride: speed, GPS distance and the 5 s track per race.
 const SCHEMA = [
-  `CREATE TABLE IF NOT EXISTS owner (rider_id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, saved_at TEXT NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS owner (rider_id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, show_power INTEGER NOT NULL DEFAULT 0, saved_at TEXT NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS power (rider_id TEXT NOT NULL, race_key TEXT NOT NULL, np INTEGER NOT NULL, ap INTEGER NOT NULL,
     athlete_id TEXT NOT NULL, saved_at TEXT NOT NULL, PRIMARY KEY (rider_id, race_key))`,
-  `CREATE TABLE IF NOT EXISTS ride (rider_id TEXT NOT NULL, race_key TEXT NOT NULL, speed REAL, km REAL, pts TEXT NOT NULL,
+  `CREATE TABLE IF NOT EXISTS ride (rider_id TEXT NOT NULL, race_key TEXT NOT NULL, speed REAL, km REAL, secs INTEGER, pts TEXT NOT NULL,
     athlete_id TEXT NOT NULL, saved_at TEXT NOT NULL, PRIMARY KEY (rider_id, race_key))`,
   // hits: calls that reach intervals.icu, per visitor IP and hour ("*" = everyone), for rate limiting.
   `CREATE TABLE IF NOT EXISTS hits (ip TEXT NOT NULL, hour INTEGER NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (ip, hour))`,

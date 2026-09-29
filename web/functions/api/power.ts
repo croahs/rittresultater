@@ -1,8 +1,12 @@
 // Race numbers a rider has chosen to save on the site, so they stay after the page is closed.
 //
-//   GET    /api/power?rider=<id>          saved watts and speed for that rider, and the years with GPS clips
-//   POST   /api/power {key, rider, rows}  save avg power, NP, speed and GPS distance per race
-//   DELETE /api/power {key, rider}        delete everything that intervals.icu account saved for the rider
+//   GET    /api/power?rider=<id>                saved watts (only if the rider shows them) and speed, and the years with GPS clips
+//   POST   /api/power {key, rider, rows, show}  save avg power, NP, speed and GPS distance per race
+//   PATCH  /api/power {key, rider, show}        show the saved watts to everyone, or hide them again
+//   DELETE /api/power {key, rider}              delete everything that intervals.icu account saved for the rider
+//
+// Each rider chooses whether their watts are public. Hidden watts stay saved but GET
+// leaves them out; speed and the season clip don't depend on that choice.
 //
 // The browser works the numbers out from the rider's own intervals.icu rides
 // (src/intervals.ts); the Cloudflare free plan leaves a function too little CPU to
@@ -18,7 +22,7 @@
 // {enabled: false} and the page falls back to watts that aren't saved.
 
 import { BAD_KEY, NO_DB, account, activities, athleteFor, body, isRider, json, limited, riderOk, signToken, tables, type ActivitySummary, type Ctx } from "../../server/lib";
-import { raceKeyOf } from "../../src/intervals";
+import { raceKeyOf, secs } from "../../src/intervals";
 
 type Row = { race_key: string; np: number; ap: number };
 type In = { race_key: string; np?: unknown; ap?: unknown; speed?: unknown; km?: unknown };
@@ -47,21 +51,23 @@ function checkKm(r: In, acts: ActivitySummary[]): number | null {
 
 export async function onRequestGet({ request, env }: Ctx) {
   const rider = new URL(request.url).searchParams.get("rider");
-  if (!env.DB) return json({ enabled: false, rows: [], rides: [], clipYears: [] });
+  if (!env.DB) return json({ enabled: false, rows: [], rides: [], clipYears: [], hidden: false });
   if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
   await tables(env.DB);
   const [p, r] = await Promise.all([
-    env.DB.prepare("SELECT race_key, np, ap FROM power WHERE rider_id = ?").bind(rider).all<Row>(),
+    env.DB.prepare(`SELECT race_key, np, ap, (SELECT show_power FROM owner WHERE rider_id = ?1) AS shown
+      FROM power WHERE rider_id = ?1`).bind(rider).all<Row & { shown: number | null }>(),
     env.DB.prepare("SELECT race_key, speed, km, length(pts) > 2 AS gps FROM ride WHERE rider_id = ?").bind(rider).all<{ race_key: string; speed: number | null; km: number | null; gps: number }>(),
   ]);
   const clipYears = [...new Set(r.results.filter((x) => x.gps).map((x) => Number(x.race_key.slice(0, 4))))].sort();
-  return json({ enabled: true, rows: p.results, rides: r.results.map(({ race_key, speed, km }) => ({ race_key, speed, km })), clipYears });
+  const shown = p.results.filter((x) => x.shown).map(({ race_key, np, ap }) => ({ race_key, np, ap }));
+  return json({ enabled: true, rows: shown, hidden: p.results.length > shown.length, rides: r.results.map(({ race_key, speed, km }) => ({ race_key, speed, km })), clipYears });
 }
 
 export async function onRequestPost(ctx: Ctx) {
   const { request, env } = ctx;
   if (!env.DB) return NO_DB();
-  const b = await body<{ rows?: unknown }>(request, 64_000);
+  const b = await body<{ rows?: unknown; show?: unknown }>(request, 64_000);
   if (!b) return BAD_KEY();
   await tables(env.DB);
   const stop = await limited(ctx);
@@ -71,33 +77,51 @@ export async function onRequestPost(ctx: Ctx) {
   const a = await athleteFor(ctx, b.rider);
   if (!a) return json({ error: "Fant ikke rytteren." }, 404);
   if (!isRider(me, a)) return json({ error: `Nøkkelen tilhører «${me.name}» i intervals.icu, ikke ${a.name}. Bare rytteren selv kan lagre på sin side.` }, 403);
-  const keys = new Set(a.results.map(raceKeyOf));
+  const raceSecs = new Map(a.results.map((r) => [raceKeyOf(r), secs(r.time) || null]));
+  const keys = new Set(raceSecs.keys());
   const input = (Array.isArray(b.rows) ? b.rows as In[] : []).filter((r) => r && typeof r.race_key === "string" && keys.has(r.race_key)).slice(0, 400);
   const dates = input.map((r) => r.race_key.slice(0, 10)).sort();
   const acts = dates.length ? await activities(b.key, dates[0], dates[dates.length - 1]) : [];
   if (!acts) return json({ error: "Fikk ikke kontakt med intervals.icu. Prøv igjen." }, 502);
   const onDate = (d: string) => acts.filter((x) => RIDES.has(x.type || "") && (x.start_date_local || "").slice(0, 10) === d);
-  const rows: Row[] = [], rides: { race_key: string; speed: number | null; km: number | null }[] = [];
+  const rows: Row[] = [], rides: { race_key: string; speed: number | null; km: number | null; secs: number | null }[] = [];
   for (const r of input) {
     const day = onDate(r.race_key.slice(0, 10));
     if (!day.length) continue; // no ride that day in this account: nothing of it is saved
     const p = checkPower(r, day);
     if (p) rows.push(p);
-    rides.push({ race_key: r.race_key, speed: checkSpeed(r, day), km: checkKm(r, day) });
+    rides.push({ race_key: r.race_key, speed: checkSpeed(r, day), km: checkKm(r, day), secs: raceSecs.get(r.race_key) ?? null });
   }
   const now = new Date().toISOString();
   const put = env.DB.prepare(`INSERT INTO power (rider_id, race_key, np, ap, athlete_id, saved_at) VALUES (?, ?, ?, ?, ?, ?)
     ON CONFLICT (rider_id, race_key) DO UPDATE SET np = excluded.np, ap = excluded.ap, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
-  // A ride row marks a race with a real ride that day; /api/track may then add its GPS track.
-  const ride = env.DB.prepare(`INSERT INTO ride (rider_id, race_key, speed, km, pts, athlete_id, saved_at) VALUES (?, ?, ?, ?, '[]', ?, ?)
-    ON CONFLICT (rider_id, race_key) DO UPDATE SET speed = excluded.speed, km = excluded.km, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
+  // A ride row marks a race with a real ride that day; /api/track may then add its GPS track,
+  // no longer than the official race time (secs) so nothing from before or after the race is kept.
+  const ride = env.DB.prepare(`INSERT INTO ride (rider_id, race_key, speed, km, secs, pts, athlete_id, saved_at) VALUES (?, ?, ?, ?, ?, '[]', ?, ?)
+    ON CONFLICT (rider_id, race_key) DO UPDATE SET speed = excluded.speed, km = excluded.km, secs = excluded.secs, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
   await env.DB.batch([
-    env.DB.prepare(`INSERT INTO owner (rider_id, athlete_id, saved_at) VALUES (?, ?, ?)
-      ON CONFLICT (rider_id) DO UPDATE SET athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`).bind(b.rider, me.id, now),
+    env.DB.prepare(`INSERT INTO owner (rider_id, athlete_id, show_power, saved_at) VALUES (?, ?, ?, ?)
+      ON CONFLICT (rider_id) DO UPDATE SET athlete_id = excluded.athlete_id, show_power = excluded.show_power, saved_at = excluded.saved_at`).bind(b.rider, me.id, b.show === true ? 1 : 0, now),
     ...rows.map((r) => put.bind(b.rider, r.race_key, r.np, r.ap, me.id, now)),
-    ...rides.map((r) => ride.bind(b.rider, r.race_key, r.speed, r.km, me.id, now)),
+    ...rides.map((r) => ride.bind(b.rider, r.race_key, r.speed, r.km, r.secs, me.id, now)),
   ]);
   return json({ saved: rows.length, rides: rides.map((r) => r.race_key), token: await signToken(env.DB, b.rider, me.id) });
+}
+
+export async function onRequestPatch(ctx: Ctx) {
+  const { request, env } = ctx;
+  if (!env.DB) return NO_DB();
+  const b = await body<{ show?: unknown }>(request, 4_000);
+  if (!b || typeof b.show !== "boolean") return BAD_KEY();
+  await tables(env.DB);
+  const stop = await limited(ctx);
+  if (stop) return stop;
+  // Only the account that saved the watts can show or hide them.
+  const me = await account(b.key);
+  if (me instanceof Response) return me;
+  const r = await env.DB.prepare("UPDATE owner SET show_power = ? WHERE rider_id = ? AND athlete_id = ?").bind(b.show ? 1 : 0, b.rider, me.id).run();
+  if (!r.meta?.changes) return json({ error: "Denne intervals.icu-kontoen har ikke lagret noe her." }, 404);
+  return json({ show: b.show });
 }
 
 export async function onRequestDelete(ctx: Ctx) {
