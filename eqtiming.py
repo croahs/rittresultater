@@ -26,6 +26,9 @@ PAUSE = 2
 # Start groups that are separate competitions (distance or bike type), unlike
 # seeded waves ("Pulje 2 - 3.00 til 3.20 timer") which are one race.
 OWN_RACE_GROUP = re.compile(r"\d\s*km|racer|tempo|rekrutt", re.I)
+# Classes in a list that ride their own distance (fewer laps, a shorter course): a rider in one is
+# placed within that class, as on the race page and in rivals (rivals.courses()).
+OWN_DISTANCE = re.compile(r"senior|junior|jr\b|^[mkgj]\s?-?(6-9|10|11-12|13-14|15-16)$", re.I)
 # Points races: everyone who scores gets the race's time, so the time says nothing about the
 # placing. They are read as points races (kermesse()), not as timed races (races()).
 POINTS_RACE = re.compile(r"kermesse", re.I)
@@ -80,18 +83,64 @@ def _club(d):
             or (d["Utover"].get("Klubb") or {}).get("Navn") or "").strip()
 
 
+def stage_laps(event_id):
+    """{stage id: laps} as the timer set the stages up (0 or 1 = no laps). One Event request per
+    event, cached forever."""
+    def fetch():
+        e = _get(f"Event/{event_id}")
+        return {k: v.get("Runder") or 0 for k, v in (e.get("Etapper") or {}).items()}
+    return _cached(f"laps:{event_id}", fetch)
+
+
+def lap_times(items):
+    """{row index: (ranking time in ms, laps down)} for the riders of a lap race who were lapped.
+
+    In a lap race (terrengcup, cyclocross) EQ Timing ranks by laps, then time: a rider a lap down
+    is behind everyone on the lead lap, whatever the clock says. Every class rides its own number of
+    laps (the most any rider in it rode). The rest of this code ranks by time alone, so a lapped
+    rider gets a ranking time: the time projected to the full number of laps, and at least a
+    second behind the rider ahead (laps first, then time). The official time is kept beside it for display."""
+    out, by_class = {}, {}
+    for n, i in enumerate(items):
+        if i["StatusTekst"] == "TIME" and _ms(i):
+            by_class.setdefault(i["Deltaker"]["Klasse"]["Navn"], []).append(n)
+    for rows in by_class.values():
+        # The class's full distance: the laps at least two riders rode, so one rider with a stray
+        # extra passage (as in the youth races of Rogaland tredagers 2012) doesn't set it.
+        full = sorted((items[n].get("Rundenummer") or 1 for n in rows), reverse=True)[:2][-1]
+        lap = lambda n: min(items[n].get("Rundenummer") or 1, full)
+        prev = 0
+        for n in sorted(rows, key=lambda n: (-lap(n), _ms(items[n]))):
+            laps, t = lap(n), _ms(items[n])
+            if laps < full:
+                t = max(round(t * full / laps), prev + 1000)
+                out[n] = (t, full - laps)
+            prev = t
+    return out
+
+
 def _total(event, stage):
     """Fetch one race's full result list once and cache both shapes of it (results: for races(),
-    named: for registry races), so a list read for one is never fetched again for the other."""
-    items = _get(f"Result/Total/{event}/{stage}", count=99999)["Items"]
+    named: for registry races), so a list read for one is never fetched again for the other.
+
+    A lap race is asked for each rider's last lap (round=0). Without it EQ Timing answers with the
+    first passage of the finish line, one lap's time, in lap order (Terrengcupen Rogaland #2 Sola
+    CK 2019: 4:29 instead of 46:04). A race without laps has no round 0 (the list comes back empty),
+    so it is asked as before. Lapped riders get their ranking time from lap_times(); each row ends
+    with [laps down, official time in ms]."""
+    laps = int(stage_laps(event).get(str(stage)) or 0)
+    items = _get(f"Result/Total/{event}/{stage}", count=99999, **({"round": 0} if laps > 1 else {}))["Items"]
+    lapped = lap_times(items) if laps > 1 else {}
+    ms = lambda n, i: lapped[n][0] if n in lapped else _ms(i)
+    tail = lambda n, i: [lapped[n][1] if n in lapped else 0, _ms(i)]
     _cache[f"results:{event}:{stage}"] = [[i["Deltaker"]["Utover"]["UID"], i["Deltaker"]["Klasse"]["Navn"],
-                                           i["StatusTekst"], _ms(i), i["Deltaker"]["Pulje"]["Navn"].strip()]
-                                          for i in items]
+                                           i["StatusTekst"], ms(n, i), i["Deltaker"]["Pulje"]["Navn"].strip()] + tail(n, i)
+                                          for n, i in enumerate(items)]
     _cache[f"named:{event}:{stage}"] = [
         [i["Deltaker"]["Utover"]["UID"]] + ([None, None] if i["Deltaker"].get("Anonym") else
          [i["Deltaker"]["Utover"].get("NavnFormatert") or "", _club(i["Deltaker"])])
-        + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], _ms(i), i["Deltaker"]["Pulje"]["Navn"].strip()]
-        for i in items]
+        + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], ms(n, i), i["Deltaker"]["Pulje"]["Navn"].strip()] + tail(n, i)
+        for n, i in enumerate(items)]
     _save()
 
 
@@ -128,6 +177,22 @@ def timing_errors(times, km, tt=False):
             break
         bad.add(a)
     return bad
+
+
+def _course(rows, age_class, cls):
+    """The rows on the same course as a rider in age_class: that class alone when it rides its
+    own distance (OWN_DISTANCE), else every class that doesn't."""
+    own = OWN_DISTANCE.search((age_class or "").strip())
+    return [r for r in rows if (cls(r) or "").strip() == age_class.strip()] if own else \
+        [r for r in rows if not OWN_DISTANCE.search((cls(r) or "").strip())]
+
+
+def _time(status, ms, tail):
+    """The time as the timer shows it: the official time, also for a lapped rider (whose ms is
+    the ranking time from lap_times()). tail is the row's [laps down, official time], when there."""
+    if status != "TIME":
+        return status
+    return _hms(tail[1] if len(tail) >= 2 else ms)
 
 
 def _rank(rows, me):
@@ -169,6 +234,7 @@ def races(rider=RIDER_ID, since=0, max_lists=None):
             continue
         if OWN_RACE_GROUP.search(me[4]):
             rows = [r for r in rows if r[4] == me[4]]
+        rows = _course(rows, me[1], lambda r: r[1])
         try:
             km = stage_km(h["ArrangementUID"], h["EtappeUID"])
         except requests.RequestException:
@@ -186,7 +252,7 @@ def races(rider=RIDER_ID, since=0, max_lists=None):
             "name": h["ArrangementNavn"], "stage": h["EtappeNavn"], "group": me[4], "date": h["ArrangementDato"][:10],
             "class_place": place, "class_n": n,
             "age_class": me[1], "age_place": age_place, "age_n": age_n,
-            "time": _hms(me[3]) if me[2] == "TIME" else me[2],
+            "time": _time(me[2], me[3], me[5:]),
             "class_winner": _hms(min(finishers)) if finishers else "",
             "url": f"https://live.eqtiming.com/{h['ArrangementUID']}#result",
         })
@@ -249,6 +315,7 @@ def registry_races(entry, name, rider=None):
         pool = [[r[0], r[3], r[4], r[5], r[6]] for r in rows]  # the shape _rank() and races() use
         if OWN_RACE_GROUP.search(me[6]):
             pool = [r for r in pool if r[4] == me[6]]
+        pool = _course(pool, me[3], lambda r: r[1])
         place, n = _rank(pool, me[0])
         age_place, age_n = _rank([r for r in pool if r[1] == me[3]], me[0])
         finishers = [r[3] for r in pool if r[2] == "TIME"]
@@ -256,7 +323,7 @@ def registry_races(entry, name, rider=None):
             "event_id": entry["event"], "stage_id": stage, "name": entry["name"], "stage": stage_name,
             "group": me[6], "date": entry["date"], "class_place": place, "class_n": n,
             "age_class": me[3], "age_place": age_place, "age_n": age_n,
-            "time": _hms(me[5]) if me[4] == "TIME" else me[4],
+            "time": _time(me[4], me[5], me[7:]),
             "class_winner": _hms(min(finishers)) if finishers else "",
             "url": f"https://live.eqtiming.com/{entry['event']}#result",
         })

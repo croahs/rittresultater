@@ -155,12 +155,16 @@ def lists(key, date):
 
 
 def eq_event(event_id):
-    """{stage id: {"name", "km", "rows": [[rider id, name, club, age class, status, ms, group]]}}.
-    Anonymised riders (they asked EQ) keep their row with no name or club."""
+    """{stage id: {"name", "km", "laps", "rows": [[rider id, name, club, age class, status, ms, group, laps]]}}.
+    Anonymised riders (they asked EQ) keep their row with no name or club. A lap race is asked for
+    each rider's last lap (round=0): without it EQ Timing gives the first passage of the finish line,
+    one lap's time (see eqtiming._total). Ranking is by laps, then time."""
     e = _get(f"{EQ_LIVE}/Event/{event_id}")
     out = {}
     for sid, st in (e.get("Etapper") or {}).items():
-        items = _get(f"{EQ_LIVE}/Result/Total/{event_id}/{sid}", count=99999).get("Items") or []
+        laps = st.get("Runder") or 0
+        items = _get(f"{EQ_LIVE}/Result/Total/{event_id}/{sid}", count=99999,
+                     **({"round": 0} if laps > 1 else {})).get("Items") or []
         rows = []
         for i in items:
             d = i["Deltaker"]
@@ -169,8 +173,9 @@ def eq_event(event_id):
                     or ((d.get("Utover") or {}).get("Klubb") or {}).get("Navn") or "").strip()
             rows.append([d["Utover"]["UID"], None if anon else (d["Utover"].get("NavnFormatert") or ""),
                          None if anon else club, (d.get("Klasse") or {}).get("Navn") or "", i.get("StatusTekst"),
-                         i.get("AkkumulertTidGlattet") or i.get("AkkumulertTid"), ((d.get("Pulje") or {}).get("Navn") or "").strip()])
-        out[sid] = {"name": st.get("Navn") or "", "km": st.get("Km") or None, "rows": rows}
+                         i.get("AkkumulertTidGlattet") or i.get("AkkumulertTid"), ((d.get("Pulje") or {}).get("Navn") or "").strip(),
+                         i.get("Rundenummer") or 1])
+        out[sid] = {"name": st.get("Navn") or "", "km": st.get("Km") or None, "laps": laps, "rows": rows}
     return out
 
 

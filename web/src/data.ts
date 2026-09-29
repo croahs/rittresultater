@@ -277,8 +277,9 @@ export const years = (a: Athlete) => [...new Set(a.results.map((r) => r.year))].
 export const record = (ms: Meeting[]) => ({ w: ms.filter((m) => m.res === "w").length, l: ms.filter((m) => m.res === "l").length });
 
 /* Head-to-head against any rider, computed from the shared result lists (data/races.json). */
-/** One row of a result list: rider key, name, club, age class, class, time in s (null = DNF), sex. */
-export type RaceRow = [string, string, string, string, string | null, number | null, Sex?];
+/** One row of a result list: rider key, name, club, age class, class, time in s (null = DNF), sex,
+ *  and for a lapped rider in a lap race: laps down and the official time (the time before is then the ranking time). */
+export type RaceRow = [string, string, string, string, string | null, number | null, Sex?, number?, number?];
 export interface RaceList { id: string; name: string; date: string; type: RaceType; distance_km?: number | null; turritt?: string; rows: RaceRow[] }
 interface RacesFile { races: RaceList[] }
 export const raceLists = async () => (await getJSON<RacesFile>("races.json")).races;
