@@ -31,6 +31,22 @@
       "turritt_id": "125529",
       "eq_id": 364828,
       "publish_power": false
+    },
+    {
+      "id": "154061",
+      "rid": "r16326",
+      "name": "Mats Husberg",
+      "turritt_id": "154061",
+      "since": 2005,
+      "eq_id": 7031827
+    },
+    {
+      "id": "171118",
+      "rid": "r17186",
+      "name": "Ine Saksvik",
+      "turritt_id": "171118",
+      "since": 2005,
+      "eq_id": 4746354
     }
   ]
 }

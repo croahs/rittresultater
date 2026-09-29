@@ -16,6 +16,22 @@
    "turritt_id": "125529",
    "eq_id": 364828,
    "power": false
+  },
+  {
+   "id": "154061",
+   "rid": "r16326",
+   "name": "Mats Husberg",
+   "turritt_id": "154061",
+   "eq_id": 7031827,
+   "power": false
+  },
+  {
+   "id": "171118",
+   "rid": "r17186",
+   "name": "Ine Saksvik",
+   "turritt_id": "171118",
+   "eq_id": 4746354,
+   "power": false
   }
  ],
  "races": [
@@ -2376,6 +2392,44 @@
    }
   },
   {
+   "rider_id": "171118",
+   "race_id": "eqtiming:74581/307744",
+   "name": "Enebakk Rundt",
+   "series": "enebakk rundt",
+   "date": "2025-05-01",
+   "year": 2025,
+   "type": "Road",
+   "class_name": "Enebakk Rundt",
+   "class_place": 372,
+   "class_n": 542,
+   "overall_place": 372,
+   "overall_n": 542,
+   "percentile": 68.63,
+   "overall_percentile": 68.63,
+   "time": "02:32:46",
+   "time_s": 9166,
+   "winner_time": "01:05:56",
+   "behind_pct": 132.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K20-29",
+   "age_place": 6,
+   "age_n": 9,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "74581/307744"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/74581#result",
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "125529",
    "race_id": "turritt:3205",
    "name": "Garborgriket Rundt",
@@ -2601,6 +2655,44 @@
     "turritt": "https://turritt.com/index.php?Turritt=3224&page=resultat&current=2&su=2",
     "eqtiming": "https://live.eqtiming.com/74590#result",
     "intervals": "https://intervals.icu/activities/i83144451"
+   }
+  },
+  {
+   "rider_id": "171118",
+   "race_id": "eqtiming:74590/307789",
+   "name": "Nordsjørittet",
+   "series": "nordsjørittet",
+   "date": "2025-06-14",
+   "year": 2025,
+   "type": "Gravel",
+   "class_name": "Nordsjørittet 88km",
+   "class_place": 280,
+   "class_n": 719,
+   "overall_place": 280,
+   "overall_n": 719,
+   "percentile": 38.94,
+   "overall_percentile": 38.94,
+   "time": "03:46:57",
+   "time_s": 13617,
+   "winner_time": "02:34:12",
+   "behind_pct": 47.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K25-29",
+   "age_place": 1,
+   "age_n": 13,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "74590/307789"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/74590#result",
+    "intervals": null
    }
   },
   {
@@ -3022,6 +3114,82 @@
    }
   },
   {
+   "rider_id": "171118",
+   "race_id": "eqtiming:77648/318922",
+   "name": "Enebakk Rundt",
+   "series": "enebakk rundt",
+   "date": "2026-05-01",
+   "year": 2026,
+   "type": "Road",
+   "class_name": "Enebakk Rundt",
+   "class_place": 459,
+   "class_n": 725,
+   "overall_place": 459,
+   "overall_n": 725,
+   "percentile": 63.31,
+   "overall_percentile": 63.31,
+   "time": "02:24:51",
+   "time_s": 8691,
+   "winner_time": "01:52:35",
+   "behind_pct": 29.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K30-39",
+   "age_place": 8,
+   "age_n": 16,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "77648/318922"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/77648#result",
+    "intervals": null
+   }
+  },
+  {
+   "rider_id": "154061",
+   "race_id": "eqtiming:80724/329548",
+   "name": "KCC Lagtempoen",
+   "series": "kcc lagtempoen",
+   "date": "2026-05-05",
+   "year": 2026,
+   "type": "TTT",
+   "class_name": "Lagtempoen (Lagtempo - Racer)",
+   "class_place": 83,
+   "class_n": 99,
+   "overall_place": 83,
+   "overall_n": 99,
+   "percentile": 83.84,
+   "overall_percentile": 83.84,
+   "time": "01:07:43",
+   "time_s": 4063,
+   "winner_time": "00:54:11",
+   "behind_pct": 25.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": null,
+   "age_place": null,
+   "age_n": null,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "80724/329548"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/80724#result",
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "171101",
    "race_id": "turritt:3268",
    "name": "KCC Lagtempoen",
@@ -3098,6 +3266,44 @@
    }
   },
   {
+   "rider_id": "171118",
+   "race_id": "eqtiming:79614/326014",
+   "name": "Nordmarka Rundt",
+   "series": "nordmarka rundt",
+   "date": "2026-05-24",
+   "year": 2026,
+   "type": "Road",
+   "class_name": "Nordmarka Rundt Fellesstart",
+   "class_place": 173,
+   "class_n": 282,
+   "overall_place": 173,
+   "overall_n": 282,
+   "percentile": 61.35,
+   "overall_percentile": 61.35,
+   "time": "04:42:03",
+   "time_s": 16923,
+   "winner_time": "03:43:03",
+   "behind_pct": 26.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K30-34",
+   "age_place": 2,
+   "age_n": 9,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "79614/326014"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/79614#result",
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "125529",
    "race_id": "turritt:3281",
    "name": "Bergen-Voss",
@@ -3131,6 +3337,44 @@
    },
    "links": {
     "turritt": "https://turritt.com/index.php?Turritt=3281&page=resultat&current=2&su=2",
+    "eqtiming": null,
+    "intervals": null
+   }
+  },
+  {
+   "rider_id": "171118",
+   "race_id": "ultimate:7141/1",
+   "name": "Bergen-Voss",
+   "series": "bergen-voss",
+   "date": "2026-06-06",
+   "year": 2026,
+   "type": "Road",
+   "class_name": "Bergen-Voss",
+   "class_place": 322,
+   "class_n": 1395,
+   "overall_place": 322,
+   "overall_n": 1395,
+   "percentile": 23.08,
+   "overall_percentile": 23.08,
+   "time": "05:39:54",
+   "time_s": 20394,
+   "winner_time": "04:18:03",
+   "behind_pct": 32.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K30-34",
+   "age_place": 2,
+   "age_n": 28,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": null
+   },
+   "links": {
+    "turritt": null,
     "eqtiming": null,
     "intervals": null
    }
@@ -3212,6 +3456,44 @@
    }
   },
   {
+   "rider_id": "154061",
+   "race_id": "raceresult:346769/Nordsjørittet Egersund - Sandnes CX/Gravel",
+   "name": "Nordsjørittet",
+   "series": "nordsjørittet",
+   "date": "2026-06-13",
+   "year": 2026,
+   "type": "Gravel",
+   "class_name": "Nordsjørittet Egersund - Sandnes CX/Gravel",
+   "class_place": 63,
+   "class_n": 258,
+   "overall_place": 63,
+   "overall_n": 258,
+   "percentile": 24.42,
+   "overall_percentile": 24.42,
+   "time": "03:07:35",
+   "time_s": 11255,
+   "winner_time": "02:21:31",
+   "behind_pct": 33.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": null,
+   "age_place": null,
+   "age_n": null,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": null
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": null,
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "171101",
    "race_id": "turritt:3292",
    "name": "Nordsjørittet",
@@ -3247,6 +3529,44 @@
     "turritt": "https://turritt.com/index.php?Turritt=3292&page=resultat&current=2&su=2",
     "eqtiming": null,
     "intervals": "https://intervals.icu/activities/i156900743"
+   }
+  },
+  {
+   "rider_id": "171118",
+   "race_id": "raceresult:346769/Nordsjørittet Egersund - Sandnes CX/Gravel",
+   "name": "Nordsjørittet",
+   "series": "nordsjørittet",
+   "date": "2026-06-13",
+   "year": 2026,
+   "type": "Gravel",
+   "class_name": "Nordsjørittet Egersund - Sandnes CX/Gravel",
+   "class_place": 108,
+   "class_n": 258,
+   "overall_place": 108,
+   "overall_n": 258,
+   "percentile": 41.86,
+   "overall_percentile": 41.86,
+   "time": "03:21:21",
+   "time_s": 12081,
+   "winner_time": "02:21:31",
+   "behind_pct": 42.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": null,
+   "age_place": null,
+   "age_n": null,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": null
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": null,
+    "intervals": null
    }
   },
   {
@@ -3391,6 +3711,44 @@
    "age_class": "M30-49",
    "age_place": 10,
    "age_n": 29,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "82651/336801"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/82651#result",
+    "intervals": null
+   }
+  },
+  {
+   "rider_id": "171118",
+   "race_id": "eqtiming:82651/336801",
+   "name": "OSLO`S RÅESTE- GENUS OPEN by BOC",
+   "series": "oslo`s råeste- genus open by boc",
+   "date": "2026-08-19",
+   "year": 2026,
+   "type": "TT",
+   "class_name": "Oslo,s Råeste -Genus Open by BOC (Tempo)",
+   "class_place": 51,
+   "class_n": 66,
+   "overall_place": 51,
+   "overall_n": 66,
+   "percentile": 77.27,
+   "overall_percentile": 77.27,
+   "time": "00:59:18",
+   "time_s": 3558,
+   "winner_time": "00:41:17",
+   "behind_pct": 44.0,
+   "distance_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K30-49",
+   "age_place": 2,
+   "age_n": 3,
    "source_ids": {
     "turritt": null,
     "eqtiming": "82651/336801"
