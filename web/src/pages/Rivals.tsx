@@ -1,8 +1,9 @@
 import MoreRaces from "../MoreRaces";
 import { useMemo, useRef, useState, useEffect } from "react";
-import { headToHead, median, record, type Athlete, type IndexRider, type Meeting, type Opponent, type RaceType, type Who } from "../data";
+import { headToHead, median, raceFor, record, type Athlete, type Result, type IndexRider, type Meeting, type Opponent, type RaceType, type Who } from "../data";
 import { TYPE_LABEL, TYPE_LC, clock, dateLong, firstName, fold, initials, listNo } from "../format";
 import { Empty, useTip } from "../ui";
+import { KlasseToggle } from "../klasse";
 
 type TabKey = "closest" | RaceType;
 
@@ -23,7 +24,7 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
   const hasClass = useMemo(() => [...O.values()].some((o) => o.ms.some((m) => m.mc || m.tc)), [O]);
   const you = isMe ? "deg" : firstName(a.name);
   // Same rule as rivals.py: 3+ races together and a median gap within 5 %.
-  const level = `Jevnbyrdige er ryttere ${isMe ? "du" : firstName(a.name)} har møtt minst tre ganger, og som vanligvis kommer i mål innen 5\u00a0% av ${isMe ? "tiden din" : `tiden til ${firstName(a.name)}`}, rundt 5 minutter på et ritt på 1:40.`;
+  const level = `Jevnbyrdige er ryttere ${isMe ? "du" : firstName(a.name)} har møtt minst tre ganger, og som vanligvis kommer i mål innen 5\u00a0% i tid fra ${isMe ? "deg" : firstName(a.name)}, rundt 5 minutter på et ritt på 1:40.`;
 
   const open = (id: string) => {
     if (!O.has(id)) {
@@ -61,6 +62,7 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
 
       <section className="card duel-wrap" ref={duelRef} style={{ scrollMarginTop: 80 }}>
         <div className="rpick">
+          <KlasseToggle />
           {hasClass && <label className="switch"><input type="checkbox" id="same-class" checked={sameOnly} onChange={(e) => setSameOnly(e.target.checked)} /> Bare samme klasse som {you}</label>}
           <div className="tabs" role="tablist" aria-label="Rivaler etter rittype">
             {TABS.map(([k, l]) => <button key={k} type="button" role="tab" aria-selected={tab === k} onClick={() => { setTab(k); setCur(ids(k)[0]); }}>{l}</button>)}
@@ -139,13 +141,13 @@ function Duel({ a, o, ms: all, type, isMe, sameOnly, inIndex, onRider }: { a: At
         {!sameOnly && same.w + same.l > 0 && same.w + same.l !== r.w + r.l && <div><small>I samme klasse</small><b>{same.w}–{same.l}</b></div>}
         <div><small>Siste møte</small><b>{last.race} {last.date.slice(0, 4)}, {resTxt(last)}</b></div>
       </div>
-      <GapChart key={`${o.id}-${type}-${sameOnly}`} ms={ms} them={them} me={me} />
+      <GapChart key={`${o.id}-${type}-${sameOnly}`} ms={ms} them={them} me={me} results={a.results} />
       {inIndex && <div><button type="button" className="btn" onClick={() => onRider(o.id)}>Se siden til {them}</button></div>}
     </div>
   );
 }
 
-function GapChart({ ms, them, me }: { ms: Meeting[]; them: string; me: string }) {
+function GapChart({ ms, them, me, results }: { ms: Meeting[]; them: string; me: string; results: Result[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [W, setW] = useState(620);
   const [pick, setPick] = useState<number | null>(null);
@@ -200,18 +202,28 @@ function GapChart({ ms, them, me }: { ms: Meeting[]; them: string; me: string })
           );
         })}
       </svg>
-      {m ? <MeetingDetail m={m} me={me} them={them} onClose={() => setPick(null)} /> : <p className="note" style={{ margin: "0 0 4px" }}>Trykk på en stolpe for å se rittet, klassene og tidsforskjellen.</p>}
+      {m ? <MeetingDetail m={m} me={me} them={them} mine={results.find((r) => r.date === m.date && r.race === m.race)} onClose={() => setPick(null)} /> : <p className="note" style={{ margin: "0 0 4px" }}>Trykk på en stolpe for å se rittet, klassene og tidsforskjellen.</p>}
       <div className="chart-foot"><span className="legend">
         <span className="swatch"><span className="dot" style={{ background: "var(--win)" }} />{me} raskere</span>
         <span className="swatch"><span className="dot" style={{ background: "var(--loss)" }} />{them} raskere</span>
         {other && <span className="swatch"><span className="dot" style={{ border: "2px solid var(--muted)" }} />Hul: ulik klasse</span>}
-      </span><span>Høyde: tidsforskjell i prosent av vinnertiden mellom dere</span></div>
+      </span><span>Høyde: tidsforskjell i prosent av tiden til {them}</span></div>
     </div>
   );
 }
 
-function MeetingDetail({ m, me, them, onClose }: { m: Meeting; me: string; them: string; onClose: () => void }) {
+/** "2:32:46" or "59:18" -> seconds, or null. */
+const secsOf = (t: string) => { const p = t.split(":").map(Number); return p.length >= 2 && p.every(Number.isFinite) ? p.reduce((a, x) => a * 60 + x, 0) : null; };
+const kmh = (km: number, s: number) => `${((km / s) * 3600).toFixed(1).replace(".", ",")} km/t`;
+
+function MeetingDetail({ m, me, them, mine, onClose }: { m: Meeting; me: string; them: string; mine?: Result; onClose: () => void }) {
   const you = me === "Du";
+  // Average speed: official time over the race's distance (data/races.json). Only for the same class, since
+  // classes can ride different distances and the lists give one distance per race.
+  const [km, setKm] = useState<number | null>(null);
+  useEffect(() => { let live = true; setKm(null); raceFor(m).then((x) => live && setKm(x?.distance_km || null)).catch(() => {}); return () => { live = false; }; }, [m]);
+  const t = mine ? secsOf(mine.time) : null;
+  const ot = t != null && m.gs != null ? t - m.gs : null; // gap = my time - theirs
   const who = m.res === "w" ? me : m.res === "l" ? them : null;
   const lead = m.pl ? (m.pl < 0 ? me : them) : null;
   return (
@@ -221,6 +233,7 @@ function MeetingDetail({ m, me, them, onClose }: { m: Meeting; me: string; them:
         <span>{dateLong(m.date)} · {TYPE_LABEL[m.type]}</span>
         <span>{m.gs != null && who ? `${who} var ${clock(m.gs)} raskere (${Math.abs(m.gp!).toFixed(1).replace(".", ",")} %)` : m.gs === 0 ? "Helt likt i tid" : who ? `${who} fullførte, den andre har ingen tid (DNF)` : "Ingen av dere har tid"}
           {lead ? `, ${Math.abs(m.pl!)} ${Math.abs(m.pl!) === 1 ? "plass" : "plasser"} foran` : ""}</span>
+        {km && m.same && (t || ot) ? <span>Snittfart på {String(km).replace(".", ",")} km: {[t && `${you ? "du" : me} ${kmh(km, t)}`, ot && `${them} ${kmh(km, ot)}`].filter(Boolean).join(", ")}</span> : null}
         {(m.mc || m.tc) && <span>Klasse: {you ? "du" : me} {m.mc || "ukjent"}, {them} {m.tc || "ukjent"}{m.same ? " (samme klasse)" : " (ulik klasse)"}</span>}
       </div>
       <button type="button" onClick={onClose}>Lukk</button>

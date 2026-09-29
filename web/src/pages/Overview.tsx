@@ -1,13 +1,16 @@
 import { useEffect, useMemo } from "react";
 import MoreRaces from "../MoreRaces";
-import { median, mean, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
+import { median, mean, raceFor, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, hms, pct, span } from "../format";
 import { useState } from "react";
 import { raceKey, useSel } from "../state";
 import { flags, ridOf } from "../data";
 import type { Tab } from "../App";
+import { KlasseToggle, useFelt } from "../klasse";
+import { openRace } from "./Race";
 
 export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void }) {
+  const felt = useFelt();
   const { season, setSeason, sel, setSel, rows } = useSel();
   const ys = years(a);
   const last = a.results[a.results.length - 1];
@@ -20,7 +23,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
       {!a.full && <MoreRaces a={a} />}
       {last && (
         <div className="latest" role="note">
-          <span>Siste ritt: {last.race} {last.year}, {last.place}. av {last.field}. {who} slo {Math.round(last.beaten)} % av feltet.</span>
+          <span>Siste ritt: {last.race} {last.year}, {last.place}. av {last.field}. {who} slo {Math.round(last.beaten)} % av {felt}.</span>
           <button type="button" onClick={() => { setSeason("all"); setSel(raceKey(last)); }}>Vis rittet</button>
         </div>
       )}
@@ -28,11 +31,12 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
       <section className="section" aria-labelledby="h-sesong">
         <div className="section-head">
           <div><h2 className="h-section" id="h-sesong">Sesongen</h2><p className="lead">Velg et ritt i listen for å se detaljene. Tallene i skiven gjelder hele perioden når ingen ritt er valgt.</p></div>
+          <div className="filters"><KlasseToggle />
           <div className="chips" role="group" aria-label="Sesong">
             {(["all", ...ys] as const).map((y) => (
               <button key={y} type="button" className="chip" aria-pressed={season === y} onClick={() => setSeason(y)}>{y === "all" ? "Alle år" : y}</button>
             ))}
-          </div>
+          </div></div>
         </div>
         <div className="board">
           <FinishSheet a={a} />
@@ -47,6 +51,7 @@ export default function Overview({ a, isMe, go }: { a: Athlete; isMe: boolean; g
 }
 
 function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void }) {
+  const felt = useFelt();
   const ys = years(a);
   const best = a.results.reduce<Result | null>((b, r) => (!b || r.beaten > b.beaten ? r : b), null);
   const typical = median(a.results.map((r) => r.beaten));
@@ -68,16 +73,16 @@ function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void
         <div className="bib-num" aria-label={idNum}>{[...idNum].map((d, i) => <span key={i} aria-hidden="true" style={{ animationDelay: `${120 + i * 70}ms` }}>{d}</span>)}</div>
         <div className="bib-stripe" aria-hidden="true" />
         <div>
-          <div className="bib-name">{a.name}{isMe ? "" : ""}</div>
+          <h1 className="bib-name">{a.name}</h1>
           <div className="bib-meta">{a.club || "Uten klubb"} · {a.results.length} ritt på tid{a.points.length ? ` og ${a.points.length} poengritt` : ""}{ys.length ? ` · ${span(ys)}` : ""}</div>
         </div>
       </div>
       <div className="stats">
-        <button type="button" className="card stat" onClick={() => go("utvikling")}><span className="eyebrow">Slår typisk <i aria-hidden="true">→</i></span><b>{pct(typical)}</b><small>av feltet, median over alle ritt. Se utviklingen.</small></button>
+        <button type="button" className="card stat" onClick={() => go("utvikling")}><span className="eyebrow">Slår typisk <i aria-hidden="true">→</i></span><b>{pct(typical)}</b><small>av {felt}, median over alle ritt. Se utviklingen.</small></button>
         <button type="button" className="card stat" disabled={!best} onClick={() => { if (!best) return; setSeason("all"); setSel(raceKey(best)); setTimeout(() => document.getElementById("race-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); }}><span className="eyebrow">Beste ritt <i aria-hidden="true">→</i></span><b>{best ? `Slo ${pct(best.beaten)}` : "–"}</b><small>{best ? `${best.place}. av ${best.field} ${best.basis} i ${best.race} ${best.year}` : "Ingen ritt ennå"}</small></button>
         <button type="button" className="card stat" onClick={() => jump("utvikling", "samme-ritt")}><span className="eyebrow">Utvikling <i aria-hidden="true">→</i></span>
           <b className={change == null ? "" : change >= 0 ? "pos" : "neg"}>{change == null ? "–" : `${change >= 0 ? "+" : "−"}${Math.abs(change).toFixed(0)}`}</b>
-          <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `prosentpoeng ${change >= 0 ? "mer" : "mindre"} av feltet slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></button>
+          <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `prosentpoeng ${change >= 0 ? "mer" : "mindre"} av ${felt} slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></button>
         <button type="button" className="card stat" onClick={() => jump("utvikling", "watt")}><span className="eyebrow">{a.power ? "Snitt NP" : "Watt"} <i aria-hidden="true">→</i></span>
           <b>{a.power ? `${Math.round(mean(a.results.filter((r) => r.np).map((r) => r.np!)))} W` : "–"}</b>
           <small>{a.power ? "normalisert watt i rittene med wattdata" : "Ikke delt ennå. Trykk for å hente watt fra intervals.icu."}</small></button>
@@ -139,12 +144,13 @@ function FinishSheet({ a }: { a: Athlete }) {
 }
 
 function Dial({ value, label, sub }: { value: number; label: string; sub: string }) {
+  const felt = useFelt();
   const N = 72, R = 120, C = 150, lit = Math.round((value / 100) * N);
   const pt = (a: number, r: number) => `${(C + r * Math.cos(a)).toFixed(1)} ${(C + r * Math.sin(a)).toFixed(1)}`;
   const ang = (f: number) => f * 2 * Math.PI - Math.PI / 2;
   return (
     <div className="dial">
-      <svg viewBox="0 0 300 300" role="img" aria-label={`${Math.round(value)} prosent av feltet slått`}>
+      <svg viewBox="0 0 300 300" role="img" aria-label={`${Math.round(value)} prosent av ${felt} slått`}>
         <circle cx={C} cy={C} r={R + 18} fill="none" stroke="var(--line)" strokeWidth="1" strokeDasharray="1 5" />
         {Array.from({ length: N }, (_, i) => {
           const on = i < lit, t = i / (N - 1);
@@ -163,7 +169,11 @@ function Dial({ value, label, sub }: { value: number; label: string; sub: string
 }
 
 function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Result[]; go: (t: Tab) => void }) {
+  const felt = useFelt();
   const { season, setSel } = useSel();
+  // The race's whole result list, when the shared lists have it (every race of the riders the site follows).
+  const [list, setList] = useState<string | null>(null);
+  useEffect(() => { setList(null); if (!r) return; let live = true; raceFor(r).then((x) => live && setList(x?.id ?? null)).catch(() => {}); return () => { live = false; }; }, [r]);
   if (!rows.length) return <div className="card empty"><b>Ingen ritt i denne perioden</b></div>;
   if (r) {
     return (
@@ -172,7 +182,7 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
           <span><small>Valgt ritt</small>{r.race} {r.year}</span>
           <button type="button" onClick={() => setSel(null)}>Fjern valg</button>
         </div>
-        <Dial value={r.beaten} label={`${r.race} ${r.year}`} sub={`av feltet slått (${r.place}. av ${r.field})`} />
+        <Dial value={r.beaten} label={`${r.race} ${r.year}`} sub={`av ${felt} slått (${r.place}. av ${r.field})`} />
         <div className="facts">
           <span className="eyebrow">{TYPE_LABEL[r.type]} · {dateLong(r.date)}</span>
           <div className="fact"><span>Plassering</span><b>{r.place}. av {r.field} {r.basis}{r.cls ? ` (${r.cls})` : ""}</b></div>
@@ -182,7 +192,10 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
           {r.np && <div className="fact"><span>Watt (NP / snitt)</span><b>{r.np} / {r.ap} W</b></div>}
           {r.speed && <div className="fact"><span>Fart / distanse</span><b>{dec(r.speed)} km/t · {dec(r.km)} km{r.climb ? ` · ${Math.round(r.climb)} hm` : ""}</b></div>}
           <div className="fact"><span>Kilder</span><b>{r.link && <a href={r.link} target="_blank" rel="noopener">Resultatliste</a>}{r.icu && flags.activityLinks && <> · <a href={r.icu} target="_blank" rel="noopener">intervals.icu</a></>}{r.video && <>{r.link || (r.icu && flags.activityLinks) ? " · " : ""}<a href={r.video} target="_blank" rel="noopener">Video fra rittet</a></>}</b></div>
-          <button type="button" className="btn" onClick={() => go("rivaler")}>Se rivalene</button>
+          <div className="find-actions">
+            {list && <button type="button" className="btn" onClick={() => openRace(list)}>Hele resultatlisten</button>}
+            <button type="button" className="btn" onClick={() => go("rivaler")}>Se rivalene</button>
+          </div>
         </div>
       </div>
     );
@@ -193,7 +206,7 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
   const np = rows.filter((x) => x.np).map((x) => x.np!);
   return (
     <div className="card dial-card" id="race-detail">
-      <Dial value={typical} label={season === "all" ? "Typisk ritt, alle år" : `Typisk ritt i ${season}`} sub="av feltet slått (median)" />
+      <Dial value={typical} label={season === "all" ? "Typisk ritt, alle år" : `Typisk ritt i ${season}`} sub={`av ${felt} slått (median)`} />
       <div className="facts">
         <span className="eyebrow">{season === "all" ? "Alle år" : `Sesongen ${season}`}</span>
         <div className="fact"><span>Ritt på tid</span><b>{rows.length}</b></div>
