@@ -470,3 +470,5 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .race-table td.l, .race-table th.l { white-space: nowrap; }
 .hits .recent-head { display: flex; white-space: nowrap; align-items: baseline; justify-content: space-between; gap: 12px; padding: 4px 10px 6px; color: var(--muted); font-size: .75rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
 .hits .recent-head .linkish { text-transform: none; letter-spacing: 0; font-size: .8rem; font-weight: 500; padding: 6px 0; }
+.race-link { color: inherit; text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 3px; }
+.race-link:hover { text-decoration-color: var(--accent); }

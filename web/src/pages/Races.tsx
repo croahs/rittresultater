@@ -1,10 +1,11 @@
-import { Fragment, useMemo, useState } from "react";
-import { flags, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { findRace, flags, raceLists, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
 import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon } from "../ui";
 import { KlasseToggle } from "../klasse";
 import RaceVideos from "../RaceVideos";
+import { openRace } from "./Race";
 
 type SortKey = "date" | "beaten" | "behind" | "np";
 
@@ -18,6 +19,13 @@ export default function Races({ a }: { a: Athlete }) {
   const media = a.results.some((r) => r.videos?.length); // videos riders shared from the race, whoever made them
   const [open, setOpen] = useState<string | null>(null);
   const types = [...new Set(a.results.map((r) => r.type))];
+  // The whole result list behind each race, where we have one: a tap on the race opens it.
+  const [lists, setLists] = useState<Map<string, string>>(new Map());
+  useEffect(() => {
+    let live = true;
+    raceLists().then((l) => live && setLists(new Map(a.results.flatMap((r) => { const x = findRace(l, r); return x ? [[raceKey(r), x.id] as const] : []; })))).catch(() => {});
+    return () => { live = false; };
+  }, [a]);
   const rows = useMemo(() => {
     const s = fold(q.trim());
     const val = (r: Result) => (sort.k === "date" ? r.date : sort.k === "beaten" ? r.beaten : sort.k === "behind" ? r.behind ?? 999 : r.np ?? -1);
@@ -49,12 +57,16 @@ export default function Races({ a }: { a: Athlete }) {
           <div className="table-wrap"><table className="sticky">
             <thead><tr><th className="l">Ritt</th><th>Plass</th>{th("beaten", "Slått")}{th("behind", "Bak vinner")}{th("date", "Dato")}<th className="l">Type</th><th>Tid</th><th>Km</th><th>Fart</th>{a.power && th("np", "NP")}{a.power && <th>Snitt W</th>}{media && <th>Media</th>}<th>Lenker</th></tr></thead>
             <tbody>{rows.map((r) => {
-              const k = raceKey(r), n = r.videos?.length || 0;
+              const k = raceKey(r), n = r.videos?.length || 0, list = lists.get(k);
+              // With a result list, a tap opens it; without one, it selects the race for the other tabs as before.
+              const act = () => (list ? openRace(list) : setSel(sel === k ? null : k));
               return (
                 <Fragment key={k}>
-                <tr aria-selected={sel === k} tabIndex={0} style={{ cursor: "pointer" }} onClick={() => setSel(sel === k ? null : k)}
-                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSel(sel === k ? null : k); } }}>
-                  <td className="l"><b style={{ fontWeight: 600 }}>{r.race}</b> <span className="muted">{r.year}</span></td>
+                <tr aria-selected={sel === k} tabIndex={0} style={{ cursor: "pointer" }} onClick={act}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } }}>
+                  <td className="l">{list
+                    ? <a className="race-link" href={`#/ritt/${encodeURIComponent(list)}`} onClick={(e) => e.stopPropagation()} title={`Hele resultatlisten for ${r.race} ${r.year}`}><b style={{ fontWeight: 600 }}>{r.race}</b> <span className="muted">{r.year}</span></a>
+                    : <><b style={{ fontWeight: 600 }}>{r.race}</b> <span className="muted">{r.year}</span></>}</td>
                   <td>{r.place}/{r.field}{r.agePlace ? <span className="muted age"> ({r.agePlace}/{r.ageN} {r.ageClass})</span> : null}</td>
                   <td>{pct(r.beaten)}</td><td>{pct(r.behind)}</td>
                   <td>{dateLong(r.date)}</td>
