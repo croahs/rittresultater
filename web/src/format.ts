@@ -1,7 +1,9 @@
 import type { RaceType } from "./data";
 
-export const TYPE_LABEL: Record<RaceType, string> = { Road: "Landevei", Gravel: "Gravel", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo", Unknown: "Ukjent" };
-export const TYPE_LC: Record<RaceType, string> = { Road: "landevei", Gravel: "gravel", MTB: "terreng", TT: "tempo", TTT: "lagtempo", Unknown: "ukjent type" };
+export const TYPE_LABEL: Record<RaceType, string> = { Road: "Landevei", Gravel: "Grus", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo", Unknown: "Ukjent" };
+export const TYPE_LC: Record<RaceType, string> = { Road: "landevei", Gravel: "grus", MTB: "terreng", TT: "tempo", TTT: "lagtempo", Unknown: "ukjent type" };
+/** Class names from the timers in Norwegian: «CX/Gravel» reads «CX/Grus». Race names keep their own spelling. */
+export const clsLabel = <T extends string | null | undefined>(s: T): T => (s ? s.replace(/\bGravel\b/g, "Grus") : s) as T;
 export const TYPE_VAR: Record<RaceType, string> = { Road: "var(--road)", Gravel: "var(--gravel)", MTB: "var(--mtb)", TT: "var(--tt)", TTT: "var(--ttt)", Unknown: "var(--unknown)" };
 
 const MON = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"];

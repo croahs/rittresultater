@@ -1,5 +1,5 @@
 import { idsLoader } from "./ids";
-import { fold } from "./format";
+import { clsLabel, fold } from "./format";
 // Data model and loading. The site only reads static JSON under data/ (written by export_web.py).
 
 export type RaceType = "Road" | "Gravel" | "MTB" | "TT" | "TTT" | "Unknown";
@@ -99,7 +99,7 @@ function opponents(raw: RawOpp[] | undefined): Map<string, Opponent> {
     id, name, club, w, l, med, sex: sex ?? null,
     ms: ms.map(([race, date, type, res, gs, gp, pl, mc, tc, same]) => ({
       race: race.replace(/\s+20\d\d$/, ""), date: toIso(date), type, res: res[0] as Meeting["res"],
-      gs, gp, pl, mc: mc ?? null, tc: tc ?? null, same: same === undefined ? true : !!same,
+      gs, gp, pl, mc: clsLabel(mc) ?? null, tc: clsLabel(tc) ?? null, same: same === undefined ? true : !!same,
     })).sort((a, b) => a.date.localeCompare(b.date)),
   }]));
 }
@@ -131,11 +131,11 @@ function result(r: Record<string, unknown>): Result {
   const beaten = field > 1 ? ((field - place) / (field - 1)) * 100 : 100;
   return {
     race: String(r.name ?? r.race).replace(/\s+20\d\d$/, ""), date, year: Number(date.slice(0, 4)),
-    type: r.type as RaceType, cls: (r.class as string) ?? null,
+    type: r.type as RaceType, cls: clsLabel(r.class as string) ?? null,
     place, field, basis: overall || r.class == null && r.top === undefined ? "totalt" : "i klassen", top, beaten: Math.max(0, Math.min(100, beaten)),
     behind: num(r.behind ?? r.behind_pct), time: String(r.time ?? ""), winner: String(r.winner ?? ""),
     np: num(r.np), ap: num(r.ap), speed: num(r.speed), km: num(r.km), climb: num(r.climb),
-    ageClass: String(r.age_class ?? ""), agePlace: num(r.age_place), ageN: num(r.age_n),
+    ageClass: clsLabel(String(r.age_class ?? "")), agePlace: num(r.age_place), ageN: num(r.age_n),
     link: String(r.turritt ?? r.link ?? ""), icu: String(r.icu ?? ""),
     women: r.women_place != null && r.women_field != null ? {
       place: Number(r.women_place), field: Number(r.women_field),

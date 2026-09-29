@@ -13,7 +13,7 @@
 (function () {
   const TYPE_VAR = { Road: "--road", Gravel: "--gravel", MTB: "--mtb", TT: "--tempo", TTT: "--tempo", Unknown: "--unknown" };
   const TYPE_FALLBACK = { Road: "#2a78d6", Gravel: "#eb6834", MTB: "#5b8a2e", TT: "#1baf7a", TTT: "#1baf7a", Unknown: "#8a8f99" };
-  const TYPE_NAME = { Road: "Landevei", Gravel: "Gravel", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo", Unknown: "Ukjent" };
+  const TYPE_NAME = { Road: "Landevei", Gravel: "Grus", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo", Unknown: "Ukjent" };
   const LENGTHS = [15, 30, 60, 120];
   const FAR_KM = 150; // races this far from the season's centre get their own inset
 
