@@ -105,8 +105,8 @@ export default function App() {
           {!home && (
             // The tabs are views of one rider, so they sit in one group with that rider's name in front.
             <div className="rider-nav">
-              {riderName && <span className="who-chip" title={riderName}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span>
-                {athlete?.channel && <a className="yt-link" href={athlete.channel} target="_blank" rel="noopener" title={`${firstName(riderName)} på YouTube`} aria-label={`${riderName} på YouTube`}><Icon.play /></a>}</span>}
+              {riderName && <span className="who-chip"><button type="button" className="who-btn" title={`${riderName}: oversikt`} aria-label={`${riderName}, til oversikten`} onClick={() => go("oversikt")}><span className="ini" aria-hidden="true">{initials(riderName)}</span><span className="nm">{firstName(riderName)}</span></button>
+                {athlete?.channel && <a className="yt-link" href={athlete.channel} target="_blank" rel="noopener" title={`${firstName(riderName)} på YouTube`} aria-label={`${riderName} på YouTube`}><Icon.youtube /></a>}</span>}
               <nav className="nav" aria-label={riderName ? `Sider for ${riderName}` : "Sider for rytteren"}>
                 {TABS.map((t) => (
                   <button key={t.id} type="button" aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id)}>

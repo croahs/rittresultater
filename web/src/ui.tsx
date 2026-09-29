@@ -11,6 +11,8 @@ export const Icon = {
   sun: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" /></svg>,
   moon: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z" /></svg>,
   play: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><rect x="2.5" y="5" width="19" height="14" rx="4" /><path d="M10 9v6l5-3z" fill="currentColor" /></svg>,
+  // YouTube's own mark: red rounded rectangle, white play triangle (brand colours, not the theme's).
+  youtube: () => <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF0000" /><path d="M10 8.8v6.4l5.6-3.2z" fill="#fff" /></svg>,
   bolt: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg>,
 };
 
