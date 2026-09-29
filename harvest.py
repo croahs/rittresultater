@@ -21,13 +21,14 @@ folder is the branch "harvest" (checked out there by the workflow), not main, so
 (cache/harvest/calendar.json) is read once per past year; this year and last year are read
 again every night, for new and late-published races.
 
-  python3 harvest.py [minutes]     read calendars, then fetch lists until the time is up (default 300)
+  python3 harvest.py [minutes]     read calendars, then fetch lists until the time is up (default 330)
   python3 harvest.py status        what is in the calendar and what is fetched
 """
 import datetime
 import gzip
 import json
 import os
+import random
 import sys
 import time
 
@@ -36,7 +37,7 @@ import requests
 HERE = os.path.dirname(os.path.abspath(__file__))
 DIR = os.path.join(HERE, "cache", "harvest")
 CALENDAR = os.path.join(DIR, "calendar.json")
-PAUSE = 5  # seconds between any two requests: gentler than the 2 s of the daytime jobs
+PAUSE = (8, 15)  # seconds between any two requests, a random number in this range (Pedår, 2026-09-29)
 FIRST_YEAR = 2008  # EQ Timing's first cycling results
 EQ_CAL = "https://api.eqtiming.com/api/v2/Events"
 EQ_LIVE = "https://live.eqtiming.com/api"
@@ -49,7 +50,7 @@ RR_SPORTS = {11, 2, 20}  # Cycling, Mountain Bike, Cyclocross
 RR_SKIP_LIST = ("live", "detalj", "sammenlagt", "totalt", "beste", "påmeld", "start", "deltaker", "participant", "series")
 
 s = requests.Session()
-s.headers["User-Agent"] = "rittresultater/0.1 (nightly, 5 s between requests; peder@holterman.no)"
+s.headers["User-Agent"] = "rittresultater/0.1 (nightly, 8-15 s between requests; peder@holterman.no)"
 _last = 0.0
 
 
@@ -59,7 +60,7 @@ class Blocked(Exception):
 
 def _get(url, **params):
     global _last
-    time.sleep(max(0, _last + PAUSE - time.time()))
+    time.sleep(max(0, _last + random.uniform(*PAUSE) - time.time()))
     try:
         r = s.get(url, params=params, timeout=120)
     finally:
@@ -251,4 +252,4 @@ if __name__ == "__main__":
         status()
     else:
         read_calendars()
-        fetch_lists(float(sys.argv[1]) if sys.argv[1:] else 300)
+        fetch_lists(float(sys.argv[1]) if sys.argv[1:] else 330)

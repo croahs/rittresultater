@@ -1,7 +1,7 @@
 # Nightly harvest (harvest.py): every cycling race in Norway, found from EQ Timing's and
-# raceresult's own calendars, and each race's result lists fetched once, 5 s between requests.
-# The first nights work through the backlog (about 4,600 races since 2008), a few hours a
-# night; after that only new races are fetched.
+# raceresult's own calendars, and each race's result lists fetched once, 8 to 15 s (random) between requests.
+# The first nights work through the backlog (about 4,600 races since 2008, roughly a week to ten
+# nights at 5.5 hours a night); after that only new races are fetched.
 #
 # The lists live on the branch "harvest", checked out in cache/harvest, never on main. The
 # first run creates that branch. Nothing on the site can start this job.
@@ -12,12 +12,12 @@ name: Harvest race results
 # (harvest.Blocked) and the job fails, so it shows up; nothing works around a block.
 on:
   schedule:
-    - cron: "30 0 * * *"  # 00:30 UTC, night in Norway
+    - cron: "0 22 * * *"  # 22:00 UTC = midnight in Norway (summer time); fetching stops after 5.5 hours
   workflow_dispatch:
     inputs:
       minutes:
         description: "Minutes to spend fetching lists"
-        default: "300"
+        default: "330"
 
 permissions:
   contents: write
@@ -29,7 +29,7 @@ concurrency:
 jobs:
   harvest:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
 
@@ -54,7 +54,7 @@ jobs:
           fi
 
       - name: Harvest
-        run: python3 harvest.py "${{ github.event.inputs.minutes || '300' }}"
+        run: python3 harvest.py "${{ github.event.inputs.minutes || '330' }}"
 
       - name: Commit to the harvest branch
         if: always()
