@@ -67,18 +67,25 @@ def history(rider=RIDER_ID):
     return _get("Participant/Results", id=rider)
 
 
+def _ms(i):
+    """The official time in ms: EQ's smoothed time, where riders in one bunch share the time of
+    the first of them (as on EQ's own result page), not each rider's own line crossing.
+    (RangeringsTid is not a time in every event, e.g. 1.75e18 in untimed tour rides.)"""
+    return i.get("AkkumulertTidGlattet") or i["AkkumulertTid"]
+
+
 def _total(event, stage):
     """Fetch one race's full result list once and cache both shapes of it (results: for races(),
     named: for registry races), so a list read for one is never fetched again for the other."""
     items = _get(f"Result/Total/{event}/{stage}", count=99999)["Items"]
     _cache[f"results:{event}:{stage}"] = [[i["Deltaker"]["Utover"]["UID"], i["Deltaker"]["Klasse"]["Navn"],
-                                           i["StatusTekst"], i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
+                                           i["StatusTekst"], _ms(i), i["Deltaker"]["Pulje"]["Navn"].strip()]
                                           for i in items]
-    _cache.setdefault(f"named:{event}:{stage}", [
+    _cache[f"named:{event}:{stage}"] = [
         [i["Deltaker"]["Utover"]["UID"]] + ([None, None] if i["Deltaker"].get("Anonym") else
          [i["Deltaker"]["Utover"].get("NavnFormatert") or "", i["Deltaker"].get("Klubbnavn") or ""])
-        + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], i["AkkumulertTid"], i["Deltaker"]["Pulje"]["Navn"].strip()]
-        for i in items])
+        + [i["Deltaker"]["Klasse"]["Navn"], i["StatusTekst"], _ms(i), i["Deltaker"]["Pulje"]["Navn"].strip()]
+        for i in items]
     _save()
 
 
@@ -182,6 +189,15 @@ def event_stages(event_id):
             return []
         _cached(key, lambda: [[int(k), v.get("Navn") or ""] for k, v in e["Etapper"].items()])
     return [tuple(x) for x in _cache[key]]
+
+
+def stage_km(event_id, stage):
+    """The distance of one stage (class) as the timer gives it, in km, or None when it doesn't.
+    One Event request per event, cached forever."""
+    def fetch():
+        e = _get(f"Event/{event_id}")
+        return {k: v.get("Km") or None for k, v in (e.get("Etapper") or {}).items()}
+    return _cached(f"km:{event_id}", fetch).get(str(stage))
 
 
 def registry_races(entry, name, rider=None):

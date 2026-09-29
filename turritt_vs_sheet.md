@@ -47,3 +47,36 @@
 | Dalane Rundt 2026 | Overall participants (not officials or DNS, DNF included) | 58 | 64 |
 | Dalane Rundt 2026 | Time | 01:53:35 | 01:53:34 |
 | Dalane Rundt 2026 | Class winner | 01:29:41 | 01:29:40 |
+| Nordsjørittet | Overall placement | 232 | 99 (eqtiming) |
+| Nordsjørittet | Class participants (not officials or DNS, DNF included) | 195 | 200 (eqtiming) |
+| Nordsjørittet | Overall participants (not officials or DNS, DNF included) | 907 | 200 (eqtiming) |
+| Tysværrittet 2025 | Placement in class | 66 | 64 (eqtiming) |
+| Tysværrittet 2025 | Overall placement | 66 | 64 (eqtiming) |
+| Tysværrittet 2025 | Class participants (not officials or DNS, DNF included) | 90 | 99 (eqtiming) |
+| Tysværrittet 2025 | Overall participants (not officials or DNS, DNF included) | 90 | 99 (eqtiming) |
+| Tysværrittet 2025 | Time | 02:23:32 | 02:23:29 (eqtiming) |
+| Tysværrittet 2025 | Class winner | 01:49:46 | 01:49:45 (eqtiming) |
+| Toskaskabet | Placement in class | 29 | 30 (eqtiming) |
+| Toskaskabet | Overall placement | 37 | 30 (eqtiming) |
+| Toskaskabet | Class participants (not officials or DNS, DNF included) | 45 | 46 (eqtiming) |
+| Toskaskabet | Overall participants (not officials or DNS, DNF included) | 56 | 46 (eqtiming) |
+| Dalane Rundt 2025 | Placement in class | 60 | 58 (eqtiming) |
+| Dalane Rundt 2025 | Overall placement | 61 | 58 (eqtiming) |
+| Dalane Rundt 2025 | Class participants (not officials or DNS, DNF included) | 71 | 68 (eqtiming) |
+| Dalane Rundt 2025 | Overall participants (not officials or DNS, DNF included) | 73 | 68 (eqtiming) |
+| KlostermilÅ 2026 | Overall placement | 33 | 21 (eqtiming) |
+| KlostermilÅ 2026 | Overall participants (not officials or DNS, DNF included) | 58 | 43 (eqtiming) |
+| Nordsjørittet 2026 | Placement in class | 96 | 94 (raceresult) |
+| Nordsjørittet 2026 | Overall placement | 146 | 94 (raceresult) |
+| Nordsjørittet 2026 | Class participants (not officials or DNS, DNF included) | 260 | 258 (raceresult) |
+| Nordsjørittet 2026 | Overall participants (not officials or DNS, DNF included) | 825 | 258 (raceresult) |
+| Rennesøy Tempo 2026 | Overall placement | 25 | 17 (eqtiming) |
+| Rennesøy Tempo 2026 | Overall participants (not officials or DNS, DNF included) | 47 | 37 (eqtiming) |
+| Ryfylkerittet 2026 | Class participants (not officials or DNS, DNF included) | 77 | 83 (eqtiming) |
+| Ryfylkerittet 2026 | Overall participants (not officials or DNS, DNF included) | 77 | 83 (eqtiming) |
+| Toskaskabet 2026 | Overall placement | 31 | 22 (eqtiming) |
+| Toskaskabet 2026 | Overall participants (not officials or DNS, DNF included) | 61 | 46 (eqtiming) |
+| Dalane Rundt 2026 | Placement in class | 52 | 49 (eqtiming) |
+| Dalane Rundt 2026 | Overall placement | 52 | 49 (eqtiming) |
+| Dalane Rundt 2026 | Class participants (not officials or DNS, DNF included) | 64 | 61 (eqtiming) |
+| Dalane Rundt 2026 | Overall participants (not officials or DNS, DNF included) | 64 | 61 (eqtiming) |

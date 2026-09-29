@@ -208,6 +208,37 @@ def build_rider(rider, log=print):
         rows.append(r)
         changes.append((r["Race"], "(new row)", "", "added from Turritt"))
 
+    # Turritt is not a source (Pedår, 2026-09-29): a Turritt row whose race the registry has
+    # from its own timer, confirmed, with the rider found in that list, takes its placings and
+    # link from the timer instead. Rows the timer's lists don't have yet stay as they are.
+    reg = registry.races(rider, log)
+    replaced = {}
+    for row in registry.load():
+        # Team time trials are ranked per team; the timer's lists rank each rider, so they stay.
+        if row.get("status") == "bekreftet" and row.get("type") != "TTT":
+            for t in row["turritt_ids"]:
+                replaced.setdefault(t, set()).update((s["source"], s["event"]) for s in row["sources"])
+    for r in rows:
+        events = replaced.get(r.get("_turritt_race_id"))
+        if not events:
+            continue
+        e = eq_by_date.get(r["Date"])
+        if not e or ("eqtiming", e["event_id"]) not in events:
+            e = next((x for x in reg if (x["source"], x["event_id"]) in events and isinstance(x["class_place"], int)), None)
+        if not e:
+            continue
+        source = e.get("source", "eqtiming")
+        hit = {**e, "overall_place": e["class_place"], "overall_n": e["class_n"]}
+        for col, key in FROM_TURRITT.items():
+            v = str(hit[key])
+            if r.get(col) != v:
+                changes.append((r["Race"], col, r.get(col, ""), f"{v} ({source})"))
+                r[col] = v
+        r["_class"], r["Turritt"], r["_turritt_race_id"] = eq_class(e), "", None
+        r["_rr"], r["Match note"] = f"{source}:{e['event_id']}/{e['stage_id']}", f"placings from {source} (was Turritt)"
+        if source == "eqtiming":
+            r["EQ Timing"], r["_eq"] = e["url"], f"{e['event_id']}/{e['stage_id']}"
+
     # EQ Timing races nobody has a row for yet (Turritt covers many of the same races).
     taken = {sync.parse_date(r["Date"]) for r in rows}
     for e in eq_all:
@@ -222,7 +253,7 @@ def build_rider(rider, log=print):
     # Races from their own timers listed in data/registry.json (raceresult, Ultimate, EQ
     # results not linked to a profile), found by name. Only a day nobody has a row for.
     src_name = {"eqtiming": "EQ Timing", "raceresult": "raceresult", "ultimate": "Ultimate"}
-    for e in registry.races(rider, log):
+    for e in reg:
         d = sync.parse_date_iso(e["date"])
         # NM has a race a day, so only the same day is a duplicate. Lapped riders keep their place.
         if d in taken or not isinstance(e["class_place"], int):
@@ -261,6 +292,14 @@ def build_rider(rider, log=print):
 
     add_power(rider, rows, log)
     for r in rows:
+        # The distance of the rider's own class or stage, from the timer (EQ gives it per stage).
+        if r.get("_eq"):
+            try:
+                r["_stage_km"] = eqtiming.stage_km(*(int(x) for x in r["_eq"].split("/")))
+            except Exception as e:
+                log(f"{rider['id']}: EQ Timing distance for {r['Race']} skipped: {e}")
+            if r.get("_stage_km") and not r.get("Distance (km)"):
+                r["Distance (km)"] = str(r["_stage_km"])
         if not r.get("_gps_speed") and r.get("Distance (km)"):
             r["Average speed (km/h)"] = ""  # derive() then uses official distance / time
         sync.derive(r)

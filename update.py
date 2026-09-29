@@ -136,6 +136,7 @@ def race_json(rider, r):
         "winner_time": r["Class winner"],
         "behind_pct": num(r.get("% behind winner")),
         "distance_km": num(r.get("Distance (km)")),
+        "stage_km": r.get("_stage_km"),  # the rider's own class/stage, from the timer; None when it gives none
         "elevation_m": num(r.get("Elevation gain (m)"), int),
         "climb_per_km": num(r.get("Climbing per km")),
         "speed_kmh": num(r.get("Average speed (km/h)")),
