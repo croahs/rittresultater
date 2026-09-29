@@ -85,7 +85,7 @@ Hvis Zero Trust-registreringen er et hinder, kan en liten Pages Function i `func
 Watt for andre ryttere: på Utvikling kan en rytter lime inn sin egen API-nøkkel fra intervals.icu. Nettleseren henter da watt for rittene direkte fra intervals.icu og regner ut NP for selve rittet. Nøkkelen sendes bare til intervals.icu, lagres ikke, og tallene forsvinner når siden lukkes. Ingenting av dette går via Cloudflare.
 
 Før lansering bør du vite dette:
-- Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Sett en kontaktadresse i `"contact"` i `site.json`-linja i `export_web.py`. Den vises da nederst på siden, slik at folk kan be om retting eller fjerning.
+- Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Kontaktadressen står i `"contact"` i `site.json`-linja i `export_web.py` og vises nederst på siden, slik at folk kan be om retting eller fjerning.
 - Kartflisene i sesongklippet kommer fra CARTO (basert på OpenStreetMap). Gratis bruk er begrenset og krever kildehenvisning, som vises nederst i kartet. Ved mye trafikk bør vi bytte til en fliskilde med egen nøkkel.
 
 ## 4. Nye ritt
