@@ -111,7 +111,7 @@ def original(sources, race_name, ids):
             if lst is None:
                 return None
             for uid, nm, club, age, status, ms, group in lst:
-                if status not in ("TIME", "DNF", "LAP") or (status == "TIME" and not ms) or turritt.EXCLUDE_GROUP.search(f"{group} {age}"):
+                if nm is None or status not in ("TIME", "DNF", "LAP") or (status == "TIME" and not ms) or turritt.EXCLUDE_GROUP.search(f"{group} {age}"):
                     continue
                 t = int(ms // 1000) if status == "TIME" else DNF_TIME
                 rows.append(([0, "", ids.get(("eq", str(uid)), f"eq{uid}"), group, "", nm, "", club, age, t, stage],
