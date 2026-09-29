@@ -126,7 +126,9 @@ Lokalt kan det testes med `npx wrangler pages dev` i `web/` etter `pnpm build`, 
 
 ## 6. «Hent alle mine ritt» (valgfritt, cirka 5 minutter)
 
-Knappen på siden legger bare en forespørsel i tabellen `fetch_requests` i D1. Siden henter aldri noe selv. Jobben `.github/workflows/fetch-queue.yml` kjører hver dag klokka 04:00 UTC. Den tar maks 3 forespørsler, legger rytteren inn i `riders.json`, henter historikken fra 2005 med de vanlige pausene og cachen, bygger rivaler og sidedata, og pusher til `main`.
+Knappen på siden legger bare en forespørsel i tabellen `fetch_requests` i D1. Siden henter aldri noe selv. Jobben `.github/workflows/fetch-queue.yml` kjører annenhver time. Den tar maks 3 forespørsler, legger rytteren inn i `riders.json`, henter historikken fra 2005 med de vanlige pausene og cachen, bygger rivaler og sidedata, og pusher til `main`.
+
+Kildene er Turritt (ut fra ID-en rytteren oppga), EQ Timing med kermesse (når nøyaktig én EQ-profil har navnet) og SSK Cup på raceresult (når navnet står i listene der). Uten intervals.icu-nøkkel får SSK Cup plassering og poeng, men ikke watt.
 
 Jobben leser køen gjennom Cloudflare sitt D1-API, og trenger tre repo-secrets (**Settings → Secrets and variables → Actions → New repository secret**):
 

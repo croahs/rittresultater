@@ -194,8 +194,8 @@ def run_rider(rider, log):
     if rider.get("ssk_cup"):
         icu = build.intervals_client(rider)
         points = (sskcup.main(rider, icu, log) if icu else None)
-        if points is None:  # no key this run: keep what we had
-            points = [r for r in read_csv(points_csv(rider)) if not r.get("EQ Timing")]
+        if points is None:  # no key this run: keep what we had, else placings from the lists
+            points = [r for r in read_csv(points_csv(rider)) if not r.get("EQ Timing")] or sskcup.list_rows(rider, log)
     points = points + kermesse_rows(rider, log)
     if points:
         # Keep last run's watts for kermesse rides we couldn't read this time (no key in this run).

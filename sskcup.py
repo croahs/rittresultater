@@ -11,6 +11,7 @@ Power, speed and time cover only the race laps (auto-laps of the circuit).
 
 Run through update.py for every rider in riders.json with an "ssk_cup" entry
 (their name as raceresult writes it, and the rounds they rode in Sort klasse).
+Riders without an intervals.icu key get placing and points from the lists alone.
 The lap window per ride is cached in cache/metrics.json like the other races.
 """
 import csv
@@ -18,6 +19,7 @@ import json
 import os
 import re
 import time
+import unicodedata
 
 import requests
 
@@ -32,6 +34,10 @@ PAUSE = 2
 # Riders can ride Sort klasse in rounds where raceresult lists them in Blå
 # (Pedår did in rounds 1 and 6; it isn't recorded anywhere). That goes in riders.json.
 NEUTRAL_LAPS = 15  # Sort klasse rides 15 neutral laps before the race starts
+ROUNDS = range(1, 7)
+# raceresult's lists carry no dates; these are from Pedår's rides. Rounds without a date
+# here are only found through a rider's own intervals.icu ride.
+ROUND_DATES = {1: "2026-04-22", 4: "2026-08-19", 5: "2026-09-02", 6: "2026-09-16"}
 
 try:
     with open(CACHE_FILE, encoding="utf-8") as f:
@@ -54,6 +60,51 @@ def round_list(n):
         with open(CACHE_FILE, "w", encoding="utf-8") as f:
             json.dump(_cache, f, ensure_ascii=False)
     return _cache[key]
+
+
+def fold(name):
+    s = unicodedata.normalize("NFD", name.lower().replace("ø", "o").replace("æ", "ae"))
+    return sorted(re.sub(r"[\u0300-\u036f]", "", s).split())
+
+
+def name_for(name):
+    """The rider's name as raceresult writes it ("SURNAME Given names") when it is in
+    exactly one form in the cup's lists, else None. Only reads the cached round lists
+    (a round not cached yet costs one request, 2 s apart)."""
+    want = fold(name)
+    found = {r[1] for n in ROUNDS for rows in round_list(n).values() for r in rows if fold(r[1]) == want}
+    return found.pop() if len(found) == 1 else None
+
+
+def class_result(n, name):
+    """(class, place, riders in class, points, winner points) in round n, or None."""
+    for cls, rows in round_list(n).items():
+        me = next((r for r in rows if r[1] == name), None)
+        if me:
+            pts = int(me[2] or 0)
+            scorers = [r for r in rows if int(r[2] or 0) > 0]
+            return (cls, me[0] if pts else f"{len(scorers) + 1}-{len(rows)} (shared)",
+                    len(rows), pts, max(int(r[2] or 0) for r in rows))
+    return None
+
+
+def list_rows(rider, log=print):
+    """Points-race rows from the result lists alone, for riders with no intervals.icu key:
+    placing and points, no watts. Rounds with no known date are left out."""
+    out = []
+    for n in ROUNDS:
+        res = class_result(n, rider["ssk_cup"]["name"])
+        if not res:
+            continue
+        if n not in ROUND_DATES:
+            log(f"{rider['id']}: SSK Cup {n} skipped, its date isn't known")
+            continue
+        cls, place, field, pts, top = res
+        out.append({"Race": f"SSK Cup {n}", "Date": ROUND_DATES[n], "Class": cls, "Placement": place,
+                    "Riders in class": field, "Points": pts, "Winner points": top, "Race laps": "",
+                    "Race time": "", "Distance (km)": "", "Average speed (km/h)": "", "Average Power": "",
+                    "Normalized Power": "", "raceresult": PAGE, "intervals.icu activity": "", "Note": ""})
+    return out
 
 
 def race_laps(laps, sort_class):
@@ -112,15 +163,9 @@ def main(rider, icu, log=print):
         row = {"Race": f"SSK Cup {n}", "Date": a["start_date_local"][:10],
                "Class": "Sort klasse" if sort_class else "", "Placement": "", "Riders in class": "",
                "Points": "", "Winner points": ""}
-        for cls, rows in round_list(n).items():
-            me = next((r for r in rows if r[1] == conf["name"]), None)
-            if not me or sort_class:
-                continue
-            pts = int(me[2] or 0)
-            scorers = [r for r in rows if int(r[2] or 0) > 0]
-            row.update({"Class": cls, "Placement": me[0] if pts else f"{len(scorers) + 1}-{len(rows)} (shared)",
-                        "Riders in class": len(rows), "Points": pts,
-                        "Winner points": max(int(r[2] or 0) for r in rows)})
+        res = None if sort_class else class_result(n, conf["name"])
+        if res:
+            row.update(dict(zip(("Class", "Placement", "Riders in class", "Points", "Winner points"), res)))
         row.update({
             "Race laps": nlaps, "Race time": f"{secs // 60}:{secs % 60:02d}" if secs else "",
             "Distance (km)": f"{km:.1f}" if km else "",
