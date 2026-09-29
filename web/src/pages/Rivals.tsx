@@ -21,6 +21,8 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
   const pool = (o: Opponent) => (sameOnly ? o.ms.filter((m) => m.same) : o.ms);
   const hasClass = useMemo(() => [...O.values()].some((o) => o.ms.some((m) => m.mc || m.tc)), [O]);
   const you = isMe ? "deg" : firstName(a.name);
+  // Same rule as rivals.py: 3+ races together and a median gap within 5 %.
+  const level = `Jevnbyrdige er ryttere ${isMe ? "du" : firstName(a.name)} har møtt minst tre ganger, og som vanligvis kommer i mål innen 5\u00a0% av ${isMe ? "tiden din" : `tiden til ${firstName(a.name)}`}, rundt 5 minutter på et ritt på 1:40.`;
 
   const open = (id: string) => {
     if (!O.has(id)) {
@@ -81,10 +83,10 @@ export default function Rivals({ a, isMe, onRider, index }: { a: Athlete; isMe: 
       </section>
 
       <div className="hl-cards">
-        <HlCard title="Nemesis" sub={`Jevnbyrdige som slår ${you} oftest`} c="var(--loss)" rows={ins.nemesis} val={(r) => [`${r.wins}–${r.losses}`, `${r.races} ritt`]} onPick={open} />
-        <HlCard title="Offer" sub={`Jevnbyrdige ${isMe ? "du slår" : `${firstName(a.name)} slår`} oftest`} c="var(--win)" rows={ins.victims} val={(r) => [`${r.wins}–${r.losses}`, `${r.races} ritt`]} onPick={open} />
-        <HlCard title="Jakten" sub={`Ender oftest 1–3 plasser foran ${you}`} c="var(--gravel)" rows={ins.right_ahead} val={(r) => [`${(r as Who & { right_ahead?: number }).right_ahead}×`, `av ${r.races} ritt`]} onPick={open} />
-        <HlCard title="I nakken" sub={`Ender oftest 1–3 plasser bak ${you}`} c="var(--road)" rows={ins.right_behind} val={(r) => [`${(r as Who & { right_behind?: number }).right_behind}×`, `av ${r.races} ritt`]} onPick={open} />
+        <HlCard title="Nemesis" sub={`Jevnbyrdige som slår ${you} oftest`} info={`${level} Nemesis er de blant dem som oftest slår ${you}.`} c="var(--loss)" rows={ins.nemesis} val={(r) => [`${r.wins}–${r.losses}`, `${r.races} ritt`]} onPick={open} />
+        <HlCard title="Offer" sub={`Jevnbyrdige ${isMe ? "du slår" : `${firstName(a.name)} slår`} oftest`} info={`${level} Offer er de blant dem som ${isMe ? "du" : firstName(a.name)} oftest slår.`} c="var(--win)" rows={ins.victims} val={(r) => [`${r.wins}–${r.losses}`, `${r.races} ritt`]} onPick={open} />
+        <HlCard title="Jakten" sub={`Ender oftest 1–3 plasser foran ${you}`} info={`Ryttere som oftest kommer i mål én til tre plasser foran ${you}. Dem er det nærmest å ta igjen.`} c="var(--gravel)" rows={ins.right_ahead} val={(r) => [`${(r as Who & { right_ahead?: number }).right_ahead}×`, `av ${r.races} ritt`]} onPick={open} />
+        <HlCard title="I nakken" sub={`Ender oftest 1–3 plasser bak ${you}`} info={`Ryttere som oftest kommer i mål én til tre plasser bak ${you}. De er nærmest å ta ${isMe ? "deg" : firstName(a.name)} igjen.`} c="var(--road)" rows={ins.right_behind} val={(r) => [`${(r as Who & { right_behind?: number }).right_behind}×`, `av ${r.races} ritt`]} onPick={open} />
       </div>
 
       <div className="grid-2">
@@ -223,10 +225,10 @@ function MeetingDetail({ m, me, them, onClose }: { m: Meeting; me: string; them:
   );
 }
 
-function HlCard({ title, sub, c, rows, val, onPick }: { title: string; sub: string; c: string; rows?: Who[]; val: (r: Who) => [string, string]; onPick: (id: string) => void }) {
+function HlCard({ title, sub, info, c, rows, val, onPick }: { title: string; sub: string; info: string; c: string; rows?: Who[]; val: (r: Who) => [string, string]; onPick: (id: string) => void }) {
   return (
     <article className="card hl" style={{ ["--c" as string]: c }}>
-      <header><h2 className="h-card">{title}</h2><small>{sub}</small></header>
+      <header><h2 className="h-card">{title} <Info text={info} /></h2><small>{sub}</small></header>
       {rows?.length ? <ul>{rows.slice(0, 5).map((r) => {
         const [v, s] = val(r);
         return <li key={r.turritt_id}><button type="button" className="rrow" onClick={() => onPick(r.turritt_id)}>
@@ -293,5 +295,16 @@ function OppSearch({ O, index, self, onPick }: { O: Map<string, Opponent>; index
           <span className="who"><b>{r.name}</b><small>{r.club || "Uten klubb"}</small></span><small className="tnum">{o ? `${o.w}–${o.l}` : `${r.races} ritt`}</small></li>; })}
       </ul>}
     </div>
+  );
+}
+
+/* A small "i" that explains a term: shown on hover or keyboard focus, toggled by a tap on phones. */
+function Info({ text }: { text: string }) {
+  const [on, setOn] = useState(false);
+  return (
+    <span className="info-wrap">
+      <button type="button" className="info" aria-label="Forklaring" aria-expanded={on} onClick={() => setOn(!on)} onBlur={() => setOn(false)}>i</button>
+      <span className="info-pop" role="tooltip">{text}</span>
+    </span>
   );
 }

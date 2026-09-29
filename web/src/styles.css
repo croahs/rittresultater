@@ -398,3 +398,11 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .busy .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .busy .who small { display: block; color: var(--muted); font-size: .78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .busy-row { cursor: default; }
+/* Term explanations on the rival cards: hover or focus on desktop, tap on phones. */
+.info-wrap { display: inline-block; vertical-align: middle; }
+.info { all: unset; box-sizing: border-box; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line); color: var(--muted); font: 700 .7rem/1 var(--body); font-style: italic; cursor: help; }
+.info:hover, .info[aria-expanded="true"] { color: var(--ink); border-color: var(--muted); }
+.info:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.info-pop { display: none; position: absolute; z-index: 20; top: calc(100% - 4px); left: 10px; right: 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 8px 24px rgb(0 0 0 / .18); color: var(--ink); font: 400 .85rem/1.45 var(--body); letter-spacing: normal; text-transform: none; }
+.info:hover + .info-pop, .info:focus-visible + .info-pop, .info[aria-expanded="true"] + .info-pop { display: block; }
+.hl:has(.info:hover), .hl:has(.info:focus-visible), .hl:has(.info[aria-expanded="true"]) { overflow: visible; z-index: 5; }
