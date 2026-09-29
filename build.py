@@ -22,6 +22,7 @@ from datetime import timedelta
 
 import sync
 import eqtiming
+import raceresult
 import turritt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -204,6 +205,22 @@ def build_rider(rider, log=print):
         rows.append(r)
         taken.add(d)
         changes.append((r["Race"], "(new row)", "", "added from EQ Timing"))
+
+    # Races on raceresult (NM), found by name; there is no rider id to go by.
+    try:
+        rr_all = raceresult.races(rider["name"], int(rider.get("since") or 0))
+    except Exception as e:
+        log(f"{rider['id']}: raceresult skipped: {e}")
+        rr_all = []
+    for e in rr_all:
+        d = sync.parse_date_iso(e["date"])
+        if d in taken or ":" not in e["time"]:  # NM has a race a day, so only the same day is a duplicate
+            continue
+        r = eq_row(e, rider)
+        r["Match note"], r["_rr"] = "new from raceresult", f"{e['event_id']}/{e['stage_id']}"
+        rows.append(r)
+        taken.add(d)
+        changes.append((r["Race"], "(new row)", "", "added from raceresult"))
 
     if exclude:
         rows = [r for r in rows if not exclude.search(r["Race"])]

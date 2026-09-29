@@ -5,7 +5,8 @@ cap); it never scrapes. This script, run by .github/workflows/fetch-queue.yml, t
 most MAX_PER_RUN requests, adds each rider to riders.json (history from SINCE) and builds
 them with update.py, which fetches only result lists that aren't cached yet, 2 s apart.
 Sources: Turritt (by the id they gave), EQ Timing including kermesse (when exactly one
-EQ profile has their name) and SSK Cup on raceresult (when their name is in its lists).
+EQ profile has their name), and on raceresult SSK Cup and NM Landevei 2026 (when their name
+is in those lists).
 rivals.py and export_web.py then refresh the site data.
 
 The queue is read through Cloudflare's D1 REST API, so the site needs no endpoint for

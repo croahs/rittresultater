@@ -106,6 +106,8 @@ def race_id(r):
         return f"turritt:{r['_turritt_race_id']}"
     if r.get("_eq"):
         return f"eqtiming:{r['_eq']}"
+    if r.get("_rr"):
+        return f"raceresult:{r['_rr']}"
     return f"sheet:{sync.parse_date(r['Date']).isoformat()}:{series_key(r['Race'])}"
 
 
