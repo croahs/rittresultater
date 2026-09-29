@@ -39,7 +39,7 @@ export default function Races({ a }: { a: Athlete }) {
   );
   return (
     <>
-      <div><h1 className="h-display">Alle ritt</h1><p className="lead">Hele resultatlisten. Trykk på en kolonne for å sortere, og på et ritt for å velge det.</p><SelChip /></div>
+      <div><h1 className="h-display">Alle ritt</h1><p className="lead">Alle rittene rytteren har kjørt. Trykk på en kolonne for å sortere, og på et ritt for å se hele resultatlisten.</p><SelChip /></div>
       <section className="card">
         <div className="toolbar">
           <input type="search" id="race-filter" placeholder="Filtrer på rittnavn" aria-label="Filtrer på rittnavn" value={q} onChange={(e) => setQ(e.target.value)} />
