@@ -14,6 +14,24 @@
   const TYPE_VAR = { Road: "--road", Gravel: "--gravel", MTB: "--mtb", TT: "--tempo", TTT: "--tempo", Unknown: "--unknown" };
   const TYPE_FALLBACK = { Road: "#2a78d6", Gravel: "#eb6834", MTB: "#5b8a2e", TT: "#1baf7a", TTT: "#1baf7a", Unknown: "#8a8f99" };
   const TYPE_NAME = { Road: "Landevei", Gravel: "Grus", MTB: "Terreng", TT: "Tempo", TTT: "Lagtempo", Unknown: "Ukjent" };
+  const WMS = "https://wms.geonorge.no/skwms1/wms.topograatone";
+  const TERRAIN = /h(ø|o|oe)yde|kurve|terreng|relieff|skygge|dybde|contour|hillshade|elevation|terrain/i;
+  /** Kartverket's grey topo map without contour lines or terrain: its leaf layers, minus those. "" if unavailable. */
+  let plainPromise = null;
+  const plainLayers = () => plainPromise || (plainPromise = fetch(`${WMS}?service=WMS&request=GetCapabilities&version=1.3.0`)
+    .then((r) => (r.ok ? r.text() : Promise.reject(new Error(String(r.status)))))
+    .then((xml) => {
+      const doc = new DOMParser().parseFromString(xml, "text/xml");
+      if (!xml.includes("EPSG:3857")) return "";
+      const kid = (el, tag) => [...el.children].find((c) => c.localName === tag);
+      const names = [...doc.getElementsByTagNameNS("*", "Layer")]
+        .filter((l) => ![...l.children].some((c) => c.localName === "Layer"))
+        .map((l) => [kid(l, "Name")?.textContent || "", kid(l, "Title")?.textContent || ""])
+        .filter(([n, t]) => n && !TERRAIN.test(n) && !TERRAIN.test(t))
+        .map(([n]) => n);
+      return names.join(",");
+    })
+    .catch(() => ""));
   const LENGTHS = [15, 30, 60, 120];
   const FAR_KM = 150; // races this far from the season's centre get their own inset
 
@@ -142,17 +160,23 @@
 
     const map = L.map(root.querySelector(".sc-map"), { zoomControl: false, attributionControl: true });
     L.control.zoom({ position: "topright" }).addTo(map);
-    let tiles;
+    // Kartverket's open maps (CC BY 4.0, no key). The backdrop should be plain: no contour lines or terrain, so
+    // the visitor's browser reads the grey topo WMS's layer list and asks only for the layers without them.
+    // Until that list is in, or if the WMS can't be used, the grey topo tile cache is shown instead.
+    // In dark mode the tiles are inverted by the sc-dark class (CSS above).
+    const attribution = '&copy; <a href="https://www.kartverket.no/">Kartverket</a> (CC BY 4.0)';
+    let tiles, plain = "", errors = 0;
     const setTiles = () => {
       if (tiles) tiles.remove();
-      // Kartverket's open map cache (CC BY 4.0, no key). The grey topo map keeps the coloured tracks
-      // readable; in dark mode the same tiles are inverted by the sc-dark class (CSS below).
-      tiles = L.tileLayer("https://cache.kartverket.no/v1/wmts/1.0.0/topograatone/default/webmercator/{z}/{y}/{x}.png", {
-        maxZoom: 18, className: dark() ? "sc-tiles sc-dark" : "sc-tiles",
-        attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a> (CC BY 4.0)',
-      }).addTo(map);
+      const className = dark() ? "sc-tiles sc-dark" : "sc-tiles";
+      tiles = plain
+        ? L.tileLayer.wms(WMS, { layers: plain, format: "image/png", version: "1.3.0", maxZoom: 18, className, attribution })
+        : L.tileLayer("https://cache.kartverket.no/v1/wmts/1.0.0/topograatone/default/webmercator/{z}/{y}/{x}.png", { maxZoom: 18, className, attribution });
+      tiles.on("tileerror", () => { if (plain && ++errors > 3) { plain = ""; setTiles(); } });
+      tiles.addTo(map);
     };
     setTiles();
+    plainLayers().then((names) => { if (names) { plain = names; setTiles(); } });
     const home = races.filter((r) => !far.has(r)).flatMap((r) => r.pts);
     map.fitBounds(L.latLngBounds(home.length ? home : races.flatMap((r) => r.pts)), { padding: [24, 24] });
 
