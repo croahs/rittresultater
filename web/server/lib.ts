@@ -2,6 +2,7 @@
 
 import { sameName, validKey } from "../src/intervals";
 import { loadAthlete, type Athlete, type IndexRider, type Site } from "../src/data";
+import { isRid, makeIds, type Ids, type IdMap } from "../src/ids";
 
 export interface D1Result<T> { results: T[] }
 export interface D1Stmt { bind(...v: unknown[]): D1Stmt; run(): Promise<{ meta?: { changes?: number } }>; all<T>(): Promise<D1Result<T>>; first<T>(): Promise<T | null> }
@@ -72,12 +73,49 @@ export async function readToken(db: D1, token: unknown, rider: string): Promise<
   } catch { return null; }
 }
 
-export async function tables(db: D1) { await db.batch(SCHEMA.map((q) => db.prepare(q))); }
+export async function tables(db: D1, ctx: Ctx) {
+  await db.batch(SCHEMA.map((q) => db.prepare(q)));
+  await toOurIds(db, ctx);
+}
+
+/** A file from the site's own static data. */
+export async function staticJSON<T>(ctx: Ctx, path: string): Promise<T | null> {
+  try {
+    const r = await ctx.env.ASSETS.fetch(new URL(`/data/${path}`, ctx.request.url).toString());
+    return r.ok ? await r.json() as T : null;
+  } catch { return null; }
+}
+
+export async function siteIds(ctx: Ctx): Promise<Ids> { return makeIds((await staticJSON<IdMap>(ctx, "ids.json")) || {}); }
+
+/** The data files' key for our rider id (a TurrittID until rivals.py moves to our ids), or null. */
+export async function dataKey(ctx: Ctx, rid: string, index?: IndexRider[] | null): Promise<string | null> {
+  index ??= await staticJSON<IndexRider[]>(ctx, "riders/index.json");
+  if (!index) return null;
+  const keys = new Set(index.map((r) => r.id));
+  return (await siteIds(ctx)).toKey(rid, (k) => keys.has(k));
+}
+
+/** One-time move of rows saved under TurrittIDs to our rider ids (data/aliases.json). Nothing is deleted:
+ *  a row whose TurrittID has no id of ours yet stays as it is and is moved on a later call. */
+async function toOurIds(db: D1, ctx: Ctx) {
+  const done = await db.prepare("SELECT v FROM meta WHERE k = 'rider_ids'").first<{ v: string }>();
+  if (done?.v === "ours") return;
+  const old = await db.prepare(`SELECT rider_id FROM owner WHERE rider_id NOT LIKE 'r%' UNION SELECT rider_id FROM power WHERE rider_id NOT LIKE 'r%'
+    UNION SELECT rider_id FROM ride WHERE rider_id NOT LIKE 'r%'`).all<{ rider_id: string }>();
+  const m = await siteIds(ctx);
+  const moves = old.results.map((r) => [r.rider_id, m.toRid(r.rider_id)] as const).filter((x): x is readonly [string, string] => !!x[1]);
+  // OR IGNORE: if a row already exists under our id (saved after the switch), that newer row wins and the old one is left as it was.
+  if (moves.length) await db.batch(moves.flatMap(([from, to]) => ["owner", "power", "ride"].map((t) =>
+    db.prepare(`UPDATE OR IGNORE ${t} SET rider_id = ? WHERE rider_id = ?`).bind(to, from))));
+  if (moves.length === old.results.length) await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('rider_ids', 'ours')").run();
+}
 
 export const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
 
-export const riderOk = (id: unknown): id is string => typeof id === "string" && /^\d{1,12}$/.test(id);
+/** Our rider id, e.g. "r17179" (see src/ids.ts). */
+export const riderOk = (id: unknown): id is string => isRid(id);
 export const NO_DB = () => json({ error: "Lagring er ikke satt opp på denne siden ennå." }, 503);
 export const BAD_KEY = () => json({ error: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }, 400);
 
@@ -114,8 +152,8 @@ export async function activities(key: string, oldest: string, newest: string): P
   } catch { return null; }
 }
 
-/** A rider's results from the site's own static data files. */
-export async function athleteFor(ctx: Ctx, rider: string): Promise<Athlete | null> {
+/** A rider's results from the site's own static data files, by our rider id. */
+export async function athleteFor(ctx: Ctx, rid: string): Promise<Athlete | null> {
   const get = async <T,>(path: string): Promise<T> => {
     const r = await ctx.env.ASSETS.fetch(new URL(`/data/${path}`, ctx.request.url).toString());
     if (!r.ok) throw new Error(`${path}: ${r.status}`);
@@ -123,7 +161,8 @@ export async function athleteFor(ctx: Ctx, rider: string): Promise<Athlete | nul
   };
   try {
     const [site, index] = await Promise.all([get<Site>("site.json"), get<IndexRider[]>("riders/index.json")]);
-    return await loadAthlete(rider, site, index, get);
+    const key = await dataKey(ctx, rid, index);
+    return key ? await loadAthlete(key, site, index, get) : null;
   } catch { return null; }
 }
 

@@ -4,6 +4,7 @@
 // server only checks that the key belongs to this rider before storing them.
 
 import type { PowerFetch, RacePower } from "./intervals";
+import { ridOf } from "./data";
 
 // hidden: the rider saved watts but chose not to show them, so power is empty.
 export interface Saved { enabled: boolean; power: Map<string, RacePower>; speed: Map<string, number>; clipYears: number[]; hidden: boolean }
@@ -17,7 +18,7 @@ type Ride = { race_key: string; speed: number | null; km: number | null };
 
 export function getSaved(rider: string): Promise<Saved> {
   if (!cache.has(rider)) {
-    cache.set(rider, fetch(`${API}power?rider=${encodeURIComponent(rider)}`, { cache: "no-store" })
+    cache.set(rider, ridOf(rider).then((rid) => fetch(`${API}power?rider=${encodeURIComponent(rid)}`, { cache: "no-store" }))
       .then(async (r) => {
         if (!r.ok || !(r.headers.get("content-type") || "").includes("json")) return none;
         const b = await r.json() as { enabled?: boolean; rows?: Row[]; rides?: Ride[]; clipYears?: number[]; hidden?: boolean };
@@ -34,8 +35,10 @@ export function getSaved(rider: string): Promise<Saved> {
   return cache.get(rider)!;
 }
 
-async function call<T>(method: "POST" | "PATCH" | "DELETE", path: string, payload: object): Promise<T> {
+// The API knows riders by our id; callers pass the data key.
+async function call<T>(method: "POST" | "PATCH" | "DELETE", path: string, payload: { rider: string; [k: string]: unknown }): Promise<T> {
   let r: Response;
+  payload = { ...payload, rider: await ridOf(payload.rider) };
   try {
     r = await fetch(API + path, { method, headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
   } catch { throw new Error("Fikk ikke kontakt med siden. Prøv igjen."); }

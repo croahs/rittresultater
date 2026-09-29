@@ -1,3 +1,4 @@
+import { idsLoader } from "./ids";
 // Data model and loading. The site only reads static JSON under data/ (written by export_web.py).
 
 export type RaceType = "Road" | "Gravel" | "MTB" | "TT" | "TTT" | "Unknown";
@@ -75,6 +76,11 @@ export function getJSON<T>(path: string): Promise<T> {
   }
   return cache.get(path) as Promise<T>;
 }
+
+/** Our rider ids and the data files' keys (see ids.ts). */
+export const ids = idsLoader(getJSON);
+/** Our id ("r17179") for a data key, for URLs and the API. Falls back to the key itself. */
+export const ridOf = async (key: string) => (await ids()).toRid(key) ?? key;
 
 type RawOpp = [string, string, string, number, number, number | null,
   [string, string, RaceType, string, number | null, number | null, number | null, (string | null)?, (string | null)?, number?][]];
