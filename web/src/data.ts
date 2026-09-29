@@ -168,15 +168,22 @@ export interface RaceVideo { rid: string; by: string; url: string; own: boolean 
 
 const plain = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ø/g, "o").replace(/æ/g, "ae").replace(/[^a-z0-9]/g, "");
 
+/** The videos shared from the race on this date with this name (the name may carry the year). */
+export function videosFor(file: VideoFile | null, date: string, name: string) {
+  const n = plain(name.replace(/\s+20\d\d$/, ""));
+  return file?.races?.find((x) => x.date === date && (n.startsWith(plain(x.race)) || plain(x.race).startsWith(n)))?.videos || [];
+}
+
+export const loadVideos = () => getJSON<VideoFile>("videos.json").catch(() => null); // optional: a missing file just means no videos
+
 export function withVideos(a: Athlete, file: VideoFile | null, names: (rid: string) => string): Athlete {
   const races = file?.races || [];
   const channel = file?.channels?.[a.id];
   if (!races.length && !channel) return a;
   const find = (date: string, name: string): RaceVideo[] | undefined => {
-    const n = plain(name);
-    const race = races.find((x) => x.date === date && (n.startsWith(plain(x.race)) || plain(x.race).startsWith(n)));
-    if (!race?.videos.length) return undefined;
-    return race.videos.map((v) => ({ rid: v.rid, by: v.rid === a.id ? a.name : names(v.rid), url: v.url, own: v.rid === a.id }))
+    const vs = videosFor(file, date, name);
+    if (!vs.length) return undefined;
+    return vs.map((v) => ({ rid: v.rid, by: v.rid === a.id ? a.name : names(v.rid), url: v.url, own: v.rid === a.id }))
       .sort((x, y) => Number(y.own) - Number(x.own));
   };
   const own = (vs?: RaceVideo[]) => vs?.find((v) => v.own)?.url;
