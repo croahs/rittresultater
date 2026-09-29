@@ -71,7 +71,7 @@ export default function App() {
       // Numbers the rider saved on the site (only riders without watts in the static data).
       if (a.power) return;
       const saved = await getSaved(a.id);
-      if (live && (saved.power.size || saved.speed.size || saved.clipYears.length)) setAthlete((x) => (x && x.id === a.id ? withSaved(x, saved) : x));
+      if (live && (saved.power.size || saved.speed.size || saved.clipYears.length || saved.hidden)) setAthlete((x) => (x && x.id === a.id ? withSaved(x, saved) : x));
     }).catch(() => live && setError("Fant ikke denne rytteren i resultatlistene."));
     return () => { live = false; };
   }, [site, riderId, index]);

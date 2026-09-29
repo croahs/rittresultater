@@ -43,6 +43,7 @@ export interface Athlete {
   id: string; name: string; club: string; ageClass: string;
   power: boolean; clips: number[];
   savedPower?: boolean; // watts come from the site's database (the rider saved them), not the static files
+  savedHidden?: boolean; // the rider saved watts but keeps them hidden
   savedClipYears?: number[]; // season clips built from GPS tracks the rider saved (api/clip), not static files
   results: Result[]; points: PointsRace[];
   opponents: Map<string, Opponent>; rivals: string[]; insights: Insights;
@@ -146,13 +147,13 @@ export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>
 }
 
 /** Numbers the rider saved on the site: watts, GPS speed and the years that have a season clip. */
-export function withSaved(a: Athlete, s: { power: Map<string, { np: number; ap: number }>; speed: Map<string, number>; clipYears: number[] }): Athlete {
+export function withSaved(a: Athlete, s: { power: Map<string, { np: number; ap: number }>; speed: Map<string, number>; clipYears: number[]; hidden?: boolean }): Athlete {
   const b = s.power.size ? withPower(a, s.power, true) : a;
   const extra = s.clipYears.filter((y) => !a.clips.includes(y));
   return {
     ...b,
     results: b.results.map((r) => { const v = s.speed.get(`${r.date}|${r.race}`); return v != null ? { ...r, speed: v } : r; }),
-    clips: [...a.clips, ...extra].sort(), savedClipYears: extra,
+    clips: [...a.clips, ...extra].sort(), savedClipYears: extra, savedHidden: !!s.hidden,
   };
 }
 

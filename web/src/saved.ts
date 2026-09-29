@@ -5,10 +5,11 @@
 
 import type { PowerFetch, RacePower } from "./intervals";
 
-export interface Saved { enabled: boolean; power: Map<string, RacePower>; speed: Map<string, number>; clipYears: number[] }
+// hidden: the rider saved watts but chose not to show them, so power is empty.
+export interface Saved { enabled: boolean; power: Map<string, RacePower>; speed: Map<string, number>; clipYears: number[]; hidden: boolean }
 
 const API = "api/";
-const none: Saved = { enabled: false, power: new Map(), speed: new Map(), clipYears: [] };
+const none: Saved = { enabled: false, power: new Map(), speed: new Map(), clipYears: [], hidden: false };
 const cache = new Map<string, Promise<Saved>>();
 
 type Row = { race_key: string; np: number; ap: number };
@@ -19,12 +20,13 @@ export function getSaved(rider: string): Promise<Saved> {
     cache.set(rider, fetch(`${API}power?rider=${encodeURIComponent(rider)}`, { cache: "no-store" })
       .then(async (r) => {
         if (!r.ok || !(r.headers.get("content-type") || "").includes("json")) return none;
-        const b = await r.json() as { enabled?: boolean; rows?: Row[]; rides?: Ride[]; clipYears?: number[] };
+        const b = await r.json() as { enabled?: boolean; rows?: Row[]; rides?: Ride[]; clipYears?: number[]; hidden?: boolean };
         return {
           enabled: !!b.enabled,
           power: new Map((b.rows || []).map((x) => [x.race_key, { np: x.np, ap: x.ap }])),
           speed: new Map((b.rides || []).filter((x) => x.speed != null).map((x) => [x.race_key, x.speed!])),
           clipYears: b.clipYears || [],
+          hidden: !!b.hidden,
         };
       })
       .catch(() => none));
@@ -32,7 +34,7 @@ export function getSaved(rider: string): Promise<Saved> {
   return cache.get(rider)!;
 }
 
-async function call<T>(method: "POST" | "DELETE", path: string, payload: object): Promise<T> {
+async function call<T>(method: "POST" | "PATCH" | "DELETE", path: string, payload: object): Promise<T> {
   let r: Response;
   try {
     r = await fetch(API + path, { method, headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
@@ -42,8 +44,8 @@ async function call<T>(method: "POST" | "DELETE", path: string, payload: object)
   return b;
 }
 
-/** Save watts, then speed and GPS track one race at a time. Returns how many of each were saved. */
-export async function saveRides(key: string, rider: string, res: PowerFetch, onProgress?: (done: number, total: number) => void): Promise<{ power: number; tracks: number }> {
+/** Save watts (shown to everyone only if `show`), then speed and GPS track one race at a time. Returns how many of each were saved. */
+export async function saveRides(key: string, rider: string, res: PowerFetch, show: boolean, onProgress?: (done: number, total: number) => void): Promise<{ power: number; tracks: number }> {
   cache.delete(rider);
   const keys = new Set([...res.power.keys(), ...res.tracks.keys()]);
   const rows = [...keys].map((race_key) => {
@@ -51,7 +53,7 @@ export async function saveRides(key: string, rider: string, res: PowerFetch, onP
     return { race_key, np: p?.np, ap: p?.ap, speed: t?.speed ?? undefined, km: t?.km ?? undefined };
   });
   // The key goes to the site once; the tracks use the short-lived token it answers with.
-  const { saved, rides, token } = await call<{ saved: number; rides: string[]; token: string }>("POST", "power", { key, rider, rows });
+  const { saved, rides, token } = await call<{ saved: number; rides: string[]; token: string }>("POST", "power", { key, rider, rows, show });
   const withPts = [...res.tracks].filter(([k, t]) => t.pts.length && rides.includes(k));
   let tracks = 0, done = 0;
   for (const [race_key, t] of withPts) {
@@ -63,6 +65,12 @@ export async function saveRides(key: string, rider: string, res: PowerFetch, onP
   }
   cache.delete(rider);
   return { power: saved, tracks };
+}
+
+/** Show saved watts to everyone, or hide them again. Needs the key of the account that saved them. */
+export async function showPower(key: string, rider: string, show: boolean): Promise<void> {
+  cache.delete(rider);
+  await call("PATCH", "power", { key, rider, show });
 }
 
 export async function deleteRides(key: string, rider: string): Promise<number> {
