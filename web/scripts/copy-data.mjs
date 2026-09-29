@@ -4,6 +4,7 @@
 //   ../data/races.json (rivals.py: every result list, for head-to-head between any two riders)
 //   ../data/summary.json (rivals.py: front page numbers from every followed rider's races)
 //   ../data/videos.json (hand-kept: riders' YouTube channels and race videos)
+//   ../data/land/* (tools/land_cells.py: land and sea for the season clip's map)
 import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
@@ -16,6 +17,7 @@ rmSync(out, { recursive: true, force: true });
 cpSync(root + "site", out, { recursive: true });
 cpSync(root + "riders", out + "riders", { recursive: true });
 for (const f of ["races.json", "summary.json", "videos.json"]) if (existsSync(root + f)) cpSync(root + f, out + f);
+if (existsSync(root + "land")) cpSync(root + "land", out + "land", { recursive: true });
 // ids.json: our rider id -> TurrittID, from data/aliases.json (riderids.py), for #/r/<id> URLs and the API
 // while the data files are still keyed by TurrittID. Only the ids go out, not names or clubs.
 if (existsSync(root + "aliases.json")) {
