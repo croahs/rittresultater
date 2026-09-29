@@ -35,9 +35,9 @@ PAUSE = 2
 # (Pedår did in rounds 1 and 6; it isn't recorded anywhere). That goes in riders.json.
 NEUTRAL_LAPS = 15  # Sort klasse rides 15 neutral laps before the race starts
 ROUNDS = range(1, 7)
-# raceresult's lists carry no dates; these are from Pedår's rides. Rounds without a date
-# here are only found through a rider's own intervals.icu ride.
-ROUND_DATES = {1: "2026-04-22", 4: "2026-08-19", 5: "2026-09-02", 6: "2026-09-16"}
+# raceresult's lists carry no dates; these are from Stavanger SK's calendar (stavangersk.no/calendar),
+# which matches Pedår's rides in rounds 1, 4, 5 and 6.
+ROUND_DATES = {1: "2026-04-22", 2: "2026-05-20", 3: "2026-06-17", 4: "2026-08-19", 5: "2026-09-02", 6: "2026-09-16"}
 
 try:
     with open(CACHE_FILE, encoding="utf-8") as f:
