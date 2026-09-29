@@ -407,6 +407,8 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .w-fact { display: grid; gap: 4px; align-content: start; }
 .w-fact p { margin: 0; }
 .w-fact-num { font: 800 2.4rem/1 var(--display); font-stretch: 62%; }
+.w-fact-link { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--accent); text-decoration-color: currentColor; }
+.top-switch { display: flex; flex-wrap: wrap; gap: 8px; }
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 16px; }
 .feature { all: unset; box-sizing: border-box; display: grid; gap: 8px; align-content: start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); padding: 18px 20px; cursor: pointer; }
 .feature:hover { border-color: var(--accent); }

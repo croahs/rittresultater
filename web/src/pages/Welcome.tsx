@@ -4,6 +4,7 @@ import { TYPE_LABEL, TYPE_VAR, clock, dateLong, dec, span } from "../format";
 import { Icon } from "../ui";
 import type { Tab } from "../App";
 import { openRace } from "./Race";
+import { openTop, type TopKind } from "./Top";
 
 /* The front page: what is in here, a taste of the numbers, and a search box to find yourself. */
 
@@ -26,6 +27,8 @@ export default function Welcome({ example, onRider, search }: {
 
   // Riders outside the search pool have no page yet: show the name without a link.
   const who = (w: Who) => w.page ? <button type="button" className="linkish" onClick={() => onRider(w.id)}>{w.name}</button> : <span>{w.name}</span>;
+  // Each card's heading opens its top list.
+  const head = (k: TopKind, label: string) => <p className="eyebrow"><button type="button" className="linkish w-fact-link" onClick={() => openTop(k)}>{label}<span aria-hidden="true"> ›</span></button></p>;
   const num = (n?: number) => (n == null ? "–" : Math.round(n).toLocaleString("nb-NO"));
 
   return (
@@ -66,11 +69,11 @@ export default function Welcome({ example, onRider, search }: {
         <section className="section" aria-labelledby="h-fakta">
           <h2 className="h-section" id="h-fakta">Fra resultatlistene</h2>
           <div className="w-facts">
-            {facts.biggest && <div className="card card-pad w-fact"><p className="eyebrow">Største felt</p><b className="w-fact-num tnum">{num(facts.biggest.riders)}</b>
+            {facts.biggest && <div className="card card-pad w-fact">{head("felt", "Største felt")}<b className="w-fact-num tnum">{num(facts.biggest.riders)}</b>
               <p className="muted">ryttere i {facts.biggest.name}</p></div>}
-            {facts.closest_tt && <div className="card card-pad w-fact"><p className="eyebrow">Jevneste tempo</p><b className="w-fact-num tnum">{facts.closest_tt.gap_s} s</b>
+            {facts.closest_tt && <div className="card card-pad w-fact">{head("tempo", "Jevneste tempo")}<b className="w-fact-num tnum">{facts.closest_tt.gap_s} s</b>
               <p className="muted">skilte {who(facts.closest_tt.a)} og {who(facts.closest_tt.b)} i {facts.closest_tt.name}</p></div>}
-            {facts.fastest_avg && <div className="card card-pad w-fact"><p className="eyebrow">Høyeste snittfart</p><b className="w-fact-num tnum">{dec(facts.fastest_avg.kmh, 1)} km/t</b>
+            {facts.fastest_avg && <div className="card card-pad w-fact">{head("snittfart", "Høyeste snittfart")}<b className="w-fact-num tnum">{dec(facts.fastest_avg.kmh, 1)} km/t</b>
               <p className="muted">{who(facts.fastest_avg.rider)} i {facts.fastest_avg.name}</p></div>}
           </div>
         </section>

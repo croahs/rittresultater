@@ -838,30 +838,40 @@ def write_summary(evs, index_ids):
         recent.append({"id": ev["race_id"], "name": re.sub(r"\s+20\d\d$", "", sh["Race"]), "date": iso_(sh),
                        "type": sh["Type"], "km": float(sh["Distance (km)"] or 0) or None, "finishers": len(f),
                        "fastest": dict(who(f[0][1]), time=f[0][0]) if f else None})
-    biggest = max(evs, key=lambda ev: len(ev["cats"]))
+    TOP = 25  # rows in each front-page top list (#/topp/...)
+    race = lambda ev: {"id": ev["race_id"], "name": title(ev["sheet"]), "date": iso_(ev["sheet"]), "type": ev["sheet"]["Type"]}
+    big = sorted(evs, key=lambda ev: (-len(ev["cats"]), iso_(ev["sheet"])))
     tts = []
     for ev in evs:
         f = fin(ev)
         if ev["sheet"]["Type"] == "TT" and len(f) > 1 and f[1][0] > f[0][0]:
             tts.append((f[1][0] - f[0][0], ev, f))
+    tts.sort(key=lambda x: (x[0], iso_(x[1]["sheet"])))
     quick = []
     for ev in evs:
         f, dist = fin(ev), float(ev["sheet"]["Distance (km)"] or 0)
         if f and dist and ev["sheet"]["Type"] != "TTT":
-            quick.append((dist / (f[0][0] / 3600), ev, f))
+            quick.append((dist / (f[0][0] / 3600), ev, f, dist))
+    quick.sort(key=lambda x: (-x[0], iso_(x[1]["sheet"])))
     busiest = sorted(count, key=lambda t: (-count[t], name(last[t])))[:8]
+    top = {
+        "biggest": [dict(race(ev), riders=len(ev["cats"])) for ev in big[:TOP]],
+        "closest_tt": [dict(race(ev), gap_s=gap, a=who(f[0][1]), b=who(f[1][1])) for gap, ev, f in tts[:TOP]],
+        "fastest_avg": [dict(race(ev), km=dist, kmh=round(kmh, 1), rider=who(f[0][1])) for kmh, ev, f, dist in quick[:TOP]],
+    }
     out = {
         "races": len(evs), "results": sum(len(ev["cats"]) for ev in evs), "riders": len(count), "km": round(km),
         "years": sorted({int(iso_(ev["sheet"])[:4]) for ev in evs}),
         "recent": recent,
-        "biggest": {"name": title(biggest["sheet"]), "riders": len(biggest["cats"])},
+        "biggest": {"name": title(big[0]["sheet"]), "riders": len(big[0]["cats"])},
         "busiest": [dict(who(last[t]), club=club(last[t]), races=count[t]) for t in busiest],
+        "top": top,
     }
     if tts:
-        gap, ev, f = min(tts, key=lambda x: x[0])
+        gap, ev, f = tts[0]
         out["closest_tt"] = {"name": title(ev["sheet"]), "gap_s": gap, "a": who(f[0][1]), "b": who(f[1][1])}
     if quick:
-        kmh, ev, f = max(quick, key=lambda x: x[0])
+        kmh, ev, f, _ = quick[0]
         out["fastest_avg"] = {"name": title(ev["sheet"]), "kmh": round(kmh, 1), "rider": who(f[0][1])}
     json.dump(out, open(os.path.join(HERE, "data", "summary.json"), "w", encoding="utf-8"),
               ensure_ascii=False, separators=(",", ":"), sort_keys=True)
