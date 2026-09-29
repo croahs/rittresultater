@@ -67,10 +67,10 @@ export async function onRequestPost(ctx: Ctx) {
     ON CONFLICT (ip, hour) DO UPDATE SET n = n + 1 RETURNING n`).bind(ip, hour).first<{ n: number }>();
   if ((mine?.n ?? 0) > PER_IP_HOUR) return json({ error: "For mange forespørsler. Prøv igjen om en time." }, 429);
 
-  const [site, index, done] = await Promise.all([staticJSON<Site>(ctx, "site.json"), staticJSON<IndexRider[]>(ctx, "riders/index.json"), staticJSON<string[]>(ctx, "queue-done.json")]);
+  const [site, index] = await Promise.all([staticJSON<Site>(ctx, "site.json"), staticJSON<IndexRider[]>(ctx, "riders/index.json")]);
   if (!site || !index) return json({ error: "Fikk ikke lest resultatlistene. Prøv igjen." }, 502);
-  // queue-done.json: riders the job has already added (written by the job, may not exist yet).
-  if (site.profiles.includes(rider) || done?.includes(rider)) return json({ error: "Denne rytteren har allerede hele historikken sin her." }, 409);
+  // Riders the pipeline follows (the job adds requested riders there) have a full profile already.
+  if (site.profiles.includes(rider)) return json({ error: "Denne rytteren har allerede hele historikken sin her." }, 409);
   const entry = index.find((r) => r.id === rider);
   if (!entry) return json({ error: "Fant ikke rytteren i resultatlistene." }, 404);
 
