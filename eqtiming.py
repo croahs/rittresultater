@@ -87,7 +87,7 @@ def races(rider=RIDER_ID, since=0):
             continue
         rows = result_list(h["ArrangementUID"], h["EtappeUID"])
         me = next((r for r in rows if r[0] == rider), None)
-        if not me:
+        if not me or me[2] == "DNS":  # did not start: not a race for this rider
             continue
         if OWN_RACE_GROUP.search(me[4]):
             rows = [r for r in rows if r[4] == me[4]]
