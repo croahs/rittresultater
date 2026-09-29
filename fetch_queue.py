@@ -4,8 +4,11 @@ The site only queues a request (D1 table fetch_requests, behind a bot check and 
 cap); it never scrapes. This script, run by .github/workflows/fetch-queue.yml, takes at
 most MAX_PER_RUN requests, adds each rider to riders.json (history from SINCE) and builds
 them with update.py, which fetches only result lists that aren't cached yet, 2 s apart.
-Sources: Turritt (by the id they gave), EQ Timing including kermesse (when exactly one
-EQ profile has their name) and SSK Cup on raceresult (when their name is in its lists).
+Sources are the original timing systems, never Turritt (a competitor; turritt.LIVE is off):
+EQ Timing including kermesse (when exactly one EQ profile has their name), SSK Cup, and by
+name in the races listed in data/registry.json (EQ Timing, raceresult, Ultimate).
+A request names the rider by our id (rid, data/aliases.json); their TurrittID, where they
+have one, is still their id on the site until it moves to our ids.
 rivals.py and export_web.py then refresh the site data.
 
 The queue is read through Cloudflare's D1 REST API, so the site needs no endpoint for
@@ -26,6 +29,7 @@ from datetime import datetime, timezone
 import requests
 
 import eqtiming
+import riderids
 import sskcup
 import update
 
@@ -78,22 +82,33 @@ def main():
         print("queue: Cloudflare secrets not set, skipping", file=sys.stderr)
         return []
     d1(SCHEMA)
-    todo = d1("SELECT id, turritt_id, name FROM fetch_requests WHERE status = 'queued' ORDER BY id LIMIT ?", MAX_PER_RUN)
+    try:  # the site adds rid (our rider id, data/aliases.json); older tables lack it
+        todo = d1("SELECT id, rid, turritt_id, name FROM fetch_requests WHERE status = 'queued' ORDER BY id LIMIT ?", MAX_PER_RUN)
+    except requests.HTTPError:
+        todo = d1("SELECT id, turritt_id, name FROM fetch_requests WHERE status = 'queued' ORDER BY id LIMIT ?", MAX_PER_RUN)
     with open(update.RIDERS_FILE, encoding="utf-8") as f:
         conf = json.load(f)
-    known = {r["id"] for r in conf["riders"]}
+    aliases = riderids.load()
+    by_tt = {a["turritt"]: k for k, a in aliases.items() if a.get("turritt")}
+    known = {r["id"] for r in conf["riders"]} | {r["rid"] for r in conf["riders"] if r.get("rid")}
+    known |= {by_tt[r["turritt_id"]] for r in conf["riders"] if r.get("turritt_id") in by_tt}
     built = []
     for req in todo:
-        tid, name = str(req["turritt_id"]), str(req["name"]).strip()
-        if not re.fullmatch(r"\d{1,12}", tid) or not name:
+        rid, tid, name = str(req.get("rid") or ""), str(req.get("turritt_id") or ""), str(req["name"]).strip()
+        if rid and rid not in aliases or (not rid and not re.fullmatch(r"\d{1,12}", tid)) or not name:
             finish(req["id"], "skipped", "ugyldig forespørsel")
             continue
-        if tid in known:
+        rid = rid or by_tt.get(tid, "")
+        alias = aliases.get(rid, {})
+        tid = alias.get("turritt") or (tid if re.fullmatch(r"\d{1,12}", tid) else "")
+        site_id = tid or rid  # the site's rider ids are still TurrittIDs where there is one
+        if site_id in known or (rid and rid in known):
             finish(req["id"], "done", "følges allerede")
             continue
         d1("UPDATE fetch_requests SET status = 'running' WHERE id = ?", req["id"])
-        rider = {"id": tid, "name": name, "turritt_id": tid, "since": SINCE}
-        eq = eq_id_for(name)
+        rider = {"id": site_id, "rid": rid or None, "name": name, "turritt_id": tid or None, "since": SINCE}
+        rider = {k: v for k, v in rider.items() if v}
+        eq = alias.get("eq") or eq_id_for(name)
         if eq:
             rider["eq_id"] = eq
         ssk = ssk_name_for(name)
@@ -105,13 +120,16 @@ def main():
             f.write("\n")
         try:
             with contextlib.redirect_stdout(sys.stderr):  # stdout is only the built ids
-                data = update.main((tid,))
-            n = sum(1 for r in data["races"] if r["rider_id"] == tid)
+                data = update.main((site_id,))
+            n = sum(1 for r in data["races"] if r["rider_id"] == site_id)
+            n += sum(1 for r in data["points_races"] if r["rider_id"] == site_id)
+            if not n:
+                raise RuntimeError("Vi fant ingen ritt med dette navnet hos tidtakerne vi henter fra.")
             finish(req["id"], "done", f"{n} ritt")
-            known.add(tid)
-            built.append(tid)
+            known.add(site_id)
+            built.append(site_id)
         except Exception as e:  # keep the rider out rather than half-built
-            conf["riders"] = [r for r in conf["riders"] if r["id"] != tid]
+            conf["riders"] = [r for r in conf["riders"] if r["id"] != site_id]
             with open(update.RIDERS_FILE, "w", encoding="utf-8") as f:
                 json.dump(conf, f, ensure_ascii=False, indent=2)
                 f.write("\n")

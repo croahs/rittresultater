@@ -19,6 +19,7 @@ import sys
 
 import build
 import eqtiming
+import riderids
 import sskcup
 import sync
 
@@ -106,6 +107,8 @@ def race_id(r):
         return f"turritt:{r['_turritt_race_id']}"
     if r.get("_eq"):
         return f"eqtiming:{r['_eq']}"
+    if r.get("_rr"):
+        return r["_rr"]
     return f"sheet:{sync.parse_date(r['Date']).isoformat()}:{series_key(r['Race'])}"
 
 
@@ -129,7 +132,7 @@ def race_json(rider, r):
         "percentile": num(r.get("Percentile in class")),
         "overall_percentile": num(r.get("Overall percentile")),
         "time": r["Time"],
-        "time_s": sync.secs(r["Time"]),
+        "time_s": sync.secs(r["Time"]) if ":" in r["Time"] else None,  # lapped: "+2 runder"
         "winner_time": r["Class winner"],
         "behind_pct": num(r.get("% behind winner")),
         "distance_km": num(r.get("Distance (km)")),
@@ -234,9 +237,14 @@ def main(only=()):
         points += [points_json(rider, r) for r in pts]
         log(f"{rider['id']}: {len(rows)} races, {len(pts)} points races, "
             f"{sum(1 for r in rows if r.get('Average Power'))} with power")
+    # Our own rider ids (data/aliases.json): new riders from the lists fetched above get one.
+    aliases = riderids.build(log)
+    by_tt = {a["turritt"]: k for k, a in aliases.items() if a.get("turritt")}
+    by_eq = {str(u): k for k, a in aliases.items() for u in riderids._eqs(a)}
+    rid_of = lambda r: r.get("rid") or by_tt.get(str(r.get("turritt_id"))) or by_eq.get(str(r.get("eq_id")))
     data = {
         "schema": SCHEMA,
-        "riders": [{"id": r["id"], "name": r["name"], "turritt_id": r.get("turritt_id"),
+        "riders": [{"id": r["id"], "rid": rid_of(r), "name": r["name"], "turritt_id": r.get("turritt_id"),
                     "eq_id": r.get("eq_id"), "power": bool(r.get("publish_power"))} for r in riders],
         "races": sorted(races, key=lambda x: (x["date"], x["rider_id"])),
         "points_races": sorted(points, key=lambda x: (x["date"], x["rider_id"])),

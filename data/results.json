@@ -3,6 +3,7 @@
  "riders": [
   {
    "id": "171101",
+   "rid": "r17179",
    "name": "Peder Holterman Solland",
    "turritt_id": "171101",
    "eq_id": 6753412,
@@ -10,6 +11,7 @@
   },
   {
    "id": "125529",
+   "rid": "r8955",
    "name": "Jo Henrik Egeland Jarstø",
    "turritt_id": "125529",
    "eq_id": 364828,
@@ -2532,7 +2534,7 @@
    "series": "nordsjørittet",
    "date": "2025-06-14",
    "year": 2025,
-   "type": "Road",
+   "type": "Gravel",
    "class_name": "Nordsjørittet",
    "class_place": 17,
    "class_n": 712,

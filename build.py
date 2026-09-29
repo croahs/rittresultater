@@ -20,8 +20,11 @@ import re
 import sys
 from datetime import timedelta
 
+import requests
+
 import sync
 import eqtiming
+import registry
 import turritt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -130,11 +133,22 @@ def build_rider(rider, log=print):
     exclude = re.compile(rider["exclude"], re.I) if rider.get("exclude") else None
 
     tt = []
+    rider["_turritt_blocked"] = False
     if rider.get("turritt_id"):
-        rid = turritt.find_rider(rider["turritt_id"], rider["name"])
-        if rid:
+        try:
+            rid = turritt.find_rider(rider["turritt_id"], rider["name"])
+            pairs = turritt.rider_races(rid) if rid else []
+        except requests.RequestException as e:
+            # Turritt isn't fetched from any more (turritt.LIVE). Use what is cached and go on
+            # with the original timing sources: EQ Timing, raceresult, Ultimate.
+            if turritt.LIVE:
+                log(f"{rider['id']}: Turritt unreachable ({e}), using cached Turritt lists only")
+            rider["_turritt_blocked"] = True
+            rid = turritt._cache.get(f"rider:{rider['turritt_id']}")
+            pairs = turritt.cached_races(rid) if rid else []
+        if rid or rider["_turritt_blocked"]:
             since = int(rider.get("since") or 0)  # older seasons cost a request per race list
-            for race_id, year in turritt.rider_races(rid):
+            for race_id, year in pairs:
                 if int(year) < since:
                     continue
                 try:
@@ -205,6 +219,34 @@ def build_rider(rider, log=print):
         taken.add(d)
         changes.append((r["Race"], "(new row)", "", "added from EQ Timing"))
 
+    # Races from their own timers listed in data/registry.json (raceresult, Ultimate, EQ
+    # results not linked to a profile), found by name. Only a day nobody has a row for.
+    src_name = {"eqtiming": "EQ Timing", "raceresult": "raceresult", "ultimate": "Ultimate"}
+    for e in registry.races(rider, log):
+        d = sync.parse_date_iso(e["date"])
+        # NM has a race a day, so only the same day is a duplicate. Lapped riders keep their place.
+        if d in taken or not isinstance(e["class_place"], int):
+            continue
+        r = eq_row(e, rider)
+        if e.get("type"):
+            r["Type"] = e["type"]
+        r["Match note"], r["_rr"] = f"new from {src_name[e['source']]}", f"{e['source']}:{e['event_id']}/{e['stage_id']}"
+        if e["source"] == "eqtiming":
+            r["EQ Timing"], r["_eq"] = e["url"], f"{e['event_id']}/{e['stage_id']}"
+        if e["age_place"] and e["age_class"] not in ("Menn", "M17+"):
+            r["Age class"], r["Age class placement"], r["Age class participants"] = e["age_class"], str(e["age_place"]), str(e["age_n"])
+        rows.append(r)
+        taken.add(d)
+        changes.append((r["Race"], "(new row)", "", f"added from {src_name[e['source']]}"))
+
+    # The registry knows some races' type better than their name does (Nordsjørittet is gravel).
+    typed = {sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"): e for e in registry.load()
+             if e.get("type") in ("Gravel", "MTB") and e.get("status") == "bekreftet"}
+    for r in rows:
+        e = typed.get(r["Date"])
+        if e and e["name"].split()[0].lower() in r["Race"].lower():
+            r["Type"] = e["type"]
+
     if exclude:
         rows = [r for r in rows if not exclude.search(r["Race"])]
     rows.sort(key=lambda r: sync.parse_date(r["Date"]))
@@ -239,6 +281,8 @@ def add_power(rider, rows, log=print):
         log(f"{rider['id']}: intervals.icu skipped: {e}")
         return
     for r in rows:
+        if ":" not in r["Time"]:  # lapped: no official time to find the ride or race window by
+            continue
         a, note = sync.match(r, acts)
         r["Match note"] = "; ".join(x for x in (r.get("Match note"), note) if x)
         if not a:

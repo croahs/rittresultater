@@ -12,7 +12,7 @@ python3 update.py      # every rider in riders.json; or: python3 update.py 17110
 ```
 
 - `race_results_original.csv` is the hand-kept sheet.
-- Placings come from Turritt, or from EQ Timing (`eqtiming.py`, cached in `cache/eqtiming.json`) for races Turritt lacks; EQ Timing also gives the age-class placing.
+- Placings come from the timing systems themselves. Turritt is no longer fetched from (`turritt.LIVE = False`, 2026-09-29: it is a competitor, not a source); its cached lists are still read until the move to the original sources is done. EQ Timing (`eqtiming.py`, cached in `cache/eqtiming.json`) also gives the age-class placing. Races from other timers (raceresult, Ultimate) and EQ results not linked to a rider's EQ profile are listed by hand in `data/registry.json` (`registry.py`); riders are matched by name, each list is fetched once and cached (`cache/raceresult_events.json`, `cache/ultimate.json`, `cache/eqtiming.json`). Every rider has an id of ours (`r123`, `riderids.py`, run by `update.py`): `data/aliases.json` maps it to their TurrittID and EQ id, linked only when certain (same race on both, or same club); `data/linking.json` lists the doubtful ones to link by hand.
 - SSK Cup is a points race (no times), so it has its own file: `python3 sskcup.py points_races.csv` (raceresult, cached in `cache/raceresult.json`).
 - `race_results_auto.csv` is the rebuilt sheet; `turritt_vs_sheet.md` lists where Turritt disagrees with it.
 - `cache/turritt.json` caches every Turritt page fetched. Published results never change, so each race is fetched once and never again. Keep this file committed.
@@ -45,7 +45,7 @@ Output:
 ## Caching (be gentle)
 
 Published results never change, so each result list is fetched once and kept in git:
-`cache/turritt.json`, `cache/eqtiming.json`, `cache/raceresult.json`. The watts computed per ride are kept in `cache/metrics.json`, so old rides are never fetched again (raw ride files in `cache/intervals/` stay out of git). A normal week costs one request each to Turritt, EQ Timing and intervals.icu, with 2 s between requests.
+`cache/turritt.json`, `cache/eqtiming.json`, `cache/raceresult.json`, `cache/raceresult_events.json`. The watts computed per ride are kept in `cache/metrics.json`, so old rides are never fetched again (raw ride files in `cache/intervals/` stay out of git). A normal week costs one request each to Turritt, EQ Timing and intervals.icu, with 2 s between requests.
 
 ## data/results.json
 
@@ -62,7 +62,7 @@ Published results never change, so each result list is fetched once and kept in 
                     avg_power, np, note, links: {raceresult, intervals}}] }
 ```
 
-- `race_id` is shared by every rider in the same race: `turritt:<id>`, `eqtiming:<event>/<stage>`, `raceresult:<event>:cup<n>`.
+- `race_id` is shared by every rider in the same race: `turritt:<id>`, `eqtiming:<event>/<stage>`, `raceresult:<event>:cup<n>` (SSK Cup), `raceresult:<event>/<class>` (NM).
 - `series` joins the same race across years.
 - `avg_power`/`np` are null when the rider has no power data or doesn't publish it.
 - Placing rules: DNS dropped, DNF counted and placed behind finishers; `class` is the race you rode (bike-type or distance groups split out), `overall` all sibling races of the event.
