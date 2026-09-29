@@ -241,7 +241,7 @@ def main(only=()):
     aliases = riderids.build(log)
     by_tt = {a["turritt"]: k for k, a in aliases.items() if a.get("turritt")}
     by_eq = {str(a["eq"]): k for k, a in aliases.items() if a.get("eq")}
-    rid_of = lambda r: by_tt.get(str(r.get("turritt_id"))) or by_eq.get(str(r.get("eq_id")))
+    rid_of = lambda r: r.get("rid") or by_tt.get(str(r.get("turritt_id"))) or by_eq.get(str(r.get("eq_id")))
     data = {
         "schema": SCHEMA,
         "riders": [{"id": r["id"], "rid": rid_of(r), "name": r["name"], "turritt_id": r.get("turritt_id"),
