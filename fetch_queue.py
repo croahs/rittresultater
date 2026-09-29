@@ -44,13 +44,15 @@ import sskcup
 import update
 
 MAX_PER_RUN = 3
-MAX_LISTS = 30  # result lists read for one EQ Timing profile
+MAX_LISTS = 30  # new result lists one request may fetch (profile, race search and build together)
 MAX_STAGES = 12  # stages searched for a name in one race named in words
 SINCE = 2005
 SCHEMA = """CREATE TABLE IF NOT EXISTS fetch_requests (
   id INTEGER PRIMARY KEY AUTOINCREMENT, turritt_id TEXT NOT NULL, name TEXT NOT NULL,
   requested_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'queued', done_at TEXT, note TEXT)"""
-NEW_COLUMNS = [("rid", "TEXT"), ("kind", "TEXT"), ("eq_participant_id", "TEXT"), ("race_text", "TEXT"), ("race_year", "INTEGER")]
+# The site's columns (web/functions, same ALTERs): whichever runs first adds them.
+NEW_COLUMNS = [("rid", "TEXT"), ("kind", "TEXT NOT NULL DEFAULT 'rider'"), ("eq_participant_id", "TEXT"),
+               ("race_text", "TEXT"), ("race_year", "INTEGER"), ("ref", "TEXT")]
 
 
 def d1(sql, *params):
@@ -111,15 +113,21 @@ def from_profile(uid, fallback_name, log):
         raise Skip("failed", "Vi fant ingen sykkelritt med resultater på denne EQ Timing-profilen.")
     name = ""
     for h in races:
+        try:
+            rows = eqtiming.named_list(h["ArrangementUID"], h["EtappeUID"])
+        except eqtiming.BudgetSpent:
+            break
         registry.add_eq(h["ArrangementUID"], [h["EtappeUID"]], h["ArrangementNavn"], h["ArrangementDato"][:10],
                         build.race_type(h["ArrangementNavn"]), "fra en EQ Timing-profil i køen på nettsiden")
-        rows = eqtiming.named_list(h["ArrangementUID"], h["EtappeUID"])
         name = name or next((r[1] for r in rows if r[0] == uid and r[1]), "")
+    name = name or fallback_name
+    if not name:  # every profile race lists them by name, unless they are anonymised at EQ
+        raise Skip("failed", "Vi fant ikke navnet på denne EQ Timing-profilen i resultatlistene.")
     riderids.build(log)  # gives them an id of ours, or links them to one they have
     rid = rid_for_eq(uid)
     alias = riderids.load().get(rid, {})
     tid = alias.get("turritt", "")
-    rider = {"id": tid or rid, "rid": rid, "name": name or fallback_name, "turritt_id": tid or None,
+    rider = {"id": tid or rid, "rid": rid, "name": name, "turritt_id": tid or None,
              "eq_id": uid, "since": SINCE, "eq_max_lists": MAX_LISTS}
     return {k: v for k, v in rider.items() if v}, tid or rid
 
@@ -137,7 +145,11 @@ def from_race(text, year, name, log):
         raise Skip("needs_source", f"{ev_name} har ingen resultater hos EQ Timing. Rittet legges inn for hånd.")
     want, hits = raceresult.fold(name), {}
     for stage, _ in stages[:MAX_STAGES]:
-        for r in eqtiming.named_list(event, stage):
+        try:
+            rows = eqtiming.named_list(event, stage)
+        except eqtiming.BudgetSpent:
+            break
+        for r in rows:
             if r[1] and raceresult.fold(r[1]) == want and r[4] != "DNS":
                 hits.setdefault(r[0], stage)
     if len(hits) != 1:
@@ -154,10 +166,10 @@ def main():
         return []
     log = lambda m: print(m, file=sys.stderr)
     d1(SCHEMA)
-    for col, typ in NEW_COLUMNS:  # the site adds them too; whichever runs first wins
+    for col, typ in NEW_COLUMNS:
         try:
             d1(f"ALTER TABLE fetch_requests ADD COLUMN {col} {typ}")
-        except requests.HTTPError:
+        except Exception:  # "duplicate column": already there
             pass
     todo = d1("SELECT id, kind, rid, turritt_id, eq_participant_id, name, race_text, race_year FROM fetch_requests "
               "WHERE status = 'queued' ORDER BY id LIMIT ?", MAX_PER_RUN)
@@ -170,6 +182,7 @@ def main():
     known_eq = {str(r["eq_id"]) for r in conf["riders"] if r.get("eq_id")}
     built = []
     for req in todo:
+        eqtiming.list_budget = MAX_LISTS  # new result lists one request may fetch, all steps together
         kind = req.get("kind") or "rider"
         name = str(req.get("name") or "").strip()[:100]
         try:
@@ -228,6 +241,7 @@ def main():
                 json.dump(conf, f, ensure_ascii=False, indent=2)
                 f.write("\n")
             finish(req["id"], "failed", str(e))
+    eqtiming.list_budget = None
     return built
 
 

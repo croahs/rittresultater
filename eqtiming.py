@@ -41,8 +41,21 @@ except (OSError, ValueError):
     _cache = {}
 
 
+class BudgetSpent(Exception):
+    """list_budget is used up: the list is left unread."""
+
+
+# New result lists (Result/Total, Startlist) this run may still fetch; None = no limit.
+# fetch_queue.py sets it per request, so one request never reads more than its share.
+list_budget = None
+
+
 def _get(path, **params):
-    global _last
+    global _last, list_budget
+    if list_budget is not None and path.startswith(("Result/Total/", "Startlist/")):
+        if list_budget <= 0:
+            raise BudgetSpent(path)
+        list_budget -= 1
     time.sleep(max(0, _last + PAUSE - time.time()))
     r = s.get(f"{BASE}/{path}", params=params, timeout=60)
     _last = time.time()
@@ -117,7 +130,10 @@ def races(rider=RIDER_ID, since=0, max_lists=None):
     max_lists caps how many result lists are read (riders added from the site's queue)."""
     out = []
     for h in profile_races(rider, since, max_lists):
-        rows = result_list(h["ArrangementUID"], h["EtappeUID"])
+        try:
+            rows = result_list(h["ArrangementUID"], h["EtappeUID"])
+        except BudgetSpent:
+            continue
         me = next((r for r in rows if r[0] == rider), None)
         if not me or me[2] == "DNS":  # did not start: not a race for this rider
             continue
