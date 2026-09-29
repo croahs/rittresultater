@@ -1,0 +1,63 @@
+# Nightly harvest (harvest.py): every cycling race in Norway, found from EQ Timing's and
+# raceresult's own calendars, and each race's result lists fetched once, 5 s between requests.
+# The first nights work through the backlog (about 4,600 races since 2008), a few hours a
+# night; after that only new races are fetched.
+#
+# The lists live on the branch "harvest", checked out in cache/harvest, never on main. The
+# first run creates that branch. Nothing on the site can start this job.
+name: Harvest race results
+
+# The nightly schedule is off until Pedår has decided whether we fetch EQ Timing's lists without
+# a key for their official API (2026-09-29). Then add:  schedule: - cron: "30 0 * * *"
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "Minutes to spend fetching lists"
+        default: "300"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: harvest
+  cancel-in-progress: false
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Check out the harvest branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          url="https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          if git ls-remote --exit-code --heads "$url" harvest >/dev/null; then
+            git clone --quiet --single-branch --branch harvest --depth 1 "$url" cache/harvest
+          else
+            mkdir -p cache/harvest && cd cache/harvest
+            git init --quiet -b harvest && git remote add origin "$url"
+          fi
+
+      - name: Harvest
+        run: python3 harvest.py "${{ github.event.inputs.minutes || '300' }}"
+
+      - name: Commit to the harvest branch
+        if: always()
+        working-directory: cache/harvest
+        run: |
+          git add -A
+          if git diff --cached --quiet; then exit 0; fi
+          git commit --quiet -m "Harvest $(date -u +%F): $(git diff --cached --name-only | grep -c json.gz || true) race files"
+          git push --quiet origin harvest
