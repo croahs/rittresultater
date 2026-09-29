@@ -10,26 +10,35 @@
 // own result lists can be queued, each once, a few per visitor per hour and a capped number per
 // day in total. So the worst a bot can do is make the queue longer; the job keeps its own pace.
 
-import { NO_DB, json, riderOk, tables, type Ctx } from "../../server/lib";
+import { NO_DB, dataKey, json, riderOk, staticJSON, tables, type Ctx, type D1 } from "../../server/lib";
+import { makeIds, type IdMap } from "../../src/ids";
 import type { IndexRider, Site } from "../../src/data";
 
 // status: queued -> running -> done | failed | skipped (the job sets everything after queued).
 // Agreed with the job's side: one open (queued or running) request per rider; name is the index's.
+// rid is our rider id (the key here); turritt_id is kept filled ("" when unknown) while the job still reads it.
 const QUEUE = `CREATE TABLE IF NOT EXISTS fetch_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, turritt_id TEXT NOT NULL,
-  name TEXT NOT NULL, requested_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'queued', done_at TEXT, note TEXT)`;
+  name TEXT NOT NULL, requested_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'queued', done_at TEXT, note TEXT, rid TEXT)`;
+
+/** The queue table, with the rid column added to an older table and filled in from the TurrittID. */
+async function queue(db: D1, ctx: Ctx): Promise<IdMap> {
+  await db.batch([db.prepare(QUEUE)]);
+  const cols = await db.prepare("PRAGMA table_info(fetch_requests)").all<{ name: string }>();
+  if (!cols.results.some((c) => c.name === "rid")) await db.prepare("ALTER TABLE fetch_requests ADD COLUMN rid TEXT").run();
+  const map = (await staticJSON<IdMap>(ctx, "ids.json")) || {};
+  const todo = await db.prepare("SELECT DISTINCT turritt_id FROM fetch_requests WHERE rid IS NULL").all<{ turritt_id: string }>();
+  const ids = makeIds(map);
+  const moves = todo.results.map((r) => [r.turritt_id, ids.toRid(r.turritt_id)] as const).filter((x): x is readonly [string, string] => !!x[1]);
+  if (moves.length) await db.batch(moves.map(([t, rid]) => db.prepare("UPDATE fetch_requests SET rid = ? WHERE turritt_id = ? AND rid IS NULL").bind(rid, t)));
+  return map;
+}
 const PER_IP_HOUR = 3, NEW_PER_DAY = 30;
 
 type Row = { id: number; status: string; requested_at: string; done_at: string | null; note: string | null };
 
-async function staticJSON<T>(ctx: Ctx, path: string): Promise<T | null> {
-  try {
-    const r = await ctx.env.ASSETS.fetch(new URL(`/data/${path}`, ctx.request.url).toString());
-    return r.ok ? await r.json() as T : null;
-  } catch { return null; }
-}
 
-async function status(db: NonNullable<Ctx["env"]["DB"]>, rider: string) {
-  const row = await db.prepare("SELECT id, status, requested_at, done_at, note FROM fetch_requests WHERE turritt_id = ? ORDER BY id DESC LIMIT 1").bind(rider).first<Row>();
+async function status(db: D1, rider: string) {
+  const row = await db.prepare("SELECT id, status, requested_at, done_at, note FROM fetch_requests WHERE rid = ? ORDER BY id DESC LIMIT 1").bind(rider).first<Row>();
   if (!row) return { enabled: true, status: "none" };
   const ahead = row.status === "queued"
     ? (await db.prepare("SELECT COUNT(*) AS n FROM fetch_requests WHERE status = 'queued' AND id < ?").bind(row.id).first<{ n: number }>())?.n ?? 0
@@ -38,11 +47,12 @@ async function status(db: NonNullable<Ctx["env"]["DB"]>, rider: string) {
   return { enabled: true, ...rest, ahead };
 }
 
-export async function onRequestGet({ request, env }: Ctx) {
+export async function onRequestGet(ctx: Ctx) {
+  const { request, env } = ctx;
   const rider = new URL(request.url).searchParams.get("rider");
   if (!env.DB) return json({ enabled: false, status: "none" });
   if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
-  await env.DB.batch([env.DB.prepare(QUEUE)]);
+  await queue(env.DB, ctx);
   return json(await status(env.DB, rider));
 }
 
@@ -54,10 +64,10 @@ export async function onRequestPost(ctx: Ctx) {
   try { rider = text.length < 200 ? (JSON.parse(text) as { rider?: unknown }).rider : null; } catch { rider = null; }
   if (!riderOk(rider)) return json({ error: "Ukjent rytter." }, 400);
   const db = env.DB;
-  await tables(db);
-  await db.batch([db.prepare(QUEUE)]);
+  await tables(db, ctx);
+  const map = await queue(db, ctx);
 
-  const open = await db.prepare("SELECT 1 FROM fetch_requests WHERE turritt_id = ? AND status IN ('queued', 'running')").bind(rider).first();
+  const open = await db.prepare("SELECT 1 FROM fetch_requests WHERE rid = ? AND status IN ('queued', 'running')").bind(rider).first();
   if (open) return json(await status(db, rider)); // asking twice changes nothing
 
   // Per visitor and hour, in the same counter table as the key checks but under its own prefix.
@@ -70,14 +80,16 @@ export async function onRequestPost(ctx: Ctx) {
   const [site, index] = await Promise.all([staticJSON<Site>(ctx, "site.json"), staticJSON<IndexRider[]>(ctx, "riders/index.json")]);
   if (!site || !index) return json({ error: "Fikk ikke lest resultatlistene. Prøv igjen." }, 502);
   // Riders the pipeline follows (the job adds requested riders there) have a full profile already.
-  if (site.profiles.includes(rider)) return json({ error: "Denne rytteren har allerede hele historikken sin her." }, 409);
-  const entry = index.find((r) => r.id === rider);
+  const key = await dataKey(ctx, rider, index);
+  if (key && site.profiles.includes(key)) return json({ error: "Denne rytteren har allerede hele historikken sin her." }, 409);
+  const entry = key ? index.find((r) => r.id === key) : undefined;
   if (!entry) return json({ error: "Fant ikke rytteren i resultatlistene." }, 404);
 
   const today = new Date().toISOString().slice(0, 10);
   const n = await db.prepare("SELECT COUNT(*) AS n FROM fetch_requests WHERE requested_at >= ?").bind(today).first<{ n: number }>();
   if ((n?.n ?? 0) >= NEW_PER_DAY) return json({ error: "Køen er full for i dag. Prøv igjen i morgen." }, 429);
 
-  await db.prepare("INSERT INTO fetch_requests (turritt_id, name, requested_at) VALUES (?, ?, ?)").bind(rider, entry.name, new Date().toISOString()).run();
+  await db.prepare("INSERT INTO fetch_requests (turritt_id, rid, name, requested_at) VALUES (?, ?, ?, ?)")
+    .bind(map[rider] || "", rider, entry.name, new Date().toISOString()).run();
   return json(await status(db, rider));
 }

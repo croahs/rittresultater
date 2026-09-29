@@ -14,13 +14,14 @@ const MAX_PTS = 8 * 3600 / 5; // an 8 hour race at one point per 5 s
 const okPts = (p: unknown): p is [number, number][] => Array.isArray(p) && p.length <= MAX_PTS
   && p.every((x) => Array.isArray(x) && x.length === 2 && Math.abs(x[0]) <= 90 && Math.abs(x[1]) <= 180);
 
-export async function onRequestPost({ request, env }: Ctx) {
+export async function onRequestPost(ctx: Ctx) {
+  const { request, env } = ctx;
   if (!env.DB) return NO_DB();
   const b = await body<{ token?: unknown; race_key?: unknown; pts?: unknown }>(request, 400_000, true);
   if (!b) return json({ error: "Ugyldig forespørsel." }, 400);
   if (typeof b.race_key !== "string" || !/^\d{4}-\d\d-\d\d\|.{1,120}$/.test(b.race_key)
     || !okPts(b.pts)) return json({ error: "Ugyldig spor." }, 400);
-  await tables(env.DB);
+  await tables(env.DB, ctx);
   const athlete = await readToken(env.DB, b.token, b.rider);
   if (!athlete) return json({ error: "Lagre på nytt: tillatelsen er utløpt." }, 403);
   const r = await env.DB.prepare(`UPDATE ride SET pts = ? WHERE rider_id = ? AND race_key = ? AND athlete_id = ?

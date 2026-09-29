@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { flags, getJSON, loadAthlete, withPower, withSaved, type Athlete, type IndexRider, type Site } from "./data";
+import { flags, getJSON, ids, loadAthlete, withPower, withSaved, type Athlete, type IndexRider, type Site } from "./data";
 import { firstName, fold, initials } from "./format";
 import { BrandMark, Icon, TipProvider } from "./ui";
 import { Sources } from "./sources";
@@ -22,14 +22,27 @@ const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
   { id: "klipp", label: "Sesongklipp", icon: Icon.clip },
 ];
 
-/* Hash: #/<rider id>/<tab>. No rider id means the front page. */
-function readHash(): { rider?: string; tab?: Tab } {
+/* Hash: #/r/<our id without the r>/<tab>, e.g. #/r/17179/oversikt. No rider means the front page.
+   Old links (#/<TurrittID>/<tab>) still open the right rider and are rewritten to the new form. */
+function readHash(): { rid?: string; legacy?: string; tab?: Tab } {
   try {
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
     const tab = parts.find((p): p is Tab => TABS.some((t) => t.id === p));
-    const rider = parts.find((p) => /^\d+$/.test(p));
-    return { rider, tab };
+    if (parts[0] === "r" && /^\d+$/.test(parts[1] || "")) return { rid: "r" + parts[1], tab };
+    const legacy = parts.find((p) => /^(eq)?\d+$/.test(p)); // a TurrittID, or eq<id> for a rider not yet given an id of ours
+    return { legacy, tab };
   } catch { return {}; }
+}
+
+/** The data key for the rider in the hash, or null. */
+async function hashRider(index: IndexRider[]): Promise<string | null> {
+  const h = readHash();
+  if (!h.rid && !h.legacy) return null;
+  const inData = (k: string) => index.some((r) => r.id === k);
+  if (h.legacy && inData(h.legacy)) return h.legacy;
+  const m = await ids();
+  const rid = h.rid || (h.legacy ? m.toRid(h.legacy) : null);
+  return rid ? m.toKey(rid, inData) : null;
 }
 
 type Theme = "light" | "dark";
@@ -53,12 +66,13 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>(() => readHash().tab || "oversikt");
   const [theme, setTheme] = useTheme();
+  const indexRef = useRef<IndexRider[]>([]);
 
   useEffect(() => {
     Promise.all([getJSON<Site>("site.json"), getJSON<IndexRider[]>("riders/index.json")])
-      .then(([s, i]) => { flags.activityLinks = !!s.activity_links; setSite(s); setIndex(i); setRiderId(readHash().rider || null); })
+      .then(async ([s, i]) => { flags.activityLinks = !!s.activity_links; indexRef.current = i; const r = await hashRider(i); setSite(s); setIndex(i); setRiderId(r); })
       .catch(() => setError("Fant ikke dataene. Kjør python3 export_web.py og bygg på nytt."));
-    const onHash = () => { const h = readHash(); setTab(h.tab || "oversikt"); setRiderId(h.rider || null); };
+    const onHash = async () => { const h = readHash(); const r = await hashRider(indexRef.current); setTab(h.tab || "oversikt"); setRiderId(r); };
     addEventListener("hashchange", onHash);
     return () => removeEventListener("hashchange", onHash);
   }, []);
@@ -81,12 +95,21 @@ export default function App() {
   useEffect(() => {
     // A new rider (or the front page) gets its own history entry, so Back returns to where you were; a tab change does not.
     if (!site) return; // until the data has loaded, the hash is still the link the visitor opened
-    const want = riderId ? `#/${riderId}/${tab}` : "#/";
-    try {
-      if (location.hash === want || (!riderId && !location.hash)) return;
-      if ((readHash().rider || null) === riderId) history.replaceState(null, "", want);
-      else history.pushState(null, "", want);
-    } catch { /* sandboxed preview */ }
+    let live = true;
+    (async () => {
+      const rid = riderId ? (await ids()).toRid(riderId) : null;
+      if (!live) return;
+      const want = !riderId ? "#/" : rid ? `#/r/${rid.slice(1)}/${tab}` : `#/${riderId}/${tab}`;
+      try {
+        if (location.hash === want || (!riderId && !location.hash)) return;
+        // Same rider (a tab change, or an old link being rewritten): replace. A new rider: its own history entry.
+        const h = readHash();
+        const same = (h.rid && h.rid === rid) || (h.legacy && h.legacy === riderId) || (!h.rid && !h.legacy && !riderId);
+        if (same) history.replaceState(null, "", want);
+        else history.pushState(null, "", want);
+      } catch { /* sandboxed preview */ }
+    })();
+    return () => { live = false; };
   }, [site, riderId, tab]);
 
   const go = (t: Tab) => { setTab(t); window.scrollTo({ top: 0 }); };
