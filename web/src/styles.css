@@ -42,17 +42,24 @@ h1, h2, h3 { text-wrap: balance; }
 .brand { display: flex; align-items: center; gap: 10px; flex: none; margin-right: 12px; font: 800 1.05rem/1 var(--display); font-stretch: 75%; letter-spacing: .04em; text-transform: uppercase; }
 .brand-mark { width: 30px; height: 30px; flex: none; }
 .brand small { display: block; font: 600 .68rem/1.2 var(--body); letter-spacing: .08em; color: var(--muted); }
+/* The tabs belong to the rider named in front of them: one quiet group. */
+.rider-nav { display: flex; align-items: center; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-2); min-width: 0; }
+.who-chip { display: flex; align-items: center; gap: 7px; padding: 0 10px 0 4px; margin-right: 2px; border-right: 1px solid var(--line); font-weight: 700; white-space: nowrap; min-width: 0; }
+.who-chip .ini { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: .7rem; letter-spacing: .02em; flex: none; }
+.who-chip .nm { overflow: hidden; text-overflow: ellipsis; max-width: 9rem; }
 .nav { display: flex; gap: 2px; }
-.nav button { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink-2); font-weight: 600; white-space: nowrap; cursor: pointer; }
+.nav button { display: flex; align-items: center; gap: 8px; padding: 6px 11px; border: 0; border-radius: 8px; background: none; color: var(--ink-2); font-weight: 600; white-space: nowrap; cursor: pointer; }
 .nav button svg { width: 18px; height: 18px; flex: none; }
 .nav button:hover { background: var(--ghost); color: var(--ink); }
-.nav button[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
+.nav button[aria-current="page"] { background: var(--surface); color: var(--accent); box-shadow: 0 1px 2px rgb(0 0 0 / .12); }
 .page { padding: 24px clamp(16px, 3vw, 32px) 48px; display: grid; gap: 28px; max-width: 1320px; width: 100%; margin: 0 auto; }
 
 @media (max-width: 1180px) and (min-width: 861px) {
   .nav button svg { display: none; }
-  .nav button { padding: 8px 10px; }
+  .nav button { padding: 6px 9px; }
   .brand > div { display: none; }
+  .who-chip { padding-right: 6px; }
+  .who-chip .nm { display: none; }
 }
 @media (max-width: 860px) {
   /* no backdrop-filter here: it would make the fixed tab bar position against the top bar */
@@ -62,6 +69,11 @@ h1, h2, h3 { text-wrap: balance; }
   .nav { position: fixed; inset: auto 0 0 0; z-index: 30; padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px)); background: var(--surface); border-top: 1px solid var(--line); }
   .nav button { flex: 1; flex-direction: column; gap: 2px; padding: 7px 2px; font-size: .68rem; text-align: center; min-width: 0; }
   .nav button svg { width: 20px; height: 20px; }
+  .nav button[aria-current="page"] { background: var(--accent-soft); box-shadow: none; }
+  .rider-nav { padding: 0; border: 0; background: none; flex: none; }
+  .who-chip { padding: 0; margin: 0; border: 0; }
+  .who-chip .nm { max-width: 6rem; }
+  .picker { min-width: 110px; }
   .page { padding-bottom: 96px; }
 }
 
@@ -378,10 +390,19 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .feature .muted { font-size: .9rem; }
 .feature-go { font-weight: 700; color: var(--accent); font-size: .85rem; margin-top: 4px; }
 .busy { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 8px; }
-.busy button { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); cursor: pointer; }
+.busy button, .busy-row { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
 .busy button:hover { border-color: var(--accent); }
 .busy button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .busy-n { font: 800 1.2rem/1 var(--display); color: var(--muted); }
 .busy .who { min-width: 0; }
 .busy .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .busy .who small { display: block; color: var(--muted); font-size: .78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.busy-row { cursor: default; }
+/* Term explanations on the rival cards: hover or focus on desktop, tap on phones. */
+.info-wrap { display: inline-block; vertical-align: middle; }
+.info { all: unset; box-sizing: border-box; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line); color: var(--muted); font: 700 .7rem/1 var(--body); font-style: italic; cursor: help; }
+.info:hover, .info[aria-expanded="true"] { color: var(--ink); border-color: var(--muted); }
+.info:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.info-pop { display: none; position: absolute; z-index: 20; top: calc(100% - 4px); left: 10px; right: 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 8px 24px rgb(0 0 0 / .18); color: var(--ink); font: 400 .85rem/1.45 var(--body); letter-spacing: normal; text-transform: none; }
+.info:hover + .info-pop, .info:focus-visible + .info-pop, .info[aria-expanded="true"] + .info-pop { display: block; }
+.hl:has(.info:hover), .hl:has(.info:focus-visible), .hl:has(.info[aria-expanded="true"]) { overflow: visible; z-index: 5; }

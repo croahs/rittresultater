@@ -1,72 +1,59 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { getJSON, type IndexRider, type RaceType } from "../data";
-import { TYPE_LABEL, TYPE_VAR, clock, dateLong, dec } from "../format";
+import { useEffect, useState, type ReactNode } from "react";
+import { getJSON, type RaceType } from "../data";
+import { TYPE_LABEL, TYPE_VAR, clock, dateLong, dec, span } from "../format";
 import { Icon } from "../ui";
 import type { Tab } from "../App";
 
 /* The front page: what is in here, a taste of the numbers, and a search box to find yourself. */
 
-const title = (r: Race) => `${r.name.replace(/\s+20\d\d$/, "")} ${r.date.slice(0, 4)}`;
+type Who = { id: string; name: string; page: boolean };
+interface Summary {
+  races: number; results: number; riders: number; km: number; years: number[];
+  recent: { id: string; name: string; date: string; type: RaceType; km: number | null; finishers: number; fastest: (Who & { time: number }) | null }[];
+  biggest: { name: string; riders: number } | null;
+  busiest: (Who & { club: string; races: number })[];
+  closest_tt: { name: string; gap_s: number; a: Who; b: Who } | null;
+  fastest_avg: { name: string; kmh: number; rider: Who } | null;
+}
 
-type Row = [string, string, string, string, string | null, number | null];
-interface Race { id: string; name: string; date: string; type: RaceType; distance_km?: number; rows: Row[] }
-
-export default function Welcome({ index, example, onRider, search }: {
-  index: IndexRider[]; example?: string; onRider: (id: string, tab?: Tab) => void; search: ReactNode;
+export default function Welcome({ example, onRider, search }: {
+  example?: string; onRider: (id: string, tab?: Tab) => void; search: ReactNode;
 }) {
-  const [races, setRaces] = useState<Race[] | null>(null);
-  useEffect(() => { getJSON<{ races: Race[] }>("races.json").then((d) => setRaces(d.races)).catch(() => setRaces([])); }, []);
+  // summary.json is rebuilt by the weekly data job from every followed rider's race lists, so nothing here is hardcoded.
+  const [facts, setFacts] = useState<Summary | null>(null);
+  useEffect(() => { getJSON<Summary>("summary.json").then(setFacts).catch(() => setFacts(null)); }, []);
 
-  const facts = useMemo(() => {
-    if (!races) return null;
-    const rs = [...races].sort((a, b) => a.date.localeCompare(b.date));
-    const results = rs.reduce((n, r) => n + r.rows.length, 0);
-    // Every finisher's distance added up: how far the whole field has raced together.
-    const km = rs.reduce((n, r) => n + (r.distance_km || 0) * r.rows.filter((x) => x[5] != null).length, 0);
-    const ys = [...new Set(rs.map((r) => r.date.slice(0, 4)))];
-    const fastest = (r: Race) => r.rows.filter((x) => x[5] != null).sort((a, b) => a[5]! - b[5]!)[0];
-    const recent = rs.slice(-4).reverse().map((r) => ({ r, win: fastest(r), n: r.rows.filter((x) => x[5] != null).length }));
-    const biggest = rs.reduce((b, r) => (r.rows.length > b.rows.length ? r : b), rs[0]);
-    // Closest finish in a race against the clock: gap between the two fastest.
-    const tt = rs.filter((r) => r.type === "TT").map((r) => {
-      const [a, b] = r.rows.filter((x) => x[5] != null).sort((x, y) => x[5]! - y[5]!);
-      return a && b ? { r, a, b, gap: b[5]! - a[5]! } : null;
-    }).filter((x): x is NonNullable<typeof x> => !!x && x.gap > 0).sort((x, y) => x.gap - y.gap)[0];
-    const quick = rs.filter((r) => r.distance_km && r.type !== "TTT").map((r) => { const w = fastest(r); return w ? { r, w, kmh: r.distance_km! / (w[5]! / 3600) } : null; })
-      .filter((x): x is NonNullable<typeof x> => !!x).sort((a, b) => b.kmh - a.kmh)[0];
-    return { n: rs.length, results, km, ys, recent, biggest, tt, quick };
-  }, [races, index]);
-
-  const busiest = useMemo(() => [...index].sort((a, b) => b.races - a.races).slice(0, 8), [index]);
-  const who = (id: string, name: string) => <button type="button" className="linkish" onClick={() => onRider(id)}>{name}</button>;
+  // Riders outside the search pool have no page yet: show the name without a link.
+  const who = (w: Who) => w.page ? <button type="button" className="linkish" onClick={() => onRider(w.id)}>{w.name}</button> : <span>{w.name}</span>;
+  const num = (n?: number) => (n == null ? "–" : Math.round(n).toLocaleString("nb-NO"));
 
   return (
     <>
       <section className="welcome" aria-labelledby="h-velkommen">
         <div className="welcome-copy">
-          <p className="eyebrow">Sykkelritt i Rogaland{facts ? `, ${facts.ys.join("–")}` : ""}</p>
+          <p className="eyebrow">Sykkelritt{facts ? ` ${span(facts.years)}` : ""}</p>
           <h1 className="h-display welcome-title" id="h-velkommen">Hvor godt kjørte du egentlig?</h1>
           <p className="lead">Søk opp deg selv og se hver plassering, hvor stor del av feltet du slo, hvem du kjemper mot fra ritt til ritt, og om du blir bedre. Alt hentet fra de offisielle resultatlistene.</p>
           <div className="welcome-search">{search}</div>
           {example && <p className="fine">Eller <button type="button" className="linkish" onClick={() => onRider(example)}>se et eksempel</button> først.</p>}
         </div>
         <dl className="welcome-stats">
-          <div><dt>Ritt</dt><dd className="tnum">{facts?.n ?? "–"}</dd></div>
-          <div><dt>Resultater</dt><dd className="tnum">{facts ? facts.results.toLocaleString("nb-NO") : "–"}</dd></div>
-          <div><dt>Ryttere</dt><dd className="tnum">{index.length ? index.length.toLocaleString("nb-NO") : "–"}</dd></div>
-          <div><dt>Km kjørt til sammen</dt><dd className="tnum">{facts ? Math.round(facts.km).toLocaleString("nb-NO") : "–"}</dd></div>
+          <div><dt>Ritt</dt><dd className="tnum">{num(facts?.races)}</dd></div>
+          <div><dt>Resultater</dt><dd className="tnum">{num(facts?.results)}</dd></div>
+          <div><dt>Ryttere</dt><dd className="tnum">{num(facts?.riders)}</dd></div>
+          <div><dt>Km kjørt til sammen</dt><dd className="tnum">{num(facts?.km)}</dd></div>
         </dl>
       </section>
 
       <section className="section" aria-labelledby="h-siste">
         <div className="section-head"><div><h2 className="h-section" id="h-siste">Siste ritt</h2><p className="lead">Trykk på et navn for å se rytterens side.</p></div></div>
         <div className="recent">
-          {facts?.recent.map(({ r, win, n }) => (
+          {facts?.recent.map((r) => (
             <article key={r.id} className="card card-pad recent-card" style={{ ["--c" as string]: TYPE_VAR[r.type] }}>
               <p className="eyebrow">{TYPE_LABEL[r.type]} · {dateLong(r.date)}</p>
-              <h3 className="recent-name">{r.name.replace(/\s+20\d\d$/, "")}</h3>
-              <p className="muted">{n} i mål{r.distance_km ? `, ${dec(r.distance_km, 0)} km` : ""}</p>
-              {win && <p className="recent-win"><span className="eyebrow">Raskest</span>{who(win[0], win[1])}<span className="tnum muted">{clock(win[5]!)}</span></p>}
+              <h3 className="recent-name">{r.name}</h3>
+              <p className="muted">{r.finishers} i mål{r.km ? `, ${dec(r.km, 0)} km` : ""}</p>
+              {r.fastest && <p className="recent-win"><span className="eyebrow">Raskest</span>{who(r.fastest)}<span className="tnum muted">{clock(r.fastest.time)}</span></p>}
             </article>
           ))}
           {!facts && <div className="loading">Henter rittene …</div>}
@@ -77,12 +64,12 @@ export default function Welcome({ index, example, onRider, search }: {
         <section className="section" aria-labelledby="h-fakta">
           <h2 className="h-section" id="h-fakta">Fra resultatlistene</h2>
           <div className="w-facts">
-            <div className="card card-pad w-fact"><p className="eyebrow">Største felt</p><b className="w-fact-num tnum">{facts.biggest.rows.length}</b>
-              <p className="muted">ryttere i {title(facts.biggest)}</p></div>
-            {facts.tt && <div className="card card-pad w-fact"><p className="eyebrow">Jevneste tempo</p><b className="w-fact-num tnum">{facts.tt.gap} s</b>
-              <p className="muted">skilte {who(facts.tt.a[0], facts.tt.a[1])} og {who(facts.tt.b[0], facts.tt.b[1])} i {title(facts.tt.r)}</p></div>}
-            {facts.quick && <div className="card card-pad w-fact"><p className="eyebrow">Høyeste snittfart</p><b className="w-fact-num tnum">{dec(facts.quick.kmh, 1)} km/t</b>
-              <p className="muted">{who(facts.quick.w[0], facts.quick.w[1])} i {title(facts.quick.r)}</p></div>}
+            {facts.biggest && <div className="card card-pad w-fact"><p className="eyebrow">Største felt</p><b className="w-fact-num tnum">{num(facts.biggest.riders)}</b>
+              <p className="muted">ryttere i {facts.biggest.name}</p></div>}
+            {facts.closest_tt && <div className="card card-pad w-fact"><p className="eyebrow">Jevneste tempo</p><b className="w-fact-num tnum">{facts.closest_tt.gap_s} s</b>
+              <p className="muted">skilte {who(facts.closest_tt.a)} og {who(facts.closest_tt.b)} i {facts.closest_tt.name}</p></div>}
+            {facts.fastest_avg && <div className="card card-pad w-fact"><p className="eyebrow">Høyeste snittfart</p><b className="w-fact-num tnum">{dec(facts.fastest_avg.kmh, 1)} km/t</b>
+              <p className="muted">{who(facts.fastest_avg.rider)} i {facts.fastest_avg.name}</p></div>}
           </div>
         </section>
       )}
@@ -104,17 +91,19 @@ export default function Welcome({ index, example, onRider, search }: {
       </section>
 
       <section className="section" aria-labelledby="h-flest">
-        <div className="section-head"><div><h2 className="h-section" id="h-flest">Flest ritt</h2><p className="lead">Ryttere som har vært med i flest av rittene her.</p></div></div>
+        <div className="section-head"><div><h2 className="h-section" id="h-flest">Flest ritt</h2><p className="lead">Ryttere med flest ritt i resultatlistene her.</p></div></div>
         <ol className="busy">
-          {busiest.map((r, i) => (
-            <li key={r.id}><button type="button" onClick={() => onRider(r.id)}>
-              <span className="busy-n tnum">{i + 1}</span><span className="who"><b>{r.name}</b><small>{r.club || "Uten klubb"}</small></span><span className="tnum muted">{r.races} ritt</span>
-            </button></li>
+          {facts?.busiest.map((r, i) => (
+            <li key={r.id}>{r.page ? <button type="button" onClick={() => onRider(r.id)}>{busyRow(r, i)}</button> : <div className="busy-row">{busyRow(r, i)}</div>}</li>
           ))}
         </ol>
       </section>
 
-      <p className="note">Med er {facts ? `${facts.n} ritt` : "rittene"} fra Turritt i Rogaland. Flere ritt kommer etter hvert. Watt vises bare når rytteren selv kobler til intervals.icu.</p>
+      <p className="note">Med er {facts ? `${facts.races} ritt, ${span(facts.years)}` : "rittene"}: alle rittene til rytterne siden følger. Tallene oppdateres av seg selv når nye ritt og ryttere kommer til. Watt vises bare når rytteren selv kobler til intervals.icu.</p>
     </>
   );
 }
+
+const busyRow = (r: Who & { club: string; races: number }, i: number) => (
+  <><span className="busy-n tnum">{i + 1}</span><span className="who"><b>{r.name}</b><small>{r.club || "Uten klubb"}</small></span><span className="tnum muted">{r.races} ritt</span></>
+);

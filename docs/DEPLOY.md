@@ -18,7 +18,7 @@ Innhold i `web/public/_headers`:
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.basemaps.cartocdn.com; connect-src 'self' https://intervals.icu; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://cache.kartverket.no; connect-src 'self' https://intervals.icu; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 /data/*
   Cache-Control: public, max-age=300
 /assets/*
@@ -86,7 +86,7 @@ Watt for andre ryttere: på Utvikling kan en rytter lime inn sin egen API-nøkke
 
 Før lansering bør du vite dette:
 - Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Kontaktadressen står i `"contact"` i `site.json`-linja i `export_web.py` og vises nederst på siden, slik at folk kan be om retting eller fjerning.
-- Kartflisene i sesongklippet kommer fra CARTO (basert på OpenStreetMap). Gratis bruk er begrenset og krever kildehenvisning, som vises nederst i kartet. Ved mye trafikk bør vi bytte til en fliskilde med egen nøkkel.
+- Kartflisene i sesongklippet kommer fra Kartverkets åpne kartcache (`cache.kartverket.no`, gråtonekartet). De er åpne data under CC BY 4.0, krever ingen nøkkel, og kildehenvisningen «© Kartverket» vises nederst i kartet. Kartet dekker Norge; ritt i utlandet får tom bakgrunn.
 
 ## 4. Nye ritt
 
