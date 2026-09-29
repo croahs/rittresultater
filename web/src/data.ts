@@ -42,6 +42,8 @@ export interface Insights {
 export interface Athlete {
   id: string; name: string; club: string; ageClass: string;
   power: boolean; clips: number[];
+  full: boolean;       // own profile from the pipeline (every race), not rebuilt from the shared result lists
+  livePower?: boolean; // watt fetched in this browser from intervals.icu
   results: Result[]; points: PointsRace[];
   opponents: Map<string, Opponent>; rivals: string[]; insights: Insights;
 }
@@ -116,12 +118,12 @@ function result(r: Record<string, unknown>): Result {
   };
 }
 
-function athlete(p: RawProfile): Athlete {
+function athlete(p: RawProfile, full = false): Athlete {
   const ins = { ...(p.insights || {}) } as Insights & { closest?: string[] };
   const closest = ins.closest; delete ins.closest;
   return {
     id: p.id, name: p.name, club: p.club, ageClass: p.age_class || "",
-    power: !!p.power, clips: p.clips || [],
+    power: !!p.power, clips: p.clips || [], full,
     results: p.results.map(result).filter((r) => r.field > 0 && Number.isFinite(r.top)).sort((a, b) => a.date.localeCompare(b.date)),
     points: p.points || [],
     opponents: opponents(p.opponents), rivals: p.rivals?.length ? p.rivals : closest || [], insights: ins,
@@ -129,7 +131,7 @@ function athlete(p: RawProfile): Athlete {
 }
 
 export async function loadAthlete(id: string, site: Site, index: IndexRider[]): Promise<Athlete> {
-  if (site.profiles.includes(id)) return athlete(await getJSON<RawProfile>(`athletes/${id}.json`));
+  if (site.profiles.includes(id)) return athlete(await getJSON<RawProfile>(`athletes/${id}.json`), true);
   const entry = index.find((r) => r.id === id);
   if (!entry?.shard) throw new Error("Fant ikke rytteren");
   const shard = await getJSON<Record<string, RawProfile>>(`riders/shard-${entry.shard}.json`);
@@ -140,7 +142,7 @@ export async function loadAthlete(id: string, site: Site, index: IndexRider[]): 
 
 /** The athlete with race power fetched in the browser from intervals.icu merged in (not stored anywhere). */
 export function withPower(a: Athlete, p: Map<string, { np: number; ap: number }>): Athlete {
-  return { ...a, power: true, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
+  return { ...a, power: true, livePower: true, results: a.results.map((r) => { const x = p.get(`${r.date}|${r.race}`); return x ? { ...r, np: x.np, ap: x.ap } : r; }) };
 }
 
 /* ---------- derived numbers ---------- */

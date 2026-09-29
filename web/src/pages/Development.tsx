@@ -32,7 +32,7 @@ export default function Development({ a, isMe, onPower }: { a: Athlete; isMe: bo
             <RaceChart rows={rows.filter((r) => r.behind != null)} value={(r) => r.behind!} max={niceMax(rows.map((r) => r.behind ?? 0))} unit=" %" label="bak vinneren" invert />
           </section>
           <section className="card card-pad section" id="watt" style={{ scrollMarginTop: 80 }}>
-            <div className="section-head"><div><h2 className="h-card">Watt per ritt</h2><p className="note" style={{ margin: 0 }}>Normalisert watt (NP) og snittwatt over selve rittet{a.power && !isMe ? ". Hentet fra intervals.icu i denne nettleseren, ikke lagret" : ""}</p></div></div>
+            <div className="section-head"><div><h2 className="h-card">Watt per ritt</h2><p className="note" style={{ margin: 0 }}>Normalisert watt (NP) og snittwatt over selve rittet{a.livePower ? ". Hentet fra intervals.icu i denne nettleseren, ikke lagret" : ""}</p></div></div>
             {a.power ? <PowerChart rows={rows} /> : <Connect a={a} isMe={isMe} onPower={onPower} onNote={setPowerNote} />}
             {a.power && powerNote && <p className="note" role="status" style={{ margin: 0 }}>{powerNote}</p>}
           </section>
