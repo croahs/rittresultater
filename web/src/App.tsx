@@ -117,7 +117,7 @@ export default function App() {
 
         <main className="page" id="innhold" tabIndex={-1}>
           {error && <div className="card empty"><b>{error}</b><button className="btn" onClick={() => open(null)}>Til forsiden</button></div>}
-          {home && site && <Welcome index={index} example={site.default_rider} onRider={(id, t) => open(id, t)} search={search} />}
+          {home && site && <Welcome example={site.default_rider} onRider={(id, t) => open(id, t)} search={search} />}
           {!home && !error && !athlete && <div className="loading">Henter resultater …</div>}
           {athlete && (
             <SelProvider key={athlete.id} a={athlete}>
