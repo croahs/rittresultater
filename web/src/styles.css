@@ -421,5 +421,6 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .more-races { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: -8px; }
 .more-races > div { flex: 1 1 320px; }
 .more-races p { margin: 4px 0 0; color: var(--ink-2); font-size: .9rem; max-width: 70ch; }
+.more-races p a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .more-races .err { color: var(--loss); }
 @media (max-width: 400px) { .who-chip .nm { display: none; } .who-btn { padding-right: 3px; } .topbar { gap: 8px; } .picker { min-width: 0; } }

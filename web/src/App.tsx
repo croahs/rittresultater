@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { flags, getJSON, loadAthlete, withPower, withSaved, type Athlete, type IndexRider, type Site } from "./data";
 import { firstName, fold, initials } from "./format";
 import { BrandMark, Icon, TipProvider } from "./ui";
+import { Sources } from "./sources";
 import Overview from "./pages/Overview";
 import Development from "./pages/Development";
 import Rivals from "./pages/Rivals";
@@ -137,7 +138,7 @@ export default function App() {
           )}
           <footer className="site">
             <span>Plassering: DNF telles med i feltet. Watt og fart gjelder bare selve rittet.</span>
-            <span>Resultater fra <a href="https://turritt.com" target="_blank" rel="noopener">Turritt</a>, <a href="https://live.eqtiming.com" target="_blank" rel="noopener">EQ Timing</a> og raceresult. Watt fra <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>.</span>
+            <span>Resultater fra <Sources />. Watt fra <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>.</span>
             {site?.contact && <span>Feil i dataene, eller vil du ikke være med? Skriv til <a href={`mailto:${site.contact}`}>{site.contact}</a>.</span>}
           </footer>
         </main>
