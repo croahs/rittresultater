@@ -122,7 +122,7 @@ def original(sources, race_name, ids):
             bad = eqtiming.timing_errors([x[5] for x in lst if x[4] == "TIME"], (cache.get(f"km:{src['event']}") or {}).get(str(stage)),
                                           bool(re.search(r"tempo|\bmila\b|klostermil", f"{race_name} {stage_name}", re.I)))
             for uid, nm, club, age, status, ms, group, *lap in lst:
-                if nm is None or status not in ("TIME", "DNF", "LAP") or (status == "TIME" and (not ms or ms in bad)) \
+                if nm is None or status not in ("TIME", "DNF", "LAP") or (status == "TIME" and (not ms or ms < 1000 or ms in bad)) \
                         or turritt.EXCLUDE_GROUP.search(f"{group} {age}"):
                     continue
                 t = int(ms // 1000) if status == "TIME" else DNF_TIME
@@ -400,6 +400,11 @@ def club_table(me, evs):
                   key=lambda c: -c["win_pct"])
 
 
+def behind(t, winner):
+    """Percent behind the winner, or "" for a DNF (or a winner without a real time)."""
+    return round(100 * (t / winner - 1), 1) if t < DNF and 0 < winner < DNF else ""
+
+
 def build(me=ME, evs=None, keep=None):
     """Head-to-head against every opponent (or only those in keep, which is much faster in
     the 9000-rider Nordsjørittet fields) and your result in each race."""
@@ -424,7 +429,7 @@ def build(me=ME, evs=None, keep=None):
             "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"],
             "field": len(times), "beaten": beaten,
             "beaten_pct": round(100 * beaten / (len(times) - 1), 1) if len(times) > 1 else 0.0,
-            "behind_winner_pct": round(100 * (t / winner - 1), 1) if t < DNF else "",
+            "behind_winner_pct": behind(t, winner),
             "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else "",
             "turritt_race_id": race_id,
             "time": turritt.hms(t) if t < DNF else "DNF",
@@ -432,7 +437,7 @@ def build(me=ME, evs=None, keep=None):
             "place": bisect.bisect_left(times, t) + 1 if t < DNF else "",
             "class_place": 1 + bisect.bisect_left(cls, t) if t < DNF else "",
             "class_n": len(cls),
-            "behind_class_winner_pct": round(100 * (t / cls[0] - 1), 1) if t < DNF else "",
+            "behind_class_winner_pct": behind(t, cls[0]),
             "class_winner": turritt.hms(cls[0]),
         })
         wt = ev.get("women_times")
@@ -442,7 +447,7 @@ def build(me=ME, evs=None, keep=None):
             analysis[-1].update({
                 "women_place": bisect.bisect_left(wt, t) + 1 if t < DNF else "", "women_field": len(wt),
                 "women_beaten_pct": round(100 * wb / (len(wt) - 1), 1) if len(wt) > 1 else 0.0,
-                "behind_women_winner_pct": round(100 * (t / wt[0] - 1), 1) if t < DNF else "",
+                "behind_women_winner_pct": behind(t, wt[0]),
                 "women_winner": turritt.hms(wt[0]) if wt[0] < DNF else "DNF",
             })
         lo, hi = bisect.bisect_left(times, t), bisect.bisect_right(times, t)
@@ -473,7 +478,7 @@ def build(me=ME, evs=None, keep=None):
                 places = None
             meetings[r[2]].append({
                 "race": sheet["Race"], "date": sheet["Date"], "type": sheet["Type"], "result": res,
-                "gap_s": gap, "gap_pct": round(100 * gap / o, 1) if gap is not None else None,
+                "gap_s": gap, "gap_pct": round(100 * gap / o, 1) if gap is not None and o else None,
                 "their_time": turritt.hms(o) if o < DNF else "DNF",
                 # Bike category each of you started in; same_class is False only when they differ,
                 # e.g. you on CX/Gravel and them on MTB, or you on a road bike and them on a TT bike.

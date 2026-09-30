@@ -43,8 +43,9 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_D1_DATABASE_ID: ${{ secrets.CF_D1_DATABASE_ID }}
         run: |
-          built=$(python3 fetch_queue.py)
-          echo "built=$(echo $built)" >> "$GITHUB_OUTPUT"
+          set -o pipefail
+          built=$(python3 fetch_queue.py | { grep -E '^[A-Za-z0-9]+$' || true; } | tr '\n' ' ')
+          echo "built=${built% }" >> "$GITHUB_OUTPUT"
 
       - name: Refresh rivals and site data
         if: steps.queue.outputs.built != ''
@@ -54,11 +55,30 @@ jobs:
 
       - name: Commit if anything changed
         if: steps.queue.outputs.built != ''
+        env:
+          BUILT: ${{ steps.queue.outputs.built }}
         run: |
           git add -A data cache riders.json
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Add requested riders: ${{ steps.queue.outputs.built }}"
+          git commit -m "Add requested riders: $BUILT"
           git pull --rebase
           git push
+
+      # Requests are marked done only once their data is pushed; a failed run puts them back in the queue.
+      - name: Mark the built requests done
+        if: success() && steps.queue.outputs.built != ''
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_D1_DATABASE_ID: ${{ secrets.CF_D1_DATABASE_ID }}
+        run: python3 fetch_queue.py --finish
+
+      - name: Put the built requests back in the queue
+        if: failure() || cancelled()
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_D1_DATABASE_ID: ${{ secrets.CF_D1_DATABASE_ID }}
+        run: python3 fetch_queue.py --requeue
