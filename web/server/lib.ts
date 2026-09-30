@@ -126,8 +126,13 @@ export async function riderFrom(ctx: Ctx, id: unknown): Promise<string | null> {
 export const NO_DB = () => json({ error: "Lagring er ikke satt opp på denne siden ennå." }, 503);
 export const BAD_KEY = () => json({ error: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }, 400);
 
+/** The site sends JSON with a JSON content type. Requiring it means another site can't make a
+ *  visitor's browser post here with a plain form (that would need a CORS preflight, which is refused). */
+export const isJSON = (r: Request) => (r.headers.get("content-type") || "").toLowerCase().startsWith("application/json");
+
 /** Parse a JSON body with a rider id and (unless noKey) a valid API key, or null. */
 export async function body<T>(ctx: Ctx, maxBytes: number, noKey = false): Promise<(T & { key: string; rider: string }) | null> {
+  if (!isJSON(ctx.request)) return null;
   const text = await ctx.request.text();
   if (text.length > maxBytes) return null;
   let b: T & { key?: unknown; rider?: unknown };

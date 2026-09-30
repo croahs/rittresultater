@@ -14,7 +14,7 @@
 // A few per visitor per hour and a capped number per day in total, so the worst a bot can do is make
 // the queue longer; the job keeps its own pace.
 
-import { NO_DB, dataKey, json, riderFrom, staticJSON, tables, type Ctx, type D1 } from "../../server/lib";
+import { NO_DB, dataKey, isJSON, json, riderFrom, staticJSON, tables, type Ctx, type D1 } from "../../server/lib";
 import { makeIds, type IdMap } from "../../src/ids";
 import { eqParticipant, freeText } from "../../src/find";
 import type { IndexRider, Site } from "../../src/data";
@@ -102,6 +102,7 @@ function newRef(): string {
 export async function onRequestPost(ctx: Ctx) {
   const { request, env } = ctx;
   if (!env.DB) return NO_DB();
+  if (!isJSON(request)) return json({ error: "Ugyldig forespørsel." }, 415);
   const text = await request.text();
   let b: Record<string, unknown> = {};
   try { const v = text.length < 1000 ? JSON.parse(text) : null; if (v && typeof v === "object") b = v as Record<string, unknown>; } catch { /* stays empty */ }

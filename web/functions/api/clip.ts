@@ -13,7 +13,8 @@ export async function onRequestGet(ctx: Ctx) {
   const rider = await riderFrom(ctx, q.get("rider"));
   if (!rider || !(year > 2000 && year < 2100)) return json({ error: "Ukjent rytter eller år." }, 400);
   await tables(env.DB, ctx);
-  const { results } = await env.DB.prepare("SELECT race_key, km, pts FROM ride WHERE rider_id = ? AND race_key LIKE ?")
+  const { results } = await env.DB.prepare(`SELECT race_key, km, pts FROM ride JOIN owner USING (rider_id)
+    WHERE rider_id = ? AND race_key LIKE ? AND ride.athlete_id = owner.athlete_id`)
     .bind(rider, `${year}-%`).all<{ race_key: string; km: number | null; pts: string }>();
   const a = await athleteFor(ctx, rider);
   if (!a) return json({ error: "Fant ikke rytteren." }, 404);
