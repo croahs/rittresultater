@@ -168,7 +168,9 @@ def category(race_name, group):
         return "MTB/Hybrid"
     if re.search(r"\bcx\b|gravel", g):
         return "CX/Gravel"
-    if re.search(r"- tempo$", race_name.lower()) or re.search(r"^(tempo|temposykkel)$", group.strip().lower()):
+    # A stage named "Tempo ..." is the time-trial bike class even when it lets racers with aero
+    # bars in (Toskaskabet: "Tempo (+ racer m/tempobøyle)" beside "Racer (u/tempobøyle)").
+    if re.search(r"- tempo$|^\s*tempo\b", race_name.lower()) or re.search(r"^(tempo|temposykkel)$", group.strip().lower()):
         return "Temposykkel"
     if "racer" in g:
         return "Racer"
