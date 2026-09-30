@@ -37,6 +37,7 @@ import requests
 HERE = os.path.dirname(os.path.abspath(__file__))
 DIR = os.path.join(HERE, "cache", "harvest")
 CALENDAR = os.path.join(DIR, "calendar.json")
+SETTLE_DAYS = 7  # a race's lists are fetched once it is this many days old
 PAUSE = (8, 15)  # seconds between any two requests, a random number in this range (Pedår, 2026-09-29)
 FIRST_YEAR = 2008  # EQ Timing's first cycling results
 EQ_CAL = "https://api.eqtiming.com/api/v2/Events"
@@ -65,7 +66,7 @@ def _get(url, **params):
         r = s.get(url, params=params, timeout=120)
     finally:
         _last = time.time()
-    if r.status_code in (403, 429) and not url.startswith(EQ_CAL):
+    if r.status_code in (403, 429):
         raise Blocked(f"{r.status_code} from {url}")
     r.raise_for_status()
     return r.json()
@@ -207,13 +208,16 @@ def rr_event(event_id):
 
 def fetch_lists(minutes, log=print):
     """Fetch the lists of calendar races not fetched yet, oldest first, until the time is up.
-    A race whose lists can't be read is marked and tried again after 30 days."""
+    A race whose lists can't be read, or come back empty, is marked and tried again after 30 days.
+    A race is fetched only once it is SETTLE_DAYS old, so lists still being corrected (or a stage
+    race still running) aren't frozen as they were on the day."""
     cal = _load(CALENDAR, {"years": {}, "events": {}})
     stop = time.time() + minutes * 60
     today = datetime.date.today()
     done = 0
+    settled = (today - datetime.timedelta(days=SETTLE_DAYS)).isoformat()
     todo = sorted((v["date"], k) for k, v in cal["events"].items()
-                  if not v.get("fetched") and (not v.get("failed") or
+                  if not v.get("fetched") and v["date"] <= settled and (not v.get("failed") or
                      (today - datetime.date.fromisoformat(v["failed"])).days >= 30))
     for date, key in todo:
         if time.time() > stop:
@@ -227,6 +231,10 @@ def fetch_lists(minutes, log=print):
             sys.exit(1)
         except (requests.RequestException, ValueError, KeyError, TypeError) as x:
             log(f"{key} {cal['events'][key]['name']}: {x}")
+            cal["events"][key]["failed"] = today.isoformat()
+            continue
+        if not any(st.get("rows") or st.get("groups") for st in got.values()):
+            log(f"{key} {cal['events'][key]['name']}: no results yet")
             cal["events"][key]["failed"] = today.isoformat()
             continue
         _dump(path(key, date), got)
@@ -256,5 +264,9 @@ if __name__ == "__main__":
     if sys.argv[1:] == ["status"]:
         status()
     else:
-        read_calendars()
+        try:
+            read_calendars()
+        except Blocked as x:
+            print(f"harvest stopped: {x}. Nothing more is fetched until someone looks at it.")
+            sys.exit(1)
         fetch_lists(float(sys.argv[1]) if sys.argv[1:] else 330)
