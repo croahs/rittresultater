@@ -58,12 +58,12 @@ jobs:
         env:
           BUILT: ${{ steps.queue.outputs.built }}
         run: |
-          git add -A data cache riders.json
+          git add -A data cache riders.json race_results_auto.csv points_races.csv turritt_vs_sheet.md
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
           git commit -m "Add requested riders: $BUILT"
-          git pull --rebase
+          git pull --rebase --autostash
           git push
 
       # Requests are marked done only once their data is pushed; a failed run puts them back in the queue.
