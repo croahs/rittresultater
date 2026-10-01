@@ -47,6 +47,36 @@
       "turritt_id": "171118",
       "since": 2005,
       "eq_id": 4746354
+    },
+    {
+      "id": "22638",
+      "rid": "r658",
+      "name": "Geir Henning Larsen",
+      "turritt_id": "22638",
+      "since": 2005,
+      "eq_id": 107702,
+      "ssk_cup": {
+        "name": "LARSEN Geir Henning"
+      }
+    },
+    {
+      "id": "172088",
+      "rid": "r17718",
+      "name": "Henning Stedje Larsen",
+      "turritt_id": "172088",
+      "since": 2005,
+      "eq_id": 7022492
+    },
+    {
+      "id": "20211",
+      "rid": "r55",
+      "name": "Andreas Hoddevik",
+      "turritt_id": "20211",
+      "since": 2005,
+      "eq_id": 552367,
+      "ssk_cup": {
+        "name": "HODDEVIK Andreas"
+      }
     }
   ]
 }
