@@ -240,7 +240,8 @@ def races(rider=RIDER_ID, since=0, max_lists=None):
         except requests.RequestException:
             km = None
         tt = bool(re.search(r"tempo|\bmila\b|klostermil", f"{h['ArrangementNavn']} {h['EtappeNavn']}", re.I))
-        bad = timing_errors([r[3] for r in rows if r[2] == "TIME"], km, tt)
+        # Under a second is not a time (EQ puts 0-8 ms in some rows), whatever the distance.
+        bad = timing_errors([r[3] for r in rows if r[2] == "TIME"], km, tt) | {r[3] for r in rows if r[2] == "TIME" and (r[3] or 0) < 1000}
         if me[2] == "TIME" and me[3] in bad:
             continue  # the rider's own time is a timing error: no result to show
         rows = [r for r in rows if not (r[2] == "TIME" and r[3] in bad)]

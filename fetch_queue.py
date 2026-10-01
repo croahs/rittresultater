@@ -22,8 +22,14 @@ The queue is read through Cloudflare's D1 REST API, so the site needs no endpoin
 the job. Needs CF_API_TOKEN (Account · D1 · Edit), CF_ACCOUNT_ID and CF_D1_DATABASE_ID
 (docs/DEPLOY.md section 6); without them it does nothing.
 
+A request that built a rider stays 'running' until the workflow has pushed the new data;
+only then is it marked done (--finish). If the job fails after building, those requests go
+back in the queue (--requeue), so a request is never marked done without its data on the site.
+
 Usage:
-  python3 fetch_queue.py         # prints the ids it built, one per line
+  python3 fetch_queue.py             # prints the ids it built, one per line
+  python3 fetch_queue.py --finish    # after a successful push: mark the built requests done
+  python3 fetch_queue.py --requeue   # after a failed run: put the built requests back in the queue
 """
 import contextlib
 import json
@@ -44,6 +50,8 @@ import sskcup
 import update
 
 MAX_PER_RUN = 3
+# The requests this run built, (id, note), for --finish/--requeue in a later workflow step.
+BUILT_FILE = os.path.join(os.environ.get("RUNNER_TEMP") or "/tmp", "fetch-queue-built.json")
 MAX_LISTS = 30  # new result lists one request may fetch (profile, race search and build together)
 MAX_STAGES = 12  # stages searched for a name in one race named in words
 SINCE = 2005
@@ -171,8 +179,9 @@ def main():
             d1(f"ALTER TABLE fetch_requests ADD COLUMN {col} {typ}")
         except Exception:  # "duplicate column": already there
             pass
-    todo = d1("SELECT id, kind, rid, turritt_id, eq_participant_id, name, race_text, race_year FROM fetch_requests "
-              "WHERE status = 'queued' ORDER BY id LIMIT ?", MAX_PER_RUN)
+    # Nothing else runs the queue at the same time (the workflow's concurrency group), so a
+    # 'running' row is one a killed job left behind: it goes back in the queue.
+    d1("UPDATE fetch_requests SET status = 'queued' WHERE status = 'running'")
     with open(update.RIDERS_FILE, encoding="utf-8") as f:
         conf = json.load(f)
     aliases = riderids.load()
@@ -180,7 +189,10 @@ def main():
     known = {r["id"] for r in conf["riders"]} | {r["rid"] for r in conf["riders"] if r.get("rid")}
     known |= {by_tt[r["turritt_id"]] for r in conf["riders"] if r.get("turritt_id") in by_tt}
     known_eq = {str(r["eq_id"]) for r in conf["riders"] if r.get("eq_id")}
-    built = []
+    requeue_lost(known)
+    todo = d1("SELECT id, kind, rid, turritt_id, eq_participant_id, name, race_text, race_year FROM fetch_requests "
+              "WHERE status = 'queued' ORDER BY id LIMIT ?", MAX_PER_RUN)
+    built, done = [], []
     for req in todo:
         eqtiming.list_budget = MAX_LISTS  # new result lists one request may fetch, all steps together
         kind = req.get("kind") or "rider"
@@ -231,7 +243,7 @@ def main():
             n += sum(1 for r in data["points_races"] if r["rider_id"] == site_id)
             if not n:
                 raise RuntimeError("Vi fant ingen ritt med dette navnet hos tidtakerne vi henter fra.")
-            finish(req["id"], "done", f"{n} ritt")
+            done.append((req["id"], f"{n} ritt"))  # marked done by --finish, once the data is pushed
             known.add(site_id)
             known_eq.add(str(rider.get("eq_id")))
             built.append(site_id)
@@ -240,9 +252,36 @@ def main():
             with open(update.RIDERS_FILE, "w", encoding="utf-8") as f:
                 json.dump(conf, f, ensure_ascii=False, indent=2)
                 f.write("\n")
-            finish(req["id"], "failed", str(e))
+            log(f"queue: request {req['id']} failed: {e}")
+            finish(req["id"], "failed", str(e) if isinstance(e, RuntimeError) else "Noe gikk galt da rittene ble hentet. Prøv igjen senere.")
     eqtiming.list_budget = None
+    with open(BUILT_FILE, "w", encoding="utf-8") as f:
+        json.dump(done, f)
     return built
+
+
+def requeue_lost(known):
+    """«Hent alle mine ritt» requests marked done whose rider never reached riders.json: a run
+    that marked them done before its push failed (before --finish existed). Back in the queue."""
+    rows = d1("SELECT id, rid, turritt_id FROM fetch_requests WHERE status = 'done' AND kind = 'rider' AND note LIKE '% ritt'")
+    for r in rows:
+        if not ({r.get("rid"), r.get("turritt_id")} & known):
+            d1("UPDATE fetch_requests SET status = 'queued', done_at = NULL, note = NULL WHERE id = ?", r["id"])
+            print(f"queue: request {r['id']} was marked done but never published; queued again", file=sys.stderr)
+
+
+def after_run(status):
+    """--finish (status done) or --requeue (status queued) for the requests this run built."""
+    try:
+        with open(BUILT_FILE, encoding="utf-8") as f:
+            done = json.load(f)
+    except FileNotFoundError:
+        return
+    for req_id, note in done:
+        if status == "done":
+            finish(req_id, "done", note)
+        else:
+            d1("UPDATE fetch_requests SET status = 'queued', done_at = NULL, note = NULL WHERE id = ?", req_id)
 
 
 def from_request(req, aliases, by_tt, name):
@@ -263,5 +302,10 @@ def from_request(req, aliases, by_tt, name):
 
 
 if __name__ == "__main__":
-    for rid in main():
-        print(rid)
+    if sys.argv[1:] == ["--finish"]:
+        after_run("done")
+    elif sys.argv[1:] == ["--requeue"]:
+        after_run("queued")
+    else:
+        for rid in main():
+            print(rid)

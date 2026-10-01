@@ -56,9 +56,11 @@ export async function onRequestGet(ctx: Ctx) {
   if (!rider) return json({ error: "Ukjent rytter." }, 400);
   await tables(env.DB, ctx);
   const [p, r] = await Promise.all([
-    env.DB.prepare(`SELECT race_key, np, ap, (SELECT show_power FROM owner WHERE rider_id = ?1) AS shown
-      FROM power WHERE rider_id = ?1`).bind(rider).all<Row & { shown: number | null }>(),
-    env.DB.prepare("SELECT race_key, speed, km, length(pts) > 2 AS gps FROM ride WHERE rider_id = ?").bind(rider).all<{ race_key: string; speed: number | null; km: number | null; gps: number }>(),
+    // Only rows saved by the account that owns the rider count, so nothing another account left behind shows.
+    env.DB.prepare(`SELECT race_key, np, ap, owner.show_power AS shown
+      FROM power JOIN owner USING (rider_id) WHERE rider_id = ?1 AND power.athlete_id = owner.athlete_id`).bind(rider).all<Row & { shown: number | null }>(),
+    env.DB.prepare(`SELECT race_key, speed, km, length(pts) > 2 AS gps FROM ride JOIN owner USING (rider_id)
+      WHERE rider_id = ? AND ride.athlete_id = owner.athlete_id`).bind(rider).all<{ race_key: string; speed: number | null; km: number | null; gps: number }>(),
   ]);
   const clipYears = [...new Set(r.results.filter((x) => x.gps).map((x) => Number(x.race_key.slice(0, 4))))].sort();
   const shown = p.results.filter((x) => x.shown).map(({ race_key, np, ap }) => ({ race_key, np, ap }));
@@ -78,6 +80,10 @@ export async function onRequestPost(ctx: Ctx) {
   const a = await athleteFor(ctx, b.rider);
   if (!a) return json({ error: "Fant ikke rytteren." }, 404);
   if (!isRider(me, a)) return json({ error: `Nøkkelen tilhører «${me.name}» i intervals.icu, ikke ${a.name}. Bare rytteren selv kan lagre på sin side.` }, 403);
+  // The first account that saves for a rider owns the page. intervals.icu names can be set to
+  // anything, so a later account with the same name must not take over (or unhide) the rider's watts.
+  const owner = await env.DB.prepare("SELECT athlete_id FROM owner WHERE rider_id = ?").bind(b.rider).first<{ athlete_id: string }>();
+  if (owner && owner.athlete_id !== me.id) return json({ error: "En annen intervals.icu-konto har allerede lagret for denne rytteren. Ta kontakt hvis det er feil." }, 403);
   const raceSecs = new Map(a.results.map((r) => [raceKeyOf(r), secs(r.time) || null]));
   const keys = new Set(raceSecs.keys());
   const input = (Array.isArray(b.rows) ? b.rows as In[] : []).filter((r) => r && typeof r.race_key === "string" && keys.has(r.race_key)).slice(0, 400);
@@ -95,14 +101,16 @@ export async function onRequestPost(ctx: Ctx) {
   }
   const now = new Date().toISOString();
   const put = env.DB.prepare(`INSERT INTO power (rider_id, race_key, np, ap, athlete_id, saved_at) VALUES (?, ?, ?, ?, ?, ?)
-    ON CONFLICT (rider_id, race_key) DO UPDATE SET np = excluded.np, ap = excluded.ap, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
+    ON CONFLICT (rider_id, race_key) DO UPDATE SET np = excluded.np, ap = excluded.ap, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at
+    WHERE power.athlete_id = excluded.athlete_id OR power.athlete_id NOT IN (SELECT athlete_id FROM owner WHERE rider_id = excluded.rider_id)`);
   // A ride row marks a race with a real ride that day; /api/track may then add its GPS track,
   // no longer than the official race time (secs) so nothing from before or after the race is kept.
   const ride = env.DB.prepare(`INSERT INTO ride (rider_id, race_key, speed, km, secs, pts, athlete_id, saved_at) VALUES (?, ?, ?, ?, ?, '[]', ?, ?)
-    ON CONFLICT (rider_id, race_key) DO UPDATE SET speed = excluded.speed, km = excluded.km, secs = excluded.secs, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at`);
+    ON CONFLICT (rider_id, race_key) DO UPDATE SET speed = excluded.speed, km = excluded.km, secs = excluded.secs, athlete_id = excluded.athlete_id, saved_at = excluded.saved_at
+    WHERE ride.athlete_id = excluded.athlete_id OR ride.athlete_id NOT IN (SELECT athlete_id FROM owner WHERE rider_id = excluded.rider_id)`);
   await env.DB.batch([
     env.DB.prepare(`INSERT INTO owner (rider_id, athlete_id, show_power, saved_at) VALUES (?, ?, ?, ?)
-      ON CONFLICT (rider_id) DO UPDATE SET athlete_id = excluded.athlete_id, show_power = excluded.show_power, saved_at = excluded.saved_at`).bind(b.rider, me.id, b.show === true ? 1 : 0, now),
+      ON CONFLICT (rider_id) DO UPDATE SET show_power = excluded.show_power, saved_at = excluded.saved_at WHERE owner.athlete_id = excluded.athlete_id`).bind(b.rider, me.id, b.show === true ? 1 : 0, now),
     ...rows.map((r) => put.bind(b.rider, r.race_key, r.np, r.ap, me.id, now)),
     ...rides.map((r) => ride.bind(b.rider, r.race_key, r.speed, r.km, r.secs, me.id, now)),
   ]);

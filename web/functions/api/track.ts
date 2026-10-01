@@ -12,7 +12,8 @@ import { TRACK_STEP } from "../../src/intervals";
 
 const MAX_PTS = 8 * 3600 / 5; // an 8 hour race at one point per 5 s
 const okPts = (p: unknown): p is [number, number][] => Array.isArray(p) && p.length <= MAX_PTS
-  && p.every((x) => Array.isArray(x) && x.length === 2 && Math.abs(x[0]) <= 90 && Math.abs(x[1]) <= 180);
+  && p.every((x) => Array.isArray(x) && x.length === 2 && fin(x[0]) && fin(x[1]) && Math.abs(x[0]) <= 90 && Math.abs(x[1]) <= 180);
+const fin = (v: unknown) => typeof v === "number" && Number.isFinite(v);
 
 export async function onRequestPost(ctx: Ctx) {
   const { env } = ctx;
