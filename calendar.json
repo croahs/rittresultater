@@ -595,6 +595,7 @@
 },
 "eq:13131": {
 "date": "2015-04-12",
+"fetched": "2026-10-01",
 "level": "MasterCup",
 "name": "Stjernetråkken MastersCup",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -897,6 +898,7 @@
 },
 "eq:14800": {
 "date": "2015-04-12",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Stjernetråkken Aktiv",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -1002,6 +1004,7 @@
 },
 "eq:15226": {
 "date": "2015-04-12",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Stjernetråkken Tur-ritt",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -1010,6 +1013,7 @@
 },
 "eq:15241": {
 "date": "2015-05-03",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Oggevatn Rundt 2015",
 "organizer": "Vennesla OCK",
@@ -1043,6 +1047,7 @@
 },
 "eq:15349": {
 "date": "2015-05-02",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Kjoserittet 2015",
 "organizer": "Kjose IL",
@@ -1100,6 +1105,7 @@
 },
 "eq:15452": {
 "date": "2015-05-01",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Fosen Terreng 2015",
 "organizer": "Fosen SK",
@@ -1302,6 +1308,7 @@
 },
 "eq:15811": {
 "date": "2015-04-18",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Ronde van Berg 2015",
 "organizer": "Nanset IF - Sykkel",
@@ -1382,6 +1389,7 @@
 },
 "eq:15986": {
 "date": "2015-05-01",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Mairittet 2015",
 "organizer": "NCF Region Sør",
@@ -1487,6 +1495,7 @@
 },
 "eq:16264": {
 "date": "2015-05-01",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Os Rundt",
 "organizer": "CK Henie",
@@ -1552,6 +1561,7 @@
 },
 "eq:16317": {
 "date": "2015-04-25",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC1 Fiskumrittet XCT Tempo",
 "organizer": "Fiskum IL",
@@ -1560,6 +1570,7 @@
 },
 "eq:16319": {
 "date": "2015-04-26",
+"fetched": "2026-10-01",
 "level": "UCI Ritt",
 "name": "NC2 Fiskumrittet XCO UCI cat2 Rundbane",
 "organizer": "Fiskum IL",
@@ -1632,6 +1643,7 @@
 },
 "eq:16492": {
 "date": "2015-04-26",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC Systemkjøkken Grand Prix Fellesstart",
 "organizer": "Grenland SK",
@@ -1640,6 +1652,7 @@
 },
 "eq:16493": {
 "date": "2015-04-25",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "Systemkjøkken Grand Prix tempo, ranking",
 "organizer": "Grenland SK",
@@ -1648,6 +1661,7 @@
 },
 "eq:16496": {
 "date": "2015-04-12",
+"fetched": "2026-10-01",
 "level": "Trimritt",
 "name": "Stjernetråkken Trim",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -1696,6 +1710,7 @@
 },
 "eq:16521": {
 "date": "2015-05-02",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "Helgøyatråkket 2015",
 "organizer": "Nes Sp.Kl. Sykkel",
@@ -1712,6 +1727,7 @@
 },
 "eq:16533": {
 "date": "2015-05-02",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Eikerrittet 2015",
 "organizer": "Eiker CK",
@@ -1752,6 +1768,7 @@
 },
 "eq:16587": {
 "date": "2015-04-25",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Sotramila Tempo 2015",
 "organizer": "CK Sotra",
@@ -1784,6 +1801,7 @@
 },
 "eq:16599": {
 "date": "2015-04-14",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Fatrittet Klubbtempo 2015",
 "organizer": "Sandefjord SK",
@@ -1801,6 +1819,7 @@
 },
 "eq:16605": {
 "date": "2015-05-01",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Spinn Cup 2 - 2015 Gateritt",
 "organizer": "Sandefjord SK",
@@ -1809,6 +1828,7 @@
 },
 "eq:16607": {
 "date": "2015-04-19",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Bukkene Bruse 2015",
 "organizer": "Grimstad SK",
@@ -2035,6 +2055,7 @@
 },
 "eq:16743": {
 "date": "2015-04-26",
+"fetched": "2026-10-01",
 "level": "MasterCup",
 "name": "Vårtråkken 2015",
 "organizer": "Arendal CC",
@@ -2067,6 +2088,7 @@
 },
 "eq:16797": {
 "date": "2015-04-19",
+"fetched": "2026-10-01",
 "level": "NCF Ranking",
 "name": "Straumemilen",
 "organizer": "Bergen CK",
@@ -2084,6 +2106,7 @@
 },
 "eq:16837": {
 "date": "2015-04-12",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Rådalen Rundt 2015",
 "organizer": "Fana IL Sykkel",
@@ -2140,6 +2163,7 @@
 },
 "eq:16893": {
 "date": "2015-04-26",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Smaalenene Rundt 2015",
 "organizer": "Smaalenene SK",
@@ -2230,6 +2254,7 @@
 },
 "eq:17179": {
 "date": "2015-04-29",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Continentalcup/Krohnegården 2015",
 "organizer": "CK Henie",
@@ -2263,6 +2288,7 @@
 },
 "eq:17276": {
 "date": "2015-04-23",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "PreTour Dalane 2015",
 "organizer": "Dalane SK",
@@ -2271,6 +2297,7 @@
 },
 "eq:17277": {
 "date": "2015-05-02",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "PreTour Farsund 2015",
 "organizer": "Dalane SK",
@@ -2295,6 +2322,7 @@
 },
 "eq:17281": {
 "date": "2015-04-15",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Klostermilå",
 "organizer": "Rennesøy SK",
@@ -2327,6 +2355,7 @@
 },
 "eq:17325": {
 "date": "2015-04-18",
+"fetched": "2026-10-01",
 "level": "NCF Ranking",
 "name": "Rogaland 3 Etappers",
 "organizer": "Stavanger SK",
@@ -2335,6 +2364,7 @@
 },
 "eq:17326": {
 "date": "2015-04-19",
+"fetched": "2026-10-01",
 "level": "NCF Ranking",
 "name": "Rogaland 3 Etappers",
 "organizer": "Stavanger SK",
@@ -2343,6 +2373,7 @@
 },
 "eq:17327": {
 "date": "2015-04-18",
+"fetched": "2026-10-01",
 "level": "NCF Ranking",
 "name": "Rogaland 3 Etappers",
 "organizer": "Stavanger SK",
@@ -2391,6 +2422,7 @@
 },
 "eq:17558": {
 "date": "2015-04-23",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "TOSKmesterskapet 2015",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -2423,6 +2455,7 @@
 },
 "eq:17671": {
 "date": "2015-04-12",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "FOCC Bånn Gass 2015",
 "organizer": "Fevik og Omegn CC",
@@ -2543,6 +2576,7 @@
 },
 "eq:17873": {
 "date": "2015-05-02",
+"fetched": "2026-10-01",
 "level": "NCF Ranking",
 "name": "Rønvikfjelltempoen",
 "organizer": "Bodø CK",
@@ -2624,6 +2658,7 @@
 },
 "eq:18000": {
 "date": "2015-04-01",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Bømlo Tempo 2015",
 "organizer": "Bømlo SK",
@@ -2784,6 +2819,7 @@
 },
 "eq:18138": {
 "date": "2015-04-07",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Storavatnet Rundt 1 - Treningsritt",
 "organizer": "Stord SK",
@@ -2800,6 +2836,7 @@
 },
 "eq:18146": {
 "date": "2015-04-14",
+"fetched": "2026-10-01",
 "level": "Trimritt",
 "name": "Storavatnet Rundt 2 - Treningsritt",
 "organizer": "Stord SK",
@@ -2808,6 +2845,7 @@
 },
 "eq:18147": {
 "date": "2015-04-28",
+"fetched": "2026-10-01",
 "level": "Trimritt",
 "name": "Storavatnet Rundt 3 - Treningsritt",
 "organizer": "Stord SK",
@@ -2832,6 +2870,7 @@
 },
 "eq:18151": {
 "date": "2015-04-22",
+"fetched": "2026-10-01",
 "level": "Trimritt",
 "name": "Spar Cup 1 - Tempo",
 "organizer": "Stord SK",
@@ -2953,6 +2992,7 @@
 },
 "eq:18218": {
 "date": "2015-04-19",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Black Design 2015 Tempo",
 "organizer": "IL Sverre",
@@ -2961,6 +3001,7 @@
 },
 "eq:18219": {
 "date": "2015-04-19",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Black Design 2015 Fellestart",
 "organizer": "IL Sverre",
@@ -3116,6 +3157,7 @@
 },
 "eq:18408": {
 "date": "2015-04-21",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Spinn Cup 1 2015 Fellesstart",
 "organizer": "Sandefjord SK",
@@ -3165,6 +3207,7 @@
 },
 "eq:18588": {
 "date": "2015-04-18",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "Rogaland 3 Etappers Sammenlagt",
 "organizer": "Stavanger SK",
@@ -3237,6 +3280,7 @@
 },
 "eq:18637": {
 "date": "2015-04-28",
+"fetched": "2026-10-01",
 "level": null,
 "name": "UCK Treningskarusell",
 "organizer": "UCK",
@@ -5662,6 +5706,7 @@
 },
 "eq:22351": {
 "date": "2015-01-01",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Grenserittet før 2016",
 "organizer": "Halden SK",
@@ -6154,6 +6199,7 @@
 },
 "eq:23580": {
 "date": "2014-08-01",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Grenserittet 2014",
 "organizer": "Halden SK",
@@ -9725,6 +9771,7 @@
 },
 "eq:3235": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Finnskogkureren 2014",
 "organizer": "Lunderseter IL",
@@ -10617,6 +10664,7 @@
 },
 "eq:3347": {
 "date": "2014-06-08",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Mjøsa rundt 2014",
 "organizer": "Feiring IL",
@@ -10698,6 +10746,7 @@
 },
 "eq:3366": {
 "date": "2014-06-22",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Østmarkrittet 2014",
 "organizer": "Lørenskog CK",
@@ -10748,6 +10797,7 @@
 },
 "eq:3385": {
 "date": "2014-07-04",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Jotunheimen Rundt 2014",
 "organizer": "Sogn CK",
@@ -11095,6 +11145,7 @@
 },
 "eq:3446": {
 "date": "2014-07-19",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Valdresrittet 2014",
 "organizer": "Vestre Slidre IL",
@@ -14129,6 +14180,7 @@
 },
 "eq:4011": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "HelteRittet 2014",
 "organizer": "Idrettslaget Dyre Vaa - Ski",
@@ -14137,6 +14189,7 @@
 },
 "eq:4023": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Sykkelenern 2014",
 "organizer": "Oppdal IL",
@@ -14177,6 +14230,7 @@
 },
 "eq:4041": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Midnattsolrittet 2014",
 "organizer": "Bodø CK",
@@ -14337,6 +14391,7 @@
 },
 "eq:4104": {
 "date": "2014-06-28",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Hallingrittet 2014",
 "organizer": "Gol IL",
@@ -16003,6 +16058,7 @@
 },
 "eq:4375": {
 "date": "2014-09-13",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Skarverittet 2014",
 "organizer": "Geilo IL",
@@ -16179,6 +16235,7 @@
 },
 "eq:4403": {
 "date": "2014-06-21",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Hortensmarka Rundt 2014",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -16836,6 +16893,7 @@
 },
 "eq:4526": {
 "date": "2014-08-23",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Nybakkrunden 2014",
 "organizer": "Aurskog - Høland Friidrettslag",
@@ -16964,6 +17022,7 @@
 },
 "eq:4545": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Åre Bike Challenge 09.08.2014",
 "organizer": " ",
@@ -18205,6 +18264,7 @@
 },
 "eq:4823": {
 "date": "2014-07-26",
+"fetched": "2026-10-01",
 "level": "Regionmesterskap",
 "name": "Skagerrakrittet 2014",
 "organizer": "Arendal CC",
@@ -18797,6 +18857,7 @@
 },
 "eq:4895": {
 "date": "2014-08-23",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bergmannsrittet 2014",
 "organizer": "Bergmannsarrangement AS",
@@ -19725,6 +19786,7 @@
 },
 "eq:4998": {
 "date": "2014-06-14",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Jenterittet 2014",
 "organizer": "Røros IL Sykkel",
@@ -19829,6 +19891,7 @@
 },
 "eq:5006": {
 "date": "2014-08-23",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Hellersdalen Classic",
 "organizer": "Søgne Cykleklubb",
@@ -20013,6 +20076,7 @@
 },
 "eq:5069": {
 "date": "2014-08-24",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Nesodden på langs",
 "organizer": "Nesodden SK",
@@ -20029,6 +20093,7 @@
 },
 "eq:5082": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Bergsdalen Opp 2014",
 "organizer": "Voss SK",
@@ -20287,6 +20352,7 @@
 },
 "eq:5167": {
 "date": "2014-09-07",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Dokka Rundt 2014",
 "organizer": "Tønsberg CK",
@@ -20311,6 +20377,7 @@
 },
 "eq:5193": {
 "date": "2014-09-06",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Skaidi Xtreme",
 "organizer": "Hammerfest SK",
@@ -20335,6 +20402,7 @@
 },
 "eq:5201": {
 "date": "2014-06-28",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Okserittet 2014",
 "organizer": " ",
@@ -20506,6 +20574,7 @@
 },
 "eq:5272": {
 "date": "2014-08-16",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Sandefjordrittet",
 "organizer": "Sandefjord SK",
@@ -20514,6 +20583,7 @@
 },
 "eq:5276": {
 "date": "2014-06-14",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Nordfjordrittet 2014",
 "organizer": "Sandane SK",
@@ -20538,6 +20608,7 @@
 },
 "eq:5305": {
 "date": "2014-06-09",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Sandefjord Tour 2014 Turritt/Master",
 "organizer": "Sandefjord SK",
@@ -20587,6 +20658,7 @@
 },
 "eq:5325": {
 "date": "2014-07-05",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "Bukkerittet 2014",
 "organizer": "Brumunddal SK",
@@ -20795,6 +20867,7 @@
 },
 "eq:5368": {
 "date": "2014-06-14",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Krepserittet 2014",
 "organizer": "S. Høland Idretts og Ungdomslag",
@@ -21593,6 +21666,7 @@
 },
 "eq:5447": {
 "date": "2014-06-05",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Spar Cup - Tempo",
 "organizer": "Stord SK",
@@ -21601,6 +21675,7 @@
 },
 "eq:5448": {
 "date": "2014-06-19",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Spar Cup - Tempo",
 "organizer": "Stord SK",
@@ -21649,6 +21724,7 @@
 },
 "eq:5450": {
 "date": "2014-08-27",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Spar Cup - Tempo",
 "organizer": "Stord SK",
@@ -21673,6 +21749,7 @@
 },
 "eq:5451": {
 "date": "2014-09-10",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Spar Cup - Tempo",
 "organizer": "Stord SK",
@@ -21764,6 +21841,7 @@
 },
 "eq:5467": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "Neptunrittet",
 "organizer": "Svelvik SK",
@@ -21814,6 +21892,7 @@
 },
 "eq:5487": {
 "date": "2014-08-02",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Nordisk Masters Tempo",
 "organizer": "Sandefjord SK",
@@ -21822,6 +21901,7 @@
 },
 "eq:5488": {
 "date": "2014-08-03",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Nordisk Masters Fellesstart",
 "organizer": "Sandefjord SK",
@@ -22434,6 +22514,7 @@
 },
 "eq:5601": {
 "date": "2014-06-20",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "TransØsterdalen 2014",
 "organizer": "Savalen SK",
@@ -22665,6 +22746,7 @@
 },
 "eq:5665": {
 "date": "2014-06-29",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Hedmarksvidda Rundt 2014",
 "organizer": "Nordbygda/Løten SK Sykkel",
@@ -22713,6 +22795,7 @@
 },
 "eq:5677": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Telemark Tours 2014",
 "organizer": "Grenland SK",
@@ -22721,6 +22804,7 @@
 },
 "eq:5679": {
 "date": "2014-07-26",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Femundrittet 2014",
 "organizer": "Engerdal SK",
@@ -22945,6 +23029,7 @@
 },
 "eq:5705": {
 "date": "2014-06-18",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Continentalcup/Ulven MTB",
 "organizer": "CK Henie",
@@ -22977,6 +23062,7 @@
 },
 "eq:5715": {
 "date": "2014-08-13",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Continentalcup/Åsane MTB",
 "organizer": "CK Henie",
@@ -22993,6 +23079,7 @@
 },
 "eq:5716": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Continentalcup/Vossevangen MTB",
 "organizer": "CK Henie",
@@ -23813,6 +23900,7 @@
 },
 "eq:5804": {
 "date": "2014-06-28",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Stenhoggerrittet",
 "organizer": "Idd Sportsklubb",
@@ -23936,6 +24024,7 @@
 },
 "eq:5818": {
 "date": "2014-09-03",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bernt Spesial",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -24224,6 +24313,7 @@
 },
 "eq:5918": {
 "date": "2014-08-16",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Pilegrimsrittet 2014",
 "organizer": "Nea CK",
@@ -24583,6 +24673,7 @@
 },
 "eq:5957": {
 "date": "2014-06-11",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Vennesla-geita",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -24591,6 +24682,7 @@
 },
 "eq:5958": {
 "date": "2014-06-18",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Ålefjærrunden",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -24599,6 +24691,7 @@
 },
 "eq:5959": {
 "date": "2014-08-13",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Skarpengland spesial",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -24607,6 +24700,7 @@
 },
 "eq:5960": {
 "date": "2014-08-20",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Skjerkedalen spesial",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -24615,6 +24709,7 @@
 },
 "eq:5961": {
 "date": "2014-08-27",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Iveland melkesyre",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -24623,6 +24718,7 @@
 },
 "eq:5962": {
 "date": "2014-09-10",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Dønnestad rundt",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -24639,6 +24735,7 @@
 },
 "eq:5963": {
 "date": "2014-09-17",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Gamle E-18",
 "organizer": "Vest-Agder Bedriftsidrettskrets",
@@ -25028,6 +25125,7 @@
 },
 "eq:6052": {
 "date": "2014-06-10",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bedriftstråkket 7",
 "organizer": "Vestfold Bedriftsidrettskrets",
@@ -25044,6 +25142,7 @@
 },
 "eq:6054": {
 "date": "2014-08-12",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Bedriftstråkket 9",
 "organizer": "Vestfold Bedriftsidrettskrets",
@@ -25060,6 +25159,7 @@
 },
 "eq:6055": {
 "date": "2014-08-19",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bedriftstråkket 10",
 "organizer": "Vestfold Bedriftsidrettskrets",
@@ -25068,6 +25168,7 @@
 },
 "eq:6056": {
 "date": "2014-08-26",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bedriftstråkket 11",
 "organizer": "Vestfold Bedriftsidrettskrets",
@@ -25076,6 +25177,7 @@
 },
 "eq:6057": {
 "date": "2014-09-02",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bedriftstråkket 12",
 "organizer": "Vestfold Bedriftsidrettskrets",
@@ -25084,6 +25186,7 @@
 },
 "eq:6058": {
 "date": "2014-09-09",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bedriftstråkket 13",
 "organizer": "Vestfold Bedriftsidrettskrets",
@@ -25292,6 +25395,7 @@
 },
 "eq:6082": {
 "date": "2014-09-13",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Stomperudrittet 2014",
 "organizer": "Sørum IL",
@@ -25895,6 +25999,7 @@
 },
 "eq:6166": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Tempo gigante",
 "organizer": "Torshov SK",
@@ -25903,6 +26008,7 @@
 },
 "eq:6169": {
 "date": "2014-06-14",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Ungdomsbirken Landevei",
 "organizer": "Lillehammer CK",
@@ -25928,6 +26034,7 @@
 },
 "eq:6170": {
 "date": "2014-06-15",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Ilsetra Opp",
 "organizer": "Lillehammer CK",
@@ -25968,6 +26075,7 @@
 },
 "eq:6174": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": null,
 "name": "UM Tempo",
 "organizer": "Sandnes SK",
@@ -25976,6 +26084,7 @@
 },
 "eq:6175": {
 "date": "2014-08-10",
+"fetched": "2026-10-01",
 "level": null,
 "name": "UM fellesstart",
 "organizer": "Sandnes SK",
@@ -26000,6 +26109,7 @@
 },
 "eq:6176": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "NCF Ranking",
 "name": "Fanaseter opp",
 "organizer": "NCF Region Vest",
@@ -26016,6 +26126,7 @@
 },
 "eq:6177": {
 "date": "2014-08-10",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NorgesCup Bergen",
 "organizer": "NCF Region Vest",
@@ -26024,6 +26135,7 @@
 },
 "eq:6178": {
 "date": "2014-08-14",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Kalas Rekord Mila",
 "organizer": "CK Nittedal",
@@ -26032,6 +26144,7 @@
 },
 "eq:6179": {
 "date": "2014-08-23",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Ringerike Petit Prix Tempo",
 "organizer": "Ringerike SK",
@@ -26040,6 +26153,7 @@
 },
 "eq:6180": {
 "date": "2014-08-23",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Ringerike Petit Prix Gateritt",
 "organizer": "Ringerike SK",
@@ -26048,6 +26162,7 @@
 },
 "eq:6181": {
 "date": "2014-08-24",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Ringerike Petit Prix Fellesstart",
 "organizer": "Ringerike SK",
@@ -26104,6 +26219,7 @@
 },
 "eq:6183": {
 "date": "2014-08-30",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Øygarden sykkelfestival",
 "organizer": "Sotra CK",
@@ -26160,6 +26276,7 @@
 },
 "eq:6193": {
 "date": "2014-09-21",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Ronde Van Vestkant",
 "organizer": "Bærum OCK",
@@ -26497,6 +26614,7 @@
 },
 "eq:6245": {
 "date": "2014-07-19",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "NM/UM Terreng Rundbane",
 "organizer": "Gauldal SK",
@@ -26513,6 +26631,7 @@
 },
 "eq:6247": {
 "date": "2014-07-26",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "NM Maraton",
 "organizer": "Kvam IL Sykkel",
@@ -26521,6 +26640,7 @@
 },
 "eq:6252": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "Frøy- Rundbane (NC)",
 "organizer": "IF Frøy",
@@ -26529,6 +26649,7 @@
 },
 "eq:6298": {
 "date": "2014-06-29",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Sepura XC Skjebergrittet",
 "organizer": "Skjeberg CK",
@@ -26894,6 +27015,7 @@
 },
 "eq:6342": {
 "date": "2014-06-21",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Hole 12 timers",
 "organizer": "Krokskogen Cykleklubb",
@@ -27030,6 +27152,7 @@
 },
 "eq:6391": {
 "date": "2014-08-30",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "El Classico Ciclista de Pais Perez",
 "organizer": "Ishavsbyen Sykkel",
@@ -27063,6 +27186,7 @@
 },
 "eq:6401": {
 "date": "2014-06-21",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Knapper-rittet 2014",
 "organizer": "Odal SK",
@@ -27071,6 +27195,7 @@
 },
 "eq:6402": {
 "date": "2014-08-16",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC 7 Rundbane XCO (UCI, cat 1).",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -27112,6 +27237,7 @@
 },
 "eq:6405": {
 "date": "2014-08-17",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC 8 Rundbane XCO (UCI, cat 2).",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -27186,6 +27312,7 @@
 },
 "eq:6431": {
 "date": "2014-07-05",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "NM Master Tempo",
 "organizer": "IF Frøy",
@@ -27210,6 +27337,7 @@
 },
 "eq:6434": {
 "date": "2014-07-06",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "NM Master Fellesstart",
 "organizer": "IF Frøy",
@@ -27275,6 +27403,7 @@
 },
 "eq:6436": {
 "date": "2014-06-16",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Terrengkarusell 2 16.06.2014",
 "organizer": "Nesodden SK",
@@ -27283,6 +27412,7 @@
 },
 "eq:6437": {
 "date": "2014-08-11",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Terrengkarusell 3 11.08.2014",
 "organizer": "Nesodden SK",
@@ -27291,6 +27421,7 @@
 },
 "eq:6438": {
 "date": "2014-09-08",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Terrengkarusell 4 klubbmesterskap",
 "organizer": "Nesodden SK",
@@ -27323,6 +27454,7 @@
 },
 "eq:6445": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "Norgesmesterskap",
 "name": "Marine Harvest-rittet 2014",
 "organizer": "Hjelmeland IL",
@@ -27528,6 +27660,7 @@
 },
 "eq:6501": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Lavkarittet 2014",
 "organizer": "Skibotn IL",
@@ -27576,6 +27709,7 @@
 },
 "eq:6504": {
 "date": "2014-07-19",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Moratråkket 2014",
 "organizer": "Stor-Elvdal SK",
@@ -27717,6 +27851,7 @@
 },
 "eq:6542": {
 "date": "2014-06-14",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Tour de Tomtvatnet",
 "organizer": "Tour de Tomtvatnet - IL Sverre",
@@ -27725,6 +27860,7 @@
 },
 "eq:6544": {
 "date": "2014-07-05",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Smøla Rundt",
 "organizer": "Smøla SK",
@@ -27843,6 +27979,7 @@
 },
 "eq:6559": {
 "date": "2014-08-16",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Vassfarrittet",
 "organizer": "Andebarkji TSK, CK Valdresekspressen, Flå Røde Kors, Flå kommune og Bjørneparken",
@@ -27935,6 +28072,7 @@
 },
 "eq:6603": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Skalldyrrittet 2014",
 "organizer": "Mandal CK",
@@ -28210,6 +28348,7 @@
 },
 "eq:6647": {
 "date": "2014-08-16",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Arctic Race of Norway Challenge",
 "organizer": "ASO",
@@ -28235,6 +28374,7 @@
 },
 "eq:6652": {
 "date": "2014-07-19",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Hammerfestrittet",
 "organizer": "Hammerfest SK",
@@ -28334,6 +28474,7 @@
 },
 "eq:6667": {
 "date": "2014-06-05",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Giant Cup-6 2014",
 "organizer": "Horten og Omegn Cykleclubb",
@@ -28342,6 +28483,7 @@
 },
 "eq:6670": {
 "date": "2014-06-09",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Atlanterhavsrittet 2014",
 "organizer": "Eide IL Sykkel",
@@ -28448,6 +28590,7 @@
 },
 "eq:6691": {
 "date": "2014-08-20",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Bømlomeisterskapet - Tempo",
 "organizer": "Bømlo SK",
@@ -28472,6 +28615,7 @@
 },
 "eq:6706": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Norefjellrittet 2014",
 "organizer": "Norefjell CK",
@@ -28627,6 +28771,7 @@
 },
 "eq:6726": {
 "date": "2014-07-06",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Traktor Bike Park Enduro 2014",
 "organizer": "HCK",
@@ -28773,6 +28918,7 @@
 },
 "eq:6765": {
 "date": "2014-06-28",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Reistadrittet - Bardu 2014",
 "organizer": "Bardu IL Sykkel",
@@ -29106,6 +29252,7 @@
 },
 "eq:6808": {
 "date": "2014-08-16",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Steinsvikrittet 2014",
 "organizer": "Falkeid IL",
@@ -29162,6 +29309,7 @@
 },
 "eq:6812": {
 "date": "2014-07-26",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Sjusjørittet 2014",
 "organizer": "Brøttum IL",
@@ -29195,6 +29343,7 @@
 },
 "eq:6815": {
 "date": "2014-09-07",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Trondheimsrittet",
 "organizer": "Stiftstaden Sykkelklubb og Trondhjems Skiklub",
@@ -29551,6 +29700,7 @@
 },
 "eq:6862": {
 "date": "2014-06-17",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Spinn Cup 6 - 2014 Tempo TCK",
 "organizer": "Sandefjord SK",
@@ -29599,6 +29749,7 @@
 },
 "eq:6870": {
 "date": "2014-06-22",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Skiptvetrittet",
 "organizer": "Skiptvet IL Ski og Sykkelgruppe",
@@ -29615,6 +29766,7 @@
 },
 "eq:6887": {
 "date": "2014-08-12",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cupen Hemsedal",
 "organizer": "Andebarkji TSK",
@@ -29623,6 +29775,7 @@
 },
 "eq:6888": {
 "date": "2014-06-26",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cupen Torpomoen",
 "organizer": "Andebarkji TSK",
@@ -29639,6 +29792,7 @@
 },
 "eq:6889": {
 "date": "2014-08-07",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cupen Torpo",
 "organizer": "Andebarkji TSK",
@@ -29687,6 +29841,7 @@
 },
 "eq:6904": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Gauldal 2-dagers Ånøymila",
 "organizer": "Gauldal Sykleklubb",
@@ -29703,6 +29858,7 @@
 },
 "eq:6906": {
 "date": "2014-06-07",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Gauldal 2- Bakketempo",
 "organizer": "Gauldal Sykleklubb",
@@ -29711,6 +29867,7 @@
 },
 "eq:6908": {
 "date": "2014-06-08",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Gauldal 2-dagers Fellesstart",
 "organizer": "Gauldal Sykleklubb",
@@ -29719,6 +29876,7 @@
 },
 "eq:6909": {
 "date": "2014-06-08",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Gauldal 2-dagers Sammenlagt",
 "organizer": "Gauldal Sykleklubb",
@@ -29735,6 +29893,7 @@
 },
 "eq:6911": {
 "date": "2014-06-11",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Odal SK Karusell 11. juni (Damlitj)",
 "organizer": "Slåstad IL",
@@ -29759,6 +29918,7 @@
 },
 "eq:6922": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Sentrumsrittet i Tvedestrand",
 "organizer": "Tvedestrand & Omegn SK",
@@ -29767,6 +29927,7 @@
 },
 "eq:6927": {
 "date": "2014-06-11",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Ulven Tempo",
 "organizer": "CK Henie",
@@ -29799,6 +29960,7 @@
 },
 "eq:6932": {
 "date": "2014-08-07",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Giant Cup-7 2014",
 "organizer": "Horten og Omegn Cykleclubb",
@@ -29831,6 +29993,7 @@
 },
 "eq:6954": {
 "date": "2014-06-17",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Stavåsen rundt",
 "organizer": "Jømna/Heradsbygd",
@@ -29839,6 +30002,7 @@
 },
 "eq:6956": {
 "date": "2014-06-17",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Minneåsen challenge 2014 ritt 3",
 "organizer": "Feiring IL",
@@ -29847,6 +30011,7 @@
 },
 "eq:6957": {
 "date": "2014-06-19",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Høsbjør opp",
 "organizer": "Brumunddal SK",
@@ -29863,6 +30028,7 @@
 },
 "eq:6960": {
 "date": "2014-06-15",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Jubileumsrittet NC",
 "organizer": "IK Hero",
@@ -29871,6 +30037,7 @@
 },
 "eq:6962": {
 "date": "2014-06-14",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Jubileums tempo",
 "organizer": "IK Hero",
@@ -29943,6 +30110,7 @@
 },
 "eq:6975": {
 "date": "2014-06-19",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Bakkeritt - Wienlinna",
 "organizer": "Hadeland CK",
@@ -29951,6 +30119,7 @@
 },
 "eq:6983": {
 "date": "2014-08-24",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Elgtråkket",
 "organizer": "Jømna/Heradsbygd",
@@ -29983,6 +30152,7 @@
 },
 "eq:6987": {
 "date": "2014-06-24",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Fellesstart",
 "organizer": "Jømna/Heradsbygd",
@@ -30047,6 +30217,7 @@
 },
 "eq:6997": {
 "date": "2014-06-21",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "TransØsterdalen 2014 Etappe 2",
 "organizer": "Savalen SK",
@@ -30055,6 +30226,7 @@
 },
 "eq:6998": {
 "date": "2014-06-22",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "TransØsterdalen 2014 Etappe 3",
 "organizer": "Savalen SK",
@@ -30072,6 +30244,7 @@
 },
 "eq:7010": {
 "date": "2014-07-01",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Minneåsen challenge 2014 ritt 4",
 "organizer": "Feiring IL",
@@ -30080,6 +30253,7 @@
 },
 "eq:7013": {
 "date": "2014-06-22",
+"fetched": "2026-10-01",
 "level": null,
 "name": "NM Fellesstart U23",
 "organizer": "Eidsvold SK",
@@ -30112,6 +30286,7 @@
 },
 "eq:7027": {
 "date": "2014-07-25",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Bruddet Opp",
 "organizer": "Eide IL Sykkel",
@@ -30120,6 +30295,7 @@
 },
 "eq:7028": {
 "date": "2014-07-26",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "LOI Rittet",
 "organizer": "Eide IL Sykkel",
@@ -30128,6 +30304,7 @@
 },
 "eq:7029": {
 "date": "2014-07-27",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Kystrittet",
 "organizer": "Eide IL Sykkel",
@@ -30168,6 +30345,7 @@
 },
 "eq:7040": {
 "date": "2014-06-22",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Harstad Gateritt",
 "organizer": "Harstad CK",
@@ -30248,6 +30426,7 @@
 },
 "eq:7052": {
 "date": "2014-08-09",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Le Tour de Thoreid 2014",
 "organizer": "Le Tour de Thoreid",
@@ -30256,6 +30435,7 @@
 },
 "eq:7055": {
 "date": "2014-06-26",
+"fetched": "2026-10-01",
 "level": null,
 "name": "NM Temporitt",
 "organizer": "Eidsvoll SK",
@@ -30272,6 +30452,7 @@
 },
 "eq:7065": {
 "date": "2014-06-29",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Vansbro Bianchi 120",
 "organizer": "Vansbro",
@@ -30280,6 +30461,7 @@
 },
 "eq:7071": {
 "date": "2014-06-27",
+"fetched": "2026-10-01",
 "level": null,
 "name": "NM gateritt",
 "organizer": "Eidsvoll SK",
@@ -30288,6 +30470,7 @@
 },
 "eq:7072": {
 "date": "2014-06-29",
+"fetched": "2026-10-01",
 "level": null,
 "name": "NM Fellesstart",
 "organizer": "Eidsvoll SK",
@@ -30328,6 +30511,7 @@
 },
 "eq:7097": {
 "date": "2014-07-04",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "WBR 2014",
 "organizer": "WorldBaseRace",
@@ -30376,6 +30560,7 @@
 },
 "eq:7115": {
 "date": "2014-09-14",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Scana Rittet 2014",
 "organizer": "Ryfylke Sykkelklubb",
@@ -30408,6 +30593,7 @@
 },
 "eq:7123": {
 "date": "2014-08-17",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Stord Rundt 2014",
 "organizer": "Stord SK",
@@ -30456,6 +30642,7 @@
 },
 "eq:7129": {
 "date": "2014-07-09",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Tour de Hallingdal 2014",
 "organizer": "Gol IL",
@@ -30488,6 +30675,7 @@
 },
 "eq:7151": {
 "date": "2014-08-05",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Minneåsen challenge 2014 ritt 5",
 "organizer": "Feiring IL",
@@ -30512,6 +30700,7 @@
 },
 "eq:7153": {
 "date": "2014-09-27",
+"fetched": "2026-10-01",
 "level": "Regionmesterskap",
 "name": "Regionsmesterskap Vest Tempo",
 "organizer": "Nordhordland SK",
@@ -30664,6 +30853,7 @@
 },
 "eq:7172": {
 "date": "2014-08-03",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "NesbyEnduro 80twenty",
 "organizer": "Nesbyen Freeride",
@@ -30680,6 +30870,7 @@
 },
 "eq:7174": {
 "date": "2014-07-19",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Flyktningerittet 2014",
 "organizer": "Flyktningerennet AS-Nordli IL",
@@ -30696,6 +30887,7 @@
 },
 "eq:7183": {
 "date": "2014-08-03",
+"fetched": "2026-10-01",
 "level": "Norgesmesterskap",
 "name": "Åseral Rundt 2014",
 "organizer": "Otra IL Sykkel",
@@ -30704,6 +30896,7 @@
 },
 "eq:7186": {
 "date": "2014-08-24",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "GAURHOVDRITTET 2014",
 "organizer": "Andebarkji TSK",
@@ -30896,6 +31089,7 @@
 },
 "eq:7218": {
 "date": "2014-08-05",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Bergkongen Bakketempo 2014 Klubbritt",
 "organizer": "Sandefjord SK",
@@ -30928,6 +31122,7 @@
 },
 "eq:7219": {
 "date": "2014-08-17",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Fjorden Rundt",
 "organizer": " Vegårshei IL-sykkel",
@@ -30984,6 +31179,7 @@
 },
 "eq:7228": {
 "date": "2014-09-13",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Tysværrittet 2014",
 "organizer": "CK Haugaland",
@@ -31000,6 +31196,7 @@
 },
 "eq:7235": {
 "date": "2014-08-07",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Fellesstart Furustad",
 "organizer": "Sandefjord SK",
@@ -31008,6 +31205,7 @@
 },
 "eq:7236": {
 "date": "2014-08-12",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Tempo Furustad",
 "organizer": "Sandefjord SK",
@@ -31080,6 +31278,7 @@
 },
 "eq:7247": {
 "date": "2014-08-02",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "1572 MTB Challenge",
 "organizer": "EMIT Sweden",
@@ -31272,6 +31471,7 @@
 },
 "eq:7253": {
 "date": "2014-07-26",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Furusjøen rundt rittet 2014",
 "organizer": "Kvam idrettslag",
@@ -31392,6 +31592,7 @@
 },
 "eq:7265": {
 "date": "2014-08-23",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Sogndal Enduro 2014",
 "organizer": "Sogn CK",
@@ -31400,6 +31601,7 @@
 },
 "eq:7266": {
 "date": "2014-08-19",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Wiersholm Open 2014",
 "organizer": "Advokatfirmaet Wiersholm AS",
@@ -31408,6 +31610,7 @@
 },
 "eq:7267": {
 "date": "2014-09-04",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Klostermilene Tempo",
 "organizer": "Rennesøy SK",
@@ -31600,6 +31803,7 @@
 },
 "eq:7288": {
 "date": "2014-08-02",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Midtnorsk Sykkelfestival Bakketempo",
 "organizer": "IL Stjørdals Blink",
@@ -31608,6 +31812,7 @@
 },
 "eq:7290": {
 "date": "2014-08-02",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Midtnorsk Sykkelfestival Gateritt",
 "organizer": "IL Stjørdals Blink",
@@ -31616,6 +31821,7 @@
 },
 "eq:7291": {
 "date": "2014-08-03",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Midtnorsk Sykkelfestival Gateritt",
 "organizer": "IL Stjørdals Blink",
@@ -31752,6 +31958,7 @@
 },
 "eq:7310": {
 "date": "2014-08-12",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "JH Sykkel klubbmesterskap terreng",
 "organizer": "Jømna/Heradsbygd",
@@ -31760,6 +31967,7 @@
 },
 "eq:7315": {
 "date": "2014-09-14",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Høsttråkken 2014",
 "organizer": "Grimstad SK",
@@ -31784,6 +31992,7 @@
 },
 "eq:7319": {
 "date": "2014-08-03",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Midtnorsk Sykkelfestival Sammenlagt",
 "organizer": "IL Stjørdals Blink",
@@ -31841,6 +32050,7 @@
 },
 "eq:7332": {
 "date": "2014-08-21",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Giant Cup-8 2014",
 "organizer": "Horten og Omegn Cykleclubb",
@@ -31857,6 +32067,7 @@
 },
 "eq:7336": {
 "date": "2014-09-13",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Petit Prix Criteriumsritt",
 "organizer": "Grimstad SK",
@@ -31865,6 +32076,7 @@
 },
 "eq:7338": {
 "date": "2014-09-14",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Petit Prix Fellesstart",
 "organizer": "Grimstad SK",
@@ -31953,6 +32165,7 @@
 },
 "eq:7346": {
 "date": "2014-08-19",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Spinn Cup 7 - 2014 Fellesstart",
 "organizer": "Sandefjord SK",
@@ -32065,6 +32278,7 @@
 },
 "eq:7367": {
 "date": "2014-08-19",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Minneåsen challenge 2014 ritt 6",
 "organizer": "Feiring IL",
@@ -32161,6 +32375,7 @@
 },
 "eq:7377": {
 "date": "2014-08-22",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Klubbmesterskap tempo FOCC 2014",
 "organizer": "Fevik og Omegn CC",
@@ -32177,6 +32392,7 @@
 },
 "eq:7399": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Kattnakken Opp 2014",
 "organizer": "Stord SK",
@@ -32201,6 +32417,7 @@
 },
 "eq:7405": {
 "date": "2014-08-20",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Odal SK Karusell 20. aug (Damlitj)",
 "organizer": "Slåstad IL",
@@ -32249,6 +32466,7 @@
 },
 "eq:7418": {
 "date": "2014-09-21",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "DrammEnduro",
 "organizer": "Drammen CK",
@@ -32257,6 +32475,7 @@
 },
 "eq:7421": {
 "date": "2014-08-24",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "GranFondo Kungsbacka",
 "organizer": "EMIT Sweden",
@@ -32265,6 +32484,7 @@
 },
 "eq:7422": {
 "date": "2014-09-07",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Froland Rundt",
 "organizer": "Froland SK",
@@ -32273,6 +32493,7 @@
 },
 "eq:7425": {
 "date": "2014-08-23",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Fellesstart FOCC GP 2014",
 "organizer": "Fevik og Omegn CC",
@@ -32305,6 +32526,7 @@
 },
 "eq:7441": {
 "date": "2014-08-24",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Master World Championchips MTB",
 "organizer": "Lillehammer CK",
@@ -32345,6 +32567,7 @@
 },
 "eq:7452": {
 "date": "2014-08-26",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Spinn Cup 8 - 2014 Tempo HOC",
 "organizer": "Sandefjord SK",
@@ -32409,6 +32632,7 @@
 },
 "eq:7464": {
 "date": "2014-08-26",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Master World Championchips MTB",
 "organizer": "Lillehammer CK",
@@ -32433,6 +32657,7 @@
 },
 "eq:7474": {
 "date": "2014-09-07",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "NTE Grand Prix 2014",
 "organizer": "IL Sverre",
@@ -32449,6 +32674,7 @@
 },
 "eq:7476": {
 "date": "2014-08-27",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Odal SK Kar. 27 aug (Hernesmoen)",
 "organizer": "Slåstad IL",
@@ -32497,6 +32723,7 @@
 },
 "eq:7484": {
 "date": "2014-09-28",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "Dølisjøen Rundt 2014",
 "organizer": "Slåstad IL",
@@ -32553,6 +32780,7 @@
 },
 "eq:7494": {
 "date": "2014-09-02",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Minneåsen challenge 2014 ritt 7",
 "organizer": "Feiring IL",
@@ -32561,6 +32789,7 @@
 },
 "eq:7500": {
 "date": "2014-08-31",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Pedalpesern",
 "organizer": "Eina Sportsklubb",
@@ -32641,6 +32870,7 @@
 },
 "eq:7507": {
 "date": "2014-08-22",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Ringerike Petit Prix Bakketempo",
 "organizer": "Ringerike SK",
@@ -32649,6 +32879,7 @@
 },
 "eq:7508": {
 "date": "2014-08-25",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Ringerike Petit Prix Sammenlagt",
 "organizer": "Ringerike SK",
@@ -32681,6 +32912,7 @@
 },
 "eq:7512": {
 "date": "2014-09-09",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Spinn Cup 9 - 2014 Fellesstart SSK",
 "organizer": "Sandefjord SK",
@@ -32705,6 +32937,7 @@
 },
 "eq:7516": {
 "date": "2014-09-02",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Bontveit tempo",
 "organizer": "Bergen Cykleklubb",
@@ -32729,6 +32962,7 @@
 },
 "eq:7519": {
 "date": "2014-09-03",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Odal SK Karusell 3. sep (SIAP)",
 "organizer": "Slåstad IL",
@@ -32745,6 +32979,7 @@
 },
 "eq:7527": {
 "date": "2014-09-03",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Intersport Rundbanecup ritt 4",
 "organizer": "Drevja",
@@ -32857,6 +33092,7 @@
 },
 "eq:7550": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap prolog1",
 "organizer": "Feiring IL",
@@ -32889,6 +33125,7 @@
 },
 "eq:7561": {
 "date": "2014-09-28",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "Giant Cup-10 2014",
 "organizer": "Svelvik Sykleklubb",
@@ -33137,6 +33374,7 @@
 },
 "eq:7662": {
 "date": "2014-09-13",
+"fetched": "2026-10-01",
 "level": null,
 "name": "NNM Tempo",
 "organizer": "Bodø CK",
@@ -33209,6 +33447,7 @@
 },
 "eq:7665": {
 "date": "2014-09-06",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Fana Tempo",
 "organizer": "Fana IL Sykkel",
@@ -33225,6 +33464,7 @@
 },
 "eq:7667": {
 "date": "2014-09-06",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Lønningrittet",
 "organizer": "Fana IL Sykkel",
@@ -33233,6 +33473,7 @@
 },
 "eq:7668": {
 "date": "2014-09-07",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Ytrebygda Rundt",
 "organizer": "Fana IL Sykkel",
@@ -33241,6 +33482,7 @@
 },
 "eq:7670": {
 "date": "2014-09-07",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Roserittet 2014",
 "organizer": "Horten",
@@ -33257,6 +33499,7 @@
 },
 "eq:7672": {
 "date": "2014-09-10",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Odal SK Karusell 10. sep (SIAP)",
 "organizer": "Slåstad IL",
@@ -33265,6 +33508,7 @@
 },
 "eq:7676": {
 "date": "2014-09-08",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Fana 2 Dagers Sammenlagt",
 "organizer": "Fana IL Sykkel",
@@ -33281,6 +33525,7 @@
 },
 "eq:7685": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Terreng SSK 2014",
 "organizer": "Sandefjord SK",
@@ -33289,6 +33534,7 @@
 },
 "eq:7687": {
 "date": "2014-09-14",
+"fetched": "2026-10-01",
 "level": null,
 "name": "NC 5 Sandnes",
 "organizer": "Sandnes Sykleklubb",
@@ -33409,6 +33655,7 @@
 },
 "eq:7699": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap prolog2",
 "organizer": "Feiring IL",
@@ -33434,6 +33681,7 @@
 },
 "eq:7701": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap fellestart",
 "organizer": "Feiring IL",
@@ -33514,6 +33762,7 @@
 },
 "eq:7706": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Odal SK klubbmesterskap 2014",
 "organizer": "Odal SK",
@@ -33522,6 +33771,7 @@
 },
 "eq:7708": {
 "date": "2014-09-16",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Kleivå OPP",
 "organizer": "Rennesøy SK",
@@ -33546,6 +33796,7 @@
 },
 "eq:7709": {
 "date": "2014-09-18",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Spinn Cup 10 - 2014 Bakketempo SSK",
 "organizer": "Sandefjord SK",
@@ -33618,6 +33869,7 @@
 },
 "eq:7737": {
 "date": "2014-09-27",
+"fetched": "2026-10-01",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Landevei SCK 2014",
 "organizer": "Søgne Cykleklubb",
@@ -33795,6 +34047,7 @@
 },
 "eq:7758": {
 "date": "2014-09-13",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Jæren sykkelfestival Rankingri",
 "organizer": "Sandnes Sykleklubb",
@@ -33851,6 +34104,7 @@
 },
 "eq:7767": {
 "date": "2014-08-26",
+"fetched": "2026-10-01",
 "level": "Turritt",
 "name": "TOSKaskabet 2014",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -33947,6 +34201,7 @@
 },
 "eq:7782": {
 "date": "2014-09-20",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Ronde van Vestkant",
 "organizer": "Bærum OCK",
@@ -33987,6 +34242,7 @@
 },
 "eq:7787": {
 "date": "2014-09-21",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Ronde van Vestkant Totalt",
 "organizer": "Bærum OCK",
@@ -34019,6 +34275,7 @@
 },
 "eq:7793": {
 "date": "2014-11-02",
+"fetched": "2026-10-01",
 "level": "Norgesmesterskap",
 "name": "NM Syklecross",
 "organizer": "Tønsberg CK",
@@ -34027,6 +34284,7 @@
 },
 "eq:7794": {
 "date": "2014-08-29",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Øygarden Sykkelfestival",
 "organizer": "Ck Sotra",
@@ -34051,6 +34309,7 @@
 },
 "eq:7795": {
 "date": "2014-08-30",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Øygarden Sykkelfestival",
 "organizer": "Ck Sotra",
@@ -34059,6 +34318,7 @@
 },
 "eq:7798": {
 "date": "2014-08-30",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Øygarden Sykkelfestival",
 "organizer": "Ck Sotra",
@@ -34067,6 +34327,7 @@
 },
 "eq:7803": {
 "date": "2014-08-31",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Øygarden Sykkelfestival Totalt",
 "organizer": "Ck Sotra",
@@ -34083,6 +34344,7 @@
 },
 "eq:7804": {
 "date": "2014-09-14",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Feiringrittet 2014",
 "organizer": "Feiring IL",
@@ -34091,6 +34353,7 @@
 },
 "eq:7805": {
 "date": "2014-09-05",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Roserittet 2014",
 "organizer": "Horten og omegn SK",
@@ -34107,6 +34370,7 @@
 },
 "eq:7806": {
 "date": "2014-09-06",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Roserittet 2014",
 "organizer": "Horten og omegn SK",
@@ -34115,6 +34379,7 @@
 },
 "eq:7807": {
 "date": "2014-09-06",
+"fetched": "2026-10-01",
 "level": null,
 "name": "Roserittet 2014",
 "organizer": "Horten og omegn SK",
@@ -34515,6 +34780,7 @@
 },
 "eq:7868": {
 "date": "2014-10-01",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "HeatPlan 1",
 "organizer": "EQ Timing AS",
@@ -34579,6 +34845,7 @@
 },
 "eq:7901": {
 "date": "2015-02-28",
+"fetched": "2026-10-01",
 "level": "Regionritt",
 "name": "Skaidi Fatbike 2015",
 "organizer": "Hammerfest SK",
@@ -34603,6 +34870,7 @@
 },
 "eq:7909": {
 "date": "2014-10-06",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "BMX-9",
 "organizer": "EQ Timing AS",
@@ -34643,6 +34911,7 @@
 },
 "eq:7960": {
 "date": "2014-10-11",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC1 Syklecross",
 "organizer": "Norwegian Cycling Federation",
@@ -34675,6 +34944,7 @@
 },
 "eq:7962": {
 "date": "2014-10-12",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC2 Syklecross",
 "organizer": "Norwegian Cycling Federation",
@@ -34715,6 +34985,7 @@
 },
 "eq:7989": {
 "date": "2014-10-18",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC3 Syklecross",
 "organizer": "Norwegian Cycling Federation",
@@ -34723,6 +34994,7 @@
 },
 "eq:7990": {
 "date": "2014-10-19",
+"fetched": "2026-10-01",
 "level": "NorgesCup",
 "name": "NC4 Syklecross",
 "organizer": "Norwegian Cycling Federation",
@@ -34731,6 +35003,7 @@
 },
 "eq:7991": {
 "date": "2014-10-18",
+"fetched": "2026-10-01",
 "level": "Ingen",
 "name": "MTB Adventure",
 "organizer": "SNO, Södertälje-Nykvarn Orientering",
@@ -35545,6 +35818,14 @@
 "organizer": "Dalane SK",
 "place": "Egersund",
 "sport": "Landevei"
+},
+"eq:82192": {
+"date": "2026-09-30",
+"level": "Turritt",
+"name": "Klubbmesterskap Terreng Dalane SK 2026",
+"organizer": "Dalane SK",
+"place": "Horve",
+"sport": "Terreng"
 },
 "eq:82193": {
 "date": "2026-08-22",
@@ -37484,7 +37765,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 237,
+"eq:2026": 238,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
