@@ -4529,6 +4529,7 @@
 },
 "eq:19997": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Brotorvetrittet 2016",
 "organizer": "Paragrafrytterne Sykkelklubb Bamble",
@@ -4582,6 +4583,7 @@
 },
 "eq:20128": {
 "date": "2016-09-11",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Høsttråkken 2016",
 "organizer": "Grimstad SK",
@@ -4635,6 +4637,7 @@
 },
 "eq:20198": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Dokka Rundt 2016",
 "organizer": "Tønsberg CK",
@@ -4832,6 +4835,7 @@
 },
 "eq:20570": {
 "date": "2016-09-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Stomperudrittet 2016",
 "organizer": "Sørum IL",
@@ -4876,6 +4880,7 @@
 },
 "eq:20686": {
 "date": "2016-08-07",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Stjørdalsdagene GP  - NCF Ranking",
 "organizer": "IL Stjørdals-Blink",
@@ -4884,6 +4889,7 @@
 },
 "eq:20721": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Follorittet NC Ranking 2016",
 "organizer": "Follo SK",
@@ -4901,6 +4907,7 @@
 },
 "eq:20733": {
 "date": "2016-09-24",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Øygarden Tempo",
 "organizer": "NCF Region Vest",
@@ -4909,6 +4916,7 @@
 },
 "eq:20734": {
 "date": "2016-09-25",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC 5 Bergen",
 "organizer": "NCF Region Vest",
@@ -4926,6 +4934,7 @@
 },
 "eq:20757": {
 "date": "2016-08-11",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Kalas Rekord Mila og Master Cup 2016",
 "organizer": "CK Nittedal",
@@ -4934,6 +4943,7 @@
 },
 "eq:20758": {
 "date": "2016-08-27",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Sturerittet Fellesstart (ØSF) 2016",
 "organizer": "CK Sotra",
@@ -4942,6 +4952,7 @@
 },
 "eq:20759": {
 "date": "2016-08-28",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Sotramila Tempo (ØSF) 2016",
 "organizer": "CK Sotra",
@@ -5013,6 +5024,7 @@
 },
 "eq:20769": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Fanahytten Opp",
 "organizer": "Fana IL Sykkel",
@@ -5147,6 +5159,7 @@
 },
 "eq:20905": {
 "date": "2016-08-13",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "HelteRittet 2016",
 "organizer": "Idrettslaget Dyre Vaa - Ski",
@@ -5191,6 +5204,7 @@
 },
 "eq:20929": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Lygna opp 2016",
 "organizer": "Hadeland CK",
@@ -5343,6 +5357,7 @@
 },
 "eq:20987": {
 "date": "2016-09-04",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Feiringrittet 2016",
 "organizer": "Feiring IL",
@@ -5360,6 +5375,7 @@
 },
 "eq:20997": {
 "date": "2016-08-19",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Sandefjord Grand Prix 2016 Menn og Damer Elite",
 "organizer": "Sandefjord SK",
@@ -5377,6 +5393,7 @@
 },
 "eq:21002": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Sandefjordrittet Grand Challenge 2016",
 "organizer": "Sandefjord SK",
@@ -5385,6 +5402,7 @@
 },
 "eq:21004": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Sandefjord Grand Tour Ranking",
 "organizer": "Sandefjord SK",
@@ -5438,6 +5456,7 @@
 },
 "eq:21044": {
 "date": "2016-09-06",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Klostermilene Tempo 2016",
 "organizer": "Rennesøy SK",
@@ -5473,6 +5492,7 @@
 },
 "eq:21115": {
 "date": "2016-08-19",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ringerike Petit Prix Bakkeritt Fellesstart",
 "organizer": "Ringerike SK",
@@ -5481,6 +5501,7 @@
 },
 "eq:21116": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ringerike Petit Prix Tempo",
 "organizer": "Ringerike SK",
@@ -5489,6 +5510,7 @@
 },
 "eq:21117": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ringerike Petit Prix Gateritt",
 "organizer": "Ringerike SK",
@@ -5497,6 +5519,7 @@
 },
 "eq:21118": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ringerike Petit Prix 2016 Fellesstart",
 "organizer": "Ringerike SK",
@@ -5505,6 +5528,7 @@
 },
 "eq:21125": {
 "date": "2016-08-14",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Rissa Rundt 2016",
 "organizer": "Fosen SK",
@@ -5531,6 +5555,7 @@
 },
 "eq:21168": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Stord Rundt 2016",
 "organizer": "Stord SK",
@@ -5629,6 +5654,7 @@
 },
 "eq:21253": {
 "date": "2016-09-10",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Nordhordland Tempo 2016 - RM Region Vest",
 "organizer": "Nordhordland SK",
@@ -5637,6 +5663,7 @@
 },
 "eq:21254": {
 "date": "2016-09-11",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Nordhordland Fellesstart 2016 - RM Region Vest",
 "organizer": "Nordhordland SK",
@@ -5654,6 +5681,7 @@
 },
 "eq:21289": {
 "date": "2016-09-03",
+"failed": "2026-10-04",
 "level": "MasterCup",
 "name": "2-Mila MasterCup",
 "organizer": "IK Hero",
@@ -5662,6 +5690,7 @@
 },
 "eq:21306": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Elgtråkket 2016",
 "organizer": "CK Elverum",
@@ -5769,6 +5798,7 @@
 },
 "eq:21381": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Markathriller´n",
 "organizer": "TVK",
@@ -5777,6 +5807,7 @@
 },
 "eq:21383": {
 "date": "2016-09-18",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Hommelvikrittet",
 "organizer": "TVK",
@@ -5830,6 +5861,7 @@
 },
 "eq:21443": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Victoria terreng",
 "organizer": "CK Victoria",
@@ -5838,6 +5870,7 @@
 },
 "eq:21456": {
 "date": "2016-08-20",
+"failed": "2026-10-04",
 "level": "Trimritt",
 "name": "Sandefjord Grand Classic",
 "organizer": "Sandefjord SK",
@@ -5846,6 +5879,7 @@
 },
 "eq:21464": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Mount Værskei",
 "organizer": "Lillehammer CK",
@@ -5881,6 +5915,7 @@
 },
 "eq:21492": {
 "date": "2016-08-13",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Festningsrittet Rundbane",
 "organizer": "TVK",
@@ -5889,6 +5924,7 @@
 },
 "eq:21493": {
 "date": "2016-08-14",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Festningsrittet Sprint",
 "organizer": "TVK",
@@ -5942,6 +5978,7 @@
 },
 "eq:21508": {
 "date": "2016-08-13",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Pilegrimsrittet 2016",
 "organizer": "Nea CK",
@@ -5995,6 +6032,7 @@
 },
 "eq:21529": {
 "date": "2016-08-30",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Furustad Grand Prix 3 - Klubbritt",
 "organizer": "Sandefjord SK",
@@ -6003,6 +6041,7 @@
 },
 "eq:21530": {
 "date": "2016-09-13",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Furustad Grand Prix 4 - Klubbmesterskap Fellesstart",
 "organizer": "Sandefjord SK",
@@ -6056,6 +6095,7 @@
 },
 "eq:21750": {
 "date": "2016-08-06",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Grenserittet 2016",
 "organizer": "Halden SK",
@@ -6091,6 +6131,7 @@
 },
 "eq:22046": {
 "date": "2016-09-10",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Roserittet 2016 Fellesstart",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -6099,6 +6140,7 @@
 },
 "eq:22047": {
 "date": "2016-09-11",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Roserittet 2016 Fellesstart",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -6107,6 +6149,7 @@
 },
 "eq:22048": {
 "date": "2016-09-09",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Roserittet 2016 Tempo",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -6151,6 +6194,7 @@
 },
 "eq:22317": {
 "date": "2016-09-10",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "HitraRittet",
 "organizer": "Frøya og Hitra SK",
@@ -6195,6 +6239,7 @@
 },
 "eq:22467": {
 "date": "2016-08-14",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Svartløken Offroad_2016",
 "organizer": "Ålesund og Omegn CK",
@@ -6221,6 +6266,7 @@
 },
 "eq:22555": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Oslo Terrengsykkelfestival",
 "organizer": "IF Frøy",
@@ -6229,6 +6275,7 @@
 },
 "eq:22556": {
 "date": "2016-09-18",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Oslo Terrengsykkelfestival",
 "organizer": "IF Frøy",
@@ -6264,6 +6311,7 @@
 },
 "eq:22589": {
 "date": "2016-11-05",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC CX 5: Tønsberg",
 "organizer": "Tønsberg CK",
@@ -6272,6 +6320,7 @@
 },
 "eq:22599": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Mosjøen maraton",
 "organizer": "Mosjøen og Omegn CK",
@@ -6280,6 +6329,7 @@
 },
 "eq:22605": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Mosjøen rundbane",
 "organizer": "Mosjøen og Omegn CK",
@@ -6378,6 +6428,7 @@
 },
 "eq:22976": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Continentalcup/Vossevangen MTB 2016",
 "organizer": "CK Henie",
@@ -6386,6 +6437,7 @@
 },
 "eq:22977": {
 "date": "2016-08-17",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Continentalcup/Åsane 2016",
 "organizer": "CK Henie",
@@ -6394,6 +6446,7 @@
 },
 "eq:22997": {
 "date": "2016-08-31",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Tour des Fjords Etappe 1",
 "organizer": "Stavanger SK",
@@ -6402,6 +6455,7 @@
 },
 "eq:22998": {
 "date": "2016-09-01",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Tour des Fjords Etappe 2",
 "organizer": "Stavanger SK",
@@ -6410,6 +6464,7 @@
 },
 "eq:22999": {
 "date": "2016-09-02",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Tour des Fjords Etappe 3",
 "organizer": "Stavanger SK",
@@ -6418,6 +6473,7 @@
 },
 "eq:23000": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Tour des Fjords Etappe 4",
 "organizer": "Stavanger SK",
@@ -6426,6 +6482,7 @@
 },
 "eq:23001": {
 "date": "2016-09-04",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Tour des Fjords Etappe 5",
 "organizer": "Stavanger SK",
@@ -6533,6 +6590,7 @@
 },
 "eq:23256": {
 "date": "2016-08-12",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Ladies Tour of Norway",
 "organizer": "Norwegian Cycling Federation",
@@ -6622,6 +6680,7 @@
 },
 "eq:23542": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nybakkrunden 2016",
 "organizer": "Aurskog - Høland Friidrettslag",
@@ -6720,6 +6779,7 @@
 },
 "eq:23630": {
 "date": "2016-08-16",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Munkebotn Opp",
 "organizer": "Nymark IL",
@@ -6782,6 +6842,7 @@
 },
 "eq:23792": {
 "date": "2016-08-27",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "El Clasico Ciclista de Pais Perez",
 "organizer": "Ishavsbyen Sykkel",
@@ -6817,6 +6878,7 @@
 },
 "eq:23929": {
 "date": "2016-08-11",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Arctic Race of Norway",
 "organizer": "Norwegian Cycling Federation",
@@ -6861,6 +6923,7 @@
 },
 "eq:24117": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Hålogalandsrittet - Midt i Blinken // RM Terreng Maraton, region nord",
 "organizer": "Harstad CK",
@@ -6878,6 +6941,7 @@
 },
 "eq:24164": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Rørosrittet 2016",
 "organizer": "Opp av sofaen AS",
@@ -6922,6 +6986,7 @@
 },
 "eq:24255": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Simplicity Terrengcup #5, RM Sør, Simplicity Open",
 "organizer": "Vigrestad SK",
@@ -6939,6 +7004,7 @@
 },
 "eq:24257": {
 "date": "2016-10-22",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "FjogstadHus-rittet/Sola Open (Simplicity Terrengcup #10)",
 "organizer": "Sola CK",
@@ -6947,6 +7013,7 @@
 },
 "eq:24258": {
 "date": "2016-09-24",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Simplicity Terrengcup #9, BSK",
 "organizer": "Bogafjell Sykleklubb",
@@ -6955,6 +7022,7 @@
 },
 "eq:24259": {
 "date": "2016-10-23",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Simplicity Terrengcup #11",
 "organizer": "Sola CK",
@@ -6963,6 +7031,7 @@
 },
 "eq:24261": {
 "date": "2016-08-10",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Simplicity Terrengcup #7 Sandnes",
 "organizer": "Sandnes Sykleklubb",
@@ -7088,6 +7157,7 @@
 },
 "eq:24532": {
 "date": "2016-08-09",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 7 2016 - Tempo",
 "organizer": "Stord SK",
@@ -7096,6 +7166,7 @@
 },
 "eq:24535": {
 "date": "2016-08-23",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 8 2016 - Tempo",
 "organizer": "Stord SK",
@@ -7104,6 +7175,7 @@
 },
 "eq:24536": {
 "date": "2016-09-06",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 9 2016 - Tempo",
 "organizer": "Stord SK",
@@ -7112,6 +7184,7 @@
 },
 "eq:24583": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "BMC 1814-Rittet",
 "organizer": "Eidsvoll SK",
@@ -7210,6 +7283,7 @@
 },
 "eq:24796": {
 "date": "2016-09-01",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Mjøsa terrengsykkelcup #5 Vind",
 "organizer": "Vind IL",
@@ -7218,6 +7292,7 @@
 },
 "eq:24797": {
 "date": "2016-08-25",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Mjøsa terrengsykkelcup #4 Vang",
 "organizer": "Vang Skiløperforening Sykkel",
@@ -7226,6 +7301,7 @@
 },
 "eq:24798": {
 "date": "2016-09-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Mjøsa terrengsykkelcup #6 Lillehammer",
 "organizer": "Lillehammer CK",
@@ -7270,6 +7346,7 @@
 },
 "eq:24853": {
 "date": "2016-08-22",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Terrengkarusell 3 22.08.2016",
 "organizer": "Nesodden SK",
@@ -7278,6 +7355,7 @@
 },
 "eq:24854": {
 "date": "2016-09-05",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Terrengkarusell 4 05.09.2016 + KM",
 "organizer": "Nesodden SK",
@@ -7367,6 +7445,7 @@
 },
 "eq:24935": {
 "date": "2016-08-13",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Vadsø Offroad 2016",
 "organizer": "Varanger Sportsklubb",
@@ -7411,6 +7490,7 @@
 },
 "eq:24997": {
 "date": "2016-09-11",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Tysværrittet 2016",
 "organizer": "CK Haugaland",
@@ -7455,6 +7535,7 @@
 },
 "eq:25106": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Steigenrittet 2016",
 "organizer": "Steigen SPK",
@@ -7517,6 +7598,7 @@
 },
 "eq:25140": {
 "date": "2017-04-01",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Skaidi Fatbike 2017",
 "organizer": "Hammerfest SK",
@@ -7525,6 +7607,7 @@
 },
 "eq:25155": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "100 Årsrittet 2016",
 "organizer": "Kolbotn SK",
@@ -7587,6 +7670,7 @@
 },
 "eq:25250": {
 "date": "2016-08-28",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "80/20 OppdalEnduro",
 "organizer": "Oppdal SK",
@@ -7595,6 +7679,7 @@
 },
 "eq:25252": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "80/20 HafjellEnduro",
 "organizer": "Hafjell Freeride Klubb",
@@ -7711,6 +7796,7 @@
 },
 "eq:25352": {
 "date": "2016-09-24",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Hortensmarka Rundt 2016",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -7773,6 +7859,7 @@
 },
 "eq:25386": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ronde Van Vestkant - tempo",
 "organizer": "Bærum OCK",
@@ -7781,6 +7868,7 @@
 },
 "eq:25388": {
 "date": "2016-09-18",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ronde Van Vestkant - fellesstart",
 "organizer": "Bærum OCK",
@@ -7879,6 +7967,7 @@
 },
 "eq:25463": {
 "date": "2016-08-31",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Øster Hus Cupen 3 Gateritt",
 "organizer": "Sandnes Sykleklubb",
@@ -7887,6 +7976,7 @@
 },
 "eq:25464": {
 "date": "2016-09-15",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Øster Hus Cupen 4 GATERITT",
 "organizer": "Sandnes Sykleklubb",
@@ -7976,6 +8066,7 @@
 },
 "eq:25570": {
 "date": "2016-08-24",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "TOSKaskabet 2016",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -8173,6 +8264,7 @@
 },
 "eq:25797": {
 "date": "2016-08-13",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Lavkarittet 2016",
 "organizer": "Skibotn IL",
@@ -8181,6 +8273,7 @@
 },
 "eq:25799": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Namsen Rundt 2017",
 "organizer": "Namdal SK",
@@ -8216,6 +8309,7 @@
 },
 "eq:25818": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Raufosskogen MTB 2016",
 "organizer": "Raufoss & Gjøvik SK",
@@ -8251,6 +8345,7 @@
 },
 "eq:25894": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Steinsvikrittet 2016",
 "organizer": "Falkeid IL",
@@ -8610,6 +8705,7 @@
 },
 "eq:28439": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Montebellorittet 2017",
 "organizer": "Sande Sportsklubb",
@@ -8636,6 +8732,7 @@
 },
 "eq:28566": {
 "date": "2016-08-06",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Skalldyrrittet 2016",
 "organizer": "Mandal CK",
@@ -8896,6 +8993,7 @@
 },
 "eq:30268": {
 "date": "2016-08-10",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Trek cup Vassdalveien tempo",
 "organizer": "Narvik CK",
@@ -8913,6 +9011,7 @@
 },
 "eq:30287": {
 "date": "2017-06-07",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Atlanterhavsrittet 2016_test_IAN",
 "organizer": "Eide IL Sykkel",
@@ -8930,6 +9029,7 @@
 },
 "eq:30306": {
 "date": "2016-08-13",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "ARN Challenge Bodø",
 "organizer": "Bodø CK",
@@ -8947,6 +9047,7 @@
 },
 "eq:30332": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Hellersdalen Classic 2016",
 "organizer": "Søgne Cykleklubb",
@@ -8964,6 +9065,7 @@
 },
 "eq:30349": {
 "date": "2017-06-09",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Tromsørittet Tempo",
 "organizer": "Tromsø CK",
@@ -8972,6 +9074,7 @@
 },
 "eq:30350": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Tromsørittet Terreng",
 "organizer": "Tromsø CK",
@@ -8997,6 +9100,7 @@
 },
 "eq:30364": {
 "date": "2016-09-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "BCC ZU4´R Cycle Climb",
 "organizer": "Gratangen IL",
@@ -9050,6 +9154,7 @@
 },
 "eq:30432": {
 "date": "2016-09-25",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Dølisjøen Rundt 2016 Sykkel",
 "organizer": "Slåstad IL",
@@ -9058,6 +9163,7 @@
 },
 "eq:30436": {
 "date": "2016-08-13",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Le Tour de Thoreid 2016",
 "organizer": "Le Tour de Thoreid",
@@ -9075,6 +9181,7 @@
 },
 "eq:30468": {
 "date": "2016-09-10",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Ryfylkerittet 2016",
 "organizer": "Ryfylke SK",
@@ -9110,6 +9217,7 @@
 },
 "eq:30487": {
 "date": "2016-11-13",
+"fetched": "2026-10-04",
 "level": "Norgesmesterskap",
 "name": "NM syklekross 2016",
 "organizer": "Grenland SK",
@@ -9145,6 +9253,7 @@
 },
 "eq:30509": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Ulvøytråkket",
 "organizer": "Stokmarknes IL",
@@ -9153,6 +9262,7 @@
 },
 "eq:30524": {
 "date": "2016-10-15",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC CX 3: Kristiansand",
 "organizer": "Kristiansands CK",
@@ -9214,6 +9324,7 @@
 },
 "eq:30675": {
 "date": "2016-08-16",
+"fetched": "2026-10-04",
 "level": null,
 "name": "Sykkelkarusell",
 "organizer": "Levanger Kommune BIL",
@@ -9231,6 +9342,7 @@
 },
 "eq:30704": {
 "date": "2016-08-07",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Byglandsfjorden Rundt 2016",
 "organizer": "Otra IL Sykkel",
@@ -9239,6 +9351,7 @@
 },
 "eq:30722": {
 "date": "2016-09-11",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "GD-Cup Sykkel Runde 3 - Lågen CK",
 "organizer": "Vinstra IL",
@@ -9247,6 +9360,7 @@
 },
 "eq:30742": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "GAURHOVDRITTET 2016",
 "organizer": "Andebarkji TSK",
@@ -9264,6 +9378,7 @@
 },
 "eq:30761": {
 "date": "2016-08-31",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Blikkvegen tempo challenge ritt 10",
 "organizer": "Feiring IL",
@@ -9272,6 +9387,7 @@
 },
 "eq:30772": {
 "date": "2016-08-11",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TeVeBu Cup 2016_Runde 7 Årbogen",
 "organizer": "Nanset IF - Sykkel",
@@ -9280,6 +9396,7 @@
 },
 "eq:30773": {
 "date": "2016-08-23",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TeVeBu Cup 2016_Runde 8 Sande",
 "organizer": "Nanset IF - Sykkel",
@@ -9288,6 +9405,7 @@
 },
 "eq:30775": {
 "date": "2016-09-07",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TeVeBu Cup 2016_Runde 9 Konnerud",
 "organizer": "Nanset IF - Sykkel",
@@ -9296,6 +9414,7 @@
 },
 "eq:30782": {
 "date": "2016-08-06",
+"fetched": "2026-10-04",
 "level": "Ungdomsmesterskap",
 "name": "2016 UM-UL Landevei tempo",
 "organizer": "IL Sverre",
@@ -9304,6 +9423,7 @@
 },
 "eq:30795": {
 "date": "2016-08-07",
+"fetched": "2026-10-04",
 "level": "Ungdomsmesterskap",
 "name": "2016 UM - UL Landevei Fellesstart",
 "organizer": "IL Sverre",
@@ -9312,6 +9432,7 @@
 },
 "eq:30824": {
 "date": "2016-08-26",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Bakehuset Tramo Colina Cronometro (9,5 km bakketempo)",
 "organizer": "Ishavsbyen Sykkel",
@@ -9329,6 +9450,7 @@
 },
 "eq:30839": {
 "date": "2016-10-01",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Vingerkross",
 "organizer": "Glåmdal SK",
@@ -9337,6 +9459,7 @@
 },
 "eq:30848": {
 "date": "2016-09-06",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Bontveit Tempo 2016",
 "organizer": "Bergen CK",
@@ -9345,6 +9468,7 @@
 },
 "eq:30859": {
 "date": "2016-08-16",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Gassasundrittet ritt nr. 2. 2016",
 "organizer": "Bømlo SK",
@@ -9353,6 +9477,7 @@
 },
 "eq:30868": {
 "date": "2016-08-10",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "TESTRITT Festningsrittet Rundbane",
 "organizer": "TVK",
@@ -9361,6 +9486,7 @@
 },
 "eq:30901": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Engan Rundt 2016",
 "organizer": "Namdal SK",
@@ -9369,6 +9495,7 @@
 },
 "eq:30902": {
 "date": "2016-08-16",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2016 Treningsritt 12",
 "organizer": "Harstad CK",
@@ -9377,6 +9504,7 @@
 },
 "eq:30931": {
 "date": "2016-08-17",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour 2016 - 10 Skrautvål - Beito",
 "organizer": "CK Valdres",
@@ -9385,6 +9513,7 @@
 },
 "eq:30965": {
 "date": "2016-08-23",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2016 \"Helvete i nord\"",
 "organizer": "Harstad CK",
@@ -9393,6 +9522,7 @@
 },
 "eq:30996": {
 "date": "2016-09-18",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Landevei Klubbmesterskap 2016",
 "organizer": "Nanset IF - Sykkel",
@@ -9401,6 +9531,7 @@
 },
 "eq:30998": {
 "date": "2016-09-18",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Nanset Klubbmesterskap 2016",
 "organizer": "Nanset IF - Sykkel",
@@ -9409,6 +9540,7 @@
 },
 "eq:31002": {
 "date": "2016-08-24",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour 2016 - #11 3xSlidrefjorden",
 "organizer": "CK Valdres",
@@ -9417,6 +9549,7 @@
 },
 "eq:31007": {
 "date": "2016-08-21",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Ringerike Petit Prix sammenlagt",
 "organizer": "Ringerike SK",
@@ -9425,6 +9558,7 @@
 },
 "eq:31008": {
 "date": "2016-08-24",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Wiersholm Open 2016",
 "organizer": "Advokatfirmaet Wiersholm AS",
@@ -9469,6 +9603,7 @@
 },
 "eq:31058": {
 "date": "2016-08-29",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "DSK KM Tempo 2016",
 "organizer": "Dalane SK",
@@ -9477,6 +9612,7 @@
 },
 "eq:31059": {
 "date": "2016-08-14",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Festningsrittet Sprint",
 "organizer": "Norwegian Cycling Federation",
@@ -9485,6 +9621,7 @@
 },
 "eq:31071": {
 "date": "2016-09-18",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "VTR-Valnesfjord Trillrundt",
 "organizer": "Fauske IL Sykkel",
@@ -9493,6 +9630,7 @@
 },
 "eq:31073": {
 "date": "2016-08-30",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Bømlatempoen ritt nr. 2 2016",
 "organizer": "Bømlo SK",
@@ -9501,6 +9639,7 @@
 },
 "eq:31114": {
 "date": "2016-08-31",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Tysdalvatnet Tempo 2016",
 "organizer": "Ryfylke SK",
@@ -9509,6 +9648,7 @@
 },
 "eq:31140": {
 "date": "2016-08-31",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour 2016 - #12 Eventyret i Sør",
 "organizer": "CK Valdres",
@@ -9517,6 +9657,7 @@
 },
 "eq:31145": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Kattnakken Opp 2016",
 "organizer": "Stord SK",
@@ -9525,6 +9666,7 @@
 },
 "eq:31168": {
 "date": "2016-09-08",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Tempo 2016",
 "organizer": "Nesodden SK",
@@ -9533,6 +9675,7 @@
 },
 "eq:31184": {
 "date": "2016-09-13",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap BakkeTempo 2016",
 "organizer": "Nesodden SK",
@@ -9541,6 +9684,7 @@
 },
 "eq:31194": {
 "date": "2016-09-01",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Skaidi Xtreme 2016 Xtreme Ritt_test2",
 "organizer": "Hammerfest SK",
@@ -9549,6 +9693,7 @@
 },
 "eq:31196": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Skaidi Xtreme 2016 Xtreme Ritt",
 "organizer": "Hammerfest SK",
@@ -9557,6 +9702,7 @@
 },
 "eq:31236": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Grenland Petit Prix, Fellesstart",
 "organizer": "Grenland SK",
@@ -9565,6 +9711,7 @@
 },
 "eq:31237": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Grenland Petit Prix, Bakketempo",
 "organizer": "Grenland SK",
@@ -9573,6 +9720,7 @@
 },
 "eq:31240": {
 "date": "2016-09-04",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Grenland Petit Prix, Tempo",
 "organizer": "Grenland SK",
@@ -9581,6 +9729,7 @@
 },
 "eq:31256": {
 "date": "2016-09-04",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Grenland Petit Prix Sammenlagt",
 "organizer": "Grenland SK",
@@ -9589,6 +9738,7 @@
 },
 "eq:31261": {
 "date": "2016-10-09",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC CX 2: Svelvik",
 "organizer": "Svelvik SK",
@@ -9597,6 +9747,7 @@
 },
 "eq:31275": {
 "date": "2016-09-07",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour 2016 - #13 3xVolbufjorden",
 "organizer": "CK Valdres",
@@ -9605,6 +9756,7 @@
 },
 "eq:31280": {
 "date": "2016-09-15",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Landevei",
 "organizer": "Gauldal SK",
@@ -9613,6 +9765,7 @@
 },
 "eq:31282": {
 "date": "2016-09-11",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Femsjøen Rundt",
 "organizer": "Halden CK",
@@ -9630,6 +9783,7 @@
 },
 "eq:31292": {
 "date": "2016-09-03",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Regionmesterskapet 2016 TeVeBu - Fellesstart",
 "organizer": "Grenland SK",
@@ -9647,6 +9801,7 @@
 },
 "eq:31306": {
 "date": "2016-11-06",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC CX 6: Grote Prijs",
 "organizer": "Follo SK",
@@ -9673,6 +9828,7 @@
 },
 "eq:31337": {
 "date": "2016-09-13",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Gassasundrittet ritt nr. 3. 2016",
 "organizer": "Bømlo SK",
@@ -9681,6 +9837,7 @@
 },
 "eq:31346": {
 "date": "2016-10-08",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC CX 1: Spikkestadkross",
 "organizer": "Bærum OCK",
@@ -9689,6 +9846,7 @@
 },
 "eq:31351": {
 "date": "2016-09-15",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Tempo 2016 - Furustad",
 "organizer": "Sandefjord SK",
@@ -9697,6 +9855,7 @@
 },
 "eq:31371": {
 "date": "2016-08-28",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Øygarden Sykkelfestival 2016",
 "organizer": "NCF Region Vest",
@@ -9705,6 +9864,7 @@
 },
 "eq:31388": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Vestfold Rundt 2017",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -9722,6 +9882,7 @@
 },
 "eq:31392": {
 "date": "2016-09-17",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Landevei SCK 2016",
 "organizer": "Søgne Cykleklubb",
@@ -9730,6 +9891,7 @@
 },
 "eq:31393": {
 "date": "2016-09-16",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Tempo SCK",
 "organizer": "Søgne Cykleklubb",
@@ -9747,6 +9909,7 @@
 },
 "eq:31525": {
 "date": "2016-09-18",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ronde Van Vestkant - Sammenlagt",
 "organizer": "Bærum OCK",
@@ -9764,6 +9927,7 @@
 },
 "eq:31546": {
 "date": "2016-08-20",
+"fetched": "2026-10-04",
 "level": null,
 "name": "Ringerike Petit Prix 2016",
 "organizer": "Ringerike SK",
@@ -9772,6 +9936,7 @@
 },
 "eq:31568": {
 "date": "2016-09-25",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "KORK klubbmesterskap 2016",
 "organizer": "Kloppa Off Road Klubb",
@@ -9780,6 +9945,7 @@
 },
 "eq:31601": {
 "date": "2016-09-24",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Terreng 2016",
 "organizer": "Soon CK",
@@ -9796,6 +9962,7 @@
 },
 "eq:31636": {
 "date": "2016-10-22",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Test ritt til Klubbmesterskap Terreng",
 "organizer": "Ryfylke SK",
@@ -9804,6 +9971,7 @@
 },
 "eq:31686": {
 "date": "2016-10-08",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "CX Superprestige Blåbærhaugen",
 "organizer": "Harstad CK",
@@ -9821,6 +9989,7 @@
 },
 "eq:31703": {
 "date": "2017-05-26",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Tønsberg 3D 1. etappe - Bakketempo",
 "organizer": "Tønsberg CK",
@@ -9829,6 +9998,7 @@
 },
 "eq:31704": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Tønsberg 3D 2. etappe Fellesstart",
 "organizer": "Tønsberg CK",
@@ -9837,6 +10007,7 @@
 },
 "eq:31705": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Tønsberg 3D 3. etappe_Tempo",
 "organizer": "Tønsberg CK",
@@ -9845,6 +10016,7 @@
 },
 "eq:31706": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Tønsberg 3D 4. etappe_Fellestart",
 "organizer": "Tønsberg CK",
@@ -9862,6 +10034,7 @@
 },
 "eq:31720": {
 "date": "2016-10-08",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Terreng SSK 2016",
 "organizer": "Sandefjord SK",
@@ -9870,6 +10043,7 @@
 },
 "eq:31733": {
 "date": "2016-10-16",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC CX 4: Arendal",
 "organizer": "Arendal CC",
@@ -9878,6 +10052,7 @@
 },
 "eq:31743": {
 "date": "2016-10-01",
+"failed": "2026-10-04",
 "level": "Klubbritt",
 "name": "SSK klubbmesterskap tempo",
 "organizer": "Smaalenene SK",
@@ -9886,6 +10061,7 @@
 },
 "eq:31755": {
 "date": "2016-10-01",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Risør Grand Prix",
 "organizer": "Risør IL",
@@ -9894,6 +10070,7 @@
 },
 "eq:31797": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Jærtrillen",
 "organizer": "Nærbø SK",
@@ -9918,6 +10095,7 @@
 },
 "eq:31805": {
 "date": "2017-04-22",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Landsbyrittet 2017",
 "organizer": "Randaberg SK",
@@ -9926,6 +10104,7 @@
 },
 "eq:31825": {
 "date": "2016-10-23",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "NCF rankingritt Syklekross, Sola Ck",
 "organizer": "Sola CK",
@@ -9934,6 +10113,7 @@
 },
 "eq:31831": {
 "date": "2017-06-03",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Finnskogkureren 2017",
 "organizer": "Lunderseter IL",
@@ -9950,6 +10130,7 @@
 },
 "eq:31870": {
 "date": "2017-06-24",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Hedmarksvidda Rundt 2017",
 "organizer": "Nordbygda/Løten SK Sykkel",
@@ -9984,6 +10165,7 @@
 },
 "eq:31890": {
 "date": "2017-06-18",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Bike Brothers NedstrandRittet",
 "organizer": "Nedstrand IL",
@@ -9992,6 +10174,7 @@
 },
 "eq:31895": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Midnattsolrittet 2017",
 "organizer": "Bodø CK",
@@ -10000,6 +10183,7 @@
 },
 "eq:31896": {
 "date": "2017-05-13",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Bagler runden 2017",
 "organizer": "Tønsberg CK",
@@ -10024,6 +10208,7 @@
 },
 "eq:31927": {
 "date": "2017-05-13",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Å i Heiane 2017",
 "organizer": "Birkenes IL",
@@ -10048,6 +10233,7 @@
 },
 "eq:31978": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Vårsprinten",
 "organizer": "Feiring IL Sykkel",
@@ -10056,6 +10242,7 @@
 },
 "eq:31999": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Elgrittet 2017",
 "organizer": "Høland Idretts- og ungdomslag",
@@ -10064,6 +10251,7 @@
 },
 "eq:32004": {
 "date": "2017-06-05",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Sandefjord Tour 2017 MK13-16/Turritt/Masters",
 "organizer": "Sandefjord SK",
@@ -10088,6 +10276,7 @@
 },
 "eq:32023": {
 "date": "2017-05-06",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Eikerrittet 2017",
 "organizer": "Eiker CK",
@@ -10096,6 +10285,7 @@
 },
 "eq:32028": {
 "date": "2016-10-29",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Terreng 2016",
 "organizer": "Ryfylke SK",
@@ -10113,6 +10303,7 @@
 },
 "eq:32041": {
 "date": "2016-10-23",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap",
 "organizer": "Lillehammer CK",
@@ -10138,6 +10329,7 @@
 },
 "eq:32066": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Tour des Fjords 2017",
 "organizer": "Stavanger SK",
@@ -10154,6 +10346,7 @@
 },
 "eq:32087": {
 "date": "2017-05-01",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Mairittet 2017",
 "organizer": "NCF Region Sør",
@@ -10170,6 +10363,7 @@
 },
 "eq:32113": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Tempo Gigante",
 "organizer": "Torshov SK",
@@ -10178,6 +10372,7 @@
 },
 "eq:32132": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Tempo Gigante Master",
 "organizer": "Torshov SK",
@@ -10186,6 +10381,7 @@
 },
 "eq:32148": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Stjernetråkken Aktiv",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -10194,6 +10390,7 @@
 },
 "eq:32149": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Stjernetråkken MastersCup",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -10202,6 +10399,7 @@
 },
 "eq:32150": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Stjernetråkken Tur-ritt",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -10210,6 +10408,7 @@
 },
 "eq:32151": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Stjernetråkken Trim",
 "organizer": "Fredrikstad Sykkelklubb",
@@ -10218,6 +10417,7 @@
 },
 "eq:32173": {
 "date": "2017-04-22",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Sotramila Tempo 2017",
 "organizer": "CK Sotra",
@@ -10242,6 +10442,7 @@
 },
 "eq:32178": {
 "date": "2017-06-25",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Simplicity Rittet_2017",
 "organizer": "Vigrestad SK",
@@ -10250,6 +10451,7 @@
 },
 "eq:32179": {
 "date": "2017-05-25",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Askerrunden 2017 Mastercup fellestart",
 "organizer": "Asker CK",
@@ -10258,6 +10460,7 @@
 },
 "eq:32188": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "JH-Rittet 2017",
 "organizer": "CK Elverum",
@@ -10282,6 +10485,7 @@
 },
 "eq:32197": {
 "date": "2017-06-03",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "N3 Norefjellrittet 2017",
 "organizer": "Norefjell CK",
@@ -10290,6 +10494,7 @@
 },
 "eq:32198": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Farrisrunden 2017",
 "organizer": "Nanset IF - Sykkel",
@@ -10298,6 +10503,7 @@
 },
 "eq:32215": {
 "date": "2017-06-03",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nordfjordrittet 2017",
 "organizer": "Sandane SK",
@@ -10306,6 +10512,7 @@
 },
 "eq:32228": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Ålesundsrittet_2017",
 "organizer": "Ålesund og Omegn CK",
@@ -10314,6 +10521,7 @@
 },
 "eq:32229": {
 "date": "2017-05-06",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ålesundstempoen 2017",
 "organizer": "Ålesund og Omegn CK",
@@ -10322,6 +10530,7 @@
 },
 "eq:32233": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Hamarrittet 2017",
 "organizer": "Ottestad IL Sykkel",
@@ -10330,6 +10539,7 @@
 },
 "eq:32242": {
 "date": "2017-05-06",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Bergen Ritthelg 2017 - Sund Fellesstart",
 "organizer": "Bergen CK",
@@ -10338,6 +10548,7 @@
 },
 "eq:32243": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Bergen Ritthelg 2017 - Straumemilen",
 "organizer": "Bergen CK",
@@ -10346,6 +10557,7 @@
 },
 "eq:32263": {
 "date": "2016-11-20",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Bergen Sykkelkross #1",
 "organizer": "NCF Region Vest",
@@ -10354,6 +10566,7 @@
 },
 "eq:32305": {
 "date": "2017-06-03",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Hårfagrerittet 2017",
 "organizer": "CK Haugaland",
@@ -10362,6 +10575,7 @@
 },
 "eq:32316": {
 "date": "2017-05-01",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Spinn Cup 2 - 2017 Gateritt Pindsle/Regionsmesterskap Gateritt TeVeBu",
 "organizer": "Sandefjord SK",
@@ -10370,6 +10584,7 @@
 },
 "eq:32317": {
 "date": "2017-05-30",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Spinn Cup 4 - 2017 Tempo TCK/Regionsmesterskap",
 "organizer": "Sandefjord SK",
@@ -10445,6 +10660,7 @@
 },
 "eq:32375": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Sykkylven Energirittet 2017",
 "organizer": "Sykkylven SK",
@@ -10453,6 +10669,7 @@
 },
 "eq:32383": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Byneset - Klæbu rundt",
 "organizer": "TVK",
@@ -10461,6 +10678,7 @@
 },
 "eq:32403": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Smaalenene Rundt 2017",
 "organizer": "Smaalenene SK",
@@ -10469,6 +10687,7 @@
 },
 "eq:32409": {
 "date": "2017-06-03",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Lønningrittet (F3D 1/4)",
 "organizer": "Fana IL Sykkel",
@@ -10477,6 +10696,7 @@
 },
 "eq:32410": {
 "date": "2017-06-04",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Lonevågrunden (F3D 2/4)",
 "organizer": "Fana IL Sykkel",
@@ -10485,6 +10705,7 @@
 },
 "eq:32411": {
 "date": "2017-06-04",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Lonevågrunden Tempo (F3D 3/4)",
 "organizer": "Fana IL Sykkel",
@@ -10493,6 +10714,7 @@
 },
 "eq:32412": {
 "date": "2017-06-05",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Osterøy Felles (F3D 4/4)",
 "organizer": "Fana IL Sykkel",
@@ -10501,6 +10723,7 @@
 },
 "eq:32414": {
 "date": "2017-06-05",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Fana 3 Dagers, Sammenlagt",
 "organizer": "Fana IL Sykkel",
@@ -10509,6 +10732,7 @@
 },
 "eq:32438": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "6-vatnsrunden 17",
 "organizer": "Voss SK",
@@ -10535,6 +10759,7 @@
 },
 "eq:32464": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Follorittet Mastercup 2017 (Kategori 2)",
 "organizer": "Follo SK",
@@ -10543,6 +10768,7 @@
 },
 "eq:32500": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Randsfjorden Rundt 2017",
 "organizer": "Hadeland CK",
@@ -10559,6 +10785,7 @@
 },
 "eq:32509": {
 "date": "2017-03-04",
+"fetched": "2026-10-04",
 "level": "Ungdomsmesterskap",
 "name": "Stomperud vinterritt",
 "organizer": "Sørum IL",
@@ -10576,6 +10803,7 @@
 },
 "eq:32520": {
 "date": "2017-04-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Boknasprinten 2017",
 "organizer": "Bokn Sykkelklubb",
@@ -10584,6 +10812,7 @@
 },
 "eq:32530": {
 "date": "2017-04-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Klostermilå 2017",
 "organizer": "Rennesøy SK",
@@ -10600,6 +10829,7 @@
 },
 "eq:32533": {
 "date": "2017-05-14",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Systemkjøkken Våryr 2017",
 "organizer": "Eidanger IL",
@@ -10625,6 +10855,7 @@
 },
 "eq:32544": {
 "date": "2017-06-24",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Skjebergrittet 2017",
 "organizer": "Skjeberg CK",
@@ -10699,6 +10930,7 @@
 },
 "eq:32579": {
 "date": "2017-04-22",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Orklatempo'n 2017",
 "organizer": "Orkla CK",
@@ -10707,6 +10939,7 @@
 },
 "eq:32584": {
 "date": "2017-05-06",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Helgøyatråkket 2017",
 "organizer": "Nes Sp.Kl. Sykkel",
@@ -10715,6 +10948,7 @@
 },
 "eq:32604": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Ulstein Nordearittet",
 "organizer": "Ulstein og Omegn SK",
@@ -10723,6 +10957,7 @@
 },
 "eq:32609": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Bukkene Bruse 2017",
 "organizer": "Grimstad SK",
@@ -10748,6 +10983,7 @@
 },
 "eq:32614": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "RM Sør Tempo",
 "organizer": "Grimstad SK",
@@ -10756,6 +10992,7 @@
 },
 "eq:32615": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "RM Sør Felles",
 "organizer": "Grimstad SK",
@@ -10764,6 +11001,7 @@
 },
 "eq:32620": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "HitraRittet",
 "organizer": "Frøya og Hitra SK",
@@ -10796,6 +11034,7 @@
 },
 "eq:32645": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Rådalen Rundt 2017",
 "organizer": "Fana IL Sykkel",
@@ -10804,6 +11043,7 @@
 },
 "eq:32663": {
 "date": "2017-05-24",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "NTE Banecup 2 - 2017 - Mastercup",
 "organizer": "IL Stjørdals-Blink",
@@ -10828,6 +11068,7 @@
 },
 "eq:32672": {
 "date": "2017-06-18",
+"fetched": "2026-10-04",
 "level": "Norgesmesterskap",
 "name": "Sykkel-NM Fellesstart M/K-JR - U23",
 "organizer": "IL Stjørdals-Blink",
@@ -10844,6 +11085,7 @@
 },
 "eq:32674": {
 "date": "2017-06-22",
+"fetched": "2026-10-04",
 "level": "Norgesmesterskap",
 "name": "Sykkel-NM Tempo M/K-JR/SR",
 "organizer": "IL Stjørdals-Blink",
@@ -10852,6 +11094,7 @@
 },
 "eq:32675": {
 "date": "2017-06-20",
+"fetched": "2026-10-04",
 "level": "Norgesmesterskap",
 "name": "Sykkel-NM Lagtempo M-JR/SR + K-SR",
 "organizer": "IL Stjørdals-Blink",
@@ -10860,6 +11103,7 @@
 },
 "eq:32676": {
 "date": "2017-06-23",
+"fetched": "2026-10-04",
 "level": "Norgesmesterskap",
 "name": "Sykkel-NM Gateritt M/K-JR/SR",
 "organizer": "IL Stjørdals-Blink",
@@ -10868,6 +11112,7 @@
 },
 "eq:32685": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Nordsjørittet 2017 MTB Marathon",
 "organizer": "Dalane SK",
@@ -10876,6 +11121,7 @@
 },
 "eq:32689": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Hurdalsjøen Rundt Tur",
 "organizer": "Eidsvoll SK",
@@ -10892,6 +11138,7 @@
 },
 "eq:32719": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Atlanterhavsrittet 2017",
 "organizer": "Eide IL Sykkel",
@@ -10908,6 +11155,7 @@
 },
 "eq:32724": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Norgesmesterskap",
 "name": "NM Terreng Rundbane",
 "organizer": "Konnerud IL Sykkel",
@@ -10916,6 +11164,7 @@
 },
 "eq:32726": {
 "date": "2017-06-18",
+"fetched": "2026-10-04",
 "level": "Norgesmesterskap",
 "name": "NM Terreng Sprint",
 "organizer": "Konnerud IL Sykkel",
@@ -10933,6 +11182,7 @@
 },
 "eq:32745": {
 "date": "2017-05-13",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Eidsvollrittet Ranking junior og senior",
 "organizer": "Eidsvoll SK",
@@ -10941,6 +11191,7 @@
 },
 "eq:32746": {
 "date": "2017-05-14",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Eidsvollrittet NC 2",
 "organizer": "Eidsvoll SK",
@@ -10949,6 +11200,7 @@
 },
 "eq:32747": {
 "date": "2017-05-14",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Eidsvollrittet ungdom - fellesstart",
 "organizer": "Eidsvoll SK",
@@ -10966,6 +11218,7 @@
 },
 "eq:32768": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "SSK mila",
 "organizer": "Stavanger SK",
@@ -10982,6 +11235,7 @@
 },
 "eq:32774": {
 "date": "2017-05-14",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "SørKarmøy Rundt 2017",
 "organizer": "CK Haugaland",
@@ -10990,6 +11244,7 @@
 },
 "eq:32775": {
 "date": "2017-05-30",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Haugesund Sparebank Vats Tempo_2017",
 "organizer": "CK Haugaland",
@@ -11015,6 +11270,7 @@
 },
 "eq:32802": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Haugesund-Sauda 2017",
 "organizer": "Sauda SK",
@@ -11023,6 +11279,7 @@
 },
 "eq:32828": {
 "date": "2017-05-25",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Victoriarunden 2017",
 "organizer": "CK Victoria",
@@ -11031,6 +11288,7 @@
 },
 "eq:32829": {
 "date": "2017-05-25",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Victoriarunden Aktive Ungdomsklasser",
 "organizer": "CK Victoria",
@@ -11039,6 +11297,7 @@
 },
 "eq:32830": {
 "date": "2017-05-26",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Victoriatempoen",
 "organizer": "CK Victoria",
@@ -11047,6 +11306,7 @@
 },
 "eq:32831": {
 "date": "2017-05-26",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Victoriatempoen, Mastercup",
 "organizer": "CK Victoria",
@@ -11089,6 +11349,7 @@
 },
 "eq:32926": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "2017 Tour de Tomtvatnet - Sykkel",
 "organizer": "IL Sverre",
@@ -11097,6 +11358,7 @@
 },
 "eq:32937": {
 "date": "2017-06-04",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC 3 Sandnes",
 "organizer": "Sandnes Sykleklubb",
@@ -11105,6 +11367,7 @@
 },
 "eq:33031": {
 "date": "2017-05-09",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Sport 1-Mila og Master Cup 2017",
 "organizer": "CK Nittedal",
@@ -11121,6 +11384,7 @@
 },
 "eq:33035": {
 "date": "2017-05-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Tambarskjelvesprinten",
 "organizer": "Gauldal SK",
@@ -11129,6 +11393,7 @@
 },
 "eq:33044": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Norgeshus Gauldal 3-dagers sammenlagt",
 "organizer": "Gauldal SK",
@@ -11153,6 +11418,7 @@
 },
 "eq:33056": {
 "date": "2017-05-01",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Fosen Terreng 2017",
 "organizer": "Fosen SK",
@@ -11170,6 +11436,7 @@
 },
 "eq:33101": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Landegrensen 2017",
 "organizer": "Halden SK",
@@ -11195,6 +11462,7 @@
 },
 "eq:33121": {
 "date": "2017-04-08",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Ronde van Berg 2017",
 "organizer": "Nanset IF - Sykkel",
@@ -11203,6 +11471,7 @@
 },
 "eq:33147": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Knapper-rittet 2017",
 "organizer": "Odal SK",
@@ -11211,6 +11480,7 @@
 },
 "eq:33201": {
 "date": "2017-04-18",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Spinn Cup 1 - 2017 Fellesstart TCK",
 "organizer": "Sandefjord SK",
@@ -11219,6 +11489,7 @@
 },
 "eq:33211": {
 "date": "2017-06-05",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Skjærgårdsrittet 2017",
 "organizer": "CK Sotra",
@@ -11253,6 +11524,7 @@
 },
 "eq:33280": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Krepserittet 2017",
 "organizer": "S. Høland Idretts og Ungdomslag",
@@ -11286,6 +11558,7 @@
 },
 "eq:33405": {
 "date": "2017-06-04",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Mjøsa Rundt 2017",
 "organizer": "Feiring IL",
@@ -11345,6 +11618,7 @@
 },
 "eq:33520": {
 "date": "2017-05-09",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cupen 2017 Nesbyen",
 "organizer": "Andebarkji TSK",
@@ -11353,6 +11627,7 @@
 },
 "eq:33534": {
 "date": "2017-04-29",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC1 Fiskumrittet Tempo XCT",
 "organizer": "Fiskum IL",
@@ -11361,6 +11636,7 @@
 },
 "eq:33535": {
 "date": "2017-04-30",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC2 Fiskumrittet Rundbane XCO UCI Cat 1",
 "organizer": "Fiskum IL",
@@ -11377,6 +11653,7 @@
 },
 "eq:33605": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "TelemarksKanalrittet 2017",
 "organizer": "IL Skade",
@@ -11421,6 +11698,7 @@
 },
 "eq:33830": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Nordlysrittet 2017",
 "organizer": "Nordlysbyen Sykkel",
@@ -11429,6 +11707,7 @@
 },
 "eq:33831": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Bergsdalen Opp 2017",
 "organizer": "Voss SK",
@@ -11437,6 +11716,7 @@
 },
 "eq:33833": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nordhordland Rundt 2017",
 "organizer": "Nordhordland SK",
@@ -11462,6 +11742,7 @@
 },
 "eq:33883": {
 "date": "2017-06-18",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Skiptvet-rittet 2017",
 "organizer": "Skiptvet IL Sykkel",
@@ -11470,6 +11751,7 @@
 },
 "eq:33905": {
 "date": "2017-06-24",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Reistadrittet - Bardu 2017",
 "organizer": "Bardu IL Sykkel",
@@ -11478,6 +11760,7 @@
 },
 "eq:33945": {
 "date": "2017-06-24",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Okserittet 2017",
 "organizer": "SK Lyngdal & Omegn",
@@ -11486,6 +11769,7 @@
 },
 "eq:33998": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Hålogalandsrittet - Midt i Blinken",
 "organizer": "Harstad CK",
@@ -11502,6 +11786,7 @@
 },
 "eq:34027": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "AN-MAGRITTET",
 "organizer": "Opp av sofaen AS",
@@ -11534,6 +11819,7 @@
 },
 "eq:34063": {
 "date": "2017-04-04",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Fatrittet Klubbtempo 2017",
 "organizer": "Sandefjord SK",
@@ -11542,6 +11828,7 @@
 },
 "eq:34064": {
 "date": "2017-05-02",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Furustad Grand Prix 1 - Klubbritt",
 "organizer": "Sandefjord SK",
@@ -11550,6 +11837,7 @@
 },
 "eq:34065": {
 "date": "2017-06-13",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Furustad Grand Prix 2 - Klubbritt",
 "organizer": "Sandefjord SK",
@@ -11558,6 +11846,7 @@
 },
 "eq:34066": {
 "date": "2017-05-23",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Spinn Cup 3 - 2017 Fellesstart Andebu/Regionsmesterskap",
 "organizer": "Sandefjord SK",
@@ -11575,6 +11864,7 @@
 },
 "eq:34096": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Tour de Frøya 2017",
 "organizer": "Frøya og Hitra SK",
@@ -11583,6 +11873,7 @@
 },
 "eq:34100": {
 "date": "2017-04-27",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Sola-Cup #1",
 "organizer": "Sola CK",
@@ -11591,6 +11882,7 @@
 },
 "eq:34154": {
 "date": "2017-05-01",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Os Rundt 2017",
 "organizer": "CK Henie",
@@ -11599,6 +11891,7 @@
 },
 "eq:34156": {
 "date": "2017-04-20",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "SpecializedCup/Krohnegården 2017",
 "organizer": "CK Henie",
@@ -11607,6 +11900,7 @@
 },
 "eq:34158": {
 "date": "2017-05-11",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "SpecializedCup/Totland 2017",
 "organizer": "CK Henie",
@@ -11624,6 +11918,7 @@
 },
 "eq:34217": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Tour de Lax 2017",
 "organizer": "Laksvatn SSL",
@@ -11632,6 +11927,7 @@
 },
 "eq:34222": {
 "date": "2017-05-05",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Rye terrengsykkelfestival 2017 XCT",
 "organizer": "SK Rye sykkel",
@@ -11640,6 +11936,7 @@
 },
 "eq:34225": {
 "date": "2017-05-06",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Rye terrengsykkelfestival 2017 XCO",
 "organizer": "SK Rye sykkel",
@@ -11648,6 +11945,7 @@
 },
 "eq:34226": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Rye terrengsykkelfestival 2017 - XCC",
 "organizer": "SK Rye sykkel",
@@ -11696,6 +11994,7 @@
 },
 "eq:34247": {
 "date": "2017-04-06",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "PreTour Dalane 2017",
 "organizer": "Dalane SK",
@@ -11704,6 +12003,7 @@
 },
 "eq:34248": {
 "date": "2017-05-04",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "PreTour Nærbø 2017",
 "organizer": "Dalane SK",
@@ -11712,6 +12012,7 @@
 },
 "eq:34249": {
 "date": "2017-05-06",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "PreTour Farsund 2017",
 "organizer": "Dalane SK",
@@ -11720,6 +12021,7 @@
 },
 "eq:34250": {
 "date": "2017-05-18",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "PreTour Sandnes 2017",
 "organizer": "Dalane SK",
@@ -11736,6 +12038,7 @@
 },
 "eq:34255": {
 "date": "2017-06-18",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Birkenesrunden 2017",
 "organizer": "Birkenes IL",
@@ -11761,6 +12064,7 @@
 },
 "eq:34377": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Ringerike Grand Prix Junior",
 "organizer": "Ringerike SK",
@@ -11769,6 +12073,7 @@
 },
 "eq:34378": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Ringerike Grand Prix",
 "organizer": "Ringerike SK",
@@ -11777,6 +12082,7 @@
 },
 "eq:34379": {
 "date": "2017-05-06",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Sundvolden Grand Prix",
 "organizer": "Ringerike SK",
@@ -11818,6 +12124,7 @@
 },
 "eq:34552": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Vårtesten 2017",
 "organizer": "Nesodden SK",
@@ -11896,6 +12203,7 @@
 },
 "eq:34822": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC 6 Karl XII rittet - Terreng rundbane",
 "organizer": "Halden CK",
@@ -11904,6 +12212,7 @@
 },
 "eq:34823": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC 7 Karl XII rittet - Terreng sprint (XCE)",
 "organizer": "Halden CK",
@@ -11912,6 +12221,7 @@
 },
 "eq:34825": {
 "date": "2017-04-22",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Øygarden Tempo",
 "organizer": "NCF Region Vest",
@@ -11920,6 +12230,7 @@
 },
 "eq:34826": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "NC 1 Bergen",
 "organizer": "NCF Region Vest",
@@ -11962,6 +12273,7 @@
 },
 "eq:34885": {
 "date": "2017-06-07",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #4, Bogafjell SK",
 "organizer": "Bogafjell Sykleklubb",
@@ -11970,6 +12282,7 @@
 },
 "eq:34886": {
 "date": "2017-05-23",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #3, Hafrsfjord SK",
 "organizer": "Hafrsfjord SK",
@@ -11994,6 +12307,7 @@
 },
 "eq:34889": {
 "date": "2017-03-26",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #1, Vigrestad Challenge",
 "organizer": "Vigrestad SK",
@@ -12053,6 +12367,7 @@
 },
 "eq:34944": {
 "date": "2017-05-14",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Herefoss Rundt 2017",
 "organizer": "Arendal CC",
@@ -12061,6 +12376,7 @@
 },
 "eq:34946": {
 "date": "2017-04-29",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Vårtråkken 2017",
 "organizer": "Arendal CC",
@@ -12087,6 +12403,7 @@
 },
 "eq:35002": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Hallingrittet 2017",
 "organizer": "Gol IL - sykkelgruppe",
@@ -12095,6 +12412,7 @@
 },
 "eq:35026": {
 "date": "2017-04-18",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbritt 2017- ritt 1",
 "organizer": "Eidsvoll SK",
@@ -12120,6 +12438,7 @@
 },
 "eq:35168": {
 "date": "2017-06-03",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Stenhoggerrittet 2017",
 "organizer": "Idd Sportsklubb",
@@ -12128,6 +12447,7 @@
 },
 "eq:35260": {
 "date": "2017-05-13",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #2, Sandnes SK",
 "organizer": "Sandnes Sykleklubb",
@@ -12153,6 +12473,7 @@
 },
 "eq:35397": {
 "date": "2017-04-26",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "SK: Bratten-Festvåg-Bratten",
 "organizer": "Bodø CK",
@@ -12161,6 +12482,7 @@
 },
 "eq:35407": {
 "date": "2017-03-28",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nokas Cup 1  - Treningsritt",
 "organizer": "Stord SK",
@@ -12169,6 +12491,7 @@
 },
 "eq:35408": {
 "date": "2017-04-04",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nokas Cup 2  - Treningsritt",
 "organizer": "Stord SK",
@@ -12185,6 +12508,7 @@
 },
 "eq:35412": {
 "date": "2017-04-11",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 1 2017 - Tempo",
 "organizer": "Stord SK",
@@ -12193,6 +12517,7 @@
 },
 "eq:35413": {
 "date": "2017-04-25",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 2 2017 - Tempo",
 "organizer": "Stord SK",
@@ -12201,6 +12526,7 @@
 },
 "eq:35418": {
 "date": "2017-05-09",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "SK: Saltstraumen-Kommunegransa RV17 t/r",
 "organizer": "Bodø CK",
@@ -12209,6 +12535,7 @@
 },
 "eq:35424": {
 "date": "2017-05-14",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Dalane Rundt 2017",
 "organizer": "Dalane SK",
@@ -12217,6 +12544,7 @@
 },
 "eq:35451": {
 "date": "2017-04-30",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "FOCC Bånn Gass 2017",
 "organizer": "Fevik og Omegn CC",
@@ -12225,6 +12553,7 @@
 },
 "eq:35504": {
 "date": "2017-06-04",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Åseral Rundt 2017",
 "organizer": "Otra IL Sykkel",
@@ -12259,6 +12588,7 @@
 },
 "eq:35641": {
 "date": "2017-05-10",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Nes-mila 2017",
 "organizer": "Nes SK",
@@ -12275,6 +12605,7 @@
 },
 "eq:35715": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Oggevatn Rundt 2017",
 "organizer": "Vennesla OCK",
@@ -12309,6 +12640,7 @@
 },
 "eq:35750": {
 "date": "2017-05-09",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Nymarks Tempo 2017",
 "organizer": "Nymark IL",
@@ -12317,6 +12649,7 @@
 },
 "eq:35755": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Bergen Ritthelg 2017 - Flaktveitrunden",
 "organizer": "Åsane CK",
@@ -12325,6 +12658,7 @@
 },
 "eq:35805": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": null,
 "name": "Stjernetråkken 2017",
 "organizer": "Fredrikstad SK",
@@ -12333,6 +12667,7 @@
 },
 "eq:35807": {
 "date": "2017-04-02",
+"fetched": "2026-10-04",
 "level": null,
 "name": "Stjernetråkken 2017",
 "organizer": "Fredrikstad SK",
@@ -12383,6 +12718,7 @@
 },
 "eq:35915": {
 "date": "2017-05-29",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Terrengkarusell 1 29.05.2017",
 "organizer": "Nesodden SK",
@@ -12391,6 +12727,7 @@
 },
 "eq:35916": {
 "date": "2017-06-12",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Terrengkarusell 2 12.06.2017",
 "organizer": "Nesodden SK",
@@ -12423,6 +12760,7 @@
 },
 "eq:35922": {
 "date": "2017-05-01",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Høiåsrittet 2017",
 "organizer": "Halden SK",
@@ -12431,6 +12769,7 @@
 },
 "eq:35937": {
 "date": "2017-04-26",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "TOSKmesterskabet 2017",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -12439,6 +12778,7 @@
 },
 "eq:35942": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TeVeBu Cup 2017 #1,Vikerøya",
 "organizer": "Nanset IF - Sykkel",
@@ -12455,6 +12795,7 @@
 },
 "eq:35954": {
 "date": "2017-04-18",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nokas Cup 3  - Treningsritt",
 "organizer": "Stord SK",
@@ -12463,6 +12804,7 @@
 },
 "eq:35962": {
 "date": "2017-05-13",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Eidsvollrittet ungdom - gateritt",
 "organizer": "Eidsvoll SK",
@@ -12471,6 +12813,7 @@
 },
 "eq:35970": {
 "date": "2017-04-26",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Øster Hus Cupen #1 Søredalen",
 "organizer": "Sandnes Sykleklubb",
@@ -12479,6 +12822,7 @@
 },
 "eq:35971": {
 "date": "2017-05-03",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Øster Hus Cupen #2 Horpestad",
 "organizer": "Sandnes Sykleklubb",
@@ -12513,6 +12857,7 @@
 },
 "eq:36001": {
 "date": "2017-05-04",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbritt 2017- ritt 2",
 "organizer": "Eidsvoll SK",
@@ -12521,6 +12866,7 @@
 },
 "eq:36004": {
 "date": "2017-05-27",
+"failed": "2026-10-04",
 "level": "Trimritt",
 "name": "Granfondo Don Pedro 2017-Larvik",
 "organizer": "Nanset IF - Sykkel",
@@ -12529,6 +12875,7 @@
 },
 "eq:36008": {
 "date": "2017-06-24",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Vesterålen Grand Prix 2017",
 "organizer": "Alsvåg Idrettslag",
@@ -12537,6 +12884,7 @@
 },
 "eq:36034": {
 "date": "2017-05-11",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Mjøsa terrengsykkelcup #1 Raufoss",
 "organizer": "Raufoss & Gjøvik SK",
@@ -12563,6 +12911,7 @@
 },
 "eq:36069": {
 "date": "2017-04-22",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Rogaland 3E Tempo",
 "organizer": "Stavanger SK",
@@ -12571,6 +12920,7 @@
 },
 "eq:36070": {
 "date": "2017-04-22",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Rogaland 3E Gateritt",
 "organizer": "Stavanger SK",
@@ -12579,6 +12929,7 @@
 },
 "eq:36071": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Rogaland 3E Fellesstart",
 "organizer": "Stavanger SK",
@@ -12587,6 +12938,7 @@
 },
 "eq:36072": {
 "date": "2017-04-23",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Rogaland 3E Sammenlagt",
 "organizer": "Stavanger SK",
@@ -12595,6 +12947,7 @@
 },
 "eq:36083": {
 "date": "2017-05-18",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Mjøsa terrengsykkelcup #2 Lillehammer",
 "organizer": "Lillehammer CK",
@@ -12611,6 +12964,7 @@
 },
 "eq:36086": {
 "date": "2017-06-08",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Mjøsa terrengsykkelcup #4 Vind",
 "organizer": "Vind IL",
@@ -12627,6 +12981,7 @@
 },
 "eq:36088": {
 "date": "2017-06-01",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Mjøsa terrengsykkelcup #3 Ottestad",
 "organizer": "Ottestad IL Sykkel",
@@ -12643,6 +12998,7 @@
 },
 "eq:36105": {
 "date": "2017-05-30",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TeVeBu Cup 2017 #2, Bjørndalen",
 "organizer": "Nanset IF - Sykkel",
@@ -12651,6 +13007,7 @@
 },
 "eq:36143": {
 "date": "2017-04-29",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Festvågrittene - Bakketempo",
 "organizer": "Bodø CK",
@@ -12659,6 +13016,7 @@
 },
 "eq:36144": {
 "date": "2017-04-30",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Festvågrittene - Fellesstart",
 "organizer": "Bodø CK",
@@ -12667,6 +13025,7 @@
 },
 "eq:36145": {
 "date": "2017-04-30",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Festvågrittene - Sammenlagt",
 "organizer": "Bodø CK",
@@ -12675,6 +13034,7 @@
 },
 "eq:36155": {
 "date": "2017-05-03",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour Valdres 17 #1 Sør-Aurdal",
 "organizer": "CK Valdres",
@@ -12701,6 +13061,7 @@
 },
 "eq:36197": {
 "date": "2017-05-02",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nokas Cup 4  - Treningsritt",
 "organizer": "Stord SK",
@@ -12709,6 +13070,7 @@
 },
 "eq:36199": {
 "date": "2017-05-09",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 3 2017 - Tempo",
 "organizer": "Stord SK",
@@ -12717,6 +13079,7 @@
 },
 "eq:36200": {
 "date": "2017-05-16",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 4 2017 - Tempo",
 "organizer": "Stord SK",
@@ -12725,6 +13088,7 @@
 },
 "eq:36208": {
 "date": "2017-04-28",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "test",
 "organizer": "Arendal CC",
@@ -12733,6 +13097,7 @@
 },
 "eq:36221": {
 "date": "2017-05-02",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 Treningsritt 1",
 "organizer": "Harstad CK",
@@ -12741,6 +13106,7 @@
 },
 "eq:36229": {
 "date": "2017-04-30",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "2017 Black Design Tempo",
 "organizer": "IL Sverre",
@@ -12749,6 +13115,7 @@
 },
 "eq:36230": {
 "date": "2017-04-30",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "2017 Black design Fellesstart",
 "organizer": "IL Sverre",
@@ -12757,6 +13124,7 @@
 },
 "eq:36241": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "GD CUP #2 Lalm (Ottadalen SK) 2",
 "organizer": "Ottadalen SK",
@@ -12765,6 +13133,7 @@
 },
 "eq:36260": {
 "date": "2017-05-10",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour Valdres 17 #2 GT-Runden",
 "organizer": "CK Valdres",
@@ -12790,6 +13159,7 @@
 },
 "eq:36301": {
 "date": "2017-05-09",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 Treningsritt 2",
 "organizer": "Harstad CK",
@@ -12798,6 +13168,7 @@
 },
 "eq:36355": {
 "date": "2017-05-04",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Ålesund_test",
 "organizer": "Ålesund og Omegn CK",
@@ -12806,6 +13177,7 @@
 },
 "eq:36358": {
 "date": "2017-06-01",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Korketrekkeren Harestua til Bislingen",
 "organizer": "Kloppa Off Road Klubb",
@@ -12814,6 +13186,7 @@
 },
 "eq:36363": {
 "date": "2017-05-25",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "GD-Cup Sykkel #1 - Lågen CK",
 "organizer": "Vinstra IL",
@@ -12831,6 +13204,7 @@
 },
 "eq:36380": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "Hurdalsjøen Rundt - Master Cup",
 "organizer": "Eidsvoll SK",
@@ -12839,6 +13213,7 @@
 },
 "eq:36381": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Hurdalssjøen Rundt NM Brann",
 "organizer": "Eidsvoll SK",
@@ -12847,6 +13222,7 @@
 },
 "eq:36400": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "NorgesCup",
 "name": "Rye terrengsykkelfestival 2017 XCS",
 "organizer": "SK Rye sykkel",
@@ -12863,6 +13239,7 @@
 },
 "eq:36419": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbmesterskap landevei Driv IL sykkel 2017",
 "organizer": "Driv Idrettslag",
@@ -12871,6 +13248,7 @@
 },
 "eq:36422": {
 "date": "2017-05-16",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour 2017 - #3 Individuell tempo",
 "organizer": "CK Valdres",
@@ -12879,6 +13257,7 @@
 },
 "eq:36439": {
 "date": "2017-05-16",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 \"Helvete i nord #1\"",
 "organizer": "Harstad CK",
@@ -12887,6 +13266,7 @@
 },
 "eq:36448": {
 "date": "2017-06-06",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Klubbritt 2017- ritt 3",
 "organizer": "Eidsvoll SK",
@@ -12930,6 +13310,7 @@
 },
 "eq:36502": {
 "date": "2017-05-24",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour Valdres 17 #4 Land",
 "organizer": "CK Valdres",
@@ -12938,6 +13319,7 @@
 },
 "eq:36503": {
 "date": "2017-05-24",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Specializedcup/KyrkjekrinsenÅsane 2017",
 "organizer": "CK Henie",
@@ -12946,6 +13328,7 @@
 },
 "eq:36517": {
 "date": "2017-05-23",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 Treningsritt 4",
 "organizer": "Harstad CK",
@@ -12954,6 +13337,7 @@
 },
 "eq:36520": {
 "date": "2017-05-23",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cupen 2017 Gol",
 "organizer": "Andebarkji TSK",
@@ -12971,6 +13355,7 @@
 },
 "eq:36550": {
 "date": "2017-05-19",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Svartisrittet 2017 - RM Gateritt",
 "organizer": "Meløy Ski- og Sykkelklubb",
@@ -12979,6 +13364,7 @@
 },
 "eq:36553": {
 "date": "2017-05-07",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "Bergen Ritthelg 2017 - Sammenlagt",
 "organizer": "NCF Region Vest",
@@ -12987,6 +13373,7 @@
 },
 "eq:36557": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Svartisrittet 2017 - RM Fellestart",
 "organizer": "Meløy Ski- og Sykkelklubb",
@@ -12995,6 +13382,7 @@
 },
 "eq:36570": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Svartisrittet 2017 - RM Tempo",
 "organizer": "Meløy Ski- og Sykkelklubb",
@@ -13003,6 +13391,7 @@
 },
 "eq:36578": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Regionmesterskap Tempo - ØST",
 "organizer": "Thorshov SK",
@@ -13011,6 +13400,7 @@
 },
 "eq:36579": {
 "date": "2017-06-06",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cupen 2017 Torpo Temporitt",
 "organizer": "Andebarkji TSK",
@@ -13019,6 +13409,7 @@
 },
 "eq:36580": {
 "date": "2017-06-20",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cupen 2017 Geilo",
 "organizer": "Andebarkji TSK",
@@ -13059,6 +13450,7 @@
 },
 "eq:36628": {
 "date": "2017-05-30",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 Treningsritt 5 Tempo",
 "organizer": "Harstad CK",
@@ -13110,6 +13502,7 @@
 },
 "eq:36661": {
 "date": "2017-05-30",
+"fetched": "2026-10-04",
 "level": "Trimritt",
 "name": "Spar Cup 5 2017 - Tempo",
 "organizer": "Stord SK",
@@ -13118,6 +13511,7 @@
 },
 "eq:36686": {
 "date": "2017-05-31",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour Valdres 17 #5 Helvete i Nord",
 "organizer": "CK Valdres",
@@ -13135,6 +13529,7 @@
 },
 "eq:36701": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Nærbø Grand Prix",
 "organizer": "Nærbø SK",
@@ -13143,6 +13538,7 @@
 },
 "eq:36702": {
 "date": "2017-06-18",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Nærbø Grand Prix",
 "organizer": "Nærbø SK",
@@ -13151,6 +13547,7 @@
 },
 "eq:36703": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Nærbø Grand Prix",
 "organizer": "Nærbø SK",
@@ -13159,6 +13556,7 @@
 },
 "eq:36707": {
 "date": "2017-05-17",
+"fetched": "2026-10-04",
 "level": "UCI Ritt",
 "name": "Tour of Norway 2017",
 "organizer": "Norwegian Cycling Federation",
@@ -13167,6 +13565,7 @@
 },
 "eq:36708": {
 "date": "2017-06-06",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 Treningsritt 6",
 "organizer": "Harstad CK",
@@ -13175,6 +13574,7 @@
 },
 "eq:36712": {
 "date": "2017-06-24",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Skogen Z5",
 "organizer": "Nerskogen IL",
@@ -13199,6 +13599,7 @@
 },
 "eq:36735": {
 "date": "2017-06-04",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour Valdres 17 #6 Valdresflya",
 "organizer": "CK Valdres",
@@ -13207,6 +13608,7 @@
 },
 "eq:36751": {
 "date": "2017-06-06",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nokas Cup 6  - Treningsritt",
 "organizer": "Stord SK",
@@ -13215,6 +13617,7 @@
 },
 "eq:36752": {
 "date": "2017-06-13",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Nokas Cup 7  - Treningsritt",
 "organizer": "Stord SK",
@@ -13263,6 +13666,7 @@
 },
 "eq:36784": {
 "date": "2017-06-15",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Korketrekkeren Harestua til Bislingen",
 "organizer": "Kloppa Off Road Klubb",
@@ -13271,6 +13675,7 @@
 },
 "eq:36798": {
 "date": "2017-06-07",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour Valdres 17 #7 Etnedalsrunden",
 "organizer": "CK Valdres",
@@ -13279,6 +13684,7 @@
 },
 "eq:36842": {
 "date": "2017-05-30",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Spinn Cup 4 - Regionmesterskap",
 "organizer": "Sandefjord SK",
@@ -13287,6 +13693,7 @@
 },
 "eq:36847": {
 "date": "2017-05-23",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "Spinn Cup 3 - Regionmesterskap",
 "organizer": "Sandefjord SK",
@@ -13295,6 +13702,7 @@
 },
 "eq:36850": {
 "date": "2017-06-13",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Driv XCO Venners venner rundbaneritt",
 "organizer": "Driv Idrettslag",
@@ -13311,6 +13719,7 @@
 },
 "eq:36852": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "Hammerfestrittet 2017",
 "organizer": "Hammerfest SK",
@@ -13319,6 +13728,7 @@
 },
 "eq:36864": {
 "date": "2017-06-13",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 Treningsritt 7 Terreng rundbane",
 "organizer": "Harstad CK",
@@ -13327,6 +13737,7 @@
 },
 "eq:36871": {
 "date": "2017-06-20",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Leon Sport Cup 2017 Treningsritt 8",
 "organizer": "Harstad CK",
@@ -13343,6 +13754,7 @@
 },
 "eq:36883": {
 "date": "2017-05-21",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "RM Region Vest, Fellesstart",
 "organizer": "NCF Region Vest",
@@ -13351,6 +13763,7 @@
 },
 "eq:36884": {
 "date": "2017-05-26",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "2017 Øyatempo",
 "organizer": "Mosjøen og Omegn CK",
@@ -13359,6 +13772,7 @@
 },
 "eq:36885": {
 "date": "2017-05-20",
+"fetched": "2026-10-04",
 "level": "Regionmesterskap",
 "name": "RM Region Vest, Tempo",
 "organizer": "NCF Region Vest",
@@ -13367,6 +13781,7 @@
 },
 "eq:36900": {
 "date": "2017-05-28",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "2017 Vefsentråkket",
 "organizer": "Mosjøen og Omegn CK",
@@ -13384,6 +13799,7 @@
 },
 "eq:36922": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Hurdalsjøen Rundt Brann NM Sykkel",
 "organizer": "Eidsvoll SK",
@@ -13392,6 +13808,7 @@
 },
 "eq:36927": {
 "date": "2017-06-09",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Norgeshus, Gauldal 3 dagers, Tempo",
 "organizer": "Gauldal SK",
@@ -13400,6 +13817,7 @@
 },
 "eq:36928": {
 "date": "2017-06-10",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Norgeshus Gauldal 3-dagers, Fellesstart1",
 "organizer": "Gauldal SK",
@@ -13408,6 +13826,7 @@
 },
 "eq:36929": {
 "date": "2017-06-11",
+"fetched": "2026-10-04",
 "level": "NCF Ranking",
 "name": "2017 Norgeshus, Gauldal-3 dagers, Fellesstart 2",
 "organizer": "Gauldal SK",
@@ -13416,6 +13835,7 @@
 },
 "eq:36930": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "2017 Hårektempo",
 "organizer": "Mosjøen og Omegn CK",
@@ -13424,6 +13844,7 @@
 },
 "eq:36931": {
 "date": "2017-05-27",
+"fetched": "2026-10-04",
 "level": "MasterCup",
 "name": "2017 Syv Søstrerittet",
 "organizer": "Mosjøen og Omegn CK",
@@ -13432,6 +13853,7 @@
 },
 "eq:36935": {
 "date": "2017-06-14",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "Protour Valdres 17 #8 Eventyret i Sør",
 "organizer": "CK Valdres",
@@ -13440,6 +13862,7 @@
 },
 "eq:36938": {
 "date": "2017-06-14",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TeVeBu Cup 2017 #3, RE",
 "organizer": "Nanset IF - Sykkel",
@@ -13496,6 +13919,7 @@
 },
 "eq:36976": {
 "date": "2017-06-16",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "FOCC GP 2017 Fellesstart #1 Fjærerunden",
 "organizer": "Fevik og Omegn CC",
@@ -13504,6 +13928,7 @@
 },
 "eq:36977": {
 "date": "2017-06-17",
+"fetched": "2026-10-04",
 "level": "Klubbritt",
 "name": "FOCC GP 2017 Fellestart #2 Ronde van Fevik",
 "organizer": "Fevik og Omegn CC",
@@ -13520,6 +13945,7 @@
 },
 "eq:37050": {
 "date": "2017-06-23",
+"fetched": "2026-10-04",
 "level": "Turritt",
 "name": "Skogen Z5_test",
 "organizer": "Nerskogen IL",
@@ -13545,6 +13971,7 @@
 },
 "eq:37082": {
 "date": "2017-06-23",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TransØsterdalen 2017 Etappe 1",
 "organizer": "Savalen SK",
@@ -13562,6 +13989,7 @@
 },
 "eq:37099": {
 "date": "2017-06-24",
+"fetched": "2026-10-04",
 "level": "Regionritt",
 "name": "TransØsterdalen 2017 Etappe 2",
 "organizer": "Savalen SK",
@@ -37379,6 +37807,14 @@
 "organizer": "IF Frøy",
 "place": "Holmenkollen",
 "sport": "Landevei"
+},
+"eq:84082": {
+"date": "2026-10-03",
+"level": "NorgesCup",
+"name": "NC 1 Sykkelkross 2026",
+"organizer": "Lillehammer CK",
+"place": "Lillehammer",
+"sport": "Sykkelkross"
 },
 "eq:84110": {
 "date": "2026-09-12",
