@@ -1,7 +1,7 @@
 # «Hent alle mine ritt»: riders who asked on the site to have all their races fetched.
 #
 # The site only writes a request to the fetch_requests table in D1, behind a bot check
-# and a daily cap; it never scrapes. Every two hours this job takes at most 3 requests
+# and a daily cap; it never scrapes. Every six hours this job takes at most 3 requests
 # (fetch_queue.py), fetches each rider's history from 2005 with the same caching and 2 s
 # pauses as the weekly run, and commits the result; Cloudflare Pages then republishes.
 #
@@ -11,7 +11,7 @@ name: Fetch requested riders
 
 on:
   schedule:
-    - cron: "17 */2 * * *"  # every two hours, so a request is done within a few hours; an empty queue does nothing
+    - cron: "17 */6 * * *"  # every six hours (four runs a day keep Actions inside the free minutes); an empty queue does nothing
   workflow_dispatch:
 
 permissions:

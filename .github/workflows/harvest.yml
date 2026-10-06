@@ -1,7 +1,12 @@
 # Nightly harvest (harvest.py): every cycling race in Norway, found from EQ Timing's and
 # raceresult's own calendars, and each race's result lists fetched once, 8 to 15 s (random) between requests.
-# The first nights work through the backlog (about 4,600 races since 2008, roughly a week to ten
-# nights at 5.5 hours a night); after that only new races are fetched.
+# The first nights work through the backlog (about 4,600 races since 2008); after that only new
+# races are fetched.
+#
+# 45 minutes a night (Pedår, 2026-10-06): the repo is private, so Actions has 2,000 free minutes a
+# month, and 5.5 hours a night used them up in six nights. 45 minutes a night (~1,500 a month)
+# leaves room for the queue and weekly jobs. That is about 45 races a night, so the remaining
+# backlog (about 2,000 races in October 2026) takes six to seven weeks.
 #
 # The lists live on the branch "harvest", checked out in cache/harvest, never on main. The
 # first run creates that branch. Nothing on the site can start this job.
@@ -12,12 +17,12 @@ name: Harvest race results
 # (harvest.Blocked) and the job fails, so it shows up; nothing works around a block.
 on:
   schedule:
-    - cron: "0 22 * * *"  # 22:00 UTC = midnight in Norway (summer time); fetching stops after 5.5 hours
+    - cron: "0 22 * * *"  # 22:00 UTC = midnight in Norway (summer time); fetching stops after 45 minutes
   workflow_dispatch:
     inputs:
       minutes:
         description: "Minutes to spend fetching lists"
-        default: "330"
+        default: "45"
 
 permissions:
   contents: write
@@ -29,7 +34,7 @@ concurrency:
 jobs:
   harvest:
     runs-on: ubuntu-latest
-    timeout-minutes: 355
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -54,7 +59,7 @@ jobs:
           fi
 
       - name: Harvest
-        run: python3 harvest.py "${{ github.event.inputs.minutes || '330' }}"
+        run: python3 harvest.py "${{ github.event.inputs.minutes || '45' }}"
 
       - name: Commit to the harvest branch
         if: always()
