@@ -14,6 +14,7 @@ export const Icon = {
   // YouTube's own mark: red rounded rectangle, white play triangle (brand colours, not the theme's).
   youtube: () => <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF0000" /><path d="M10 8.8v6.4l5.6-3.2z" fill="#fff" /></svg>,
   bolt: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg>,
+  beer: () => <svg viewBox="0 0 24 24" aria-hidden="true" {...s}><path d="M6 8h10v12H6zm10 3h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2M6 8a3 3 0 0 1 3-4 3 3 0 0 1 5 0 2 2 0 0 1 2 4M10 12v5m3-5v5" /></svg>,
 };
 
 export const BrandMark = () => (

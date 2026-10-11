@@ -18,6 +18,8 @@ import type { RacePower } from "./intervals";
 import { getSaved } from "./saved";
 import { addRecent, clearRecent, getRecent, type Recent } from "./recent";
 
+const KOFI = "https://ko-fi.com/pederhsx";
+
 export type Tab = "oversikt" | "utvikling" | "rivaler" | "ritt" | "klipp";
 const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
   { id: "oversikt", label: "Oversikt", icon: Icon.overview },
@@ -190,6 +192,12 @@ export default function App() {
             </SelProvider>
             </KlasseProvider>
           )}
+          {/* The tip jar: after the content on every page, never in the way of it. A plain link, so the CSP stays as it is. */}
+          <a className="kofi" href={KOFI} target="_blank" rel="noopener">
+            <span className="kofi-icon"><Icon.beer /></span>
+            <span><b>Liker du siden?</b> <span className="muted">Hjelp Peder å gjøre den bedre ved å spandere hans neste øl.</span></span>
+            <span className="kofi-go">Spander en øl →</span>
+          </a>
           <footer className="site">
             <span>Plassering: DNF telles med i feltet. Watt og fart gjelder bare selve rittet.</span>
             <span>Resultater fra <Sources />. Watt fra <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>.</span>
