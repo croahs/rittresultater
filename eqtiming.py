@@ -20,6 +20,8 @@ import time
 
 import requests
 
+from ageclass import decade
+
 BASE = "https://live.eqtiming.com/api"
 RIDER_ID = 6753412  # Peder Holterman Solland
 PAUSE = 2
@@ -246,13 +248,13 @@ def races(rider=RIDER_ID, since=0, max_lists=None):
             continue  # the rider's own time is a timing error: no result to show
         rows = [r for r in rows if not (r[2] == "TIME" and r[3] in bad)]
         place, n = _rank(rows, rider)
-        age_place, age_n = _rank([r for r in rows if r[1] == me[1]], rider)
+        age_place, age_n = _rank([r for r in rows if decade(r[1]) == decade(me[1])], rider)
         finishers = [r[3] for r in rows if r[2] == "TIME"]
         out.append({
             "event_id": h["ArrangementUID"], "stage_id": h["EtappeUID"],
             "name": h["ArrangementNavn"], "stage": h["EtappeNavn"], "group": me[4], "date": h["ArrangementDato"][:10],
             "class_place": place, "class_n": n,
-            "age_class": me[1], "age_place": age_place, "age_n": age_n,
+            "age_class": decade(me[1]), "age_place": age_place, "age_n": age_n,
             "time": _time(me[2], me[3], me[5:]),
             "class_winner": _hms(min(finishers)) if finishers else "",
             "url": f"https://live.eqtiming.com/{h['ArrangementUID']}#result",
@@ -318,12 +320,12 @@ def registry_races(entry, name, rider=None):
             pool = [r for r in pool if r[4] == me[6]]
         pool = _course(pool, me[3], lambda r: r[1])
         place, n = _rank(pool, me[0])
-        age_place, age_n = _rank([r for r in pool if r[1] == me[3]], me[0])
+        age_place, age_n = _rank([r for r in pool if decade(r[1]) == decade(me[3])], me[0])
         finishers = [r[3] for r in pool if r[2] == "TIME"]
         out.append({
             "event_id": entry["event"], "stage_id": stage, "name": entry["name"], "stage": stage_name,
             "group": me[6], "date": entry["date"], "class_place": place, "class_n": n,
-            "age_class": me[3], "age_place": age_place, "age_n": age_n,
+            "age_class": decade(me[3]), "age_place": age_place, "age_n": age_n,
             "time": _time(me[4], me[5], me[7:]),
             "class_winner": _hms(min(finishers)) if finishers else "",
             "url": f"https://live.eqtiming.com/{entry['event']}#result",
