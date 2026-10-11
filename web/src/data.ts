@@ -1,5 +1,5 @@
 import { idsLoader } from "./ids";
-import { clsLabel, fold } from "./format";
+import { ageLabel, clsLabel, fold } from "./format";
 // Data model and loading. The site only reads static JSON under data/ (written by export_web.py).
 
 export type RaceType = "Road" | "Gravel" | "MTB" | "TT" | "TTT" | "Unknown";
@@ -135,7 +135,7 @@ function result(r: Record<string, unknown>): Result {
     place, field, basis: overall || r.class == null && r.top === undefined ? "totalt" : "i klassen", top, beaten: Math.max(0, Math.min(100, beaten)),
     behind: num(r.behind ?? r.behind_pct), time: String(r.time ?? ""), winner: String(r.winner ?? ""),
     np: num(r.np), ap: num(r.ap), speed: num(r.speed), km: num(r.km), climb: num(r.climb),
-    ageClass: clsLabel(String(r.age_class ?? "")), agePlace: num(r.age_place), ageN: num(r.age_n),
+    ageClass: ageLabel(String(r.age_class ?? "")), agePlace: num(r.age_place), ageN: num(r.age_n),
     link: String(r.turritt ?? r.link ?? ""), icu: String(r.icu ?? ""),
     women: r.women_place != null && r.women_field != null ? {
       place: Number(r.women_place), field: Number(r.women_field),
@@ -149,7 +149,7 @@ function athlete(p: RawProfile, full = false): Athlete {
   const ins = { ...(p.insights || {}) } as Insights & { closest?: string[] };
   const closest = ins.closest; delete ins.closest;
   return {
-    id: p.id, name: p.name, club: p.club, ageClass: p.age_class || "",
+    id: p.id, name: p.name, club: p.club, ageClass: ageLabel(p.age_class || ""),
     sex: p.sex ?? null, rivalsWomen: p.rivals_women || [],
     power: !!p.power, clips: p.clips || [], full,
     results: p.results.map(result).filter((r) => r.field > 0 && Number.isFinite(r.top)).sort((a, b) => a.date.localeCompare(b.date)),

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { loadVideos, raceLists, videosFor, type IndexRider, type RaceList, type RaceVideo, type VideoFile } from "../data";
-import { TYPE_LABEL, TYPE_VAR, clock, clsLabel, dateLong } from "../format";
+import { TYPE_LABEL, TYPE_VAR, ageLabel, clock, clsLabel, dateLong } from "../format";
 import { KlasseToggle, useKlasse } from "../klasse";
 import RaceVideos from "../RaceVideos";
 import { Icon } from "../ui";
@@ -56,7 +56,7 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
                 <td className="tnum">{shown == null ? "–" : clock(shown)}</td>
                 <td className="tnum muted">{down ? `−${down} ${down === 1 ? "runde" : "runder"}` : t == null || best == null || i === 0 ? "" : `+${clock(t - best)}`}</td>
                 <td className="l muted">{r[2]}</td>
-                <td className="l muted">{clsLabel(r[4] || r[3])}</td>
+                <td className="l muted">{r[4] ? clsLabel(r[4]) : ageLabel(r[3])}</td>
               </tr>
               {open === r[0] && vids.has(r[0]) && <tr className="media-row"><td colSpan={99}>
                 <RaceVideos videos={[{ rid: r[0], by: r[1], url: vids.get(r[0])!, own: false } satisfies RaceVideo]} race={`${name} ${race.date.slice(0, 4)}`} autoOpen /></td></tr>}

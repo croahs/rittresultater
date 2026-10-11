@@ -125,9 +125,9 @@
    "speed_kmh": 41.2,
    "avg_power": null,
    "np": null,
-   "age_class": "M 45-49",
+   "age_class": "M40-49",
    "age_place": 4,
-   "age_n": 140,
+   "age_n": 265,
    "source_ids": {
     "turritt": null,
     "eqtiming": "254/269"
@@ -285,9 +285,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M45-49",
-   "age_place": 1,
-   "age_n": 6,
+   "age_class": "M40-49",
+   "age_place": 3,
+   "age_n": 14,
    "source_ids": {
     "turritt": null,
     "eqtiming": "987/2606"
@@ -485,9 +485,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M 25-29",
-   "age_place": 18,
-   "age_n": 33,
+   "age_class": "M20-29",
+   "age_place": 24,
+   "age_n": 42,
    "source_ids": {
     "turritt": null,
     "eqtiming": "2774/9260"
@@ -725,9 +725,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M 45-49",
+   "age_class": "M40-49",
    "age_place": 28,
-   "age_n": 46,
+   "age_n": 99,
    "source_ids": {
     "turritt": null,
     "eqtiming": "3428/11058"
@@ -1045,9 +1045,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M 25-29",
+   "age_class": "M20-29",
    "age_place": 8,
-   "age_n": 16,
+   "age_n": 17,
    "source_ids": {
     "turritt": null,
     "eqtiming": "5754/17086"
@@ -1085,9 +1085,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M 50-54",
+   "age_class": "M50-59",
    "age_place": 2,
-   "age_n": 43,
+   "age_n": 65,
    "source_ids": {
     "turritt": null,
     "eqtiming": "5754/17084"
@@ -1365,9 +1365,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
-   "age_place": 9,
-   "age_n": 41,
+   "age_class": "M50-59",
+   "age_place": 10,
+   "age_n": 67,
    "source_ids": {
     "turritt": null,
     "eqtiming": "6434/18936"
@@ -1605,9 +1605,9 @@
    "speed_kmh": 32.9,
    "avg_power": null,
    "np": null,
-   "age_class": "M 25-29",
-   "age_place": 4,
-   "age_n": 6,
+   "age_class": "M20-29",
+   "age_place": 5,
+   "age_n": 7,
    "source_ids": {
     "turritt": null,
     "eqtiming": "15986/37679"
@@ -1645,9 +1645,9 @@
    "speed_kmh": 43.0,
    "avg_power": null,
    "np": null,
-   "age_class": "M 50-54",
+   "age_class": "M50-59",
    "age_place": 4,
-   "age_n": 48,
+   "age_n": 59,
    "source_ids": {
     "turritt": null,
     "eqtiming": "15986/37679"
@@ -1845,7 +1845,7 @@
    "speed_kmh": 41.6,
    "avg_power": null,
    "np": null,
-   "age_class": "M 50-59",
+   "age_class": "M50-59",
    "age_place": 1,
    "age_n": 7,
    "source_ids": {
@@ -1925,9 +1925,9 @@
    "speed_kmh": 36.9,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 2,
-   "age_n": 49,
+   "age_n": 66,
    "source_ids": {
     "turritt": null,
     "eqtiming": "16994/40531"
@@ -2045,9 +2045,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 5,
-   "age_n": 22,
+   "age_n": 39,
    "source_ids": {
     "turritt": null,
     "eqtiming": "19472/50669"
@@ -2365,9 +2365,9 @@
    "speed_kmh": 39.9,
    "avg_power": null,
    "np": null,
-   "age_class": "M 20-24",
-   "age_place": 5,
-   "age_n": 8,
+   "age_class": "M20-29",
+   "age_place": 10,
+   "age_n": 35,
    "source_ids": {
     "turritt": "2357",
     "eqtiming": "24964/86387"
@@ -2605,9 +2605,9 @@
    "speed_kmh": 40.7,
    "avg_power": null,
    "np": null,
-   "age_class": "M20-24",
-   "age_place": 4,
-   "age_n": 15,
+   "age_class": "M20-29",
+   "age_place": 6,
+   "age_n": 40,
    "source_ids": {
     "turritt": "2388",
     "eqtiming": "20936/57853"
@@ -2685,9 +2685,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
-   "age_place": 1,
-   "age_n": 2,
+   "age_class": "M50-59",
+   "age_place": 2,
+   "age_n": 3,
    "source_ids": {
     "turritt": null,
     "eqtiming": "25365/93397"
@@ -2805,9 +2805,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 1,
-   "age_n": 23,
+   "age_n": 37,
    "source_ids": {
     "turritt": null,
     "eqtiming": "24781/85913"
@@ -2845,9 +2845,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
-   "age_place": 3,
-   "age_n": 42,
+   "age_class": "M50-59",
+   "age_place": 12,
+   "age_n": 65,
    "source_ids": {
     "turritt": null,
     "eqtiming": "20948/57903"
@@ -2965,9 +2965,9 @@
    "speed_kmh": 30.5,
    "avg_power": null,
    "np": null,
-   "age_class": "M20-24",
-   "age_place": 1,
-   "age_n": 10,
+   "age_class": "M20-29",
+   "age_place": 2,
+   "age_n": 33,
    "source_ids": {
     "turritt": "2462",
     "eqtiming": "25894/92963"
@@ -3165,9 +3165,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 1,
-   "age_n": 2,
+   "age_n": 4,
    "source_ids": {
     "turritt": null,
     "eqtiming": "35971/123524"
@@ -3245,9 +3245,9 @@
    "speed_kmh": 27.6,
    "avg_power": null,
    "np": null,
-   "age_class": "M20-24",
-   "age_place": 1,
-   "age_n": 3,
+   "age_class": "M20-29",
+   "age_place": 4,
+   "age_n": 19,
    "source_ids": {
     "turritt": "2563",
     "eqtiming": "32305/102266"
@@ -3325,9 +3325,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 3,
-   "age_n": 15,
+   "age_n": 20,
    "source_ids": {
     "turritt": null,
     "eqtiming": "32178/101840"
@@ -3565,7 +3565,7 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 3,
    "age_n": 5,
    "source_ids": {
@@ -3685,9 +3685,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 1,
-   "age_n": 26,
+   "age_n": 36,
    "source_ids": {
     "turritt": null,
     "eqtiming": "43116/159404"
@@ -3725,9 +3725,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 1,
-   "age_n": 18,
+   "age_n": 25,
    "source_ids": {
     "turritt": null,
     "eqtiming": "39045/137124"
@@ -3765,9 +3765,9 @@
    "speed_kmh": 39.9,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 3,
-   "age_n": 51,
+   "age_n": 79,
    "source_ids": {
     "turritt": null,
     "eqtiming": "38834/136484"
@@ -3805,9 +3805,9 @@
    "speed_kmh": 39.1,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 6,
-   "age_n": 47,
+   "age_n": 77,
    "source_ids": {
     "turritt": null,
     "eqtiming": "39301/162812"
@@ -3845,9 +3845,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
+   "age_class": "M50-59",
    "age_place": 3,
-   "age_n": 19,
+   "age_n": 30,
    "source_ids": {
     "turritt": null,
     "eqtiming": "38362/134722"
@@ -3885,9 +3885,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M50-54",
-   "age_place": 5,
-   "age_n": 6,
+   "age_class": "M50-59",
+   "age_place": 6,
+   "age_n": 8,
    "source_ids": {
     "turritt": null,
     "eqtiming": "44137/163629"
@@ -4085,9 +4085,9 @@
    "speed_kmh": 39.6,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 2,
-   "age_n": 31,
+   "age_class": "M50-59",
+   "age_place": 4,
+   "age_n": 65,
    "source_ids": {
     "turritt": null,
     "eqtiming": "45775/170578"
@@ -4125,9 +4125,9 @@
    "speed_kmh": 41.1,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 3,
-   "age_n": 8,
+   "age_class": "M50-59",
+   "age_place": 9,
+   "age_n": 29,
    "source_ids": {
     "turritt": null,
     "eqtiming": "48631/180570"
@@ -4165,9 +4165,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 5,
-   "age_n": 15,
+   "age_class": "M50-59",
+   "age_place": 12,
+   "age_n": 34,
    "source_ids": {
     "turritt": null,
     "eqtiming": "47925/177469"
@@ -4205,9 +4205,9 @@
    "speed_kmh": 29.9,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 2,
-   "age_n": 29,
+   "age_class": "M50-59",
+   "age_place": 3,
+   "age_n": 52,
    "source_ids": {
     "turritt": null,
     "eqtiming": "44910/166964"
@@ -4325,9 +4325,9 @@
    "speed_kmh": 26.9,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 1,
-   "age_n": 18,
+   "age_class": "M50-59",
+   "age_place": 4,
+   "age_n": 27,
    "source_ids": {
     "turritt": null,
     "eqtiming": "50352/189274"
@@ -4445,9 +4445,9 @@
    "speed_kmh": 41.1,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 2,
-   "age_n": 16,
+   "age_class": "M50-59",
+   "age_place": 8,
+   "age_n": 33,
    "source_ids": {
     "turritt": null,
     "eqtiming": "55696/208037"
@@ -4525,9 +4525,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 5,
-   "age_n": 8,
+   "age_class": "M50-59",
+   "age_place": 11,
+   "age_n": 21,
    "source_ids": {
     "turritt": null,
     "eqtiming": "63934/237833"
@@ -4565,9 +4565,9 @@
    "speed_kmh": 35.3,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 6,
-   "age_n": 36,
+   "age_class": "M50-59",
+   "age_place": 13,
+   "age_n": 66,
    "source_ids": {
     "turritt": null,
     "eqtiming": "65782/252249"
@@ -4605,9 +4605,9 @@
    "speed_kmh": 42.3,
    "avg_power": null,
    "np": null,
-   "age_class": "M55-59",
-   "age_place": 4,
-   "age_n": 14,
+   "age_class": "M50-59",
+   "age_place": 5,
+   "age_n": 25,
    "source_ids": {
     "turritt": null,
     "eqtiming": "66278/253985"
@@ -4685,9 +4685,9 @@
    "speed_kmh": 35.4,
    "avg_power": null,
    "np": null,
-   "age_class": "M60-64",
+   "age_class": "M60-69",
    "age_place": 7,
-   "age_n": 31,
+   "age_n": 39,
    "source_ids": {
     "turritt": null,
     "eqtiming": "69692/267286"
@@ -5005,9 +5005,9 @@
    "speed_kmh": 36.1,
    "avg_power": null,
    "np": null,
-   "age_class": "M60-64",
+   "age_class": "M60-69",
    "age_place": 6,
-   "age_n": 18,
+   "age_n": 23,
    "source_ids": {
     "turritt": null,
     "eqtiming": "75645/311703"
@@ -5125,9 +5125,9 @@
    "speed_kmh": 30.4,
    "avg_power": null,
    "np": null,
-   "age_class": "M25-29",
+   "age_class": "M20-29",
    "age_place": 2,
-   "age_n": 43,
+   "age_n": 57,
    "source_ids": {
     "turritt": "3223",
     "eqtiming": "74590/307789"
@@ -5165,9 +5165,9 @@
    "speed_kmh": 26.3,
    "avg_power": 183,
    "np": 223,
-   "age_class": "M30-34",
-   "age_place": 11,
-   "age_n": 19,
+   "age_class": "M30-39",
+   "age_place": 24,
+   "age_n": 48,
    "source_ids": {
     "turritt": "3224",
     "eqtiming": "74590/307796"
@@ -5205,9 +5205,9 @@
    "speed_kmh": 23.5,
    "avg_power": null,
    "np": null,
-   "age_class": "K25-29",
-   "age_place": 1,
-   "age_n": 13,
+   "age_class": "K20-29",
+   "age_place": 2,
+   "age_n": 16,
    "source_ids": {
     "turritt": null,
     "eqtiming": "74590/307789"
@@ -5245,9 +5245,9 @@
    "speed_kmh": 23.3,
    "avg_power": null,
    "np": null,
-   "age_class": "M35-39",
-   "age_place": 18,
-   "age_n": 42,
+   "age_class": "M30-39",
+   "age_place": 30,
+   "age_n": 81,
    "source_ids": {
     "turritt": null,
     "eqtiming": "74590/307789"
@@ -5285,9 +5285,9 @@
    "speed_kmh": 30.2,
    "avg_power": null,
    "np": null,
-   "age_class": "M60-64",
+   "age_class": "M60-69",
    "age_place": 1,
-   "age_n": 11,
+   "age_n": 13,
    "source_ids": {
     "turritt": null,
     "eqtiming": "74590/307796"
@@ -5325,9 +5325,9 @@
    "speed_kmh": 37.6,
    "avg_power": null,
    "np": null,
-   "age_class": "M Master 60-64",
-   "age_place": 7,
-   "age_n": 16,
+   "age_class": "M60-69",
+   "age_place": 8,
+   "age_n": 31,
    "source_ids": {
     "turritt": null,
     "eqtiming": "76053/320942"
@@ -5565,9 +5565,9 @@
    "speed_kmh": 36.5,
    "avg_power": 251,
    "np": 253,
-   "age_class": "M30-34",
-   "age_place": 3,
-   "age_n": 3,
+   "age_class": "M30-39",
+   "age_place": 9,
+   "age_n": 10,
    "source_ids": {
     "turritt": "3242",
     "eqtiming": "76098/313379"
@@ -5685,9 +5685,9 @@
    "speed_kmh": 32.9,
    "avg_power": 242,
    "np": 253,
-   "age_class": "M30-34",
-   "age_place": 2,
-   "age_n": 2,
+   "age_class": "M30-39",
+   "age_place": 4,
+   "age_n": 4,
    "source_ids": {
     "turritt": null,
     "eqtiming": "80572/328906"
@@ -5725,9 +5725,9 @@
    "speed_kmh": 33.9,
    "avg_power": 276,
    "np": 282,
-   "age_class": "M30-34",
-   "age_place": 7,
-   "age_n": 9,
+   "age_class": "M30-39",
+   "age_place": 9,
+   "age_n": 12,
    "source_ids": {
     "turritt": "3259",
     "eqtiming": "80422/328304"
@@ -6005,9 +6005,9 @@
    "speed_kmh": 31.5,
    "avg_power": null,
    "np": null,
-   "age_class": "M30-34",
-   "age_place": 30,
-   "age_n": 46,
+   "age_class": "M30-39",
+   "age_place": 51,
+   "age_n": 79,
    "source_ids": {
     "turritt": null,
     "eqtiming": "79614/326014"
@@ -6045,9 +6045,9 @@
    "speed_kmh": 31.5,
    "avg_power": null,
    "np": null,
-   "age_class": "K30-34",
-   "age_place": 2,
-   "age_n": 9,
+   "age_class": "K30-39",
+   "age_place": 3,
+   "age_n": 12,
    "source_ids": {
     "turritt": null,
     "eqtiming": "79614/326014"
@@ -6125,9 +6125,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "K30-34",
+   "age_class": "K30-39",
    "age_place": 2,
-   "age_n": 28,
+   "age_n": 31,
    "source_ids": {
     "turritt": null,
     "eqtiming": null
@@ -6165,9 +6165,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M40-44",
-   "age_place": 26,
-   "age_n": 88,
+   "age_class": "M40-49",
+   "age_place": 74,
+   "age_n": 211,
    "source_ids": {
     "turritt": null,
     "eqtiming": null
@@ -6645,7 +6645,7 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M30-49",
+   "age_class": "M30-39",
    "age_place": 10,
    "age_n": 29,
    "source_ids": {
@@ -6685,7 +6685,7 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "K30-49",
+   "age_class": "K30-39",
    "age_place": 2,
    "age_n": 3,
    "source_ids": {
@@ -6725,9 +6725,9 @@
    "speed_kmh": 36.8,
    "avg_power": 273,
    "np": 277,
-   "age_class": "M30-34",
-   "age_place": 6,
-   "age_n": 6,
+   "age_class": "M30-39",
+   "age_place": 8,
+   "age_n": 9,
    "source_ids": {
     "turritt": "3309",
     "eqtiming": "80423/328306"
@@ -6765,9 +6765,9 @@
    "speed_kmh": null,
    "avg_power": null,
    "np": null,
-   "age_class": "M25-29",
-   "age_place": 2,
-   "age_n": 2,
+   "age_class": "M20-29",
+   "age_place": 3,
+   "age_n": 5,
    "source_ids": {
     "turritt": null,
     "eqtiming": "80423/328306"
@@ -7045,9 +7045,9 @@
    "speed_kmh": 38.1,
    "avg_power": 289,
    "np": 294,
-   "age_class": "M30-34",
-   "age_place": 4,
-   "age_n": 6,
+   "age_class": "M30-39",
+   "age_place": 7,
+   "age_n": 12,
    "source_ids": {
     "turritt": "3320",
     "eqtiming": "80679/329416"
@@ -7085,9 +7085,9 @@
    "speed_kmh": 40.1,
    "avg_power": null,
    "np": null,
-   "age_class": "M25-29",
-   "age_place": 1,
-   "age_n": 2,
+   "age_class": "M20-29",
+   "age_place": 3,
+   "age_n": 6,
    "source_ids": {
     "turritt": null,
     "eqtiming": "80679/329416"
