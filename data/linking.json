@@ -818,6 +818,19 @@
    "own_id": "r20840"
   },
   {
+   "eq": 5797935,
+   "name": "Atle Høgberg",
+   "club": "TOSK Gull",
+   "candidates": [
+    {
+     "id": "r8645",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r25795"
+  },
+  {
    "eq": 113255,
    "name": "Atle Pedersen",
    "club": "Nanset IF - Sykkel",
@@ -2066,6 +2079,23 @@
    ],
    "id": null,
    "own_id": "r21418"
+  },
+  {
+   "eq": 4112673,
+   "name": "Erlend Halvorsen",
+   "club": "Bogafjell Sykleklubb",
+   "candidates": [
+    {
+     "id": "r6665",
+     "club": "Cameron"
+    },
+    {
+     "id": "r10539",
+     "club": "Sandnes"
+    }
+   ],
+   "id": null,
+   "own_id": "r25790"
   },
   {
    "eq": 492248,
@@ -5268,6 +5298,19 @@
    "own_id": "r20951"
   },
   {
+   "eq": 941977,
+   "name": "Lasse Løining",
+   "club": "Tasta & omegn sykkelklubb",
+   "candidates": [
+    {
+     "id": "r16758",
+     "club": "Randaberg"
+    }
+   ],
+   "id": null,
+   "own_id": "r25799"
+  },
+  {
    "eq": 105936,
    "name": "Lasse Obrestad",
    "club": "Raufoss & Gjøvik SK",
@@ -6160,6 +6203,19 @@
    "own_id": "r25295"
   },
   {
+   "eq": 926809,
+   "name": "Oscar Engelsvoll",
+   "club": "KCC den grønne gjengen",
+   "candidates": [
+    {
+     "id": "r1748",
+     "club": "Klepp Cykle Club"
+    }
+   ],
+   "id": null,
+   "own_id": "r25798"
+  },
+  {
    "eq": 112938,
    "name": "Oskar Mjelde Mork",
    "club": "",
@@ -6184,6 +6240,19 @@
    ],
    "id": null,
    "own_id": "r21518"
+  },
+  {
+   "eq": 109010,
+   "name": "Ove Gundersen",
+   "club": "Klepp cykleklub",
+   "candidates": [
+    {
+     "id": "r1757",
+     "club": "Depro AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r25786"
   },
   {
    "eq": 107871,
@@ -7153,6 +7222,19 @@
    "own_id": "r23318"
   },
   {
+   "eq": 5955359,
+   "name": "Rune Wammeli-Johannesen",
+   "club": "Tasta & omegn sykkelklubb",
+   "candidates": [
+    {
+     "id": "r11452",
+     "club": "Schlumberger, Div M-I SWACO"
+    }
+   ],
+   "id": null,
+   "own_id": "r25796"
+  },
+  {
    "eq": 107707,
    "name": "Sanjin Dzafic",
    "club": "Sola CK / PAD",
@@ -7192,6 +7274,19 @@
    "own_id": "r24546"
   },
   {
+   "eq": 5451138,
+   "name": "Signe Stølan Høgberg",
+   "club": "TOSK Gull",
+   "candidates": [
+    {
+     "id": "r10528",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r25793"
+  },
+  {
    "eq": 3593713,
    "name": "Sigurd Berge",
    "club": "Stavanger",
@@ -7216,6 +7311,19 @@
    ],
    "id": null,
    "own_id": "r20881"
+  },
+  {
+   "eq": 1875146,
+   "name": "Sigurd Retallack",
+   "club": "Tasta & omegn sykkelklubb",
+   "candidates": [
+    {
+     "id": "r12806",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r25787"
   },
   {
    "eq": 412781,

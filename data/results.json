@@ -56,6 +56,14 @@
    "turritt_id": "20211",
    "eq_id": 552367,
    "power": false
+  },
+  {
+   "id": "167177",
+   "rid": "r16743",
+   "name": "Lotte Navratil",
+   "turritt_id": "167177",
+   "eq_id": 5861543,
+   "power": false
   }
  ],
  "races": [
@@ -4300,6 +4308,46 @@
    }
   },
   {
+   "rider_id": "167177",
+   "race_id": "eqtiming:50352/189274",
+   "name": "Steinsvikrittet",
+   "series": "steinsvikrittet",
+   "date": "2020-08-22",
+   "year": 2020,
+   "type": "Road",
+   "class_name": "Steinsvikrittet 55 km",
+   "class_place": 91,
+   "class_n": 103,
+   "overall_place": 91,
+   "overall_n": 103,
+   "percentile": 88.35,
+   "overall_percentile": 88.35,
+   "time": "02:53:39",
+   "time_s": 10419,
+   "winner_time": "01:49:41",
+   "behind_pct": 58.0,
+   "distance_km": 55.0,
+   "stage_km": 55.0,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": 19.0,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K20-29",
+   "age_place": 1,
+   "age_n": 1,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "50352/189274"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/50352#result",
+    "raceresult": null,
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "22638",
    "race_id": "eqtiming:50352/189274",
    "name": "Steinsvikrittet",
@@ -4455,6 +4503,46 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/55696#result",
+    "raceresult": null,
+    "intervals": null
+   }
+  },
+  {
+   "rider_id": "167177",
+   "race_id": "eqtiming:57413/213266",
+   "name": "Mairittet",
+   "series": "mairittet",
+   "date": "2022-05-01",
+   "year": 2022,
+   "type": "Road",
+   "class_name": "Lagkonkurranse",
+   "class_place": 102,
+   "class_n": 106,
+   "overall_place": 102,
+   "overall_n": 106,
+   "percentile": 96.23,
+   "overall_percentile": 96.23,
+   "time": "02:42:27",
+   "time_s": 9747,
+   "winner_time": "01:43:08",
+   "behind_pct": 58.0,
+   "distance_km": 76.0,
+   "stage_km": 76.0,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": 28.1,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K30-39",
+   "age_place": 1,
+   "age_n": 1,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "57413/213266"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/57413#result",
     "raceresult": null,
     "intervals": null
    }
@@ -4895,6 +4983,46 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/74581#result",
+    "raceresult": null,
+    "intervals": null
+   }
+  },
+  {
+   "rider_id": "167177",
+   "race_id": "eqtiming:75447/310996",
+   "name": "KCC Lagtempoen",
+   "series": "kcc lagtempoen",
+   "date": "2025-05-06",
+   "year": 2025,
+   "type": "TTT",
+   "class_name": "Lagtempoen (Lagtempo - Racer)",
+   "class_place": 96,
+   "class_n": 110,
+   "overall_place": 96,
+   "overall_n": 110,
+   "percentile": 87.27,
+   "overall_percentile": 87.27,
+   "time": "01:11:58",
+   "time_s": 4318,
+   "winner_time": "00:55:42",
+   "behind_pct": 29.0,
+   "distance_km": 40.0,
+   "stage_km": 40.0,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": 33.3,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K17+",
+   "age_place": 5,
+   "age_n": 9,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "75447/310996"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/75447#result",
     "raceresult": null,
     "intervals": null
    }
@@ -5900,6 +6028,46 @@
    }
   },
   {
+   "rider_id": "167177",
+   "race_id": "eqtiming:80724/329548",
+   "name": "KCC Lagtempoen",
+   "series": "kcc lagtempoen",
+   "date": "2026-05-05",
+   "year": 2026,
+   "type": "TTT",
+   "class_name": "Lagtempoen (Lagtempo - Racer)",
+   "class_place": 89,
+   "class_n": 99,
+   "overall_place": 89,
+   "overall_n": 99,
+   "percentile": 89.9,
+   "overall_percentile": 89.9,
+   "time": "01:09:53",
+   "time_s": 4193,
+   "winner_time": "00:54:11",
+   "behind_pct": 29.0,
+   "distance_km": 40.0,
+   "stage_km": 40.0,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": 34.3,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K17+",
+   "age_place": 5,
+   "age_n": 9,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "80724/329548"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/80724#result",
+    "raceresult": null,
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "171101",
    "race_id": "turritt:3268",
    "name": "KCC Lagtempoen",
@@ -6278,6 +6446,46 @@
    "time_s": 11255,
    "winner_time": "02:21:31",
    "behind_pct": 33.0,
+   "distance_km": null,
+   "stage_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": null,
+   "age_place": null,
+   "age_n": null,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": null
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": null,
+    "raceresult": "https://my.raceresult.com/346769/results",
+    "intervals": null
+   }
+  },
+  {
+   "rider_id": "167177",
+   "race_id": "raceresult:346769/Nordsjørittet Egersund - Sandnes CX/Gravel",
+   "name": "Nordsjørittet",
+   "series": "nordsjørittet",
+   "date": "2026-06-13",
+   "year": 2026,
+   "type": "Gravel",
+   "class_name": "Nordsjørittet Egersund - Sandnes CX/Gravel",
+   "class_place": 120,
+   "class_n": 258,
+   "overall_place": 120,
+   "overall_n": 258,
+   "percentile": 46.51,
+   "overall_percentile": 46.51,
+   "time": "03:25:40",
+   "time_s": 12340,
+   "winner_time": "02:21:31",
+   "behind_pct": 45.0,
    "distance_km": null,
    "stage_km": null,
    "elevation_m": null,
@@ -6700,6 +6908,46 @@
    }
   },
   {
+   "rider_id": "167177",
+   "race_id": "eqtiming:80423/328306",
+   "name": "Rennesøy Tempo",
+   "series": "rennesøy tempo",
+   "date": "2026-08-20",
+   "year": 2026,
+   "type": "TT",
+   "class_name": "Rennesøy Tempo - Racer (Rennesøy Tempo Racer)",
+   "class_place": 23,
+   "class_n": 37,
+   "overall_place": 23,
+   "overall_n": 37,
+   "percentile": 62.16,
+   "overall_percentile": 62.16,
+   "time": "00:25:52",
+   "time_s": 1552,
+   "winner_time": "00:20:09",
+   "behind_pct": 28.0,
+   "distance_km": null,
+   "stage_km": null,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": null,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K30-39",
+   "age_place": 1,
+   "age_n": 1,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "80423/328306"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/80423#result",
+    "raceresult": null,
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "171101",
    "race_id": "eqtiming:80423/328306",
    "name": "Rennesøy Tempo",
@@ -6900,6 +7148,46 @@
    }
   },
   {
+   "rider_id": "167177",
+   "race_id": "eqtiming:80763/329680",
+   "name": "Ryfylkerittet",
+   "series": "ryfylkerittet",
+   "date": "2026-09-05",
+   "year": 2026,
+   "type": "Road",
+   "class_name": "Landevei",
+   "class_place": 64,
+   "class_n": 83,
+   "overall_place": 64,
+   "overall_n": 83,
+   "percentile": 77.11,
+   "overall_percentile": 77.11,
+   "time": "01:48:38",
+   "time_s": 6518,
+   "winner_time": "01:23:39",
+   "behind_pct": 30.0,
+   "distance_km": 55.8,
+   "stage_km": 55.8,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": 30.8,
+   "avg_power": null,
+   "np": null,
+   "age_class": "Kvinner",
+   "age_place": 6,
+   "age_n": 9,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "80763/329680"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/80763#result",
+    "raceresult": null,
+    "intervals": null
+   }
+  },
+  {
    "rider_id": "171101",
    "race_id": "eqtiming:80763/329680",
    "name": "Ryfylkerittet",
@@ -7015,6 +7303,46 @@
    "links": {
     "turritt": null,
     "eqtiming": "https://live.eqtiming.com/80763#result",
+    "raceresult": null,
+    "intervals": null
+   }
+  },
+  {
+   "rider_id": "167177",
+   "race_id": "eqtiming:80679/329416",
+   "name": "Score TOSKaskabet",
+   "series": "score toskaskabet",
+   "date": "2026-09-13",
+   "year": 2026,
+   "type": "TT",
+   "class_name": "Racer (u/tempobøyle)",
+   "class_place": 36,
+   "class_n": 46,
+   "overall_place": 36,
+   "overall_n": 46,
+   "percentile": 78.26,
+   "overall_percentile": 78.26,
+   "time": "00:22:53",
+   "time_s": 1373,
+   "winner_time": "00:18:34",
+   "behind_pct": 23.0,
+   "distance_km": 13.75,
+   "stage_km": 13.75,
+   "elevation_m": null,
+   "climb_per_km": null,
+   "speed_kmh": 36.1,
+   "avg_power": null,
+   "np": null,
+   "age_class": "K30-39",
+   "age_place": 1,
+   "age_n": 1,
+   "source_ids": {
+    "turritt": null,
+    "eqtiming": "80679/329416"
+   },
+   "links": {
+    "turritt": null,
+    "eqtiming": "https://live.eqtiming.com/80679#result",
     "raceresult": null,
     "intervals": null
    }

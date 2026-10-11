@@ -1,6 +1,6 @@
 {
   "_help": "Our rider ids (riderids.py). Each id is given once and never reused or changed. turritt: TurrittID (only while the site still uses Turritt data), eq: EQ Timing participant id.",
-  "next": 25786,
+  "next": 25800,
   "riders": {
     "r1": {"name": "Aage Stangeland", "club": "Oslo", "turritt": "20008"},
     "r2": {"name": "Agnar Gjertsen", "club": "Dalane SK", "turritt": "20018", "eq": 506951, "eq_also": [384251]},
@@ -2316,7 +2316,7 @@
     "r2312": {"name": "Tor Eldevik", "club": "Bergen Cykleklubb", "turritt": "29476"},
     "r2313": {"name": "Tor Bergersen", "club": "Sandnes", "turritt": "29483", "eq": 310823},
     "r2314": {"name": "Tor Berge", "club": "Multiconsult BIL", "turritt": "29484"},
-    "r2315": {"name": "Tor Anders Skjæveland", "club": "Bogafjell Sykleklubb", "turritt": "29489", "eq": 104969, "eq_also": [356905]},
+    "r2315": {"name": "Tor Anders Skjæveland", "club": "Bogafjell Sykleklubb", "turritt": "29489", "eq": 104969, "eq_also": [356905, 5931485]},
     "r2316": {"name": "Tor Atle Aadneram", "club": "Lura sykkel klubb", "turritt": "29500"},
     "r2317": {"name": "Tor Audun Rusdal", "club": "ACsenteret", "turritt": "29501"},
     "r2318": {"name": "Tor Christian Carlsen", "club": "Bryne CK", "turritt": "29505"},
@@ -16653,7 +16653,7 @@
     "r16649": {"name": "Fredrik Borge Minde", "club": "Åsane Cykle Klubb", "turritt": "164527", "eq": 3497934},
     "r16650": {"name": "Anders Beiermann", "club": "Stavanger SK", "turritt": "164533", "eq": 557794},
     "r16651": {"name": "Kjell Martin Dyrset", "club": "CK Haugaland", "turritt": "164550", "eq": 5450036},
-    "r16652": {"name": "Milan Matosevic", "club": "Bogafjell Sykleklubb / BK Dinamo Zagreb", "turritt": "164557"},
+    "r16652": {"name": "Milan Matosevic", "club": "Bogafjell Sykleklubb / BK Dinamo Zagreb", "turritt": "164557", "eq": 5451267},
     "r16653": {"name": "Sine Seglem", "club": "Dalane SK", "turritt": "164567"},
     "r16654": {"name": "Rune Halvorsen", "club": "Sykleklubben Lyngdal & Omegn", "turritt": "164570"},
     "r16655": {"name": "Egil André Vedøy", "club": "Åkra sykkelgruppe", "turritt": "164592", "eq": 3839477},
@@ -17006,7 +17006,7 @@
     "r17002": {"name": "Jan Ove Krakhellen", "club": "Førde Cykleklubb", "turritt": "169835"},
     "r17003": {"name": "Nikolaj Holm Gylling", "club": "Oslo sykleklubb", "turritt": "169955", "eq": 6614808},
     "r17004": {"name": "Martin Hjørnevik", "club": "Åsane Cykle Klubb", "turritt": "170273"},
-    "r17005": {"name": "Torbjørn Valheim", "club": "Bogafjell sykleklubb", "turritt": "170347"},
+    "r17005": {"name": "Torbjørn Valheim", "club": "Bogafjell sykleklubb", "turritt": "170347", "eq": 6492245},
     "r17006": {"name": "Ingolf Søreide", "club": "Equinor BIL", "turritt": "170356"},
     "r17007": {"name": "Mikhail Enikeev", "club": "Sandsli", "turritt": "170370"},
     "r17008": {"name": "Michal Leonczuk", "club": "Czernica", "turritt": "170371"},
@@ -25786,6 +25786,20 @@
     "r25782": {"name": "Håvard Kjærgaard", "club": "ROC", "eq": 935411},
     "r25783": {"name": "Sindre Viberg", "club": "Lillehammer CK", "eq": 937},
     "r25784": {"name": "Fredrik Stephansen", "club": "Drøbak-Frogn IL Sykkel", "eq": 942748},
-    "r25785": {"name": "Roald Eide", "club": "IF Frøy", "eq": 987}
+    "r25785": {"name": "Roald Eide", "club": "IF Frøy", "eq": 987},
+    "r25786": {"name": "Ove Gundersen", "club": "Klepp cykleklub", "eq": 109010},
+    "r25787": {"name": "Sigurd Retallack", "club": "Tasta & omegn sykkelklubb", "eq": 1875146},
+    "r25788": {"name": "Paal Larsen", "club": "Klepp Cykle Club", "eq": 3183160},
+    "r25789": {"name": "Linnéa Valhovd Hove", "club": "NorseCutting SpiritTri Racer", "eq": 3812447},
+    "r25790": {"name": "Erlend Halvorsen", "club": "Bogafjell Sykleklubb", "eq": 4112673},
+    "r25791": {"name": "Tom Egebakken", "club": "TOSK Rød", "eq": 4907810},
+    "r25792": {"name": "Vedran Vidic", "club": "Tasta & omegn sykkelklubb", "eq": 4912938},
+    "r25793": {"name": "Signe Stølan Høgberg", "club": "TOSK Gull", "eq": 5451138},
+    "r25794": {"name": "Brage Bakken", "club": "Sandnes Sykleklubb", "eq": 5464309},
+    "r25795": {"name": "Atle Høgberg", "club": "TOSK Gull", "eq": 5797935},
+    "r25796": {"name": "Rune Wammeli-Johannesen", "club": "Tasta & omegn sykkelklubb", "eq": 5955359},
+    "r25797": {"name": "Håkon André Halvorsen", "club": "NorseCutting SpiritTri Racer", "eq": 6501121},
+    "r25798": {"name": "Oscar Engelsvoll", "club": "KCC den grønne gjengen", "eq": 926809},
+    "r25799": {"name": "Lasse Løining", "club": "Tasta & omegn sykkelklubb", "eq": 941977}
   }
 }
