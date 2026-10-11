@@ -194,9 +194,9 @@ export default function App() {
           )}
           {/* The tip jar: after the content on every page, never in the way of it. A plain link, so the CSP stays as it is. */}
           <a className="kofi" href={KOFI} target="_blank" rel="noopener">
-            <span className="kofi-icon"><Icon.beer /></span>
-            <span><b>Liker du siden?</b> <span className="muted">Hjelp Peder å gjøre den bedre ved å spandere hans neste øl.</span></span>
-            <span className="kofi-go">Spander en øl →</span>
+            <span className="kofi-icon"><Icon.gel /></span>
+            <span><b>Liker du siden?</b> <span className="muted">Hjelp Peder å gjøre den bedre ved å spandere hans neste gel.</span></span>
+            <span className="kofi-go">Spander en gel →</span>
           </a>
           <footer className="site">
             <span>Plassering: DNF telles med i feltet. Watt og fart gjelder bare selve rittet.</span>
