@@ -241,6 +241,8 @@ def build_rider(rider, log=print):
             r["EQ Timing"], r["_eq"] = e["url"], f"{e['event_id']}/{e['stage_id']}"
         elif source == "raceresult":
             r["raceresult"] = e["url"]
+        if e["age_place"] and e["age_class"] not in ("Menn", "M17+"):
+            r["Age class"], r["Age class placement"], r["Age class participants"] = e["age_class"], str(e["age_place"]), str(e["age_n"])
 
     # EQ Timing races nobody has a row for yet (Turritt covers many of the same races).
     taken = {sync.parse_date(r["Date"]) for r in rows}
@@ -277,12 +279,17 @@ def build_rider(rider, log=print):
 
     # The registry knows a series' type better than its name does (Nordsjørittet is gravel, not
     # the road race race_type falls back to), whether or not its results come from the timer.
-    # A class the name marks as tempo, or as gravel inside a terrain race, keeps its own type.
-    typed = {sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"): e for e in registry.load()
-             if e.get("type") in ("Gravel", "MTB")}
+    # A class the name marks as tempo, as gravel inside a terrain race, or as MTB inside a gravel
+    # race (Nordsjørittet MTB Marathon), keeps its own type.
+    # Several series can share a day (Nordsjørittet and Ungdommens Nordsjøritt), so each row
+    # takes the type of the one its name matches.
+    typed = {}
+    for e in registry.load():
+        if e.get("type") in ("Gravel", "MTB"):
+            typed.setdefault(sync.parse_date_iso(e["date"]).strftime("%d.%m.%y"), []).append(e)
     for r in rows:
-        e = typed.get(r["Date"])
-        if e and e["name"].split()[0].lower() in r["Race"].lower() and r.get("Type") not in ("TT", "TTT", "Gravel"):
+        e = next((x for x in typed.get(r["Date"], []) if x["name"].split()[0].lower() in r["Race"].lower()), None)
+        if e and r.get("Type") not in ("TT", "TTT", "Gravel", "MTB"):
             r["Type"] = e["type"]
 
     if exclude:
