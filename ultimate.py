@@ -5,6 +5,7 @@ races come from data/registry.json (registry.py) and riders are matched by name.
 read once (1000 more riders a page, 2 s apart) and cached for good in cache/ultimate.json.
 The rows have the same shape as eqtiming.races(), so build.py adds them the same way.
 """
+import bisect
 import html
 import json
 import os
@@ -55,6 +56,58 @@ def result_list(event, distance):
     return _cache[key]
 
 
+SMARTRES = "http://results.ultimate.dk/smartres/"
+
+
+def smartres_list(event, distance):
+    """result_list() for Ultimate's older results pages (smartres, Nordsjørittet 2011-2013).
+    Read one age class at a time, since the overall list has no age class; the place is
+    recomputed over the whole distance. 50 or 100 riders a page, 2 s apart, cached for good."""
+    key = f"smartres:{event}:{distance}"
+    if key not in _cache:
+        time.sleep(PAUSE)
+        page = requests.get(SMARTRES, params={"eventid": event}, timeout=60).text
+        sel = page[page.find('name="results_category"'):]
+        sel = sel[:sel.find("</select>")]
+        cats = [(v, html.unescape(n)) for v, n in re.findall(r'<option value="(C::[^"]+)"[^>]*>([^<]*)', sel)]
+        out = []
+        for cat, cat_name in cats:
+            # "Kvinner 40-44 år" -> "K40-44", the age classes the other timers use.
+            span = re.search(r"\d+(-\d+|\+)?", cat_name)
+            age = ("K" if cat_name.lower().startswith("kvinne") else "M") + (span.group(0) if span else " Elite")
+            start = 0
+            while True:
+                time.sleep(PAUSE)
+                r = requests.get(SMARTRES + "results.php", params={"eventid": event, "results_distance": distance,
+                                                                   "results_category": cat, "startrecord": start}, timeout=60)
+                r.raise_for_status()
+                rows = [[html.unescape(re.sub(r"<[^>]+>", "", c)).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)]
+                        for row in re.findall(r"<tr[^>]*>(.*?)</tr>", r.text, re.S)]
+                rows = [c for c in rows if len(c) >= 6 and c[0].isdigit()]
+                out += [["", c[2], c[3], age, c[5]] for c in rows]
+                # "1413 deltakere" (2011-2012, 100 a page) or "1311 deltagere(e)" (2013, 50 a page)
+                total = re.search(r"(\d+) delta[gk]ere", r.text)
+                start += len(rows)
+                if not rows or not total or start >= int(total.group(1)):
+                    break
+        secs = lambda t: _secs(t) if ":" in t else None
+        times = sorted(s for s in (secs(r[4]) for r in out) if s is not None)
+        for r in out:
+            s = secs(r[4])
+            r[0] = str(1 + bisect.bisect_left(times, s)) if s is not None else "DNF"
+        out.sort(key=lambda r: (secs(r[4]) is None, secs(r[4]) or 0))
+        _cache[key] = out
+        os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
+        with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(_cache, f, ensure_ascii=False)
+    return _cache[key]
+
+
+def _secs(t):
+    h, m, s = ([0, 0] + [int(x) for x in t.split(":")])[-3:]
+    return h * 3600 + m * 60 + s
+
+
 def _hms(t):
     h, m, s = ([0, 0] + [int(x) for x in t.split(":")])[-3:]
     return f"{h:02d}:{m:02d}:{s:02d}"
@@ -63,7 +116,8 @@ def _hms(t):
 def races(entry, name):
     """The rider's result (by name) in one registry race, shaped like eqtiming.races()."""
     want = raceresult.fold(name)
-    rows = result_list(entry["event"], entry.get("distance", 1))
+    lister = smartres_list if entry.get("smartres") else result_list
+    rows = lister(entry["event"], entry.get("distance", 1))
     me = next((r for r in rows if raceresult.fold(r[1]) == want), None)
     if not me or not me[0].isdigit() or ":" not in me[4]:
         return []
@@ -75,5 +129,6 @@ def races(entry, name):
         "class_place": int(me[0]), "class_n": len(rows),
         "age_class": decade(me[3]), "age_place": 1 + sum(1 for r in age if ":" in r[4] and _hms(r[4]) < _hms(me[4])),
         "age_n": len(age), "time": _hms(me[4]), "class_winner": min(_hms(r[4]) for r in timed),
-        "url": f"https://live.ultimate.dk/desktop/front/?eventid={entry['event']}",
+        "url": f"{SMARTRES}?eventid={entry['event']}" if entry.get("smartres")
+               else f"https://live.ultimate.dk/desktop/front/?eventid={entry['event']}",
     }]
