@@ -93,6 +93,19 @@
    "own_id": "r25092"
   },
   {
+   "eq": 114998,
+   "name": "Alf Jonny Wroldsen",
+   "club": "Kristiansands CK",
+   "candidates": [
+    {
+     "id": "r2936",
+     "club": "KCK"
+    }
+   ],
+   "id": null,
+   "own_id": "r27310"
+  },
+  {
    "eq": 468791,
    "name": "Alf Terje Ramsfjell",
    "club": "Gjesdal IL",
@@ -437,6 +450,19 @@
    "own_id": "r21052"
   },
   {
+   "eq": 591386,
+   "name": "Arild Mellemstrand",
+   "club": "Bryne",
+   "candidates": [
+    {
+     "id": "r97",
+     "club": "kvia as"
+    }
+   ],
+   "id": null,
+   "own_id": "r27413"
+  },
+  {
    "eq": 358418,
    "name": "Arild Ollestad",
    "club": "Atea",
@@ -500,6 +526,19 @@
    ],
    "id": null,
    "own_id": "r24924"
+  },
+  {
+   "eq": 6608193,
+   "name": "Arkadiusz Lukaszewicz",
+   "club": "PGNiG Upstream Norway",
+   "candidates": [
+    {
+     "id": "r26893",
+     "club": "LOTOS Norge AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27601"
   },
   {
    "eq": 384244,
@@ -1017,6 +1056,19 @@
    "own_id": "r21985"
   },
   {
+   "eq": 6243952,
+   "name": "Bjarte Jorud",
+   "club": "Returkraft",
+   "candidates": [
+    {
+     "id": "r26418",
+     "club": "Mosby"
+    }
+   ],
+   "id": null,
+   "own_id": "r27434"
+  },
+  {
    "eq": 1482904,
    "name": "Bjørge Lima",
    "club": "",
@@ -1080,6 +1132,19 @@
    ],
    "id": null,
    "own_id": "r24813"
+  },
+  {
+   "eq": 6610135,
+   "name": "Bjørn Henriksen",
+   "club": "Macro Offshore",
+   "candidates": [
+    {
+     "id": "r10053",
+     "club": "Vestenfjeldske"
+    }
+   ],
+   "id": null,
+   "own_id": "r27610"
   },
   {
    "eq": 571935,
@@ -1153,6 +1218,27 @@
    ],
    "id": null,
    "own_id": "r24825"
+  },
+  {
+   "eq": 3829268,
+   "name": "Bjørn Jensen",
+   "club": "Farsund sykelklubb",
+   "candidates": [
+    {
+     "id": "r297",
+     "club": "KCC Road Runners / Klepp Cykle Club"
+    },
+    {
+     "id": "r15600",
+     "club": "Boreal Sykkelklubb"
+    },
+    {
+     "id": "r17144",
+     "club": "Farsund"
+    }
+   ],
+   "id": null,
+   "own_id": "r27341"
   },
   {
    "eq": 290223,
@@ -1259,6 +1345,19 @@
    "own_id": "r21255"
   },
   {
+   "eq": 522503,
+   "name": "Bård Nilsen",
+   "club": "Bjelland AS",
+   "candidates": [
+    {
+     "id": "r3698",
+     "club": "Motor forum"
+    }
+   ],
+   "id": null,
+   "own_id": "r27387"
+  },
+  {
    "eq": 388720,
    "name": "Carl Petter Osmundsen",
    "club": "Turrennklubben Rogaland",
@@ -1298,6 +1397,19 @@
    "own_id": "r20828"
   },
   {
+   "eq": 6613661,
+   "name": "Christer Fjælberg",
+   "club": "The Green Bottles",
+   "candidates": [
+    {
+     "id": "r11978",
+     "club": "Team MX Sport Kvadrat"
+    }
+   ],
+   "id": null,
+   "own_id": "r27639"
+  },
+  {
    "eq": 348547,
    "name": "Christian Balchen",
    "club": "Velonor CK",
@@ -1309,6 +1421,19 @@
    ],
    "id": null,
    "own_id": "r23313"
+  },
+  {
+   "eq": 6578211,
+   "name": "Christian Berntsen",
+   "club": "Bjelland AS",
+   "candidates": [
+    {
+     "id": "r365",
+     "club": "Klepp Stasjon"
+    }
+   ],
+   "id": null,
+   "own_id": "r27513"
   },
   {
    "eq": 105859,
@@ -1415,6 +1540,19 @@
    "own_id": "r21070"
   },
   {
+   "eq": 580056,
+   "name": "Dag Ottar Åtland",
+   "club": "Birkeland",
+   "candidates": [
+    {
+     "id": "r26239",
+     "club": "Birkenes IL"
+    }
+   ],
+   "id": null,
+   "own_id": "r27403"
+  },
+  {
    "eq": 372987,
    "name": "Dag Sandal",
    "club": "Sparebanken Pluss",
@@ -1495,6 +1633,19 @@
    ],
    "id": null,
    "own_id": "r20933"
+  },
+  {
+   "eq": 6617233,
+   "name": "Daniel Tucu",
+   "club": "Jæder",
+   "candidates": [
+    {
+     "id": "r13211",
+     "club": "Subsea 7"
+    }
+   ],
+   "id": null,
+   "own_id": "r27649"
   },
   {
    "eq": 4780230,
@@ -1625,6 +1776,19 @@
    ],
    "id": null,
    "own_id": "r21661"
+  },
+  {
+   "eq": 616621,
+   "name": "Eirik Nysted",
+   "club": "Bouvet Norge AS",
+   "candidates": [
+    {
+     "id": "r10538",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r27428"
   },
   {
    "eq": 455,
@@ -2033,6 +2197,19 @@
    "own_id": "r23777"
   },
   {
+   "eq": 6580914,
+   "name": "Erlend Salte Håland",
+   "club": "MASIV",
+   "candidates": [
+    {
+     "id": "r8974",
+     "club": "Kverneland Ski"
+    }
+   ],
+   "id": null,
+   "own_id": "r27516"
+  },
+  {
    "eq": 6866922,
    "name": "Espen Hansen",
    "club": "Elcor",
@@ -2266,6 +2443,19 @@
    "own_id": "r23428"
   },
   {
+   "eq": 798730,
+   "name": "Frank Høyer-Simonsen",
+   "club": "Statnett",
+   "candidates": [
+    {
+     "id": "r10963",
+     "club": "Sterling Kveite"
+    }
+   ],
+   "id": null,
+   "own_id": "r27680"
+  },
+  {
    "eq": 1921431,
    "name": "Frank Johannessen",
    "club": "Åkra Sykkelgruppe",
@@ -2331,6 +2521,19 @@
    "own_id": "r25257"
   },
   {
+   "eq": 514213,
+   "name": "Fredrik Jomaas",
+   "club": "",
+   "candidates": [
+    {
+     "id": "r9286",
+     "club": "Forus Elektro Automatikk AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27384"
+  },
+  {
    "eq": 116007,
    "name": "Fredrik Køhn",
    "club": "Sandnes Sykleklubb",
@@ -2374,6 +2577,19 @@
    "own_id": "r21754"
   },
   {
+   "eq": 508928,
+   "name": "Fredrik Waage",
+   "club": "Sandnes",
+   "candidates": [
+    {
+     "id": "r563",
+     "club": "Waage tannlegesenter"
+    }
+   ],
+   "id": null,
+   "own_id": "r27383"
+  },
+  {
    "eq": 386667,
    "name": "Frode Angell-Olsen",
    "club": "Wintershall",
@@ -2411,6 +2627,19 @@
    ],
    "id": null,
    "own_id": "r20794"
+  },
+  {
+   "eq": 3959769,
+   "name": "Frode Forsdahl",
+   "club": "Enter fritid/ Stiftelsen Kirkens Bymisjon",
+   "candidates": [
+    {
+     "id": "r26083",
+     "club": "Kristiansand"
+    }
+   ],
+   "id": null,
+   "own_id": "r27351"
   },
   {
    "eq": 4084303,
@@ -2654,6 +2883,19 @@
    "own_id": "r23258"
   },
   {
+   "eq": 4898410,
+   "name": "Geir-Arne Sørensen",
+   "club": "SLB",
+   "candidates": [
+    {
+     "id": "r4774",
+     "club": "Schlumberger"
+    }
+   ],
+   "id": null,
+   "own_id": "r27379"
+  },
+  {
    "eq": 344460,
    "name": "Geoff Johns",
    "club": "Sandnes Sykleklubb",
@@ -2678,6 +2920,19 @@
    ],
    "id": null,
    "own_id": "r22966"
+  },
+  {
+   "eq": 384045,
+   "name": "Gilbert Hove",
+   "club": "NorDan AS",
+   "candidates": [
+    {
+     "id": "r680",
+     "club": "Hovsherad SK"
+    }
+   ],
+   "id": null,
+   "own_id": "r27345"
   },
   {
    "eq": 679353,
@@ -2773,6 +3028,32 @@
    ],
    "id": null,
    "own_id": "r21166"
+  },
+  {
+   "eq": 728037,
+   "name": "Grzegorz Brzyski",
+   "club": "PGNiG Upstream Norway",
+   "candidates": [
+    {
+     "id": "r26520",
+     "club": "LOTOS Norge"
+    }
+   ],
+   "id": null,
+   "own_id": "r27673"
+  },
+  {
+   "eq": 589601,
+   "name": "Gudrun Gudnadottir",
+   "club": "Sykehusinnkjøp HF",
+   "candidates": [
+    {
+     "id": "r11709",
+     "club": "Dyreparken Naboisho"
+    }
+   ],
+   "id": null,
+   "own_id": "r27411"
   },
   {
    "eq": 541644,
@@ -2881,6 +3162,19 @@
    ],
    "id": null,
    "own_id": "r24462"
+  },
+  {
+   "eq": 6611519,
+   "name": "Gunnar Steinnes",
+   "club": "Paa Hjul",
+   "candidates": [
+    {
+     "id": "r16867",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r27630"
   },
   {
    "eq": 4769720,
@@ -3090,6 +3384,19 @@
    "own_id": "r23583"
   },
   {
+   "eq": 6937975,
+   "name": "Helge Gausdal",
+   "club": "Søgne FSC",
+   "candidates": [
+    {
+     "id": "r2962",
+     "club": "Nodeland"
+    }
+   ],
+   "id": null,
+   "own_id": "r27667"
+  },
+  {
    "eq": 384655,
    "name": "Helge Haugen",
    "club": "A/S Vinmonopolet",
@@ -3194,6 +3501,19 @@
    "own_id": "r21782"
   },
   {
+   "eq": 617321,
+   "name": "Helle Geheb",
+   "club": "Pedalpigane",
+   "candidates": [
+    {
+     "id": "r7057",
+     "club": "Spring sykkel"
+    }
+   ],
+   "id": null,
+   "own_id": "r27429"
+  },
+  {
    "eq": 1671343,
    "name": "Helle Mønster Olufsen",
    "club": "Independent Oil Tools AS",
@@ -3257,6 +3577,19 @@
    ],
    "id": null,
    "own_id": "r21651"
+  },
+  {
+   "eq": 6462340,
+   "name": "Henriette Steira",
+   "club": "Randaberg",
+   "candidates": [
+    {
+     "id": "r16881",
+     "club": "Herheim Design"
+    }
+   ],
+   "id": null,
+   "own_id": "r27446"
   },
   {
    "eq": 3812484,
@@ -3400,6 +3733,19 @@
    ],
    "id": null,
    "own_id": "r22544"
+  },
+  {
+   "eq": 6610787,
+   "name": "Håvard Madsen Lampe",
+   "club": "Folkehallene",
+   "candidates": [
+    {
+     "id": "r3606",
+     "club": "Tasta & Omegn Sykkel Klubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r27619"
   },
   {
    "eq": 384164,
@@ -3562,6 +3908,32 @@
    "own_id": "r20955"
   },
   {
+   "eq": 290183,
+   "name": "Jan Erik Kittilsen",
+   "club": "K-CCS_GC",
+   "candidates": [
+    {
+     "id": "r953",
+     "club": "Explora Petroleum"
+    }
+   ],
+   "id": null,
+   "own_id": "r27328"
+  },
+  {
+   "eq": 740844,
+   "name": "Jan Geir Fjogstad",
+   "club": "Ducan54",
+   "candidates": [
+    {
+     "id": "r9970",
+     "club": "Statens Vegvesen"
+    }
+   ],
+   "id": null,
+   "own_id": "r27675"
+  },
+  {
    "eq": 107811,
    "name": "Jan Gunnar Bru",
    "club": "",
@@ -3599,6 +3971,32 @@
    ],
    "id": null,
    "own_id": "r25687"
+  },
+  {
+   "eq": 6503963,
+   "name": "Jan Olsen",
+   "club": "Arendal",
+   "candidates": [
+    {
+     "id": "r12831",
+     "club": "Dolphin Drilling AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27457"
+  },
+  {
+   "eq": 6604566,
+   "name": "Jan Ove Byrknes",
+   "club": "Bergen Transport Sentral A/S",
+   "candidates": [
+    {
+     "id": "r16959",
+     "club": "Nyborg"
+    }
+   ],
+   "id": null,
+   "own_id": "r27586"
   },
   {
    "eq": 519809,
@@ -3770,6 +4168,32 @@
    "own_id": "r24557"
   },
   {
+   "eq": 108140,
+   "name": "Jens Slottet",
+   "club": "UL Fram",
+   "candidates": [
+    {
+     "id": "r4803",
+     "club": "Tine"
+    }
+   ],
+   "id": null,
+   "own_id": "r27309"
+  },
+  {
+   "eq": 2268986,
+   "name": "Jens Øyvind Solheim",
+   "club": "SpareBank1 Østlandet",
+   "candidates": [
+    {
+     "id": "r8245",
+     "club": "Vang Skiløperforening Sykkel"
+    }
+   ],
+   "id": null,
+   "own_id": "r27320"
+  },
+  {
    "eq": 540629,
    "name": "Jim Morland",
    "club": "Kristiansands CK",
@@ -3872,6 +4296,19 @@
    ],
    "id": null,
    "own_id": "r24885"
+  },
+  {
+   "eq": 3780643,
+   "name": "Johannes Kleppe",
+   "club": "Paa Hjul",
+   "candidates": [
+    {
+     "id": "r17126",
+     "club": "Sandnes"
+    }
+   ],
+   "id": null,
+   "own_id": "r27338"
   },
   {
    "eq": 1429171,
@@ -4030,6 +4467,23 @@
    "own_id": "r22902"
   },
   {
+   "eq": 4710218,
+   "name": "Jonas Andersen",
+   "club": "Team Lads",
+   "candidates": [
+    {
+     "id": "r13908",
+     "club": "Hurtigruta Carglass as"
+    },
+    {
+     "id": "r14147",
+     "club": "Seabrokers Group"
+    }
+   ],
+   "id": null,
+   "own_id": "r27368"
+  },
+  {
    "eq": 465127,
    "name": "Jonas Auestad Kverneland",
    "club": "",
@@ -4041,6 +4495,19 @@
    ],
    "id": null,
    "own_id": "r21796"
+  },
+  {
+   "eq": 6583688,
+   "name": "Jonas Bråstein",
+   "club": "ConocoPhillips BIL",
+   "candidates": [
+    {
+     "id": "r14244",
+     "club": "Sandnes"
+    }
+   ],
+   "id": null,
+   "own_id": "r27529"
   },
   {
    "eq": 766259,
@@ -4110,6 +4577,19 @@
    ],
    "id": null,
    "own_id": "r24522"
+  },
+  {
+   "eq": 6592676,
+   "name": "Jonny Hjortland",
+   "club": "Å ENERGI BEDRIFTSIDRETTSLAG",
+   "candidates": [
+    {
+     "id": "r26527",
+     "club": "Netsecurity AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27539"
   },
   {
    "eq": 758535,
@@ -4216,6 +4696,32 @@
    "own_id": "r23009"
   },
   {
+   "eq": 6463202,
+   "name": "Julie Kristine Hovet",
+   "club": "Kleppe",
+   "candidates": [
+    {
+     "id": "r16979",
+     "club": "Klepp"
+    }
+   ],
+   "id": null,
+   "own_id": "r27447"
+  },
+  {
+   "eq": 6578207,
+   "name": "Justas Acas",
+   "club": "Bjelland AS",
+   "candidates": [
+    {
+     "id": "r9330",
+     "club": "Klepp Stasjon"
+    }
+   ],
+   "id": null,
+   "own_id": "r27510"
+  },
+  {
    "eq": 107661,
    "name": "Jørgen Ørmen Aanestad",
    "club": "",
@@ -4294,6 +4800,19 @@
    "own_id": "r21811"
   },
   {
+   "eq": 6581187,
+   "name": "Karin Torland",
+   "club": "Sandnes",
+   "candidates": [
+    {
+     "id": "r1152",
+     "club": "Hå kommune"
+    }
+   ],
+   "id": null,
+   "own_id": "r27520"
+  },
+  {
    "eq": 4100701,
    "name": "Katharina Maria Fowler",
    "club": "Katharina Maria Fowler",
@@ -4333,6 +4852,19 @@
    "own_id": "r21608"
   },
   {
+   "eq": 5893555,
+   "name": "Kent Ronny Sørensen",
+   "club": "Paa Hjul",
+   "candidates": [
+    {
+     "id": "r16510",
+     "club": "Lenkegjengen"
+    }
+   ],
+   "id": null,
+   "own_id": "r27410"
+  },
+  {
    "eq": 552783,
    "name": "Kjell Arne Sætre",
    "club": "",
@@ -4361,6 +4893,19 @@
    ],
    "id": null,
    "own_id": "r23577"
+  },
+  {
+   "eq": 713114,
+   "name": "Kjell Fjeldheim",
+   "club": "På sykkel med Bjørn, Pitter og Kjell",
+   "candidates": [
+    {
+     "id": "r1230",
+     "club": "SR Group"
+    }
+   ],
+   "id": null,
+   "own_id": "r27670"
   },
   {
    "eq": 354901,
@@ -4679,6 +5224,19 @@
    ],
    "id": null,
    "own_id": "r24495"
+  },
+  {
+   "eq": 6601266,
+   "name": "Knut Martens",
+   "club": "Vetco Gray Scandinavia AS",
+   "candidates": [
+    {
+     "id": "r26664",
+     "club": "Baker Hughes"
+    }
+   ],
+   "id": null,
+   "own_id": "r27563"
   },
   {
    "eq": 381314,
@@ -5051,6 +5609,19 @@
    "own_id": "r24409"
   },
   {
+   "eq": 3839139,
+   "name": "Leif Eriksen",
+   "club": "SUSi",
+   "candidates": [
+    {
+     "id": "r10092",
+     "club": "SUSBIL"
+    }
+   ],
+   "id": null,
+   "own_id": "r27344"
+  },
+  {
    "eq": 507293,
    "name": "Leif Olav Salte",
    "club": "Harbour Energy Norge AS",
@@ -5194,6 +5765,19 @@
    "own_id": "r20983"
   },
   {
+   "eq": 6608194,
+   "name": "Marcin Stygar",
+   "club": "PGNiG Upstream Norway",
+   "candidates": [
+    {
+     "id": "r26990",
+     "club": "LOTOS Norge"
+    }
+   ],
+   "id": null,
+   "own_id": "r27602"
+  },
+  {
    "eq": 6600653,
    "name": "Marcus Karlsen",
    "club": "Tour de Fjas",
@@ -5283,6 +5867,36 @@
    ],
    "id": null,
    "own_id": "r20871"
+  },
+  {
+   "eq": 772172,
+   "name": "Marius Skjæveland",
+   "club": "Kjøpmannsbråtet Warriors",
+   "candidates": [
+    {
+     "id": "r1512",
+     "club": "Bogafjell Sykleklubb / Team Marius"
+    },
+    {
+     "id": "r10043",
+     "club": "Wurth Norge"
+    }
+   ],
+   "id": null,
+   "own_id": "r27678"
+  },
+  {
+   "eq": 3829714,
+   "name": "Martin Aanundsen",
+   "club": "Lund CK",
+   "candidates": [
+    {
+     "id": "r26622",
+     "club": "Kristiansands Cykleklubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r27342"
   },
   {
    "eq": 431045,
@@ -5623,6 +6237,19 @@
    "own_id": "r23212"
   },
   {
+   "eq": 6578160,
+   "name": "Nils Ove Pollestad",
+   "club": "MASIV",
+   "candidates": [
+    {
+     "id": "r9612",
+     "club": "Lothe Bygg"
+    }
+   ],
+   "id": null,
+   "own_id": "r27500"
+  },
+  {
    "eq": 355020,
    "name": "Nola Zwarich",
    "club": "Sandnes Sykleklubb",
@@ -5647,6 +6274,19 @@
    ],
    "id": null,
    "own_id": "r24598"
+  },
+  {
+   "eq": 730451,
+   "name": "Norunn Gumpen",
+   "club": "Kck",
+   "candidates": [
+    {
+     "id": "r7039",
+     "club": "Nodeland"
+    }
+   ],
+   "id": null,
+   "own_id": "r27674"
   },
   {
    "eq": 106880,
@@ -5701,6 +6341,19 @@
    "own_id": "r25648"
   },
   {
+   "eq": 492053,
+   "name": "Odd Magnus Severinsen",
+   "club": "TekniskBureau AS",
+   "candidates": [
+    {
+     "id": "r7871",
+     "club": "ApplyLeirvik"
+    }
+   ],
+   "id": null,
+   "own_id": "r27381"
+  },
+  {
    "eq": 3787227,
    "name": "Oddbjørn Haaland",
    "club": "Turrennklubben",
@@ -5714,6 +6367,19 @@
    "own_id": "r21409"
   },
   {
+   "eq": 6613069,
+   "name": "Oddbjørn Haaland",
+   "club": "Tråkk Tormod Trøtt",
+   "candidates": [
+    {
+     "id": "r5510",
+     "club": "Bouvet"
+    }
+   ],
+   "id": null,
+   "own_id": "r27635"
+  },
+  {
    "eq": 719693,
    "name": "Oddbjørn Nilsen",
    "club": "SpKl Ceres Sykkel",
@@ -5725,6 +6391,32 @@
    ],
    "id": null,
    "own_id": "r25658"
+  },
+  {
+   "eq": 6581665,
+   "name": "Oddbjørn Øfsteng",
+   "club": "Bryne Vidaregåande Skole",
+   "candidates": [
+    {
+     "id": "r1656",
+     "club": "TEAM TIME"
+    }
+   ],
+   "id": null,
+   "own_id": "r27525"
+  },
+  {
+   "eq": 555640,
+   "name": "Oddvar Larsen",
+   "club": "Farsund sykleklubb",
+   "candidates": [
+    {
+     "id": "r6081",
+     "club": "Team Nordic"
+    }
+   ],
+   "id": null,
+   "own_id": "r27396"
   },
   {
    "eq": 107808,
@@ -5826,6 +6518,19 @@
    "own_id": "r24914"
   },
   {
+   "eq": 508102,
+   "name": "Ole Bjelland",
+   "club": "Ålgård",
+   "candidates": [
+    {
+     "id": "r1721",
+     "club": "Bjelland AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27382"
+  },
+  {
    "eq": 344305,
    "name": "Ole Ingvald Førland",
    "club": "Statoil BIL sokkel",
@@ -5852,6 +6557,19 @@
    "own_id": "r22482"
   },
   {
+   "eq": 678767,
+   "name": "Ole Tomas Dåsvand",
+   "club": "Kristiansands CK",
+   "candidates": [
+    {
+     "id": "r4033",
+     "club": "kristiansand ck"
+    }
+   ],
+   "id": null,
+   "own_id": "r27659"
+  },
+  {
    "eq": 384352,
    "name": "Ole-Martin Rypestøl",
    "club": "Mandal",
@@ -5876,6 +6594,19 @@
    ],
    "id": null,
    "own_id": "r25295"
+  },
+  {
+   "eq": 3405652,
+   "name": "Onar Paul Varhaug",
+   "club": "MASIV",
+   "candidates": [
+    {
+     "id": "r1745",
+     "club": "Varhaug"
+    }
+   ],
+   "id": null,
+   "own_id": "r27330"
   },
   {
    "eq": 926809,
@@ -5969,6 +6700,32 @@
    "own_id": "r20843"
   },
   {
+   "eq": 6610898,
+   "name": "Paul Moi",
+   "club": "",
+   "candidates": [
+    {
+     "id": "r1818",
+     "club": "Pon Equipment AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27620"
+  },
+  {
+   "eq": 2277892,
+   "name": "Per Erik Jensen",
+   "club": "Team Jensen",
+   "candidates": [
+    {
+     "id": "r27016",
+     "club": "Stavern"
+    }
+   ],
+   "id": null,
+   "own_id": "r27321"
+  },
+  {
    "eq": 369168,
    "name": "Per Eskeland",
    "club": "Kristiansands CK",
@@ -5980,6 +6737,32 @@
    ],
    "id": null,
    "own_id": "r21366"
+  },
+  {
+   "eq": 4233433,
+   "name": "Per Helge Litsheim",
+   "club": "Klepp Cykle Club / Klepp Cykle Clubb",
+   "candidates": [
+    {
+     "id": "r26593",
+     "club": "Lenkegjengen"
+    }
+   ],
+   "id": null,
+   "own_id": "r27360"
+  },
+  {
+   "eq": 6542063,
+   "name": "Per Helge Lundstadsveen",
+   "club": "Nærbø",
+   "candidates": [
+    {
+     "id": "r14108",
+     "club": "Block Berge Bygg"
+    }
+   ],
+   "id": null,
+   "own_id": "r27481"
   },
   {
    "eq": 108373,
@@ -6006,6 +6789,19 @@
    ],
    "id": null,
    "own_id": "r25071"
+  },
+  {
+   "eq": 6600575,
+   "name": "Per Morten Haarr",
+   "club": "Stavanger",
+   "candidates": [
+    {
+     "id": "r6257",
+     "club": "Region Stavanger BA"
+    }
+   ],
+   "id": null,
+   "own_id": "r27562"
   },
   {
    "eq": 408234,
@@ -6086,6 +6882,19 @@
    "own_id": "r22137"
   },
   {
+   "eq": 6572538,
+   "name": "Petter Reed",
+   "club": "Bryne Vidaregåande Skole",
+   "candidates": [
+    {
+     "id": "r4168",
+     "club": "TEAM TIME"
+    }
+   ],
+   "id": null,
+   "own_id": "r27496"
+  },
+  {
    "eq": 344666,
    "name": "Petter Schou",
    "club": "Klepp Cykle Club",
@@ -6097,6 +6906,19 @@
    ],
    "id": null,
    "own_id": "r24823"
+  },
+  {
+   "eq": 4795605,
+   "name": "Pierre-Yves Raya",
+   "club": "Wintershall DEA",
+   "candidates": [
+    {
+     "id": "r18116",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r27376"
   },
   {
    "eq": 692295,
@@ -6246,6 +7068,19 @@
    "own_id": "r20825"
   },
   {
+   "eq": 6594385,
+   "name": "Reidar Håland",
+   "club": "PGNiG Upstream Norway",
+   "candidates": [
+    {
+     "id": "r1907",
+     "club": "BP Norge"
+    }
+   ],
+   "id": null,
+   "own_id": "r27542"
+  },
+  {
    "eq": 718776,
    "name": "Reidar Lerang",
    "club": "ITParken As",
@@ -6324,6 +7159,19 @@
    "own_id": "r24794"
   },
   {
+   "eq": 6611356,
+   "name": "Robert Johansson",
+   "club": "Wintershall DEA",
+   "candidates": [
+    {
+     "id": "r16893",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r27622"
+  },
+  {
    "eq": 555641,
    "name": "Robert Olufsen",
    "club": "Aalgaard Sykkel & Spaserlaugua",
@@ -6365,6 +7213,19 @@
    ],
    "id": null,
    "own_id": "r24981"
+  },
+  {
+   "eq": 6602905,
+   "name": "Roger Fossen",
+   "club": "BoligByggeren AS",
+   "candidates": [
+    {
+     "id": "r14394",
+     "club": "Jadarhus"
+    }
+   ],
+   "id": null,
+   "own_id": "r27571"
   },
   {
    "eq": 383422,
@@ -6443,6 +7304,19 @@
    ],
    "id": null,
    "own_id": "r22933"
+  },
+  {
+   "eq": 743687,
+   "name": "Ronald William Polenz",
+   "club": "Nodeland",
+   "candidates": [
+    {
+     "id": "r14773",
+     "club": "Kristiansand"
+    }
+   ],
+   "id": null,
+   "own_id": "r27676"
   },
   {
    "eq": 688933,
@@ -6819,6 +7693,32 @@
    "own_id": "r23318"
   },
   {
+   "eq": 6607423,
+   "name": "Samson Habtemichael",
+   "club": "Hafrsfjord",
+   "candidates": [
+    {
+     "id": "r26743",
+     "club": "Sandnes"
+    }
+   ],
+   "id": null,
+   "own_id": "r27598"
+  },
+  {
+   "eq": 6580915,
+   "name": "Sander Nevland",
+   "club": "MASIV",
+   "candidates": [
+    {
+     "id": "r17127",
+     "club": "Klepp Stasjon"
+    }
+   ],
+   "id": null,
+   "own_id": "r27517"
+  },
+  {
    "eq": 107707,
    "name": "Sanjin Dzafic",
    "club": "Sola CK / PAD",
@@ -6843,6 +7743,19 @@
    ],
    "id": null,
    "own_id": "r23160"
+  },
+  {
+   "eq": 1875675,
+   "name": "Sigbjørn Toft",
+   "club": "TekniskBureau AS",
+   "candidates": [
+    {
+     "id": "r9525",
+     "club": "Stord"
+    }
+   ],
+   "id": null,
+   "own_id": "r27317"
   },
   {
    "eq": 103885,
@@ -6988,6 +7901,19 @@
    "own_id": "r24488"
   },
   {
+   "eq": 382877,
+   "name": "Sissel Borlaug",
+   "club": "Kristiandsand CK",
+   "candidates": [
+    {
+     "id": "r15344",
+     "club": "Mandal"
+    }
+   ],
+   "id": null,
+   "own_id": "r27340"
+  },
+  {
    "eq": 456156,
    "name": "Siv Elisabeth Salte",
    "club": "Kverneland SKI",
@@ -7040,6 +7966,19 @@
    "own_id": "r20975"
   },
   {
+   "eq": 6596223,
+   "name": "Sondre Arnheim",
+   "club": "SLB",
+   "candidates": [
+    {
+     "id": "r8435",
+     "club": "Nordhordland Sykkelklubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r27545"
+  },
+  {
    "eq": 354562,
    "name": "Sondre Jensen Fjælberg",
    "club": "Kristiansand Student IL",
@@ -7064,6 +8003,19 @@
    ],
    "id": null,
    "own_id": "r25026"
+  },
+  {
+   "eq": 6583886,
+   "name": "Sonja Solås",
+   "club": "Farsund Sykleklubb",
+   "candidates": [
+    {
+     "id": "r26977",
+     "club": "Presis Vegdrift AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27530"
   },
   {
    "eq": 108170,
@@ -7103,6 +8055,19 @@
    ],
    "id": null,
    "own_id": "r20921"
+  },
+  {
+   "eq": 6572807,
+   "name": "Steffen Hidle",
+   "club": "LYSE AKTIV",
+   "candidates": [
+    {
+     "id": "r16739",
+     "club": "Tasta & omegn sykkelklubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r27498"
   },
   {
    "eq": 738930,
@@ -7459,6 +8424,19 @@
    "own_id": "r21322"
   },
   {
+   "eq": 6539944,
+   "name": "Sven Martin Helgeland",
+   "club": "Ræge",
+   "candidates": [
+    {
+     "id": "r12522",
+     "club": "NetPower"
+    }
+   ],
+   "id": null,
+   "own_id": "r27480"
+  },
+  {
    "eq": 1671344,
    "name": "Sven Olav Borgen",
    "club": "Independent Oil Tools AS",
@@ -7496,6 +8474,19 @@
    ],
    "id": null,
    "own_id": "r24834"
+  },
+  {
+   "eq": 6609183,
+   "name": "Sævar Thor Kristinsson",
+   "club": "Bouvet Norge AS",
+   "candidates": [
+    {
+     "id": "r12137",
+     "club": "National Oilwell Varco"
+    }
+   ],
+   "id": null,
+   "own_id": "r27606"
   },
   {
    "eq": 874664,
@@ -7552,6 +8543,23 @@
    ],
    "id": null,
    "own_id": "r20872"
+  },
+  {
+   "eq": 464465,
+   "name": "Terje Hansen",
+   "club": "Arendal CC",
+   "candidates": [
+    {
+     "id": "r8365",
+     "club": "Arendal sykkelklubb"
+    },
+    {
+     "id": "r16466",
+     "club": "Vennesla OCK"
+    }
+   ],
+   "id": null,
+   "own_id": "r27367"
   },
   {
    "eq": 2595379,
@@ -7684,6 +8692,19 @@
    "own_id": "r20895"
   },
   {
+   "eq": 6617234,
+   "name": "Terje Wester",
+   "club": "Jæder",
+   "candidates": [
+    {
+     "id": "r2213",
+     "club": "Hommersåk"
+    }
+   ],
+   "id": null,
+   "own_id": "r27650"
+  },
+  {
    "eq": 6912604,
    "name": "Therese Edvardsen",
    "club": "Veien Tilbake",
@@ -7729,6 +8750,19 @@
    ],
    "id": null,
    "own_id": "r20887"
+  },
+  {
+   "eq": 6526197,
+   "name": "Thomas Bjørnson Larsen",
+   "club": "Team Støl",
+   "candidates": [
+    {
+     "id": "r26821",
+     "club": "Kristiansand"
+    }
+   ],
+   "id": null,
+   "own_id": "r27471"
   },
   {
    "eq": 4444164,
@@ -7796,6 +8830,23 @@
    "own_id": "r24208"
   },
   {
+   "eq": 115068,
+   "name": "Thomas Goa",
+   "club": "Aker Solutions",
+   "candidates": [
+    {
+     "id": "r7409",
+     "club": "Tasta & Omegn Sykkel Klubb / Aker Solutions MMO"
+    },
+    {
+     "id": "r16076",
+     "club": "Tasta & omegn sykkelklubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r27311"
+  },
+  {
    "eq": 355016,
    "name": "Thomas HETLAND",
    "club": "DSK",
@@ -7811,6 +8862,19 @@
    ],
    "id": null,
    "own_id": "r24888"
+  },
+  {
+   "eq": 395231,
+   "name": "Thomas Leer",
+   "club": "Respirare Accounting AS",
+   "candidates": [
+    {
+     "id": "r26050",
+     "club": "Lund Cykleklubb / Merkantil-Service"
+    }
+   ],
+   "id": null,
+   "own_id": "r27350"
   },
   {
    "eq": 4027999,
@@ -7850,6 +8914,19 @@
    ],
    "id": null,
    "own_id": "r23232"
+  },
+  {
+   "eq": 5898984,
+   "name": "Thomas Ødegård",
+   "club": "Jæder",
+   "candidates": [
+    {
+     "id": "r8211",
+     "club": "Bogafjell Sykleklubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r27412"
   },
   {
    "eq": 543534,
@@ -7917,6 +8994,19 @@
    "own_id": "r24870"
   },
   {
+   "eq": 6610134,
+   "name": "Tom Friestad",
+   "club": "Macro Offshore",
+   "candidates": [
+    {
+     "id": "r11310",
+     "club": "Klepp Cykle Club"
+    }
+   ],
+   "id": null,
+   "own_id": "r27609"
+  },
+  {
    "eq": 1933972,
    "name": "Tom Furland",
    "club": "Sandnes IL",
@@ -7928,6 +9018,19 @@
    ],
    "id": null,
    "own_id": "r21140"
+  },
+  {
+   "eq": 3828327,
+   "name": "Tom Heske",
+   "club": "Vetco Gray Scandinavia AS",
+   "candidates": [
+    {
+     "id": "r10409",
+     "club": "Weatherford"
+    }
+   ],
+   "id": null,
+   "own_id": "r27339"
   },
   {
    "eq": 358056,
@@ -8138,6 +9241,19 @@
    "own_id": "r20940"
   },
   {
+   "eq": 6578204,
+   "name": "Tor Gabrielsen",
+   "club": "Bjelland AS",
+   "candidates": [
+    {
+     "id": "r3932",
+     "club": "Eni Norge"
+    }
+   ],
+   "id": null,
+   "own_id": "r27507"
+  },
+  {
    "eq": 686887,
    "name": "Tor Gunnar Aksland",
    "club": "Equinor BIL",
@@ -8149,6 +9265,32 @@
    ],
    "id": null,
    "own_id": "r22434"
+  },
+  {
+   "eq": 6611468,
+   "name": "Tor Gunnar Fjelde",
+   "club": "Paa Hjul",
+   "candidates": [
+    {
+     "id": "r22763",
+     "club": "Stavanger"
+    }
+   ],
+   "id": null,
+   "own_id": "r27629"
+  },
+  {
+   "eq": 5892261,
+   "name": "Tor Inge Thorsen",
+   "club": "LYSE AKTIV",
+   "candidates": [
+    {
+     "id": "r10981",
+     "club": "Auto 2000"
+    }
+   ],
+   "id": null,
+   "own_id": "r27409"
   },
   {
    "eq": 115476,
@@ -8240,6 +9382,19 @@
    ],
    "id": null,
    "own_id": "r24607"
+  },
+  {
+   "eq": 5797715,
+   "name": "Torbjørn Skaar",
+   "club": "KCK/Aker Solutions",
+   "candidates": [
+    {
+     "id": "r26822",
+     "club": "Kristiansands Cykleklubb"
+    }
+   ],
+   "id": null,
+   "own_id": "r27401"
   },
   {
    "eq": 1386028,
@@ -8380,6 +9535,19 @@
    "own_id": "r22504"
   },
   {
+   "eq": 384102,
+   "name": "Tore Vassvik",
+   "club": "Vassvik",
+   "candidates": [
+    {
+     "id": "r2377",
+     "club": "Dalane SK Mix / Dalane SK"
+    }
+   ],
+   "id": null,
+   "own_id": "r27346"
+  },
+  {
    "eq": 107852,
    "name": "Tore Vingen",
    "club": "",
@@ -8495,6 +9663,19 @@
    ],
    "id": null,
    "own_id": "r24415"
+  },
+  {
+   "eq": 6578161,
+   "name": "Torny Pollestad",
+   "club": "MASIV",
+   "candidates": [
+    {
+     "id": "r11737",
+     "club": "Lothe Bygg AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27501"
   },
   {
    "eq": 572600,
@@ -8786,6 +9967,19 @@
    "own_id": "r20916"
   },
   {
+   "eq": 4250736,
+   "name": "Vaidas Prucinskas",
+   "club": "Paa Hjul",
+   "candidates": [
+    {
+     "id": "r16298",
+     "club": "Sandnes"
+    }
+   ],
+   "id": null,
+   "own_id": "r27362"
+  },
+  {
    "eq": 4449193,
    "name": "Vegar Lund",
    "club": "Bergen",
@@ -8838,6 +10032,19 @@
    "own_id": "r25510"
   },
   {
+   "eq": 714023,
+   "name": "Vidar Eikelid",
+   "club": "Bjelland AS",
+   "candidates": [
+    {
+     "id": "r10331",
+     "club": "SR-Group"
+    }
+   ],
+   "id": null,
+   "own_id": "r27671"
+  },
+  {
    "eq": 507265,
    "name": "Vidar Gunnarsson",
    "club": "GTI Friidrett",
@@ -8862,6 +10069,23 @@
    ],
    "id": null,
    "own_id": "r23463"
+  },
+  {
+   "eq": 414541,
+   "name": "Vidar Nedrebø",
+   "club": "Repsol Norge AS/Blodsmak Sportsklubb",
+   "candidates": [
+    {
+     "id": "r10292",
+     "club": "Lothe Bygg AS"
+    },
+    {
+     "id": "r15470",
+     "club": "Talisman Energy/Blodsmak SK"
+    }
+   ],
+   "id": null,
+   "own_id": "r27355"
   },
   {
    "eq": 114966,
@@ -8979,6 +10203,19 @@
    ],
    "id": null,
    "own_id": "r21760"
+  },
+  {
+   "eq": 709480,
+   "name": "Ørjan Kommedal",
+   "club": "Engelsvoll og Austrått",
+   "candidates": [
+    {
+     "id": "r10891",
+     "club": "Archerwell AS"
+    }
+   ],
+   "id": null,
+   "own_id": "r27669"
   },
   {
    "eq": 465052,

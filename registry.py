@@ -40,10 +40,11 @@ def races(rider, log=print):
         try:
             if e["source"] == "eqtiming":
                 found = eqtiming.registry_races(e, rider["name"], int(eq_id) if eq_id else None)
-            elif e["source"] == "raceresult":
-                found = raceresult.races(e, rider["name"])
-            elif e["source"] == "ultimate":
-                found = ultimate.races(e, rider["name"])
+            elif e["source"] in ("raceresult", "ultimate"):
+                # Lists without profiles have only the name, so try the other names a rider
+                # has raced under (also_names in riders.json, e.g. without a middle name).
+                mod = raceresult if e["source"] == "raceresult" else ultimate
+                found = next((f for n in [rider["name"], *rider.get("also_names", [])] if (f := mod.races(e, n))), [])
             else:
                 continue
         except Exception as x:  # one list we can't read shouldn't stop the rest

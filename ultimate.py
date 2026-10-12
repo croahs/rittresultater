@@ -113,6 +113,13 @@ def _hms(t):
     return f"{h:02d}:{m:02d}:{s:02d}"
 
 
+def _age(c):
+    """Ultimate's live lists name a five-year class by its first age ("M45" is 45-49), so it is
+    spelled out before it goes into the ten-year bands (decade)."""
+    m = re.fullmatch(r"([MK])(\d\d)", c or "")
+    return decade(f"{m.group(1)}{m.group(2)}-{int(m.group(2)) + 4}" if m and int(m.group(2)) >= 20 else c)
+
+
 def races(entry, name):
     """The rider's result (by name) in one registry race, shaped like eqtiming.races()."""
     want = raceresult.fold(name)
@@ -121,13 +128,13 @@ def races(entry, name):
     me = next((r for r in rows if raceresult.fold(r[1]) == want), None)
     if not me or not me[0].isdigit() or ":" not in me[4]:
         return []
-    age = [r for r in rows if decade(r[3]) == decade(me[3])]
+    age = [r for r in rows if _age(r[3]) == _age(me[3])]
     timed = [r for r in rows if ":" in r[4]]
     return [{
         "event_id": entry["event"], "stage_id": entry.get("distance", 1), "name": entry["name"],
         "stage": re.sub(r"\s+20\d\d$", "", entry["name"]), "group": "", "date": entry["date"],
         "class_place": int(me[0]), "class_n": len(rows),
-        "age_class": decade(me[3]), "age_place": 1 + sum(1 for r in age if ":" in r[4] and _hms(r[4]) < _hms(me[4])),
+        "age_class": _age(me[3]), "age_place": 1 + sum(1 for r in age if ":" in r[4] and _hms(r[4]) < _hms(me[4])),
         "age_n": len(age), "time": _hms(me[4]), "class_winner": min(_hms(r[4]) for r in timed),
         "url": f"{SMARTRES}?eventid={entry['event']}" if entry.get("smartres")
                else f"https://live.ultimate.dk/desktop/front/?eventid={entry['event']}",
