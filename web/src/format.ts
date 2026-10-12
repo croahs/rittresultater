@@ -7,10 +7,12 @@ export const clsLabel = <T extends string | null | undefined>(s: T): T => (s ? s
 /** Age classes in ten-year bands, as ageclass.py counts them: "M 35-39" -> "M30-39". Juniors, «M70+» and
  *  anything that isn't a plain age band stay as the result list has them. */
 export const ageLabel = (s: string): string => {
-  const m = /^([MK])\s*(?:master\s*)?(\d\d)\s*[-–]\s*(\d\d)$/i.exec(s.trim());
-  if (!m || +m[2] < 20) return s;
-  const lo = Math.floor(+m[2] / 10) * 10;
-  return `${m[1].toUpperCase()}${lo}-${lo + 9}`;
+  const m = /^(?:master\s*)?([MK])\s*(?:master\s*)?(\d\d)\s*[-–]\s*(\d\d)$/i.exec(s.trim());
+  if (!m) return s;
+  const lo = +m[2], hi = +m[3], band = Math.floor(lo / 10) * 10;
+  // A class that crosses a band (M46-50) or is wider than one (M30-49) stays as listed.
+  if (lo < 20 || lo % 5 || hi < lo || hi > band + 9) return s;
+  return `${m[1].toUpperCase()}${band}-${band + 9}`;
 };
 export const TYPE_VAR: Record<RaceType, string> = { Road: "var(--road)", Gravel: "var(--gravel)", MTB: "var(--mtb)", TT: "var(--tt)", TTT: "var(--ttt)", Unknown: "var(--unknown)" };
 

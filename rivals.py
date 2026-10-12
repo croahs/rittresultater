@@ -168,9 +168,15 @@ def category(race_name, group):
         return "MTB/Hybrid"
     if re.search(r"\bcx\b|gravel", g):
         return "CX/Gravel"
-    # A stage named "Tempo ..." is the time-trial bike class even when it lets racers with aero
-    # bars in (Toskaskabet: "Tempo (+ racer m/tempobøyle)" beside "Racer (u/tempobøyle)").
-    if re.search(r"- tempo$|^\s*tempo\b", race_name.lower()) or re.search(r"^(tempo|temposykkel)$", group.strip().lower()):
+    # The class a start is listed in decides first: «Tempo Bue - Bryne - Racer» is a race named
+    # Tempo whose class is Racersykkel, and a class named "Tempo ..." is the time-trial bike class
+    # even when it lets racers with aero bars in (Toskaskabet: "Tempo (+ racer m/tempobøyle)").
+    if re.search(r"^\s*tempo", group.lower()):
+        return "Temposykkel"
+    if "racer" in group.lower() or re.search(r"- racer$", race_name.lower()):
+        return "Racer"
+    # So is a race or stage named "Tempo ..." whose classes are age classes.
+    if re.search(r"- tempo$|^\s*tempo\b", race_name.lower()):
         return "Temposykkel"
     if "racer" in g:
         return "Racer"
