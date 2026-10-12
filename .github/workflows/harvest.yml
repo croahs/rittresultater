@@ -3,10 +3,8 @@
 # The first nights work through the backlog (about 4,600 races since 2008); after that only new
 # races are fetched.
 #
-# 45 minutes a night (Pedår, 2026-10-06): the repo is private, so Actions has 2,000 free minutes a
-# month, and 5.5 hours a night used them up in six nights. 45 minutes a night (~1,500 a month)
-# leaves room for the queue and weekly jobs. That is about 45 races a night, so the remaining
-# backlog (about 2,000 races in October 2026) takes six to seven weeks.
+# 5.5 hours a night. The repo is public (2026-10-11), so Actions minutes are free; while it was
+# private, this job used up the 2,000 free minutes a month in six nights.
 #
 # The lists live on the branch "harvest", checked out in cache/harvest, never on main. The
 # first run creates that branch. Nothing on the site can start this job.
@@ -17,12 +15,12 @@ name: Harvest race results
 # (harvest.Blocked) and the job fails, so it shows up; nothing works around a block.
 on:
   schedule:
-    - cron: "0 22 * * *"  # 22:00 UTC = midnight in Norway (summer time); fetching stops after 45 minutes
+    - cron: "0 22 * * *"  # 22:00 UTC = midnight in Norway (summer time); fetching stops after 5.5 hours
   workflow_dispatch:
     inputs:
       minutes:
         description: "Minutes to spend fetching lists"
-        default: "45"
+        default: "330"
 
 permissions:
   contents: write
@@ -34,7 +32,7 @@ concurrency:
 jobs:
   harvest:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
 
@@ -59,7 +57,7 @@ jobs:
           fi
 
       - name: Harvest
-        run: python3 harvest.py "${{ github.event.inputs.minutes || '45' }}"
+        run: python3 harvest.py "${{ github.event.inputs.minutes || '330' }}"
 
       - name: Commit to the harvest branch
         if: always()
