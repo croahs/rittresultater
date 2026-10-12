@@ -79,6 +79,16 @@ def races():
         yield {"Race": f"{r['name']} {r['year']}", "Date": f"{d}.{m}.{y[2:]}", "Type": r["type"],
                "Distance (km)": r.get("distance_km"), "Elevation gain (m)": r.get("elevation_m"),
                "Turritt": links.get(src[0]) or ""}, src
+    # Registry rows marked "always" are read in full whether or not a followed rider rode them
+    # (Pedår, 2026-10-12: every Nordsjørittet). After the riders' own rows, so those win.
+    for row in registry.load():
+        if not row.get("always") or not row["turritt_ids"]:
+            continue
+        tid = row["turritt_ids"][0]
+        y, m, d = row["date"].split("-")
+        yield {"Race": f"{row['name']} {row['year']}", "Date": f"{d}.{m}.{y[2:]}", "Type": row["type"],
+               "Distance (km)": (turritt._cache.get(f"info:{tid}") or [None, None])[1], "Elevation gain (m)": None,
+               "Turritt": f"https://turritt.com/index.php?Turritt={tid}&page=resultat&current=2&su=2"}, ("turritt", tid)
 
 
 def aliases():
