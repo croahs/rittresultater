@@ -1497,8 +1497,8 @@
      "gap_s": 202,
      "gap_pct": 9.9,
      "their_time": "00:33:57",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 10
     },
@@ -1614,8 +1614,8 @@
      "gap_s": 6,
      "gap_pct": 0.3,
      "their_time": "00:34:41",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 1
     },
@@ -1762,8 +1762,8 @@
      "gap_s": 265,
      "gap_pct": 13.4,
      "their_time": "00:32:54",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 17
     },
@@ -1892,8 +1892,8 @@
      "gap_s": 109,
      "gap_pct": 5.5,
      "their_time": "00:32:58",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 11
     },
@@ -2027,8 +2027,8 @@
      "gap_s": 78,
      "gap_pct": 3.6,
      "their_time": "00:36:01",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 3
     },
@@ -2170,8 +2170,8 @@
      "gap_s": -179,
      "gap_pct": -7.9,
      "their_time": "00:37:46",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -11
     },
@@ -2757,8 +2757,8 @@
      "gap_s": 480,
      "gap_pct": 27.3,
      "their_time": "00:29:19",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 41
     },
@@ -2887,8 +2887,8 @@
      "gap_s": 347,
      "gap_pct": 19.9,
      "their_time": "00:29:00",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 29
     },
@@ -3035,8 +3035,8 @@
      "gap_s": 170,
      "gap_pct": 8.2,
      "their_time": "00:34:29",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 6
     },
@@ -3139,8 +3139,8 @@
      "gap_s": 358,
      "gap_pct": 20.7,
      "their_time": "00:28:49",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 31
     },
@@ -3513,8 +3513,8 @@
      "gap_s": 203,
      "gap_pct": 10.0,
      "their_time": "00:33:56",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 11
     },
@@ -3617,8 +3617,8 @@
      "gap_s": 79,
      "gap_pct": 3.9,
      "their_time": "00:33:28",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 9
     },
@@ -3699,9 +3699,9 @@
    "wins": 0,
    "losses": 17,
    "draws": 0,
-   "same_class_races": 15,
+   "same_class_races": 13,
    "same_class_wins": 0,
-   "same_class_losses": 15,
+   "same_class_losses": 13,
    "avg_gap_s": 1388,
    "median_gap_pct": 19.0,
    "meetings": [
@@ -3778,9 +3778,9 @@
      "gap_s": 271,
      "gap_pct": 13.8,
      "their_time": "00:32:48",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 18
     },
     {
@@ -3882,9 +3882,9 @@
      "gap_s": 106,
      "gap_pct": 5.4,
      "their_time": "00:33:01",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 10
     },
     {
@@ -4004,8 +4004,8 @@
      "gap_s": 405,
      "gap_pct": 22.1,
      "their_time": "00:30:34",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 34
     },
@@ -4095,8 +4095,8 @@
      "gap_s": 281,
      "gap_pct": 15.6,
      "their_time": "00:30:06",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 23
     },
@@ -4243,8 +4243,8 @@
      "gap_s": -2,
      "gap_pct": -0.1,
      "their_time": "00:37:21",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -1
     },
@@ -4334,8 +4334,8 @@
      "gap_s": -166,
      "gap_pct": -7.4,
      "their_time": "00:37:33",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -10
     },
@@ -4456,8 +4456,8 @@
      "gap_s": 8,
      "gap_pct": 0.4,
      "their_time": "00:37:11",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 1
     },
@@ -4560,8 +4560,8 @@
      "gap_s": -102,
      "gap_pct": -4.7,
      "their_time": "00:36:29",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -7
     },
@@ -4786,8 +4786,8 @@
      "gap_s": 70,
      "gap_pct": 3.5,
      "their_time": "00:33:37",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 6
     },
@@ -4855,9 +4855,9 @@
    "wins": 0,
    "losses": 16,
    "draws": 0,
-   "same_class_races": 12,
+   "same_class_races": 10,
    "same_class_wins": 0,
-   "same_class_losses": 12,
+   "same_class_losses": 10,
    "avg_gap_s": 893,
    "median_gap_pct": 20.4,
    "meetings": [
@@ -4908,9 +4908,9 @@
      "gap_s": 348,
      "gap_pct": 18.4,
      "their_time": "00:31:31",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 26
     },
     {
@@ -5012,9 +5012,9 @@
      "gap_s": 204,
      "gap_pct": 10.8,
      "their_time": "00:31:23",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 17
     },
     {
@@ -5147,8 +5147,8 @@
      "gap_s": 383,
      "gap_pct": 20.6,
      "their_time": "00:30:56",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 31
     },
@@ -5251,8 +5251,8 @@
      "gap_s": 290,
      "gap_pct": 16.1,
      "their_time": "00:29:57",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 24
     },
@@ -5360,8 +5360,8 @@
      "gap_s": 264,
      "gap_pct": 13.4,
      "their_time": "00:32:55",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 16
     },
@@ -5451,8 +5451,8 @@
      "gap_s": 74,
      "gap_pct": 3.7,
      "their_time": "00:33:33",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 8
     },
@@ -5677,8 +5677,8 @@
      "gap_s": -907,
      "gap_pct": -30.3,
      "their_time": "00:49:54",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -18
     },
@@ -5760,8 +5760,8 @@
      "gap_s": 132,
      "gap_pct": 6.3,
      "their_time": "00:35:07",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 5
     },
@@ -5864,8 +5864,8 @@
      "gap_s": -23,
      "gap_pct": -1.1,
      "their_time": "00:35:10",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -2
     },
@@ -5933,9 +5933,9 @@
    "wins": 0,
    "losses": 14,
    "draws": 0,
-   "same_class_races": 13,
+   "same_class_races": 12,
    "same_class_wins": 0,
-   "same_class_losses": 13,
+   "same_class_losses": 12,
    "avg_gap_s": 1063,
    "median_gap_pct": 19.3,
    "meetings": [
@@ -5973,9 +5973,9 @@
      "gap_s": 373,
      "gap_pct": 20.0,
      "their_time": "00:31:06",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 30
     },
     {
@@ -6064,8 +6064,8 @@
      "gap_s": 216,
      "gap_pct": 11.5,
      "their_time": "00:31:11",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 19
     },
@@ -6199,8 +6199,8 @@
      "gap_s": 292,
      "gap_pct": 15.0,
      "their_time": "00:32:27",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 20
     },
@@ -6560,8 +6560,8 @@
      "gap_s": 458,
      "gap_pct": 25.7,
      "their_time": "00:29:41",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 40
     },
@@ -6664,8 +6664,8 @@
      "gap_s": 352,
      "gap_pct": 20.3,
      "their_time": "00:28:55",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 30
     },
@@ -6733,9 +6733,9 @@
    "wins": 0,
    "losses": 13,
    "draws": 0,
-   "same_class_races": 7,
+   "same_class_races": 5,
    "same_class_wins": 0,
-   "same_class_losses": 7,
+   "same_class_losses": 5,
    "avg_gap_s": 694,
    "median_gap_pct": 19.7,
    "meetings": [
@@ -6799,9 +6799,9 @@
      "gap_s": 368,
      "gap_pct": 19.7,
      "their_time": "00:31:11",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 28
     },
     {
@@ -6877,9 +6877,9 @@
      "gap_s": 322,
      "gap_pct": 18.2,
      "their_time": "00:29:25",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 25
     },
     {
@@ -6986,8 +6986,8 @@
      "gap_s": 339,
      "gap_pct": 17.8,
      "their_time": "00:31:40",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 24
     },
@@ -7051,8 +7051,8 @@
      "gap_s": 264,
      "gap_pct": 14.5,
      "their_time": "00:30:23",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 22
     },
@@ -7225,8 +7225,8 @@
      "gap_s": -84,
      "gap_pct": -3.9,
      "their_time": "00:36:11",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -4
     },
@@ -7281,9 +7281,9 @@
    "wins": 4,
    "losses": 8,
    "draws": 0,
-   "same_class_races": 6,
-   "same_class_wins": 2,
-   "same_class_losses": 4,
+   "same_class_races": 4,
+   "same_class_wins": 1,
+   "same_class_losses": 3,
    "avg_gap_s": 39,
    "median_gap_pct": 3.0,
    "meetings": [
@@ -7321,9 +7321,9 @@
      "gap_s": 233,
      "gap_pct": 11.6,
      "their_time": "00:33:26",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 13
     },
     {
@@ -7438,9 +7438,9 @@
      "gap_s": -70,
      "gap_pct": -3.2,
      "their_time": "00:35:57",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": -3
     }
    ]
@@ -7455,9 +7455,9 @@
    "wins": 11,
    "losses": 1,
    "draws": 0,
-   "same_class_races": 9,
-   "same_class_wins": 8,
-   "same_class_losses": 1,
+   "same_class_races": 7,
+   "same_class_wins": 7,
+   "same_class_losses": 0,
    "avg_gap_s": -577,
    "median_gap_pct": -3.3,
    "meetings": [
@@ -7495,9 +7495,9 @@
      "gap_s": 73,
      "gap_pct": 3.4,
      "their_time": "00:36:06",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 2
     },
     {
@@ -7573,9 +7573,9 @@
      "gap_s": -13,
      "gap_pct": -0.6,
      "their_time": "00:35:00",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": -1
     },
     {
@@ -7656,8 +7656,8 @@
      "gap_s": 304,
      "gap_pct": 15.7,
      "their_time": "00:32:15",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 21
     },
@@ -7734,8 +7734,8 @@
      "gap_s": 199,
      "gap_pct": 10.5,
      "their_time": "00:31:28",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 16
     },
@@ -7908,8 +7908,8 @@
      "gap_s": 123,
      "gap_pct": 6.3,
      "their_time": "00:32:44",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 13
     },
@@ -8443,8 +8443,8 @@
      "gap_s": -332,
      "gap_pct": -13.7,
      "their_time": "00:40:19",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -15
     },
@@ -8539,8 +8539,8 @@
      "gap_s": 255,
      "gap_pct": 12.9,
      "their_time": "00:33:04",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 15
     },
@@ -9736,8 +9736,8 @@
      "gap_s": -32,
      "gap_pct": -1.4,
      "their_time": "00:37:51",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -2
     },
@@ -9814,8 +9814,8 @@
      "gap_s": -180,
      "gap_pct": -7.9,
      "their_time": "00:37:47",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -12
     },
@@ -9910,8 +9910,8 @@
      "gap_s": -254,
      "gap_pct": -10.9,
      "their_time": "00:39:01",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -14
     },
@@ -10071,8 +10071,8 @@
      "gap_s": -101,
      "gap_pct": -4.6,
      "their_time": "00:36:28",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -6
     },
@@ -10141,8 +10141,8 @@
      "gap_s": 212,
      "gap_pct": 10.5,
      "their_time": "00:33:47",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 12
     },
@@ -10180,8 +10180,8 @@
      "gap_s": 42,
      "gap_pct": 2.1,
      "their_time": "00:34:05",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 4
     },
@@ -10249,9 +10249,9 @@
    "wins": 1,
    "losses": 8,
    "draws": 0,
-   "same_class_races": 7,
+   "same_class_races": 6,
    "same_class_wins": 0,
-   "same_class_losses": 7,
+   "same_class_losses": 6,
    "avg_gap_s": 423,
    "median_gap_pct": 16.0,
    "meetings": [
@@ -10302,9 +10302,9 @@
      "gap_s": 322,
      "gap_pct": 16.8,
      "their_time": "00:31:57",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 23
     },
     {
@@ -10367,8 +10367,8 @@
      "gap_s": 47,
      "gap_pct": 2.3,
      "their_time": "00:34:00",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 5
     }
@@ -10463,8 +10463,8 @@
      "gap_s": 206,
      "gap_pct": 11.0,
      "their_time": "00:31:21",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 18
     },
@@ -11234,8 +11234,8 @@
      "gap_s": 12,
      "gap_pct": 0.6,
      "their_time": "00:34:35",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 2
     },
@@ -11412,9 +11412,9 @@
    "wins": 1,
    "losses": 7,
    "draws": 0,
-   "same_class_races": 3,
+   "same_class_races": 2,
    "same_class_wins": 1,
-   "same_class_losses": 2,
+   "same_class_losses": 1,
    "avg_gap_s": 84,
    "median_gap_pct": 9.4,
    "meetings": [
@@ -11478,9 +11478,9 @@
      "gap_s": 73,
      "gap_pct": 3.6,
      "their_time": "00:33:34",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 7
     },
     {
@@ -11613,8 +11613,8 @@
      "gap_s": -375,
      "gap_pct": -15.2,
      "their_time": "00:41:02",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -17
     },
@@ -11683,8 +11683,8 @@
      "gap_s": 346,
      "gap_pct": 18.3,
      "their_time": "00:31:33",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 25
     },
@@ -11735,8 +11735,8 @@
      "gap_s": 218,
      "gap_pct": 11.7,
      "their_time": "00:31:09",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 20
     },
@@ -11900,9 +11900,9 @@
    "wins": 0,
    "losses": 8,
    "draws": 0,
-   "same_class_races": 5,
+   "same_class_races": 3,
    "same_class_wins": 0,
-   "same_class_losses": 5,
+   "same_class_losses": 3,
    "avg_gap_s": 643,
    "median_gap_pct": 19.0,
    "meetings": [
@@ -11914,9 +11914,9 @@
      "gap_s": 437,
      "gap_pct": 24.3,
      "their_time": "00:30:02",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 38
     },
     {
@@ -11979,9 +11979,9 @@
      "gap_s": 329,
      "gap_pct": 18.7,
      "their_time": "00:29:18",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 26
     },
     {
@@ -12022,9 +12022,9 @@
    "wins": 1,
    "losses": 7,
    "draws": 0,
-   "same_class_races": 6,
+   "same_class_races": 4,
    "same_class_wins": 1,
-   "same_class_losses": 5,
+   "same_class_losses": 3,
    "avg_gap_s": 1087,
    "median_gap_pct": 19.8,
    "meetings": [
@@ -12049,9 +12049,9 @@
      "gap_s": 433,
      "gap_pct": 24.0,
      "their_time": "00:30:06",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 36
     },
     {
@@ -12062,9 +12062,9 @@
      "gap_s": 345,
      "gap_pct": 19.8,
      "their_time": "00:29:02",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 28
     },
     {
@@ -12510,9 +12510,9 @@
    "wins": 0,
    "losses": 8,
    "draws": 0,
-   "same_class_races": 5,
+   "same_class_races": 4,
    "same_class_wins": 0,
-   "same_class_losses": 5,
+   "same_class_losses": 4,
    "avg_gap_s": 1016,
    "median_gap_pct": 25.9,
    "meetings": [
@@ -12615,9 +12615,9 @@
      "gap_s": 381,
      "gap_pct": 22.3,
      "their_time": "00:28:26",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 32
     }
    ]
@@ -12685,8 +12685,8 @@
      "gap_s": -136,
      "gap_pct": -6.1,
      "their_time": "00:37:03",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -9
     },
@@ -12903,8 +12903,8 @@
      "gap_s": 115,
      "gap_pct": 5.8,
      "their_time": "00:32:52",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 12
     },
@@ -13177,8 +13177,8 @@
    "wins": 7,
    "losses": 0,
    "draws": 0,
-   "same_class_races": 2,
-   "same_class_wins": 2,
+   "same_class_races": 0,
+   "same_class_wins": 0,
    "same_class_losses": 0,
    "avg_gap_s": -234,
    "median_gap_pct": -13.1,
@@ -13204,9 +13204,9 @@
      "gap_s": -122,
      "gap_pct": -5.2,
      "their_time": "00:39:21",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": -6
     },
     {
@@ -13243,9 +13243,9 @@
      "gap_s": -332,
      "gap_pct": -13.7,
      "their_time": "00:40:19",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": -15
     },
     {
@@ -13831,9 +13831,9 @@
    "wins": 1,
    "losses": 6,
    "draws": 0,
-   "same_class_races": 2,
+   "same_class_races": 1,
    "same_class_wins": 0,
-   "same_class_losses": 2,
+   "same_class_losses": 1,
    "avg_gap_s": 428,
    "median_gap_pct": 21.6,
    "meetings": [
@@ -13858,9 +13858,9 @@
      "gap_s": 445,
      "gap_pct": 24.8,
      "their_time": "00:29:54",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 39
     },
     {
@@ -14049,9 +14049,9 @@
    "wins": 0,
    "losses": 7,
    "draws": 0,
-   "same_class_races": 3,
+   "same_class_races": 2,
    "same_class_wins": 0,
-   "same_class_losses": 3,
+   "same_class_losses": 2,
    "avg_gap_s": 671,
    "median_gap_pct": 23.1,
    "meetings": [
@@ -14089,9 +14089,9 @@
      "gap_s": 369,
      "gap_pct": 19.7,
      "their_time": "00:31:10",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 29
     },
     {
@@ -14172,8 +14172,8 @@
      "gap_s": 348,
      "gap_pct": 18.4,
      "their_time": "00:31:31",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 26
     },
@@ -14237,8 +14237,8 @@
      "gap_s": 228,
      "gap_pct": 12.3,
      "their_time": "00:30:59",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 21
     },
@@ -14538,8 +14538,8 @@
      "gap_s": -226,
      "gap_pct": -9.8,
      "their_time": "00:38:33",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -13
     }
@@ -14979,8 +14979,8 @@
      "gap_s": 86,
      "gap_pct": 4.0,
      "their_time": "00:35:53",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 4
     },
@@ -15005,8 +15005,8 @@
      "gap_s": -90,
      "gap_pct": -4.1,
      "their_time": "00:36:17",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -5
     },
@@ -15131,9 +15131,9 @@
    "wins": 0,
    "losses": 6,
    "draws": 0,
-   "same_class_races": 2,
+   "same_class_races": 0,
    "same_class_wins": 0,
-   "same_class_losses": 2,
+   "same_class_losses": 0,
    "avg_gap_s": 88,
    "median_gap_pct": 5.4,
    "meetings": [
@@ -15145,9 +15145,9 @@
      "gap_s": 241,
      "gap_pct": 12.1,
      "their_time": "00:33:18",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 14
     },
     {
@@ -15184,9 +15184,9 @@
      "gap_s": 20,
      "gap_pct": 1.0,
      "their_time": "00:34:27",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 3
     },
     {
@@ -15568,8 +15568,8 @@
      "gap_s": null,
      "gap_pct": null,
      "their_time": "DNF",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": null
     },
@@ -15690,8 +15690,8 @@
      "gap_s": 180,
      "gap_pct": 9.4,
      "their_time": "00:31:47",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 15
     }
@@ -15869,8 +15869,8 @@
      "gap_s": 126,
      "gap_pct": 6.4,
      "their_time": "00:32:41",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 14
     },
@@ -16105,8 +16105,8 @@
      "gap_s": 387,
      "gap_pct": 20.9,
      "their_time": "00:30:52",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 32
     },
@@ -16157,8 +16157,8 @@
      "gap_s": 329,
      "gap_pct": 18.7,
      "their_time": "00:29:18",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 26
     },
@@ -17664,8 +17664,8 @@
      "gap_s": 273,
      "gap_pct": 13.9,
      "their_time": "00:32:46",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 19
     },
@@ -18328,8 +18328,8 @@
      "gap_s": -40,
      "gap_pct": -1.8,
      "their_time": "00:37:59",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -3
     },
@@ -19925,8 +19925,8 @@
      "gap_s": 315,
      "gap_pct": 16.4,
      "their_time": "00:32:04",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 22
     },
@@ -21031,9 +21031,9 @@
    "wins": 0,
    "losses": 4,
    "draws": 0,
-   "same_class_races": 1,
+   "same_class_races": 0,
    "same_class_wins": 0,
-   "same_class_losses": 1,
+   "same_class_losses": 0,
    "avg_gap_s": 612,
    "median_gap_pct": 30.1,
    "meetings": [
@@ -21058,9 +21058,9 @@
      "gap_s": 547,
      "gap_pct": 32.3,
      "their_time": "00:28:12",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 42
     },
     {
@@ -21101,9 +21101,9 @@
    "wins": 0,
    "losses": 4,
    "draws": 0,
-   "same_class_races": 4,
+   "same_class_races": 3,
    "same_class_wins": 0,
-   "same_class_losses": 4,
+   "same_class_losses": 3,
    "avg_gap_s": 2352,
    "median_gap_pct": 30.1,
    "meetings": [
@@ -21115,9 +21115,9 @@
      "gap_s": 434,
      "gap_pct": 24.0,
      "their_time": "00:30:05",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 37
     },
     {
@@ -21369,8 +21369,8 @@
      "gap_s": -44,
      "gap_pct": -1.9,
      "their_time": "00:38:03",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -4
     },
@@ -22522,8 +22522,8 @@
      "gap_s": -120,
      "gap_pct": -5.4,
      "their_time": "00:36:47",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -8
     }
@@ -28934,8 +28934,8 @@
      "gap_s": -114,
      "gap_pct": -4.8,
      "their_time": "00:39:13",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -5
     },
@@ -29814,8 +29814,8 @@
      "gap_s": 190,
      "gap_pct": 9.3,
      "their_time": "00:34:09",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 9
     },
@@ -30531,8 +30531,8 @@
      "gap_s": 172,
      "gap_pct": 8.3,
      "their_time": "00:34:27",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 7
     }
@@ -34420,9 +34420,9 @@
    "wins": 0,
    "losses": 2,
    "draws": 0,
-   "same_class_races": 2,
+   "same_class_races": 1,
    "same_class_wins": 0,
-   "same_class_losses": 2,
+   "same_class_losses": 1,
    "avg_gap_s": 552,
    "median_gap_pct": 14.5,
    "meetings": [
@@ -34447,9 +34447,9 @@
      "gap_s": 418,
      "gap_pct": 23.0,
      "their_time": "00:30:21",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 35
     }
    ]
@@ -39040,9 +39040,9 @@
    "wins": 0,
    "losses": 2,
    "draws": 0,
-   "same_class_races": 2,
+   "same_class_races": 1,
    "same_class_wins": 0,
-   "same_class_losses": 2,
+   "same_class_losses": 1,
    "avg_gap_s": 2481,
    "median_gap_pct": 23.7,
    "meetings": [
@@ -39054,9 +39054,9 @@
      "gap_s": 395,
      "gap_pct": 21.4,
      "their_time": "00:30:44",
-     "my_class": "Temposykkel",
+     "my_class": "Racer",
      "their_class": "Temposykkel",
-     "same_class": true,
+     "same_class": false,
      "places": 33
     },
     {
@@ -49612,8 +49612,8 @@
      "gap_s": -174,
      "gap_pct": -7.2,
      "their_time": "00:40:13",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -7
     }
@@ -51503,8 +51503,8 @@
      "gap_s": 187,
      "gap_pct": 9.1,
      "their_time": "00:34:12",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": 8
     }
@@ -53084,8 +53084,8 @@
      "gap_s": -265,
      "gap_pct": -10.6,
      "their_time": "00:41:44",
-     "my_class": "Temposykkel",
-     "their_class": "Temposykkel",
+     "my_class": "Racer",
+     "their_class": "Racer",
      "same_class": true,
      "places": -8
     }
@@ -60782,7 +60782,7 @@
   {
    "turritt_id": "75987",
    "name": "Kjetil Årsland",
-   "club": "Tasta & omegn sykkelklubb / Equinor BIL",
+   "club": "Tasta & omegn sykkelklubb",
    "age_class": "M 55-59",
    "sex": "M",
    "races": 1,

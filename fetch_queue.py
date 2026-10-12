@@ -133,6 +133,8 @@ def from_profile(uid, fallback_name, log):
         raise Skip("failed", "Vi fant ikke navnet på denne EQ Timing-profilen i resultatlistene.")
     riderids.build(log)  # gives them an id of ours, or links them to one they have
     rid = rid_for_eq(uid)
+    if not rid:  # without an id the rider can't be built; failing here keeps the request from blocking the queue
+        raise Skip("failed", "Vi klarte ikke å koble denne EQ Timing-profilen til en rytter. Det sjekkes for hånd.")
     alias = riderids.load().get(rid, {})
     tid = alias.get("turritt", "")
     rider = {"id": tid or rid, "rid": rid, "name": name, "turritt_id": tid or None,
@@ -248,7 +250,7 @@ def main():
             known_eq.add(str(rider.get("eq_id")))
             built.append(site_id)
         except Exception as e:  # keep the rider out rather than half-built
-            conf["riders"] = [r for r in conf["riders"] if r["id"] != site_id]
+            conf["riders"] = [r for r in conf["riders"] if r.get("id") != site_id]
             with open(update.RIDERS_FILE, "w", encoding="utf-8") as f:
                 json.dump(conf, f, ensure_ascii=False, indent=2)
                 f.write("\n")

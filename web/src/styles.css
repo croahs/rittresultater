@@ -342,7 +342,7 @@ footer.site { display: flex; flex-wrap: wrap; justify-content: space-between; ga
 .anim-rise { transform-box: fill-box; transform-origin: bottom; animation: rise .6s cubic-bezier(.2, .8, .2, 1) both; }
 
 /* season_clip.js overrides: fit the phone, use this site's type */
-.page .sc-mapwrap { border-radius: var(--r); }
+.page .sc-mapwrap { border-radius: var(--r); isolation: isolate; } /* Leaflet's panes (z-index 400+) stay under the sticky top bar */
 .page .sc-clock { font-family: var(--display); font-stretch: 70%; font-weight: 800; }
 @media (max-width: 760px) { .page .sc-mapwrap { min-height: 0; aspect-ratio: 1; } }
 
