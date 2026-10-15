@@ -25625,6 +25625,7 @@
 },
 "eq:57330": {
 "date": "2022-08-20",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Hålogalandsrittet - Midt i Blinken 2022",
 "organizer": "Harstad CK",
@@ -26317,6 +26318,7 @@
 },
 "eq:57963": {
 "date": "2022-09-03",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Skaidi Xtreme 2022",
 "organizer": "Hammerfest SK",
@@ -26325,6 +26327,7 @@
 },
 "eq:57980": {
 "date": "2022-08-20",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Steinsvikrittet 2022",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -26396,6 +26399,7 @@
 },
 "eq:58084": {
 "date": "2022-07-23",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Valdresrittet 2022",
 "organizer": "Vestre Slidre IL",
@@ -26575,6 +26579,7 @@
 },
 "eq:58354": {
 "date": "2022-09-03",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Gran Fondo Strade Statskog 2022",
 "organizer": "Namdal SK",
@@ -26619,6 +26624,7 @@
 },
 "eq:58435": {
 "date": "2022-09-03",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Ryfylkerittet 2022",
 "organizer": "Ryfylke SK",
@@ -26645,6 +26651,7 @@
 },
 "eq:58612": {
 "date": "2022-08-20",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Grenserittet 2022",
 "organizer": "Halden SK",
@@ -26653,6 +26660,7 @@
 },
 "eq:58709": {
 "date": "2022-06-21",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Sykkel 2022 - Lagtempo",
 "organizer": "IL Sverre",
@@ -26661,6 +26669,7 @@
 },
 "eq:58710": {
 "date": "2022-06-23",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Sykkel 2022 - Tempo",
 "organizer": "IL Sverre",
@@ -26669,6 +26678,7 @@
 },
 "eq:58711": {
 "date": "2022-06-24",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Sykkel 2022 - Gateritt",
 "organizer": "IL Sverre",
@@ -26677,6 +26687,7 @@
 },
 "eq:58712": {
 "date": "2022-06-26",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Sykkel  2022- Elite Fellesstart",
 "organizer": "IL Sverre",
@@ -26685,6 +26696,7 @@
 },
 "eq:58734": {
 "date": "2022-06-19",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Sykkel  2022 - U23, MJunior, KJunior",
 "organizer": "IL Sverre",
@@ -26693,6 +26705,7 @@
 },
 "eq:58745": {
 "date": "2022-07-02",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Okserittet 2022",
 "organizer": "SK Lyngdal & Omegn",
@@ -26701,6 +26714,7 @@
 },
 "eq:58752": {
 "date": "2022-07-02",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Zalaris Lofoten Insomnia 2022",
 "organizer": "Lødingen SK",
@@ -26709,6 +26723,7 @@
 },
 "eq:58761": {
 "date": "2022-06-10",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Vestfold 3D - bakketempo",
 "organizer": "Tønsberg CK",
@@ -26717,6 +26732,7 @@
 },
 "eq:58786": {
 "date": "2022-09-04",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Master Fellesstart 2022",
 "organizer": "CK Sotra",
@@ -26725,6 +26741,7 @@
 },
 "eq:58787": {
 "date": "2022-09-03",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Master Tempo 2022",
 "organizer": "CK Sotra",
@@ -26733,6 +26750,7 @@
 },
 "eq:58803": {
 "date": "2022-06-19",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Simplicityrittet 2022",
 "organizer": "Vigrestad SK",
@@ -26741,6 +26759,7 @@
 },
 "eq:58832": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Nibberittet 2022",
 "organizer": "Geiranger IL",
@@ -26749,6 +26768,7 @@
 },
 "eq:58853": {
 "date": "2022-06-18",
+"fetched": "2026-10-15",
 "level": "Trimritt",
 "name": "Løp E39 sykkel",
 "organizer": "CK Henie",
@@ -26757,6 +26777,7 @@
 },
 "eq:58913": {
 "date": "2022-08-20",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Stomperudrittet 2022",
 "organizer": "Sørum IL",
@@ -26783,6 +26804,7 @@
 },
 "eq:59018": {
 "date": "2022-07-01",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Jotunheimen Rundt 2022",
 "organizer": "Sogn CK",
@@ -26800,6 +26822,7 @@
 },
 "eq:59064": {
 "date": "2022-07-02",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Øyungen Rundt 2022",
 "organizer": "Hessdalen IL",
@@ -26817,6 +26840,7 @@
 },
 "eq:59201": {
 "date": "2022-07-15",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tusten Opp 2022",
 "organizer": "Molde CK",
@@ -26825,6 +26849,7 @@
 },
 "eq:59237": {
 "date": "2022-07-17",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Rally Tusten 2022",
 "organizer": "Molde CK",
@@ -26833,6 +26858,7 @@
 },
 "eq:59239": {
 "date": "2022-07-16",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Molde Challenge 2022",
 "organizer": "Molde CK",
@@ -26850,6 +26876,7 @@
 },
 "eq:59249": {
 "date": "2022-08-25",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Rennesøy Tempo 2022",
 "organizer": "Rennesøy SK",
@@ -26867,6 +26894,7 @@
 },
 "eq:59265": {
 "date": "2022-08-28",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "2-Mila Aktivt+Mastercup",
 "organizer": "IK Hero",
@@ -26902,6 +26930,7 @@
 },
 "eq:59280": {
 "date": "2022-06-07",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #4",
 "organizer": "Kristiansands CK",
@@ -26910,6 +26939,7 @@
 },
 "eq:59283": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Sørlandet Petit Prix gateritt",
 "organizer": "Kristiansands CK",
@@ -26918,6 +26948,7 @@
 },
 "eq:59284": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Sørlandet Petit Prix tempo",
 "organizer": "Kristiansands CK",
@@ -26926,6 +26957,7 @@
 },
 "eq:59285": {
 "date": "2022-08-14",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Sørlandet Petit Prix fellesstart",
 "organizer": "Kristiansands CK",
@@ -26934,6 +26966,7 @@
 },
 "eq:59287": {
 "date": "2022-08-16",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #5",
 "organizer": "Kristiansands CK",
@@ -26942,6 +26975,7 @@
 },
 "eq:59289": {
 "date": "2022-08-30",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #6",
 "organizer": "Kristiansands CK",
@@ -26950,6 +26984,7 @@
 },
 "eq:59291": {
 "date": "2022-09-13",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #7",
 "organizer": "Kristiansands CK",
@@ -26958,6 +26993,7 @@
 },
 "eq:59293": {
 "date": "2022-09-27",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #8",
 "organizer": "Kristiansands CK",
@@ -27011,6 +27047,7 @@
 },
 "eq:59349": {
 "date": "2022-06-12",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Fanafjellet Rundt 2022",
 "organizer": "Fana IL Sykkel",
@@ -27019,6 +27056,7 @@
 },
 "eq:59350": {
 "date": "2022-09-18",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Fanahytten Opp 2022",
 "organizer": "Fana IL Sykkel",
@@ -27027,6 +27065,7 @@
 },
 "eq:59355": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Stenhoggerrittet 2022",
 "organizer": "Idd Sportsklubb",
@@ -27125,6 +27164,7 @@
 },
 "eq:59502": {
 "date": "2022-08-28",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "KCC Sorperittet 2022",
 "organizer": "Klepp Cykle Club",
@@ -27151,6 +27191,7 @@
 },
 "eq:59553": {
 "date": "2022-09-25",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "TOSKaskabet 2022",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -27276,6 +27317,7 @@
 },
 "eq:59678": {
 "date": "2022-06-06",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sandefjord Tour 2022 MK13-16/Turritt/Masters",
 "organizer": "Sandefjord SK",
@@ -27284,6 +27326,7 @@
 },
 "eq:59679": {
 "date": "2022-08-09",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Bergkongen Bakketempo 2022 - Klubbritt Sandefjord Sykleklubb",
 "organizer": "Sandefjord SK",
@@ -27292,6 +27335,7 @@
 },
 "eq:59680": {
 "date": "2022-08-16",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Tempo SSK 2022",
 "organizer": "Sandefjord SK",
@@ -27300,6 +27344,7 @@
 },
 "eq:59681": {
 "date": "2022-08-30",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Fellesstart SSK 2022",
 "organizer": "Sandefjord SK",
@@ -27308,6 +27353,7 @@
 },
 "eq:59682": {
 "date": "2022-10-22",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Terreng SSK 2022",
 "organizer": "Sandefjord SK",
@@ -27342,6 +27388,7 @@
 },
 "eq:59886": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Rensfjellrittet 2022",
 "organizer": "Stiftstaden SK Trondheim",
@@ -27377,6 +27424,7 @@
 },
 "eq:59929": {
 "date": "2022-06-14",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #4 - Bogafjell CK",
 "organizer": "Bogafjell Sykleklubb",
@@ -27385,6 +27433,7 @@
 },
 "eq:59930": {
 "date": "2022-08-16",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #5 - Sola CK",
 "organizer": "Sola CK",
@@ -27393,6 +27442,7 @@
 },
 "eq:59931": {
 "date": "2022-09-04",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #6 - Vigrestad SK",
 "organizer": "Vigrestad SK",
@@ -27401,6 +27451,7 @@
 },
 "eq:59932": {
 "date": "2022-09-17",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Terrengcupen Rogaland #7 - Dalane SK",
 "organizer": "Dalane SK",
@@ -27454,6 +27505,7 @@
 },
 "eq:60244": {
 "date": "2022-09-15",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Vestfold Cup 2022 #7 By bikeshop.no - Undrumsdal",
 "organizer": "Re SK",
@@ -27471,6 +27523,7 @@
 },
 "eq:60292": {
 "date": "2022-06-12",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Birkenesrunden 2022",
 "organizer": "Birkenes IL",
@@ -27515,6 +27568,7 @@
 },
 "eq:60430": {
 "date": "2022-09-09",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Gateritt - Sandnes",
 "organizer": "Sandnes Sykleklubb",
@@ -27541,6 +27595,7 @@
 },
 "eq:60447": {
 "date": "2022-06-07",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu terrengcup 2022 #3 Svelvik",
 "organizer": "Re SK",
@@ -27549,6 +27604,7 @@
 },
 "eq:60448": {
 "date": "2022-06-14",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu terrengcup 2022 #4 Solum",
 "organizer": "Re SK",
@@ -27557,6 +27613,7 @@
 },
 "eq:60449": {
 "date": "2022-08-16",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu terrengcup 2022 #5 Konnerud",
 "organizer": "Re SK",
@@ -27565,6 +27622,7 @@
 },
 "eq:60450": {
 "date": "2022-08-23",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu terrengcup 2022 #6 Birkebeineren",
 "organizer": "Re SK",
@@ -27573,6 +27631,7 @@
 },
 "eq:60451": {
 "date": "2022-09-17",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu terrengcup 2022 #7 Nanset",
 "organizer": "Re SK",
@@ -27581,6 +27640,7 @@
 },
 "eq:60452": {
 "date": "2022-09-18",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu terrengcup 2022 #8 Nanset",
 "organizer": "Re SK",
@@ -27616,6 +27676,7 @@
 },
 "eq:60462": {
 "date": "2022-08-24",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Vestfold Cup 2022 #5 By bikeshop.no - Osebergrunden",
 "organizer": "Re SK",
@@ -27669,6 +27730,7 @@
 },
 "eq:60537": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "Trimritt",
 "name": "Bergsdalen Opp 2022 Sykkel",
 "organizer": "Voss SK",
@@ -27686,6 +27748,7 @@
 },
 "eq:60544": {
 "date": "2022-07-02",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Trysil-Knut rittet 2022",
 "organizer": "Søre Osen IL",
@@ -27748,6 +27811,7 @@
 },
 "eq:60605": {
 "date": "2022-08-16",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Spar Cup 6 2022 - Tempo",
 "organizer": "Stord SK",
@@ -27756,6 +27820,7 @@
 },
 "eq:60606": {
 "date": "2022-08-30",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Spar Cup 7 2022 - Stord Mesterskap Tempo",
 "organizer": "Stord SK",
@@ -27782,6 +27847,7 @@
 },
 "eq:60610": {
 "date": "2022-06-07",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Engelsen Cup 3 2022 - Fellesstart",
 "organizer": "Stord SK",
@@ -27826,6 +27892,7 @@
 },
 "eq:60703": {
 "date": "2022-08-26",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Bakketempo Skulsfjord-Finnvikdalen - 2022",
 "organizer": "Ishavsbyen Sykkel",
@@ -27834,6 +27901,7 @@
 },
 "eq:60704": {
 "date": "2022-08-27",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "El Clasico Ciclista de Pais Perez-2022",
 "organizer": "Ishavsbyen Sykkel",
@@ -27851,6 +27919,7 @@
 },
 "eq:60707": {
 "date": "2022-06-25",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Savkadasrittet 2022",
 "organizer": "Karasjok SK",
@@ -27886,6 +27955,7 @@
 },
 "eq:60730": {
 "date": "2022-06-04",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Finnskogkureren 2022",
 "organizer": "Lunderseter IL",
@@ -27903,6 +27973,7 @@
 },
 "eq:60759": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Farrisrunden 2022",
 "organizer": "Nanset IF - Sykkel",
@@ -27920,6 +27991,7 @@
 },
 "eq:60810": {
 "date": "2022-06-14",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sykkelbutikken MTB Skageskogen",
 "organizer": "CK Henie",
@@ -27928,6 +28000,7 @@
 },
 "eq:60811": {
 "date": "2022-08-23",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sykkelbutikken MTB Ulven",
 "organizer": "CK Henie",
@@ -27936,6 +28009,7 @@
 },
 "eq:60812": {
 "date": "2022-09-17",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sykkelbutikken MTB Bømoen",
 "organizer": "CK Henie",
@@ -27953,6 +28027,7 @@
 },
 "eq:60932": {
 "date": "2022-09-25",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Dølisjøen Rundt 2022 Sykkel",
 "organizer": "Slåstad IL",
@@ -27961,6 +28036,7 @@
 },
 "eq:61045": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tynsetrittet Junior 2022",
 "organizer": "Savalen SK",
@@ -27978,6 +28054,7 @@
 },
 "eq:61075": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Lavkarittet 2022",
 "organizer": "Skibotn IL",
@@ -28031,6 +28108,7 @@
 },
 "eq:61173": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Vestfold 3D - fellesstart 1",
 "organizer": "Tønsberg CK",
@@ -28039,6 +28117,7 @@
 },
 "eq:61174": {
 "date": "2022-06-12",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Vestfold 3D - fellesstart 2",
 "organizer": "Tønsberg CK",
@@ -28065,6 +28144,7 @@
 },
 "eq:61335": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Dalatråkken MTB Festival NC10, UCI 1 NCF Cat. 3  Rundbane (XCO)",
 "organizer": "Brumunddal SK",
@@ -28073,6 +28153,7 @@
 },
 "eq:61336": {
 "date": "2022-09-11",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Dalatråkken MTB Festival NC11, UCI Cat 3/Ncf kat. 3 Kortbane (XCC)",
 "organizer": "Brumunddal SK",
@@ -28081,6 +28162,7 @@
 },
 "eq:61347": {
 "date": "2022-06-26",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Nerskogsrittet 2022",
 "organizer": "Rennebu IL",
@@ -28089,6 +28171,7 @@
 },
 "eq:61350": {
 "date": "2022-08-19",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Norgescup Landevei nr 3 Glåmdal SK",
 "organizer": "Glåmdal SK",
@@ -28097,6 +28180,7 @@
 },
 "eq:61355": {
 "date": "2022-06-16",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Vestfold Cup 2022 #4 By bikeshop.no- Jåbergrunden,Sandefjord",
 "organizer": "Sandefjord SK",
@@ -28105,6 +28189,7 @@
 },
 "eq:61356": {
 "date": "2022-09-08",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "LågenTempo - Vestfold Cup 2022 #6 By bikeshop.no",
 "organizer": "Sandefjord SK",
@@ -28131,6 +28216,7 @@
 },
 "eq:61372": {
 "date": "2022-06-06",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Skiptvet-rittet 2022",
 "organizer": "Skiptvet IL Sykkel",
@@ -28157,6 +28243,7 @@
 },
 "eq:61399": {
 "date": "2022-08-14",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Mosjøen Grus 2022",
 "organizer": "Mosjøen og Omegn CK",
@@ -28183,6 +28270,7 @@
 },
 "eq:61424": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Stasjonsrittet",
 "organizer": "Vårsol Velocipedclub",
@@ -28191,6 +28279,7 @@
 },
 "eq:61426": {
 "date": "2022-07-09",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Furusjøen Rundt-rittet 2022",
 "organizer": "Kvam IL",
@@ -28262,6 +28351,7 @@
 },
 "eq:61467": {
 "date": "2022-08-20",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Norgescup Landevei nr 3 Glåmdal SK",
 "organizer": "Glåmdal SK",
@@ -28270,6 +28360,7 @@
 },
 "eq:61468": {
 "date": "2022-08-21",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Norgescup Landevei nr 3 Glåmdal SK",
 "organizer": "Glåmdal SK",
@@ -28332,6 +28423,7 @@
 },
 "eq:61506": {
 "date": "2022-06-08",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2022 #5 IF Frøy",
 "organizer": "IF Frøy",
@@ -28340,6 +28432,7 @@
 },
 "eq:61507": {
 "date": "2022-08-10",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2022 #6 CK Nittedal",
 "organizer": "CK Nittedal",
@@ -28348,6 +28441,7 @@
 },
 "eq:61508": {
 "date": "2022-08-17",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2022 #7 Follo SK",
 "organizer": "Follo SK",
@@ -28356,6 +28450,7 @@
 },
 "eq:61509": {
 "date": "2022-08-24",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2022 #8 Fossum IF",
 "organizer": "Fossum IF Sykkel",
@@ -28364,6 +28459,7 @@
 },
 "eq:61510": {
 "date": "2022-09-03",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2022 #9 SK Rye",
 "organizer": "SK Rye sykkel",
@@ -28408,6 +28504,7 @@
 },
 "eq:61570": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Tour de Lyngen 2022",
 "organizer": "Jægervatnet IL Sykkel",
@@ -28443,6 +28540,7 @@
 },
 "eq:61598": {
 "date": "2022-08-25",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Landeveiscupen 2022 #6 Askertempoen",
 "organizer": "Asker CK",
@@ -28478,6 +28576,7 @@
 },
 "eq:61618": {
 "date": "2022-06-07",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 5",
 "organizer": "Tromsø CK",
@@ -28486,6 +28585,7 @@
 },
 "eq:61619": {
 "date": "2022-06-14",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 6",
 "organizer": "Tromsø CK",
@@ -28503,6 +28603,7 @@
 },
 "eq:61620": {
 "date": "2022-08-16",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 7",
 "organizer": "Tromsø CK",
@@ -28511,6 +28612,7 @@
 },
 "eq:61622": {
 "date": "2022-08-30",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 9",
 "organizer": "Tromsø CK",
@@ -28519,6 +28621,7 @@
 },
 "eq:61623": {
 "date": "2022-09-06",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 10",
 "organizer": "Tromsø CK",
@@ -28545,6 +28648,7 @@
 },
 "eq:61637": {
 "date": "2022-06-04",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "NC6 Nilsbyen Race Weekend XCO",
 "organizer": "TVK",
@@ -28670,6 +28774,7 @@
 },
 "eq:61758": {
 "date": "2022-06-05",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "NC7 Nilsbyen Race Weekend XCC",
 "organizer": "TVK",
@@ -28678,6 +28783,7 @@
 },
 "eq:61759": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Oslo Terrengsykkelfestival NC XCO 2022",
 "organizer": "IF Frøy",
@@ -28695,6 +28801,7 @@
 },
 "eq:61760": {
 "date": "2022-08-14",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Oslo Terrengsykkelfestival 2022 NC XCC",
 "organizer": "IF Frøy",
@@ -28748,6 +28855,7 @@
 },
 "eq:61812": {
 "date": "2022-06-25",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Gran Fondo Strade Statskog Blåtind",
 "organizer": "Bardufoss og Omegn IF",
@@ -28783,6 +28891,7 @@
 },
 "eq:61827": {
 "date": "2022-08-31",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Mjøsa Terrengsykkelcup #3 Elverum",
 "organizer": "NCF Region Innlandet",
@@ -28791,6 +28900,7 @@
 },
 "eq:61829": {
 "date": "2022-09-14",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Mjøsa Terrengsykkelcup #4 Lillehammer",
 "organizer": "NCF Region Innlandet",
@@ -28808,6 +28918,7 @@
 },
 "eq:61874": {
 "date": "2022-06-18",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Terreng 2022 XCO",
 "organizer": "Lillehammer CK",
@@ -28843,6 +28954,7 @@
 },
 "eq:61909": {
 "date": "2023-06-10",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Terrengsykkelrittet 2023 - Sport",
 "organizer": "IF Frøy",
@@ -28851,6 +28963,7 @@
 },
 "eq:61910": {
 "date": "2023-06-10",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Terrengsykkelrittet 2023 - NC Maraton",
 "organizer": "IF Frøy",
@@ -28868,6 +28981,7 @@
 },
 "eq:61934": {
 "date": "2022-09-18",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Femsjøen Rundt 2022",
 "organizer": "Halden CK",
@@ -28876,6 +28990,7 @@
 },
 "eq:61955": {
 "date": "2022-06-19",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Terreng 2022 XCC",
 "organizer": "Lillehammer CK",
@@ -28884,6 +28999,7 @@
 },
 "eq:61956": {
 "date": "2022-06-16",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Terreng 2022 XCE",
 "organizer": "Lillehammer CK",
@@ -28892,6 +29008,7 @@
 },
 "eq:62016": {
 "date": "2022-06-17",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "UM/UL Terreng 2022 XCE",
 "organizer": "Lillehammer CK",
@@ -28918,6 +29035,7 @@
 },
 "eq:62050": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Nordlysrittet 2022",
 "organizer": "Nordlysbyen Sykkel",
@@ -28926,6 +29044,7 @@
 },
 "eq:62061": {
 "date": "2022-09-24",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Lygna opp 2022",
 "organizer": "Hadeland CK",
@@ -28952,6 +29071,7 @@
 },
 "eq:62090": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "MasterCup",
 "name": "Ceresrittet Master 2023",
 "organizer": "SpKl Ceres Sykkel",
@@ -28960,6 +29080,7 @@
 },
 "eq:62091": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Ceresrittet lagkonkurranse 2023",
 "organizer": "SpKl Ceres Sykkel",
@@ -28968,6 +29089,7 @@
 },
 "eq:62092": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Ceresrittet Tur 2023",
 "organizer": "SpKl Ceres Sykkel",
@@ -28976,6 +29098,7 @@
 },
 "eq:62112": {
 "date": "2022-06-21",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - lagtempo",
 "organizer": "Tromsø CK",
@@ -28984,6 +29107,7 @@
 },
 "eq:62148": {
 "date": "2022-06-04",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Lønningrittet 2022 (F3D 1/4)",
 "organizer": "Fana IL Sykkel",
@@ -28992,6 +29116,7 @@
 },
 "eq:62149": {
 "date": "2022-06-05",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Lonevågrunden 2022 (F3D 2/4)",
 "organizer": "Fana IL Sykkel",
@@ -29000,6 +29125,7 @@
 },
 "eq:62150": {
 "date": "2022-06-05",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Lonevågrunden Tempo 2022 (F3D 3/4)",
 "organizer": "Fana IL Sykkel",
@@ -29008,6 +29134,7 @@
 },
 "eq:62154": {
 "date": "2022-06-06",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Osterøy Felles 2022 (F3D 4/4)",
 "organizer": "Fana IL Sykkel",
@@ -29016,6 +29143,7 @@
 },
 "eq:62156": {
 "date": "2022-06-11",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Gateritt Bestemorenga 2022",
 "organizer": "Bodø CK",
@@ -29024,6 +29152,7 @@
 },
 "eq:62179": {
 "date": "2022-06-07",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cup 2022 Geilo",
 "organizer": "Andebarkji TSK",
@@ -29032,6 +29161,7 @@
 },
 "eq:62180": {
 "date": "2022-08-06",
+"failed": "2026-10-15",
 "level": "Ungdomsmesterskap",
 "name": "Jokermesterskapet 2022 UL Fellesstart",
 "organizer": "Smaalenene SK",
@@ -29040,6 +29170,7 @@
 },
 "eq:62201": {
 "date": "2022-06-16",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Korketrekkeren Harestua til Bislingen - 16.06.2022",
 "organizer": "Kloppa Off Road Klubb",
@@ -29048,6 +29179,7 @@
 },
 "eq:62229": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Finnskogkureren 2023",
 "organizer": "Lunderseter IL",
@@ -29056,6 +29188,7 @@
 },
 "eq:62236": {
 "date": "2022-07-30",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sjusjørittet 2022",
 "organizer": "Brøttum IL",
@@ -29064,6 +29197,7 @@
 },
 "eq:62247": {
 "date": "2023-05-14",
+"fetched": "2026-10-15",
 "level": "MasterCup",
 "name": "Follorittet Mastercup 2023",
 "organizer": "Follo SK",
@@ -29072,6 +29206,7 @@
 },
 "eq:62256": {
 "date": "2022-08-06",
+"fetched": "2026-10-15",
 "level": "Ungdomsmesterskap",
 "name": "Jokermesterskapet 2022 UM/UL Tempo",
 "organizer": "Smaalenene SK",
@@ -29080,6 +29215,7 @@
 },
 "eq:62257": {
 "date": "2022-08-07",
+"fetched": "2026-10-15",
 "level": "Ungdomsmesterskap",
 "name": "Jokermesterskapet 2022 UM Fellesstart",
 "organizer": "Smaalenene SK",
@@ -29088,6 +29224,7 @@
 },
 "eq:62270": {
 "date": "2022-10-22",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "StudentCross NC 5 - 2022",
 "organizer": "Fiskeklev og Omegn Landeveisklub ",
@@ -29096,6 +29233,7 @@
 },
 "eq:62271": {
 "date": "2022-10-23",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "StudentCross NC 6 - 2022",
 "organizer": "Fiskeklev og Omegn Landeveisklub ",
@@ -29104,6 +29242,7 @@
 },
 "eq:62282": {
 "date": "2022-10-29",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "SkanseCross NC 7",
 "organizer": "Drøbak-Frogn IL Sykkel",
@@ -29112,6 +29251,7 @@
 },
 "eq:62283": {
 "date": "2022-10-30",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "SkanseCross NC 8",
 "organizer": "Drøbak-Frogn IL Sykkel",
@@ -29120,6 +29260,7 @@
 },
 "eq:62287": {
 "date": "2022-09-03",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Dokka Rundt 2022",
 "organizer": "Tønsberg CK",
@@ -29128,6 +29269,7 @@
 },
 "eq:62290": {
 "date": "2022-07-06",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Uno-X Tour Te Fjells bakketempo junior",
 "organizer": "CK Valdres",
@@ -29136,6 +29278,7 @@
 },
 "eq:62296": {
 "date": "2022-09-24",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Norway Cross NC #1",
 "organizer": "IF Frøy",
@@ -29144,6 +29287,7 @@
 },
 "eq:62303": {
 "date": "2022-09-25",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Norway Cross NC #2",
 "organizer": "IF Frøy",
@@ -29152,6 +29296,7 @@
 },
 "eq:62347": {
 "date": "2022-11-20",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Sykkelkross",
 "organizer": "Kristiansands CK",
@@ -29160,6 +29305,7 @@
 },
 "eq:62411": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "ARN Challenge Levanger",
 "organizer": "IL Sverre",
@@ -29177,6 +29323,7 @@
 },
 "eq:62447": {
 "date": "2022-07-07",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Uno-X Tour Te Fjells fellesstart 07.07",
 "organizer": "CK Valdres",
@@ -29185,6 +29332,7 @@
 },
 "eq:62448": {
 "date": "2022-07-08",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Uno-X Tour Te Fjells fellesstart 08.07",
 "organizer": "CK Valdres",
@@ -29193,6 +29341,7 @@
 },
 "eq:62449": {
 "date": "2022-07-09",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Uno-X Tour Te Fjells gateritt",
 "organizer": "CK Valdres",
@@ -29210,6 +29359,7 @@
 },
 "eq:62461": {
 "date": "2023-06-30",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Jotunheimen Rundt 2023/Sognefjellrittet",
 "organizer": "Sogn CK",
@@ -29245,6 +29395,7 @@
 },
 "eq:63028": {
 "date": "2022-07-09",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Uno-X Tour Te Fjells bakketempo senior",
 "organizer": "CK Valdres",
@@ -29253,6 +29404,7 @@
 },
 "eq:63029": {
 "date": "2022-07-10",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Uno-X Tour Te Fjells gateritt søndag",
 "organizer": "CK Valdres",
@@ -29261,6 +29413,7 @@
 },
 "eq:63034": {
 "date": "2022-08-16",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Munkebotn Opp 2022",
 "organizer": "Nymark IL",
@@ -29269,6 +29422,7 @@
 },
 "eq:63036": {
 "date": "2022-08-27",
+"fetched": "2026-10-15",
 "level": "Trimritt",
 "name": "Bingesrittet 2022",
 "organizer": "Binges sihkkelsearvi - Binges cycleklubb",
@@ -29277,6 +29431,7 @@
 },
 "eq:63052": {
 "date": "2022-07-10",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Uno- Tour Te Fjells sammenlagt 2022",
 "organizer": "CK Valdres",
@@ -29285,6 +29440,7 @@
 },
 "eq:63056": {
 "date": "2022-08-25",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Fløyen Opp 2022",
 "organizer": "NCF Region Vest",
@@ -29293,6 +29449,7 @@
 },
 "eq:63059": {
 "date": "2023-06-04",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "NC 7 - Sanderittet XCO/Rundbane 2023",
 "organizer": "Sande SpKl Sykkel",
@@ -29301,6 +29458,7 @@
 },
 "eq:63065": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Grenland Petit Prix Fellesstart 2022",
 "organizer": "Grenland SK",
@@ -29309,6 +29467,7 @@
 },
 "eq:63066": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Grenland Petit Prix Bakketempo 2022",
 "organizer": "Grenland SK",
@@ -29317,6 +29476,7 @@
 },
 "eq:63067": {
 "date": "2022-09-11",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Grenland Petit Prix Tempo 2022",
 "organizer": "Grenland SK",
@@ -29325,6 +29485,7 @@
 },
 "eq:63071": {
 "date": "2022-07-25",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Tallsjøen rundt 2022",
 "organizer": "Tolga IL",
@@ -29333,6 +29494,7 @@
 },
 "eq:63073": {
 "date": "2022-11-19",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Krs Classic sykkelkross",
 "organizer": "Kristiansands CK",
@@ -29350,6 +29512,7 @@
 },
 "eq:63093": {
 "date": "2022-06-05",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Fana 3 Dagers 2022 Sammenlagt",
 "organizer": "Fana IL Sykkel",
@@ -29358,6 +29521,7 @@
 },
 "eq:63094": {
 "date": "2022-06-12",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Vestfold 3 Sammenlangt M/K 15-16",
 "organizer": "Kåre Stokke",
@@ -29366,6 +29530,7 @@
 },
 "eq:63098": {
 "date": "2022-09-08",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Terreng Arendal CC 2022",
 "organizer": "Arendal CC",
@@ -29374,6 +29539,7 @@
 },
 "eq:63099": {
 "date": "2022-09-09",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Tempo Arendal CC 2022",
 "organizer": "Arendal CC",
@@ -29382,6 +29548,7 @@
 },
 "eq:63100": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Klubbmesterskap Landevei Arendal CC 2022",
 "organizer": "Arendal CC",
@@ -29390,6 +29557,7 @@
 },
 "eq:63103": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "Regionmesterskap",
 "name": "TEMPO RM/NNM Landevei Harstad 10-11 september 2022",
 "organizer": "Harstad CK",
@@ -29398,6 +29566,7 @@
 },
 "eq:63105": {
 "date": "2022-09-11",
+"fetched": "2026-10-15",
 "level": "Regionmesterskap",
 "name": "FELLESSTART RM/NNM Landevei Harstad 10-11 september 2022",
 "organizer": "Harstad CK",
@@ -29406,6 +29575,7 @@
 },
 "eq:63149": {
 "date": "2022-08-09",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cup 2022 Torpo tempo",
 "organizer": "Andebarkji TSK",
@@ -29414,6 +29584,7 @@
 },
 "eq:63152": {
 "date": "2022-08-23",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Gassasundrittet 2022",
 "organizer": "Bømlo SK",
@@ -29422,6 +29593,7 @@
 },
 "eq:63161": {
 "date": "2022-08-11",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Klubbritt Overhallarunden 2022",
 "organizer": "Namdal SK",
@@ -29430,6 +29602,7 @@
 },
 "eq:63171": {
 "date": "2022-08-21",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Gaurhovdrittet 2022",
 "organizer": "Andebarkji TSK",
@@ -29438,6 +29611,7 @@
 },
 "eq:63178": {
 "date": "2022-08-12",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "TransØsterdalen 2022 Etappe 1",
 "organizer": "Savalen SK",
@@ -29446,6 +29620,7 @@
 },
 "eq:63179": {
 "date": "2022-08-13",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "TransØsterdalen 2022 Etappe 2",
 "organizer": "Savalen SK",
@@ -29454,6 +29629,7 @@
 },
 "eq:63180": {
 "date": "2022-08-14",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "TransØsterdalen 2022 Etappe 3",
 "organizer": "Savalen SK",
@@ -29489,6 +29665,7 @@
 },
 "eq:63276": {
 "date": "2022-09-08",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "UCK klubbritt individuell tempo",
 "organizer": "Ullensaker CK",
@@ -29497,6 +29674,7 @@
 },
 "eq:63280": {
 "date": "2022-09-08",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "UCK klubbritt lagtempo",
 "organizer": "Ullensaker CK",
@@ -29514,6 +29692,7 @@
 },
 "eq:63296": {
 "date": "2022-08-29",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "KM Landevei Dalane SK 2022",
 "organizer": "Dalane SK",
@@ -29539,6 +29718,7 @@
 },
 "eq:63302": {
 "date": "2022-08-24",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Ringkolltråkket 2022",
 "organizer": "Ringerike Ski",
@@ -29547,6 +29727,7 @@
 },
 "eq:63304": {
 "date": "2022-10-08",
+"fetched": "2026-10-15",
 "level": "Trimritt",
 "name": "Føyka Kross - Norges Cup 3",
 "organizer": "Asker CK",
@@ -29555,6 +29736,7 @@
 },
 "eq:63307": {
 "date": "2022-10-09",
+"fetched": "2026-10-15",
 "level": "Trimritt",
 "name": "Føyka Kross - Norges Cup 4",
 "organizer": "Asker CK",
@@ -29563,6 +29745,7 @@
 },
 "eq:63308": {
 "date": "2022-11-05",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "NC 9 Spikkestad røyk, rock og kross",
 "organizer": "Vårsol Velocipedclub",
@@ -29571,6 +29754,7 @@
 },
 "eq:63364": {
 "date": "2022-09-03",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Lillehammer GP, UNO-X Dev. Weekend",
 "organizer": "Lillehammer CK",
@@ -29579,6 +29763,7 @@
 },
 "eq:63365": {
 "date": "2022-09-04",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "GYLNE GUTUER, UNO-X Dev. Weekend",
 "organizer": "Ottestad IL Sykkel",
@@ -29587,6 +29772,7 @@
 },
 "eq:63372": {
 "date": "2022-09-15",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "UCK klubbritt fellesstart",
 "organizer": "Ullensaker CK",
@@ -29595,6 +29781,7 @@
 },
 "eq:63397": {
 "date": "2022-09-06",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Bømlatempoen 2022",
 "organizer": "Bømlo SK",
@@ -29612,6 +29799,7 @@
 },
 "eq:63451": {
 "date": "2022-09-06",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "TIL-karusell",
 "organizer": "Tverrelvdalen IL",
@@ -29620,6 +29808,7 @@
 },
 "eq:63452": {
 "date": "2022-09-18",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sverre cup - åpen klubbtempo",
 "organizer": "IL Sverre",
@@ -29628,6 +29817,7 @@
 },
 "eq:63456": {
 "date": "2022-11-12",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Sykkelkross NC 11 Sandnes",
 "organizer": "Sandnes Sykleklubb",
@@ -29636,6 +29826,7 @@
 },
 "eq:63529": {
 "date": "2022-11-06",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "NC 10 Spikkestad røyk, rock og kross",
 "organizer": "Vårsol Velocipedclub",
@@ -29644,6 +29835,7 @@
 },
 "eq:63533": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "NC 4 Tempo Sandnes 2022 Resultater",
 "organizer": "Sandnes Sykleklubb",
@@ -29652,6 +29844,7 @@
 },
 "eq:63535": {
 "date": "2022-09-10",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "NC 4 Fellesstart Sandnes 2022 Resultater",
 "organizer": "Sandnes Sykleklubb",
@@ -29660,6 +29853,7 @@
 },
 "eq:63544": {
 "date": "2023-02-26",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Arctic Alta Fatbikerace 2023",
 "organizer": "Tverrelvdalen IL",
@@ -29668,6 +29862,7 @@
 },
 "eq:63580": {
 "date": "2022-10-15",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Superpokal Voldsløkka 2022",
 "organizer": "FTT Oslo Sykkelklubb",
@@ -29676,6 +29871,7 @@
 },
 "eq:63596": {
 "date": "2022-10-29",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Omegnkross 2022",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -29692,6 +29888,7 @@
 },
 "eq:63698": {
 "date": "2023-05-06",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Eikerrittet 2023",
 "organizer": "Eiker CK",
@@ -29700,6 +29897,7 @@
 },
 "eq:63813": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Stenhoggerrittet 2023",
 "organizer": "Idd Sportsklubb",
@@ -29708,6 +29906,7 @@
 },
 "eq:63829": {
 "date": "2022-11-27",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Bjerkekross 2022",
 "organizer": "Hasle-Løren IL",
@@ -29732,6 +29931,7 @@
 },
 "eq:63869": {
 "date": "2023-05-29",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Skjærgårdsrittet 2023",
 "organizer": "CK Sotra",
@@ -29749,6 +29949,7 @@
 },
 "eq:63934": {
 "date": "2023-05-14",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Simplicityrittet 2023",
 "organizer": "Vigrestad SK",
@@ -29766,6 +29967,7 @@
 },
 "eq:64009": {
 "date": "2023-06-04",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Terningenrittet 2023",
 "organizer": "CK Elverum",
@@ -29809,6 +30011,7 @@
 },
 "eq:64041": {
 "date": "2022-11-12",
+"fetched": "2026-10-15",
 "level": "MasterCup",
 "name": "Sykkelkross NC 11 Sandnes 2022 Resultater",
 "organizer": "Sandnes Sykleklubb",
@@ -29834,6 +30037,7 @@
 },
 "eq:64054": {
 "date": "2022-11-13",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Sykkelkross NC 12 Sandnes 2022 Resultater",
 "organizer": "Sandnes Sykleklubb",
@@ -29842,6 +30046,7 @@
 },
 "eq:64093": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Hamarrittet 2023",
 "organizer": "Ottestad IL Sykkel",
@@ -29859,6 +30064,7 @@
 },
 "eq:64162": {
 "date": "2023-04-30",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Bukkene Bruse 2023",
 "organizer": "Grimstad SK",
@@ -29876,6 +30082,7 @@
 },
 "eq:64185": {
 "date": "2023-05-18",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Victoriarunden 2023",
 "organizer": "CK Victoria",
@@ -29884,6 +30091,7 @@
 },
 "eq:64245": {
 "date": "2023-04-23",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "REPSOL mila 2023",
 "organizer": "Stavanger SK",
@@ -29892,6 +30100,7 @@
 },
 "eq:64283": {
 "date": "2023-06-18",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Elgrittet 2023",
 "organizer": "Høland Idretts- og ungdomslag",
@@ -29917,6 +30126,7 @@
 },
 "eq:64334": {
 "date": "2023-05-01",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "1. Mai-rittet (Tidligere Høiåsrittet)",
 "organizer": "Halden CK",
@@ -29934,6 +30144,7 @@
 },
 "eq:64340": {
 "date": "2023-04-25",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #1",
 "organizer": "Kristiansands CK",
@@ -29942,6 +30153,7 @@
 },
 "eq:64343": {
 "date": "2023-06-06",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #4",
 "organizer": "Kristiansands CK",
@@ -29950,6 +30162,7 @@
 },
 "eq:64344": {
 "date": "2023-06-20",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Scott Cup #5",
 "organizer": "Kristiansands CK",
@@ -30018,6 +30231,7 @@
 },
 "eq:64387": {
 "date": "2023-06-09",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Vestfold 3D - bakketempo 2023",
 "organizer": "Tønsberg CK",
@@ -30026,6 +30240,7 @@
 },
 "eq:64388": {
 "date": "2023-06-10",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Vestfold 3D - fellesstart 1 2023",
 "organizer": "Tønsberg CK",
@@ -30034,6 +30249,7 @@
 },
 "eq:64389": {
 "date": "2023-06-11",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Vestfold 3D - fellesstart 2 2023",
 "organizer": "Tønsberg CK",
@@ -30051,6 +30267,7 @@
 },
 "eq:64466": {
 "date": "2023-06-25",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Nerskogsrittet 2023",
 "organizer": "Rennebu IL",
@@ -30076,6 +30293,7 @@
 },
 "eq:64557": {
 "date": "2023-06-24",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Strade Statskog Blåtind",
 "organizer": "Bardufoss og Omegn IF",
@@ -30092,6 +30310,7 @@
 },
 "eq:64637": {
 "date": "2023-05-14",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Nordhordland Rundt 2023",
 "organizer": "Nordhordland SK",
@@ -30109,6 +30328,7 @@
 },
 "eq:64658": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Bergsdalen Opp 2023 Sykkel",
 "organizer": "Voss SK",
@@ -30159,6 +30379,7 @@
 },
 "eq:64801": {
 "date": "2023-05-11",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "PreTour Sandnes 2023",
 "organizer": "Dalane SK",
@@ -30167,6 +30388,7 @@
 },
 "eq:64802": {
 "date": "2023-05-31",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "PreTour Dalane 2023",
 "organizer": "Dalane SK",
@@ -30191,6 +30413,7 @@
 },
 "eq:64820": {
 "date": "2023-05-09",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "KCC Lagtempoen 2023",
 "organizer": "Klepp Cykle Club",
@@ -30208,6 +30431,7 @@
 },
 "eq:64836": {
 "date": "2023-05-27",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Randsfjorden Rundt 2023",
 "organizer": "Hadeland CK",
@@ -30224,6 +30448,7 @@
 },
 "eq:64997": {
 "date": "2023-03-04",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Kloppa ICE Race 2023",
 "organizer": "Kloppa Off Road Klubb",
@@ -30232,6 +30457,7 @@
 },
 "eq:64999": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Oggevatn Rundt 2023",
 "organizer": "Vennesla OCK",
@@ -30240,6 +30466,7 @@
 },
 "eq:65007": {
 "date": "2023-04-23",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Smaalenene Rundt 2023",
 "organizer": "Smaalenene SK",
@@ -30257,6 +30484,7 @@
 },
 "eq:65010": {
 "date": "2023-04-22",
+"fetched": "2026-10-15",
 "level": "MasterCup",
 "name": "Orklatempo'n 2023",
 "organizer": "Orkla CK",
@@ -30265,6 +30493,7 @@
 },
 "eq:65011": {
 "date": "2023-06-04",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Hemnerunden 2023",
 "organizer": "Orkla CK",
@@ -30273,6 +30502,7 @@
 },
 "eq:65018": {
 "date": "2023-05-05",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "NC3 Kalas Rye Terrengsykkelfestival 2023 XCO",
 "organizer": "SK Rye sykkel",
@@ -30281,6 +30511,7 @@
 },
 "eq:65019": {
 "date": "2023-05-06",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "NC4 Kalas Rye Terrengsykkelfestival 2023 XCC",
 "organizer": "SK Rye sykkel",
@@ -30289,6 +30520,7 @@
 },
 "eq:65020": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "NC5 Kalas Rye Terrengsykkelfestival 2023 XCO",
 "organizer": "SK Rye sykkel",
@@ -30306,6 +30538,7 @@
 },
 "eq:65166": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "NC6 - Sanderittet XCC/Kortbane 2023",
 "organizer": "Sande SpKl Sykkel",
@@ -30331,6 +30564,7 @@
 },
 "eq:65191": {
 "date": "2023-04-20",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Klostermilå 2023",
 "organizer": "Rennesøy SK",
@@ -30347,6 +30581,7 @@
 },
 "eq:65271": {
 "date": "2023-05-13",
+"fetched": "2026-10-15",
 "level": "MasterCup",
 "name": "2023-Prøve NM Master-Tempo, Molderittet 2023",
 "organizer": "Molde CK",
@@ -30364,6 +30599,7 @@
 },
 "eq:65308": {
 "date": "2023-04-15",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Myrdalen Opp 2023",
 "organizer": "Fana IL Sykkel",
@@ -30372,6 +30608,7 @@
 },
 "eq:65309": {
 "date": "2023-04-15",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Stend Gateritt 2023",
 "organizer": "Fana IL Sykkel",
@@ -30380,6 +30617,7 @@
 },
 "eq:65310": {
 "date": "2023-04-16",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Rådalen Rundt 2023",
 "organizer": "Fana IL Sykkel",
@@ -30414,6 +30652,7 @@
 },
 "eq:65342": {
 "date": "2023-05-14",
+"fetched": "2026-10-15",
 "level": "MasterCup",
 "name": "2023-Prøve NM Master-Fellesstart, Molderittet 2023",
 "organizer": "Molde CK",
@@ -30422,6 +30661,7 @@
 },
 "eq:65354": {
 "date": "2023-05-29",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Ålesundsrittet 2023",
 "organizer": "Ålesund og Omegn CK",
@@ -30457,6 +30697,7 @@
 },
 "eq:65492": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Vefsntråkket",
 "organizer": "Mosjøen og Omegn CK",
@@ -30465,6 +30706,7 @@
 },
 "eq:65493": {
 "date": "2023-06-04",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Øyatempo",
 "organizer": "Mosjøen og Omegn CK",
@@ -30585,6 +30827,7 @@
 },
 "eq:65745": {
 "date": "2023-05-01",
+"fetched": "2026-10-15",
 "level": "MasterCup",
 "name": "Vårtråkken 2023",
 "organizer": "Arendal CC",
@@ -30593,6 +30836,7 @@
 },
 "eq:65746": {
 "date": "2023-05-14",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Herefoss Rundt 2023",
 "organizer": "Arendal CC",
@@ -30610,6 +30854,7 @@
 },
 "eq:65782": {
 "date": "2023-05-27",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Haugesund-Sauda 2023",
 "organizer": "Sauda SK",
@@ -30644,6 +30889,7 @@
 },
 "eq:66004": {
 "date": "2023-04-27",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "PreTour Nærbø 2023",
 "organizer": "Dalane SK",
@@ -30652,6 +30898,7 @@
 },
 "eq:66020": {
 "date": "2023-07-01",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sirma Open XC 2023",
 "organizer": "Sirbmá-Sirma IL ",
@@ -30669,6 +30916,7 @@
 },
 "eq:66033": {
 "date": "2023-04-22",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Simplicity Terrengsykkelfestival NC1 XCT",
 "organizer": "Vigrestad SK",
@@ -30677,6 +30925,7 @@
 },
 "eq:66034": {
 "date": "2023-04-23",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Simplicity Terrengsykkelfestival NC2 XCO UCI Cat 1 og 2",
 "organizer": "Vigrestad SK",
@@ -30701,6 +30950,7 @@
 },
 "eq:66066": {
 "date": "2023-02-25",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Stomperud Vinterritt 2023",
 "organizer": "Sørum IL",
@@ -30709,6 +30959,7 @@
 },
 "eq:66087": {
 "date": "2023-07-01",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Nes Terreng Rundbane NC XCO 2023",
 "organizer": "Nes SK",
@@ -30725,6 +30976,7 @@
 },
 "eq:66162": {
 "date": "2023-06-24",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Master Tempo",
 "organizer": "Ullensaker CK",
@@ -30741,6 +30993,7 @@
 },
 "eq:66164": {
 "date": "2023-06-25",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Master Fellesstart",
 "organizer": "Ullensaker CK",
@@ -30749,6 +31002,7 @@
 },
 "eq:66190": {
 "date": "2023-05-13",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Skjebergrittet 2023",
 "organizer": "Skjeberg CK",
@@ -30765,6 +31019,7 @@
 },
 "eq:66277": {
 "date": "2023-05-06",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Å i Heiane 2023  Terreng Maraton",
 "organizer": "Birkenes IL",
@@ -30773,6 +31028,7 @@
 },
 "eq:66278": {
 "date": "2023-06-18",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Birkenesrunden 2023",
 "organizer": "Birkenes IL",
@@ -30781,6 +31037,7 @@
 },
 "eq:66293": {
 "date": "2023-04-16",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu Terrengcup 2023 #1 Vikerøya",
 "organizer": "Re SK",
@@ -30789,6 +31046,7 @@
 },
 "eq:66295": {
 "date": "2023-05-23",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu Terrengcup 2023 #2 Re",
 "organizer": "Re SK",
@@ -30797,6 +31055,7 @@
 },
 "eq:66296": {
 "date": "2023-06-06",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Tevebu Terrengcup 2023 #3 Svelvik",
 "organizer": "Re SK",
@@ -30863,6 +31122,7 @@
 },
 "eq:66392": {
 "date": "2023-06-22",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Tempo",
 "organizer": "Sandnes Sykleklubb",
@@ -30871,6 +31131,7 @@
 },
 "eq:66393": {
 "date": "2023-06-23",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Gateritt",
 "organizer": "Sandnes Sykleklubb",
@@ -30879,6 +31140,7 @@
 },
 "eq:66394": {
 "date": "2023-06-24",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Fellesstart Junior",
 "organizer": "Sandnes Sykleklubb",
@@ -30887,6 +31149,7 @@
 },
 "eq:66396": {
 "date": "2023-06-25",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM Fellesstart Elite",
 "organizer": "Sandnes Sykleklubb",
@@ -30911,6 +31174,7 @@
 },
 "eq:66424": {
 "date": "2023-06-21",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Polarsletta XCO",
 "organizer": "Polarstjernen IL",
@@ -30928,6 +31192,7 @@
 },
 "eq:66456": {
 "date": "2023-05-28",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM terreng kortbane XCC",
 "organizer": "TVK",
@@ -30945,6 +31210,7 @@
 },
 "eq:66498": {
 "date": "2023-05-27",
+"fetched": "2026-10-15",
 "level": "Norgesmesterskap",
 "name": "NM terreng Rundbane XCO",
 "organizer": "TVK",
@@ -30980,6 +31246,7 @@
 },
 "eq:66578": {
 "date": "2023-05-11",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Vestfold Cup 2023 #2 By bikeshop.no - Storås Fellesstart",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -30988,6 +31255,7 @@
 },
 "eq:66582": {
 "date": "2023-05-31",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Vestfold Cup 2023 #3 By bikeshop.no - Tempo Undrumsdal",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -31020,6 +31288,7 @@
 },
 "eq:66586": {
 "date": "2023-05-01",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Vestfold Cup 2023 #1 By bikeshop.no - BIBO Rulleskianlegg Våle",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -31046,6 +31315,7 @@
 },
 "eq:66645": {
 "date": "2023-04-18",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Fatrittet Klubbtempo 2023",
 "organizer": "Sandefjord SK",
@@ -31080,6 +31350,7 @@
 },
 "eq:66728": {
 "date": "2023-04-29",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "2023 NC#1 FARA Hegra, Fellesstart",
 "organizer": "IL Stjørdals-Blink",
@@ -31088,6 +31359,7 @@
 },
 "eq:66729": {
 "date": "2023-04-30",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "2023 NC#2 FARA Stjørdal Kermessritt",
 "organizer": "IL Stjørdals-Blink",
@@ -31104,6 +31376,7 @@
 },
 "eq:66741": {
 "date": "2023-05-01",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "2023 NC#3 Fara Gateritt",
 "organizer": "IL Stjørdals-Blink",
@@ -31121,6 +31394,7 @@
 },
 "eq:66821": {
 "date": "2023-05-06",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Sundvolden GP",
 "organizer": "Ringerike SK",
@@ -31129,6 +31403,7 @@
 },
 "eq:66822": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Ringerike GP",
 "organizer": "Ringerike SK",
@@ -31137,6 +31412,7 @@
 },
 "eq:66829": {
 "date": "2023-05-06",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Sundvolden Grand Prix Junior 2023",
 "organizer": "Ringerike SK",
@@ -31145,6 +31421,7 @@
 },
 "eq:66830": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "NorgesCup",
 "name": "Ringerike Grand Prix Junior 2023",
 "organizer": "Ringerike SK",
@@ -31153,6 +31430,7 @@
 },
 "eq:66834": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Tour de Frøya 2023",
 "organizer": "Frøya og Hitra SK",
@@ -31212,6 +31490,7 @@
 },
 "eq:67064": {
 "date": "2023-05-24",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2023 #3 Follo SK",
 "organizer": "Follo SK",
@@ -31220,6 +31499,7 @@
 },
 "eq:67066": {
 "date": "2023-05-31",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2023 #4 Asker CK",
 "organizer": "Asker CK",
@@ -31228,6 +31508,7 @@
 },
 "eq:67068": {
 "date": "2023-06-07",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2023 #5 IF Frøy",
 "organizer": "IF Frøy",
@@ -31268,6 +31549,7 @@
 },
 "eq:67106": {
 "date": "2023-05-03",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Kalas Cup 2023 #1 IL Driv",
 "organizer": "Driv Idrettslag",
@@ -31293,6 +31575,7 @@
 },
 "eq:67166": {
 "date": "2023-04-26",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sykkelbutikken MTB Frotveit",
 "organizer": "CK Henie",
@@ -31301,6 +31584,7 @@
 },
 "eq:67185": {
 "date": "2023-05-01",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Os Rundt 2023",
 "organizer": "CK Henie",
@@ -31318,6 +31602,7 @@
 },
 "eq:67203": {
 "date": "2023-04-15",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Mandal CK terrengritt",
 "organizer": "Mandal CK",
@@ -31351,6 +31636,7 @@
 },
 "eq:67238": {
 "date": "2023-05-13",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Fanafjellet opp",
 "organizer": "Bergen CK",
@@ -31384,6 +31670,7 @@
 },
 "eq:67399": {
 "date": "2023-05-10",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sykkelbutikken MTB Skageskogen",
 "organizer": "CK Henie",
@@ -31392,6 +31679,7 @@
 },
 "eq:67414": {
 "date": "2023-05-09",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 1",
 "organizer": "Tromsø CK",
@@ -31400,6 +31688,7 @@
 },
 "eq:67417": {
 "date": "2023-05-16",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 2",
 "organizer": "Tromsø CK",
@@ -31408,6 +31697,7 @@
 },
 "eq:67419": {
 "date": "2023-05-23",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 3",
 "organizer": "Tromsø CK",
@@ -31416,6 +31706,7 @@
 },
 "eq:67424": {
 "date": "2023-06-10",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Tour de Lyngen 2023",
 "organizer": "Jægervatnet IL Sykkel",
@@ -31424,6 +31715,7 @@
 },
 "eq:67428": {
 "date": "2023-06-06",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 5",
 "organizer": "Tromsø CK",
@@ -31432,6 +31724,7 @@
 },
 "eq:67429": {
 "date": "2023-06-13",
+"fetched": "2026-10-15",
 "level": "Turritt",
 "name": "Sykkelkarusell Tromsø - ritt 6",
 "organizer": "Tromsø CK",
@@ -31440,6 +31733,7 @@
 },
 "eq:67448": {
 "date": "2023-06-25",
+"fetched": "2026-10-15",
 "level": "Trimritt",
 "name": "Trysil-Knut rittet 2023",
 "organizer": "Søre Osen IL",
@@ -31498,6 +31792,7 @@
 },
 "eq:67626": {
 "date": "2023-06-14",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Sykkelbutikken MTB Milde",
 "organizer": "CK Henie",
@@ -31515,6 +31810,7 @@
 },
 "eq:67650": {
 "date": "2023-05-07",
+"fetched": "2026-10-15",
 "level": "UCI Ritt",
 "name": "Kalas Rye Terrengsykkelfestival 2023 Sammenlagt",
 "organizer": "SK Rye sykkel",
@@ -31523,6 +31819,7 @@
 },
 "eq:67713": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Lillehammer Petit Prix 2023 Tempo",
 "organizer": "Lillehammer CK",
@@ -31531,6 +31828,7 @@
 },
 "eq:67723": {
 "date": "2023-05-23",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cup 2023 Gol",
 "organizer": "Andebarkji TSK",
@@ -31573,6 +31871,7 @@
 },
 "eq:67777": {
 "date": "2023-05-27",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Lønningrittet 2023 (F3D 1/4)",
 "organizer": "Fana IL Sykkel",
@@ -31581,6 +31880,7 @@
 },
 "eq:67778": {
 "date": "2023-05-28",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Lonevågrunden 2023 (F3D 2/4)",
 "organizer": "Fana IL Sykkel",
@@ -31589,6 +31889,7 @@
 },
 "eq:67779": {
 "date": "2023-05-28",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Lonevågrunden Tempo 2023 (F3D 3/4)",
 "organizer": "Fana IL Sykkel",
@@ -31597,6 +31898,7 @@
 },
 "eq:67780": {
 "date": "2023-05-29",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Osterøy Felles 2023 (F3D 4/4)",
 "organizer": "Fana IL Sykkel",
@@ -31605,6 +31907,7 @@
 },
 "eq:67814": {
 "date": "2023-06-02",
+"fetched": "2026-10-15",
 "level": "Regionmesterskap",
 "name": "Lillehammer Petit Prix 2023 Bakketempo",
 "organizer": "Lillehammer CK",
@@ -31613,6 +31916,7 @@
 },
 "eq:67815": {
 "date": "2023-06-03",
+"fetched": "2026-10-15",
 "level": "Regionmesterskap",
 "name": "Lillehammer Petit Prix 2023 Gateritt",
 "organizer": "Lillehammer CK",
@@ -31630,6 +31934,7 @@
 },
 "eq:67837": {
 "date": "2023-06-04",
+"fetched": "2026-10-15",
 "level": "Regionmesterskap",
 "name": "Lillehammer Petit Prix 2023 Fellesstart",
 "organizer": "Lillehammer CK",
@@ -31638,6 +31943,7 @@
 },
 "eq:67843": {
 "date": "2023-06-10",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Gateritt Bestemorenga 2023",
 "organizer": "Bodø CK",
@@ -31646,6 +31952,7 @@
 },
 "eq:67858": {
 "date": "2023-06-06",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cup 2023 Torpo",
 "organizer": "Andebarkji TSK",
@@ -31670,6 +31977,7 @@
 },
 "eq:67892": {
 "date": "2023-06-24",
+"fetched": "2026-10-15",
 "level": "Regionritt",
 "name": "Savkadasrittet 2023",
 "organizer": "Karasjok SK",
@@ -31678,6 +31986,7 @@
 },
 "eq:67907": {
 "date": "2023-06-10",
+"fetched": "2026-10-15",
 "level": "Velg nivå",
 "name": "Terrengsykkelrittet Maraton og Sport  2023",
 "organizer": "IF Frøy",
@@ -31686,6 +31995,7 @@
 },
 "eq:67908": {
 "date": "2023-06-22",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Korketrekkeren Harestua til Bislingen - juni 2023",
 "organizer": "Kloppa Off Road Klubb",
@@ -31719,6 +32029,7 @@
 },
 "eq:67921": {
 "date": "2023-06-17",
+"fetched": "2026-10-15",
 "level": "Ungdomsmesterskap",
 "name": "Jokermesterskapet UM/UL Tempo 2023",
 "organizer": "IL Sverre",
@@ -31727,6 +32038,7 @@
 },
 "eq:67923": {
 "date": "2023-06-18",
+"fetched": "2026-10-15",
 "level": "Ungdomsmesterskap",
 "name": "Jokermesterskapet UM/UL Fellesstart 2023",
 "organizer": "IL Sverre",
@@ -31735,6 +32047,7 @@
 },
 "eq:67926": {
 "date": "2023-06-12",
+"fetched": "2026-10-15",
 "level": "NCF Ranking",
 "name": "Vestfold 3 Dagers 2023 Sammenlagt",
 "organizer": "Tønsberg CK",
@@ -31785,6 +32098,7 @@
 },
 "eq:68040": {
 "date": "2023-06-27",
+"fetched": "2026-10-15",
 "level": "Klubbritt",
 "name": "Sparebank 1 Cup 2023 Torpo Tempo",
 "organizer": "Andebarkji TSK",
@@ -39808,6 +40122,7 @@
 },
 "rr:179392": {
 "date": "2023-04-26",
+"fetched": "2026-10-15",
 "level": null,
 "name": "Geoprovider cup Stavanger (Poengbasert)",
 "organizer": null,
@@ -39834,6 +40149,7 @@
 },
 "rr:188462": {
 "date": "2022-06-19",
+"failed": "2026-10-15",
 "level": null,
 "name": "NM Landevei Junior & U23 2022",
 "organizer": null,
@@ -39842,6 +40158,7 @@
 },
 "rr:188467": {
 "date": "2022-06-21",
+"failed": "2026-10-15",
 "level": null,
 "name": "NM Lagtempo 2022",
 "organizer": null,
@@ -39850,6 +40167,7 @@
 },
 "rr:188468": {
 "date": "2022-06-23",
+"failed": "2026-10-15",
 "level": null,
 "name": "NM Tempo 2022",
 "organizer": null,
@@ -39858,6 +40176,7 @@
 },
 "rr:188469": {
 "date": "2022-06-24",
+"failed": "2026-10-15",
 "level": null,
 "name": "NM Gateritt 2022",
 "organizer": null,
@@ -39866,6 +40185,7 @@
 },
 "rr:188470": {
 "date": "2022-06-26",
+"failed": "2026-10-15",
 "level": null,
 "name": "NM Fellesstart Elite 2022",
 "organizer": null,
@@ -39874,6 +40194,7 @@
 },
 "rr:197080": {
 "date": "2022-06-13",
+"fetched": "2026-10-15",
 "level": null,
 "name": "ELEKTROIDÉ CUP \nDRØBAK 2022",
 "organizer": null,
@@ -39882,6 +40203,7 @@
 },
 "rr:197449": {
 "date": "2022-08-14",
+"failed": "2026-10-15",
 "level": null,
 "name": "TelemarkUltra 2022 [Kansellert]",
 "organizer": null,
@@ -39890,6 +40212,7 @@
 },
 "rr:203043": {
 "date": "2022-08-01",
+"failed": "2026-10-15",
 "level": null,
 "name": "Terrengsykkelskolen i Drøbak 2022",
 "organizer": null,
@@ -39898,6 +40221,7 @@
 },
 "rr:203928": {
 "date": "2022-06-08",
+"failed": "2026-10-15",
 "level": null,
 "name": "Terrengsykkelskole for voksne",
 "organizer": null,
@@ -39906,6 +40230,7 @@
 },
 "rr:208590": {
 "date": "2022-10-29",
+"fetched": "2026-10-15",
 "level": null,
 "name": "Skansecross NC 7",
 "organizer": null,
@@ -39922,6 +40247,7 @@
 },
 "rr:219649": {
 "date": "2022-09-20",
+"fetched": "2026-10-15",
 "level": null,
 "name": "Klubbmesterskap Follo SK - Terreng 2022",
 "organizer": null,
@@ -39930,6 +40256,7 @@
 },
 "rr:220697": {
 "date": "2022-10-30",
+"fetched": "2026-10-15",
 "level": null,
 "name": "Skansecross NC 8",
 "organizer": null,
@@ -39938,6 +40265,7 @@
 },
 "rr:229146": {
 "date": "2023-06-22",
+"failed": "2026-10-15",
 "level": null,
 "name": "NM Landevei 2023 Påmelding",
 "organizer": null,
@@ -39946,6 +40274,7 @@
 },
 "rr:229613": {
 "date": "2023-06-25",
+"fetched": "2026-10-15",
 "level": null,
 "name": "NM Fellesstart Elite 2023",
 "organizer": null,
@@ -39954,6 +40283,7 @@
 },
 "rr:234078": {
 "date": "2023-05-08",
+"fetched": "2026-10-15",
 "level": null,
 "name": "ELEKTROIDÉ CUP DRØBAK 2023",
 "organizer": null,
@@ -39962,6 +40292,7 @@
 },
 "rr:234709": {
 "date": "2023-05-26",
+"fetched": "2026-10-15",
 "level": null,
 "name": "2023 Tour of Norway",
 "organizer": null,
@@ -39970,6 +40301,7 @@
 },
 "rr:236205": {
 "date": "2023-05-14",
+"fetched": "2026-10-15",
 "level": null,
 "name": "Follorittet 2023",
 "organizer": null,
@@ -39986,6 +40318,7 @@
 },
 "rr:239381": {
 "date": "2023-04-19",
+"fetched": "2026-10-15",
 "level": null,
 "name": "LANDEVEISCUP 1 Follo SK",
 "organizer": null,
@@ -39994,6 +40327,7 @@
 },
 "rr:243912": {
 "date": "2023-06-06",
+"fetched": "2026-10-15",
 "level": null,
 "name": "Landeveiscup #3 - Smaalenene SK - Rudskogen Go-Kart banen",
 "organizer": null,
@@ -40002,6 +40336,7 @@
 },
 "rr:248196": {
 "date": "2023-04-24",
+"failed": "2026-10-15",
 "level": null,
 "name": "Landeveiscup Øst 2023 - Sammenlagt",
 "organizer": null,
