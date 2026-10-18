@@ -14,6 +14,7 @@ export interface Result {
   time: string; winner: string;
   np: number | null; ap: number | null; speed: number | null; km: number | null; climb: number | null;
   ageClass: string; agePlace: number | null; ageN: number | null;
+  uciClass: string; uciPlace: number | null; uciN: number | null; // UCI gravel age group, where the timer gives ages (Birken)
   link: string; icu: string;
   video?: string;     // the rider's own video from this race (data/videos.json)
   videos?: RaceVideo[]; // every rider's video from this race, the rider's own first
@@ -136,6 +137,7 @@ function result(r: Record<string, unknown>): Result {
     behind: num(r.behind ?? r.behind_pct), time: String(r.time ?? ""), winner: String(r.winner ?? ""),
     np: num(r.np), ap: num(r.ap), speed: num(r.speed), km: num(r.km), climb: num(r.climb),
     ageClass: ageLabel(String(r.age_class ?? "")), agePlace: num(r.age_place), ageN: num(r.age_n),
+    uciClass: String(r.uci_class ?? ""), uciPlace: num(r.uci_place), uciN: num(r.uci_n),
     link: String(r.turritt ?? r.link ?? ""), icu: String(r.icu ?? ""),
     women: r.women_place != null && r.women_field != null ? {
       place: Number(r.women_place), field: Number(r.women_field),

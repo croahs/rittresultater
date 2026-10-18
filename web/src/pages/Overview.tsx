@@ -195,6 +195,7 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
           <span className="eyebrow">{TYPE_LABEL[r.type]} · {dateLong(r.date)}</span>
           <div className="fact"><span>Plassering</span><b>{r.place}. av {r.field} {r.basis}{r.cls ? ` (${r.cls})` : ""}</b></div>
           {r.agePlace && <div className="fact"><span title="I tiårsklasser: M30-34 og M35-39 telles sammen som M30-39">Aldersklasse</span><b>{r.agePlace}. av {r.ageN} i {r.ageClass}</b></div>}
+          {r.uciPlace && <div className="fact"><span title="UCI gravel-aldersgruppe (19-34, 35-39, ...), regnet fra alderen tidtakeren oppgir. Topp 25 % kvalifiserer i UCI-ritt.">UCI-klasse</span><b>{r.uciPlace}. av {r.uciN} i {r.uciClass}</b></div>}
           <div className="fact"><span>Tid / vinnertid</span><b>{hms(r.time)} / {hms(r.winner)}</b></div>
           {r.behind != null && <div className="fact"><span>Bak vinneren</span><b>{pct(r.behind, r.behind % 1 ? 1 : 0)}</b></div>}
           {r.np && <div className="fact"><span>Watt (NP / snitt)</span><b>{r.np} / {r.ap} W</b></div>}
