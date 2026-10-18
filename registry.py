@@ -76,3 +76,37 @@ def add_eq(event_id, stages, name, date, type_, note):
     data["races"].sort(key=lambda r: r["date"])
     _save(data)
     return True
+
+
+def named_lists(only_cached=True):
+    """[(row, source, [(key, name, club, class, seconds or None for DNF)])] for every confirmed
+    registry race read from a list without rider ids (raceresult, Birken). key names one result
+    for good ("birken:<result id>", "raceresult:<event>:<class>:<name>"), so riderids.py can give
+    it one of our ids. Only cached lists are read unless only_cached is False."""
+    out = []
+    for row in load():
+        if row.get("status") != "bekreftet" or row.get("type") == "Points":
+            continue
+        for src in row["sources"]:
+            if src["source"] == "birken":
+                if only_cached and f"list:{src['event']}" not in birken._cache:
+                    continue
+                rows = [(f"birken:{r[5]}", r[1], r[2], r[3], _secs(r[4]))
+                        for r in birken.result_list(src["event"], row["year"]) if r[3] not in birken.NO_TIME]
+            elif src["source"] == "raceresult":
+                if only_cached and f"{src['event']}:{src['list']}" not in raceresult._cache:
+                    continue
+                skip = re.compile(src["skip_classes"], re.I) if src.get("skip_classes") else None
+                rows = [(f"raceresult:{src['event']}:{cls}:{r[1]}", r[1], "", cls, _secs(r[2]))
+                        for cls, lst in raceresult.result_list(src).items() if not (skip and skip.search(cls))
+                        for r in lst if r[0] != "DNS"]
+            else:
+                continue
+            out.append((row, src, rows))
+    return out
+
+
+def _secs(t):
+    """H:MM:SS -> seconds; anything else (DNF, a lapped rider's "+2 runder", "") -> None."""
+    m = re.fullmatch(r"(\d+):(\d\d):(\d\d)", t or "")
+    return int(m.group(1)) * 3600 + int(m.group(2)) * 60 + int(m.group(3)) if m else None

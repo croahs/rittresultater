@@ -34,6 +34,7 @@ from collections import Counter, defaultdict
 
 import requests
 
+import birken
 import eqtiming
 import registry
 import riderids
@@ -96,13 +97,17 @@ def aliases():
 
     out = {("turritt", a["turritt"]): pub(rid) for rid, a in riders.items() if a.get("turritt")}
     out.update({("eq", uid): pub(rid) for uid, rid in riderids.by_eq().items()})
+    out.update({("named", k): pub(rid) for rid, a in riders.items() for k in a.get("named", [])})
     return out
 
 
-def original(sources, race_name, ids):
-    """[(row, category)] of one race from its own timer (EQ Timing), in the Turritt row shape
-    (id, group, name, club, age class, seconds; DNF = DNF_TIME), or None when a list isn't cached.
-    Nothing is fetched. A rider EQ can't link to one of ours yet (data/linking.json) is "eq<id>"."""
+def original(sources, race_name, ids, reg=None):
+    """[(row, category)] of one race from its own timer (EQ Timing, or raceresult and Birken for
+    the registry row reg), in the Turritt row shape (id, group, name, club, age class, seconds;
+    DNF = DNF_TIME), or None when a list isn't cached. Nothing is fetched. A rider EQ can't link
+    to one of ours yet (data/linking.json) is "eq<id>"."""
+    if any(s.get("source") in ("raceresult", "birken") for s in sources):
+        return named(reg, race_name, ids) if reg else None
     cache, rows = eqtiming._cache, []
     for src in sources:
         if src.get("source", "eqtiming") != "eqtiming":
@@ -135,6 +140,36 @@ def original(sources, race_name, ids):
     return rows or None
 
 
+def named(reg, race_name, ids):
+    """original() for a race read from lists without rider ids (raceresult, Birken): every result
+    is one of our riders through its key (riderids.py, "named"), or None when one isn't linked yet
+    or a list isn't cached. Club and age class come from the list, else from the same rider in
+    the race's Turritt list (raceresult gives neither). Each course is its own pool: the class
+    name without its bike category ("Nordsjørittet Egersund - Sandnes" and "... CX/Gravel") or
+    the race (Birken), kept in the stage field."""
+    lists = [x for x in registry.named_lists() if (x[0]["series"], x[0]["year"]) == (reg["series"], reg["year"])]
+    if not lists or len(lists) < sum(1 for s in reg["sources"] if s["source"] in ("raceresult", "birken")):
+        return None
+    tt = {}
+    for t in reg["turritt_ids"]:
+        for r in turritt._cache.get(f"results:{t}", []):
+            tt.setdefault(ids.get(("turritt", r[2]), r[2]), r)
+    rows = []
+    for _, src, lst in lists:
+        for key, nm, club, cls, s in lst:
+            rid = ids.get(("named", key))
+            if not rid:
+                return None
+            t = tt.get(rid)
+            age = birken.CLASSES.get(cls, cls) if src["source"] == "birken" else (t[8] if t else "")
+            course = re.sub(r"\s*\b(cx/gravel|mtb\S*)\s*$", "", cls, flags=re.I) if src["source"] == "raceresult" else reg["name"]
+            rows.append(([0, "", rid, cls, "", nm, "", club or (t[7] if t else ""), age, s if s is not None else DNF_TIME, course],
+                         category(race_name, cls)))
+    if any(c == "CX/Gravel" for _, c in rows):  # as in pool()
+        rows = [(r, c if c == "CX/Gravel" else "MTB/åpen") for r, c in rows]
+    return rows or None
+
+
 def courses(rows):
     """The pools in one race from EQ Timing. Youth classes (up to 15-16) and licence classes
     (senior, junior) ride their own distance even when they share a list, so each is its own
@@ -142,7 +177,8 @@ def courses(rows):
     by = defaultdict(list)
     for rc in rows:
         c = (rc[0][8] or "").strip()
-        by[c if OWN_DISTANCE.search(c) else ""].append(rc)
+        course = rc[0][10] if isinstance(rc[0][10], str) else ""  # lists without ids name the course (named())
+        by[(c if OWN_DISTANCE.search(c) else "", course)].append(rc)
     return list(by.values())
 
 
@@ -244,7 +280,7 @@ def events(log=lambda m: print(m, file=sys.stderr)):
         if not team:  # team time trials stay on Turritt for now (teams aren't in EQ's lists the same way)
             srcs = row["sources"] if row else \
                 [dict(zip(("event", "stage"), map(int, key.split("/"))))] if kind == "eqtiming" else []
-            own = original(srcs, sheet["Race"], ids) if srcs else None
+            own = original(srcs, sheet["Race"], ids, row) if srcs else None
         if own:
             # A list with several courses: one pool per class, and only the classes a followed rider rode.
             own = courses(own)
@@ -252,18 +288,27 @@ def events(log=lambda m: print(m, file=sys.stderr)):
                 own = [p for p in own if any(r[2] in follow for r, _ in p)]
         if own and cats:
             lost, other = changed(cats, own, follow)
-            (moved if lost <= SWITCH_LIMIT else kept).append(f"{sheet['Race']} ({lost} lost, {other} other result)")
-            if lost > SWITCH_LIMIT:
+            # trust_timer (data/registry.json): the timer's list is the official one, so the race
+            # moves even when Turritt has riders the organizer doesn't list.
+            trusted = bool(row and row.get("trust_timer"))
+            (moved if lost <= SWITCH_LIMIT or trusted else kept).append(
+                f"{sheet['Race']} ({lost} lost, {other} other result{', trust_timer' if trusted and lost else ''})")
+            if lost > SWITCH_LIMIT and not trusted:
                 own = None
         done |= {("turritt", t) for t in (sibs or [])} | {(kind, key)}
         if row:
             done.add(id(row))
         if own:
             src = srcs[0]
-            race_id = f"eq:{src['event']}" + (f"/{src['stage']}" if src.get("stage") else "")
-            sheet = {**sheet, "Turritt": f"https://live.eqtiming.com/{src['event']}#result"}
+            kind_src = src.get("source", "eqtiming")
+            race_id = {"eqtiming": "eq", "raceresult": "rr", "birken": "bk"}[kind_src] + f":{src['event']}" + \
+                (f"/{src['stage']}" if src.get("stage") else "")
+            sheet = {**sheet, "Turritt": {"eqtiming": f"https://live.eqtiming.com/{src['event']}#result",
+                                          "raceresult": f"https://my.raceresult.com/{src['event']}/results",
+                                          "birken": "https://tiur.birken.no/res/ListResult.aspx"}[kind_src]}
             for p in own:
-                out.append(_event(sheet, race_id if len(own) == 1 else f"{race_id}~{p[0][0][8]}", p, False))
+                tag = p[0][0][10] if isinstance(p[0][0][10], str) else p[0][0][8]
+                out.append(_event(sheet, race_id if len(own) == 1 else f"{race_id}~{tag}", p, False))
         elif cats:
             out.append(_event(sheet, key if kind == "turritt" else tids[0], cats, team))
     log(f"rivals: {len(moved)} races from their own timer instead of Turritt: {', '.join(moved)}")

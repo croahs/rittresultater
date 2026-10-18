@@ -11,6 +11,9 @@ still uses them), EQ Timing participant id. Links are made only when they are ce
 - an EQ result whose name matches exactly one Turritt rider who is in the same race's
   Turritt list, or who has ridden for the same club.
 A rider can have more than one EQ id ("eq_also"): some riders have had two EQ profiles.
+Results in lists without rider ids (raceresult, Birken) are linked the same way, by name and
+time against the same race on Turritt, and kept per result ("named": the keys from
+registry.named_lists()).
 An EQ-only rider found later to be a Turritt rider keeps their id, as "same_as" that rider.
 Everything else that could be the same rider goes to data/linking.json, which is edited by
 hand ("id": "r123" to link, "id": "new" for a rider of their own) and never guessed.
@@ -266,12 +269,55 @@ def build(log=print):
         if uid not in eq_id:
             eq_id[uid] = new(name=name, club=club, eq=int(uid))
 
+    # Riders in lists without rider ids (raceresult, Birken; registry races that replace a
+    # Turritt race, so rivals.py can read them). Each result has a key of its own ("named").
+    # It is the Turritt rider in the same race with the same name (give or take a middle name)
+    # and time (within 10 s), when no one else fits; else the one rider we know by exactly that
+    # name who has ridden for the same club; else a rider of their own.
+    named_id = {k: rid for rid, a in riders.items() for k in a.get("named", [])}
+    by_full = {}
+    for rid, a in riders.items():
+        if not a.get("same_as"):
+            by_full.setdefault(" ".join(raceresult.fold(a.get("name", ""))), []).append(rid)
+    for row, _, rows in registry.named_lists():
+        if not row["turritt_ids"]:
+            continue
+        tts = [(r[2], f"{r[5]} {r[6]}", int(r[9])) for x in row["turritt_ids"]
+               for r in turritt._cache.get(f"results:{x}", []) if r[2] not in ("", "0") and r[9].isdigit()]
+        # "SKAILAND, Odd" (raceresult) -> "Odd Skailand", so first names line up for _same_name.
+        def shown(n):
+            last, _, first = n[1].partition(", ")
+            return f"{first} {last.title()}" if first else n[1]
+        fits = lambda n, t: n[4] is not None and abs(n[4] - t[2]) <= 10 and _same_name(shown(n), t[1])
+        # Riders who finish together often share a surname and an initial (Tide and Thea Dyrseth):
+        # then only a name contained in the other counts ("Tide Dyrseth", "Tide Andreas Dyrseth").
+        whole = lambda a, b: set(_words(a)) <= set(_words(b)) or set(_words(b)) <= set(_words(a))
+        narrow = lambda xs, ok: xs if len(xs) < 2 else [x for x in xs if ok(x)]
+        for n in rows:
+            if n[0] in named_id:
+                continue
+            m = narrow([t for t in tts if fits(n, t)], lambda t: whole(shown(n), t[1]))
+            back = m and narrow([n2 for n2 in rows if fits(n2, m[0])], lambda n2: whole(shown(n2), m[0][1]))
+            if len(m) == 1 and len(back) == 1 and m[0][0] in tt_id:
+                rid = tt_id[m[0][0]]
+            else:
+                cands = by_full.get(" ".join(raceresult.fold(n[1])), [])
+                same_club = [c for c in cands if n[2] and _club(n[2]) & _club(riders[c].get("club", ""))]
+                rid = same_club[0] if len(cands) == 1 and same_club else None
+            if rid:
+                riders[rid]["named"] = riders[rid].get("named", []) + [n[0]]
+            else:
+                rid = new(name=shown(n), club=n[2], named=[n[0]])
+                by_full.setdefault(" ".join(raceresult.fold(shown(n))), []).append(rid)
+            named_id[n[0]] = rid
+
     # Still to decide: EQ riders who so far only have an id of their own.
     open_links = {u: l for u, l in open_links.items() if u in eq_id and not riders[eq_id[u]].get("turritt")}
     for u, l in open_links.items():
         l["own_id"] = eq_id[u]
     data = {"_help": "Our rider ids (riderids.py). Each id is given once and never reused or changed. "
-                     "turritt: TurrittID (only while the site still uses Turritt data), eq: EQ Timing participant id.",
+                     "turritt: TurrittID (only while the site still uses Turritt data), eq: EQ Timing participant id, "
+                     "named: results in lists without rider ids (raceresult, Birken).",
             "next": nxt, "riders": riders}
     with open(ALIASES, "w", encoding="utf-8") as f:
         f.write('{\n  "_help": ' + json.dumps(data["_help"], ensure_ascii=False) + f',\n  "next": {nxt},\n  "riders": {{\n')
