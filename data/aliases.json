@@ -1,6 +1,6 @@
 {
   "_help": "Our rider ids (riderids.py). Each id is given once and never reused or changed. turritt: TurrittID (only while the site still uses Turritt data), eq: EQ Timing participant id.",
-  "next": 27686,
+  "next": 27689,
   "riders": {
     "r1": {"name": "Aage Stangeland", "club": "Oslo", "turritt": "20008"},
     "r2": {"name": "Agnar Gjertsen", "club": "Dalane SK", "turritt": "20018", "eq": 506951, "eq_also": [384251]},
@@ -1034,7 +1034,7 @@
     "r1030": {"name": "Johan Waldeland", "club": "Vigrestad SK", "turritt": "24226"},
     "r1031": {"name": "Johan Vesteraas", "club": "CK BIL", "turritt": "24228"},
     "r1032": {"name": "Johan Salvanes", "club": "Galleri Cafè", "turritt": "24231", "eq": 361460},
-    "r1033": {"name": "Johan Heggland", "club": "Klepp Cykle Club", "turritt": "24238"},
+    "r1033": {"name": "Johan Heggland", "club": "Klepp Cykle Club", "turritt": "24238", "eq": 290249},
     "r1034": {"name": "Johan Bruun-Olsen", "club": "Sandnes Sykleklubb", "turritt": "24243", "eq": 690670},
     "r1035": {"name": "Johan Askeland", "club": "CK Haugaland / Eide Bygg & Anlegg", "turritt": "24247", "eq": 362044},
     "r1036": {"name": "Johan Andersson", "club": "Bryne CK", "turritt": "24248", "eq": 310351},
@@ -18068,7 +18068,7 @@
     "r18064": {"name": "Peder Sundnes", "club": "Bryne", "turritt": "173650"},
     "r18065": {"name": "Andreas Krohn", "club": "Stavanger", "turritt": "173654"},
     "r18066": {"name": "Tobias Larsen", "club": "Lillehammer Cykleklubb", "turritt": "173656", "eq": 2956084},
-    "r18067": {"name": "Gediminas Stonys", "club": "Klepp Stasjon", "turritt": "173663"},
+    "r18067": {"name": "Gediminas Stonys", "club": "Klepp Stasjon", "turritt": "173663", "eq": 7032747},
     "r18068": {"name": "Daniel Rosland", "club": "Sandnes", "turritt": "173664"},
     "r18069": {"name": "Nils Marius Granhus", "club": "Søgne", "turritt": "173665"},
     "r18070": {"name": "Bernt Øksendal", "club": "Bogafjell sykleklubb", "turritt": "173666"},
@@ -27686,6 +27686,9 @@
     "r27682": {"name": "Richard Hølestøl", "club": "Sandnes Sykleklubb", "eq": 863743},
     "r27683": {"name": "Tore Jan Hodnemyr", "club": "Returkraft", "eq": 870243},
     "r27684": {"name": "Rasmus Olav Vigrestad", "club": "Biri IL", "eq": 907},
-    "r27685": {"name": "Kjetil Sandstå", "club": "Å ENERGI BEDRIFTSIDRETTSLAG", "eq": 910837}
+    "r27685": {"name": "Kjetil Sandstå", "club": "Å ENERGI BEDRIFTSIDRETTSLAG", "eq": 910837},
+    "r27686": {"name": "Ole Jørgen Nordhagen", "club": "Klepp Cykle Club", "eq": 5950795},
+    "r27687": {"name": "Samuel Spencer", "club": "Sandnes", "eq": 6957105},
+    "r27688": {"name": "Fredrik Krey Berntz", "club": "Asker CK", "eq": 840374}
   }
 }
