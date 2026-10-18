@@ -145,6 +145,9 @@ def race_json(rider, r):
         "age_class": r.get("Age class") or None,
         "age_place": num(r.get("Age class placement"), int),
         "age_n": num(r.get("Age class participants"), int),
+        "uci_class": r.get("UCI class") or None,  # UCI gravel age group, where the timer gives ages (Birken)
+        "uci_place": num(r.get("UCI class placement"), int),
+        "uci_n": num(r.get("UCI class participants"), int),
         "source_ids": {"turritt": r.get("_turritt_race_id") or r.get("_turritt_ref"), "eqtiming": r.get("_eq")},
         "links": {"turritt": r.get("Turritt") or None, "eqtiming": r.get("EQ Timing") or None,
                   "raceresult": r.get("raceresult") or None,

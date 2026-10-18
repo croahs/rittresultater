@@ -1,7 +1,7 @@
 """The races we fetch from their own timer (data/registry.json), matched to a rider by name.
 
-Turritt is not a source (Pedår, 2026-09-29), and raceresult and Ultimate have no rider
-profiles, so every race we read from them is listed by hand. EQ Timing races the rider has
+Turritt is not a source (Pedår, 2026-09-29), and raceresult, Ultimate and Birken have no
+rider profiles, so every race we read from them is listed by hand. EQ Timing races the rider has
 linked to their EQ profile are found from the profile (eqtiming.races); the registry adds
 EQ races where the result isn't linked, matched by EQ id or name.
 """
@@ -9,6 +9,7 @@ import json
 import re
 import os
 
+import birken
 import eqtiming
 import raceresult
 import ultimate
@@ -40,10 +41,10 @@ def races(rider, log=print):
         try:
             if e["source"] == "eqtiming":
                 found = eqtiming.registry_races(e, rider["name"], int(eq_id) if eq_id else None)
-            elif e["source"] in ("raceresult", "ultimate"):
+            elif e["source"] in ("raceresult", "ultimate", "birken"):
                 # Lists without profiles have only the name, so try the other names a rider
                 # has raced under (also_names in riders.json, e.g. without a middle name).
-                mod = raceresult if e["source"] == "raceresult" else ultimate
+                mod = {"raceresult": raceresult, "ultimate": ultimate, "birken": birken}[e["source"]]
                 found = next((f for n in [rider["name"], *rider.get("also_names", [])] if (f := mod.races(e, n))), [])
             else:
                 continue
