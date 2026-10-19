@@ -38818,6 +38818,7 @@
 },
 "eq:80679": {
 "date": "2026-09-13",
+"failed": "2026-10-18",
 "level": "Turritt",
 "name": "Score TOSKaskabet 2026",
 "organizer": "Tasta & omegn sykkelklubb",
@@ -38880,6 +38881,7 @@
 },
 "eq:81017": {
 "date": "2026-09-20",
+"failed": "2026-10-18",
 "level": "Regionritt",
 "name": "Fanahytten Opp 2026",
 "organizer": "Fana IL Sykkel",
@@ -38915,6 +38917,7 @@
 },
 "eq:81051": {
 "date": "2026-09-20",
+"failed": "2026-10-18",
 "level": "Turritt",
 "name": "Dalane Rundt 2026",
 "organizer": "Dalane SK",
@@ -38923,6 +38926,7 @@
 },
 "eq:81056": {
 "date": "2026-09-13",
+"failed": "2026-10-18",
 "level": "NorgesCup",
 "name": "Lillehammer Sykkelfestival 2026, søndag",
 "organizer": "Lillehammer CK",
@@ -39156,6 +39160,7 @@
 },
 "eq:81510": {
 "date": "2026-09-19",
+"failed": "2026-10-18",
 "level": "UCI Ritt",
 "name": "Karl XII rittet 2026, NC12 UCI cat 1 Rundbane (XCO)",
 "organizer": "Halden CK",
@@ -39164,6 +39169,7 @@
 },
 "eq:81511": {
 "date": "2026-09-20",
+"failed": "2026-10-18",
 "level": "UCI Ritt",
 "name": "Karl XII rittet 2026, NC13 UCI cat 3 Kortbane (XCC)",
 "organizer": "Halden CK",
@@ -39235,6 +39241,7 @@
 },
 "eq:81639": {
 "date": "2026-09-26",
+"failed": "2026-10-18",
 "level": "Regionritt",
 "name": "Lygna opp 2026",
 "organizer": "Hadeland CK",
@@ -39306,6 +39313,7 @@
 },
 "eq:81778": {
 "date": "2026-09-26",
+"failed": "2026-10-18",
 "level": "Turritt",
 "name": "Femsjøen rundt 2026",
 "organizer": "Halden CK",
@@ -39377,6 +39385,7 @@
 },
 "eq:82026": {
 "date": "2026-09-15",
+"failed": "2026-10-18",
 "level": "Regionritt",
 "name": "Scott Cup #7",
 "organizer": "Kristiansands CK",
@@ -39466,6 +39475,7 @@
 },
 "eq:82192": {
 "date": "2026-09-30",
+"failed": "2026-10-18",
 "level": "Turritt",
 "name": "Klubbmesterskap Terreng Dalane SK 2026",
 "organizer": "Dalane SK",
@@ -39609,6 +39619,7 @@
 },
 "eq:82413": {
 "date": "2026-09-13",
+"failed": "2026-10-18",
 "level": "Turritt",
 "name": "Ullensaker Rundt 2026",
 "organizer": "Ullensaker CK",
@@ -40058,6 +40069,7 @@
 },
 "eq:82953": {
 "date": "2026-09-17",
+"failed": "2026-10-18",
 "level": "Klubbritt",
 "name": "TCK - Åpent klubbritt - sesongavslutning - tempo",
 "organizer": "Tønsberg CK",
@@ -40282,6 +40294,7 @@
 },
 "eq:83413": {
 "date": "2026-09-13",
+"failed": "2026-10-18",
 "level": "Klubbritt",
 "name": "NesCup 2026 Ritt 4",
 "organizer": "Nes SK",
@@ -40326,6 +40339,7 @@
 },
 "eq:83442": {
 "date": "2026-09-13",
+"failed": "2026-10-18",
 "level": "Regionritt",
 "name": "Prøve NM Master Fellesstart",
 "organizer": "Bergen CK",
@@ -40424,6 +40438,7 @@
 },
 "eq:83745": {
 "date": "2026-09-27",
+"failed": "2026-10-18",
 "level": "Klubbritt",
 "name": "Dølisjøen Rundt 2026 Sykkel",
 "organizer": "Slåstad IL",
@@ -40477,6 +40492,7 @@
 },
 "eq:84024": {
 "date": "2026-09-17",
+"failed": "2026-10-18",
 "level": "Regionritt",
 "name": "Landeveiscupen 2026 IF Frøy 17.09.2026",
 "organizer": "IF Frøy",
@@ -40485,6 +40501,7 @@
 },
 "eq:84082": {
 "date": "2026-10-03",
+"failed": "2026-10-18",
 "level": "NorgesCup",
 "name": "NC 1 Sykkelkross 2026",
 "organizer": "Lillehammer CK",
@@ -40493,6 +40510,7 @@
 },
 "eq:84083": {
 "date": "2026-10-04",
+"failed": "2026-10-18",
 "level": "NorgesCup",
 "name": "NC 2 Sykkelcross 2026",
 "organizer": "Lillehammer CK",
@@ -40510,6 +40528,7 @@
 },
 "eq:84138": {
 "date": "2026-09-26",
+"failed": "2026-10-18",
 "level": "Regionritt",
 "name": "Hortensmarka Rundt 2026 - Sykkel",
 "organizer": "Horten og Omegn's Cykleklubb",
@@ -40518,6 +40537,7 @@
 },
 "eq:84142": {
 "date": "2026-09-12",
+"failed": "2026-10-18",
 "level": "Medlemskap",
 "name": "Harstad Race Weekend Rundbane (lørdag) 2026",
 "organizer": "Harstad CK",
@@ -40526,6 +40546,7 @@
 },
 "eq:84147": {
 "date": "2026-09-16",
+"failed": "2026-10-18",
 "level": "Klubbritt",
 "name": "TCK Messecup 3 - 2026",
 "organizer": "Tønsberg CK",
@@ -40534,6 +40555,7 @@
 },
 "eq:84159": {
 "date": "2026-09-12",
+"failed": "2026-10-18",
 "level": "Regionritt",
 "name": "Prøve NM Master Tempo",
 "organizer": "Bergen CK",
@@ -41638,7 +41660,7 @@
 "eq:2022": 290,
 "eq:2023": 252,
 "eq:2024": 248,
-"eq:2025": 240,
+"eq:2025": 238,
 "eq:2026": 243,
 "rr:2008": 0,
 "rr:2009": 0,
