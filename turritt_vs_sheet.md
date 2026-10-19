@@ -51,6 +51,7 @@
 | Dalane Rundt 2026 | Overall participants (not officials or DNS, DNF included) | 58 | 64 |
 | Dalane Rundt 2026 | Time | 01:53:35 | 01:53:34 |
 | Dalane Rundt 2026 | Class winner | 01:29:41 | 01:29:40 |
+| KleppeKrossen 2026 | (new row) |  | added from Turritt |
 | Nordsjørittet | Overall placement | 232 | 99 (eqtiming) |
 | Nordsjørittet | Class participants (not officials or DNS, DNF included) | 195 | 200 (eqtiming) |
 | Nordsjørittet | Overall participants (not officials or DNS, DNF included) | 907 | 200 (eqtiming) |
