@@ -38522,6 +38522,7 @@
 },
 "eq:79842": {
 "date": "2026-10-17",
+"fetched": "2026-10-24",
 "level": "Turritt",
 "name": "KleppeKrossen 2026",
 "organizer": "Klepp Cykle Club",
@@ -41615,6 +41616,14 @@
 "place": "Drøbak",
 "sport": "Mountain Bike"
 },
+"rr:426402": {
+"date": "2026-10-24",
+"level": null,
+"name": "HOXCROSS - NC #5 - 2026",
+"organizer": null,
+"place": "ÅS",
+"sport": "Cyclocross"
+},
 "rr:75225": {
 "date": "2017-10-07",
 "fetched": "2026-10-05",
@@ -41681,6 +41690,6 @@
 "rr:2023": 17,
 "rr:2024": 13,
 "rr:2025": 12,
-"rr:2026": 14
+"rr:2026": 15
 }
 }
