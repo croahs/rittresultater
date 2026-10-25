@@ -40563,6 +40563,22 @@
 "place": "Sund. Bergen",
 "sport": "Landevei"
 },
+"eq:84323": {
+"date": "2026-10-24",
+"level": "NorgesCup",
+"name": "HOXCROSS - NC #5 - 2026",
+"organizer": "Drøbak-Frogn IL Sykkel",
+"place": "Hoxmark Bikepark",
+"sport": "Sykkelkross"
+},
+"eq:84324": {
+"date": "2026-10-25",
+"level": "NorgesCup",
+"name": "HOXCROSS - NC #6 - 2026",
+"organizer": "Drøbak-Frogn IL Sykkel",
+"place": "Hoxmark Bikepark",
+"sport": "Sykkelkross"
+},
 "eq:84629": {
 "date": "2026-10-13",
 "fetched": "2026-10-20",
@@ -41624,6 +41640,14 @@
 "place": "ÅS",
 "sport": "Cyclocross"
 },
+"rr:426407": {
+"date": "2026-10-25",
+"level": null,
+"name": "HOXCROSS - NC #6 - 2026",
+"organizer": null,
+"place": "ÅS",
+"sport": "Cyclocross"
+},
 "rr:75225": {
 "date": "2017-10-07",
 "fetched": "2026-10-05",
@@ -41670,8 +41694,8 @@
 "eq:2022": 290,
 "eq:2023": 252,
 "eq:2024": 248,
-"eq:2025": 238,
-"eq:2026": 243,
+"eq:2025": 239,
+"eq:2026": 245,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
@@ -41690,6 +41714,6 @@
 "rr:2023": 17,
 "rr:2024": 13,
 "rr:2025": 12,
-"rr:2026": 15
+"rr:2026": 16
 }
 }
