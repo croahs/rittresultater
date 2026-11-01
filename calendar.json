@@ -3440,7 +3440,7 @@
 },
 "eq:18619": {
 "date": "2015-07-26",
-"failed": "2026-10-02",
+"failed": "2026-11-01",
 "level": "Turritt",
 "name": "Dametråkken",
 "organizer": "Grimstad SK",
@@ -4556,7 +4556,7 @@
 },
 "eq:20104": {
 "date": "2015-09-28",
-"failed": "2026-10-02",
+"failed": "2026-11-01",
 "level": "Trimritt",
 "name": "Åpent Smaalenene mesterskap i tempo",
 "organizer": "Smaalenene SK",
@@ -40563,6 +40563,14 @@
 "place": "Sund. Bergen",
 "sport": "Landevei"
 },
+"eq:84255": {
+"date": "2026-10-31",
+"level": "Regionritt",
+"name": "Føyka Kross-Norges Cup 7",
+"organizer": "Asker CK",
+"place": "Føyka Stadion, Kirkeveien 221, 1383 Asker",
+"sport": "Sykkelkross"
+},
 "eq:84323": {
 "date": "2026-10-24",
 "fetched": "2026-10-31",
@@ -40574,6 +40582,7 @@
 },
 "eq:84324": {
 "date": "2026-10-25",
+"fetched": "2026-11-01",
 "level": "NorgesCup",
 "name": "HOXCROSS - NC #6 - 2026",
 "organizer": "Drøbak-Frogn IL Sykkel",
@@ -41644,6 +41653,7 @@
 },
 "rr:426407": {
 "date": "2026-10-25",
+"failed": "2026-11-01",
 "level": null,
 "name": "HOXCROSS - NC #6 - 2026",
 "organizer": null,
@@ -41697,7 +41707,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 245,
+"eq:2026": 246,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
