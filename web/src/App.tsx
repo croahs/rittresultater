@@ -12,6 +12,8 @@ import Welcome from "./pages/Welcome";
 import FindMe from "./pages/FindMe";
 import Race from "./pages/Race";
 import Top, { TOP_KINDS, type TopKind } from "./pages/Top";
+import Alle, { openAlleRider } from "./pages/Alle";
+import { searchAlle, type AlleHit } from "./alle";
 import { SelProvider } from "./state";
 import { KlasseProvider } from "./klasse";
 import type { RacePower } from "./intervals";
@@ -31,11 +33,13 @@ const TABS: { id: Tab; label: string; icon: () => JSX.Element }[] = [
 
 /* Hash: #/r/<our id without the r>/<tab>, e.g. #/r/17179/oversikt. No rider means the front page.
    Old links (#/<TurrittID>/<tab>) still open the right rider and are rewritten to the new form. */
-function readHash(): { rid?: string; legacy?: string; tab?: Tab; find?: boolean; race?: string; top?: TopKind } {
+function readHash(): { rid?: string; legacy?: string; tab?: Tab; find?: boolean; race?: string; top?: TopKind; alle?: string } {
   try {
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
     if (parts[0] === "finn") return { find: true }; // «Fant du deg ikke?»
     if (parts[0] === "ritt" && parts[1]) return { race: decodeURIComponent(parts[1]) }; // one race's result list
+    // A rider or race from every harvested list (pages/Alle.tsx): #/alle/rytter/<EQ id>, #/alle/ritt/<EQ event>
+    if (parts[0] === "alle" && (parts[1] === "rytter" || parts[1] === "ritt") && /^\d{1,10}$/.test(parts[2] || "")) return { alle: `${parts[1]}/${parts[2]}` };
     if (parts[0] === "topp" && TOP_KINDS.includes(parts[1] as TopKind)) return { top: parts[1] as TopKind }; // a front-page top list
     const tab = parts.find((p): p is Tab => TABS.some((t) => t.id === p));
     if (parts[0] === "r" && /^\d+$/.test(parts[1] || "")) return { rid: "r" + parts[1], tab };
@@ -83,13 +87,16 @@ export default function App() {
   const [women, setWomen] = useState(false);
   const [race, setRace] = useState<string | null>(() => readHash().race ?? null);
   const [top, setTop] = useState<TopKind | null>(() => readHash().top ?? null);
+  const [alle, setAlle] = useState<string | null>(() => readHash().alle ?? null);
+  const [findEq, setFindEq] = useState(""); // an EQ Timing link to fill in on «Fant du deg ikke?»
   const [missing, setMissing] = useState(false); // the link named a rider we don't have
+  const replaceNext = useRef(false); // the next page replaces this one in the history (a redirect)
 
   useEffect(() => {
     Promise.all([getJSON<Site>("site.json"), getJSON<IndexRider[]>("riders/index.json")])
       .then(async ([s, i]) => { flags.activityLinks = !!s.activity_links; indexRef.current = i; const r = await hashRider(i); const h = readHash(); setMissing(!r && !!(h.rid || h.legacy)); setSite(s); setIndex(i); setRiderId(r); })
       .catch(() => setError("Fant ikke dataene. Kjør python3 export_web.py og bygg på nytt."));
-    const onHash = async () => { const h = readHash(); const r = await hashRider(indexRef.current); setMissing(!r && !!(h.rid || h.legacy)); setTab(h.tab || "oversikt"); setRiderId(r); setFind((f) => (h.find ? f ?? "" : null)); setRace(h.race ?? null); setTop(h.top ?? null); if (h.race || h.top) window.scrollTo({ top: 0 }); };
+    const onHash = async () => { const h = readHash(); const r = await hashRider(indexRef.current); setMissing(!r && !!(h.rid || h.legacy)); setTab(h.tab || "oversikt"); setRiderId(r); setFind((f) => (h.find ? f ?? "" : null)); setRace(h.race ?? null); setTop(h.top ?? null); setAlle(h.alle ?? null); if (h.race || h.top || h.alle) window.scrollTo({ top: 0 }); };
     addEventListener("hashchange", onHash);
     return () => removeEventListener("hashchange", onHash);
   }, []);
@@ -116,25 +123,31 @@ export default function App() {
     (async () => {
       const rid = riderId ? (await ids()).toRid(riderId) : null;
       if (!live) return;
-      const want = top !== null ? `#/topp/${top}` : race !== null ? `#/ritt/${encodeURIComponent(race)}` : find !== null ? "#/finn" : !riderId ? "#/" : rid ? `#/r/${rid.slice(1)}/${tab}` : `#/${riderId}/${tab}`;
+      const want = alle !== null ? `#/alle/${alle}` : top !== null ? `#/topp/${top}` : race !== null ? `#/ritt/${encodeURIComponent(race)}` : find !== null ? "#/finn" : !riderId ? "#/" : rid ? `#/r/${rid.slice(1)}/${tab}` : `#/${riderId}/${tab}`;
       try {
-        if (location.hash === want || (!riderId && find === null && race === null && top === null && !location.hash)) return;
+        if (location.hash !== want && replaceNext.current) { history.replaceState(null, "", want); replaceNext.current = false; return; }
+        if (location.hash === want || (!riderId && find === null && race === null && top === null && alle === null && !location.hash)) return;
         // Same rider (a tab change, or an old link being rewritten): replace. A new rider: its own history entry.
         const h = readHash();
-        const same = find === null && race === null && top === null && ((h.rid && h.rid === rid) || (h.legacy && h.legacy === riderId) || (!h.rid && !h.legacy && !h.find && !h.race && !h.top && !riderId));
+        const same = find === null && race === null && top === null && alle === null && ((h.rid && h.rid === rid) || (h.legacy && h.legacy === riderId) || (!h.rid && !h.legacy && !h.find && !h.race && !h.top && !riderId));
         if (same) history.replaceState(null, "", want);
         else history.pushState(null, "", want);
       } catch { /* sandboxed preview */ }
     })();
     return () => { live = false; };
-  }, [site, riderId, tab, find, race, top]);
+  }, [site, riderId, tab, find, race, top, alle]);
 
   const go = (t: Tab) => { setTab(t); window.scrollTo({ top: 0 }); };
-  const open = (id: string | null, t: Tab = "oversikt") => { setMissing(false); setFind(null); setRace(null); setTop(null); setRiderId(id); setTab(t); window.scrollTo({ top: 0 }); };
-  const findMe = (q: string) => { setRiderId(null); setRace(null); setTop(null); setFind(q); window.scrollTo({ top: 0 }); };
+  const open = (id: string | null, t: Tab = "oversikt") => { setMissing(false); setFind(null); setRace(null); setTop(null); setAlle(null); setRiderId(id); setTab(t); window.scrollTo({ top: 0 }); };
+  const findMe = (q: string, eq = "") => { setRiderId(null); setRace(null); setTop(null); setAlle(null); setFindEq(eq); setFind(q); window.scrollTo({ top: 0 }); };
+  // The data key of a rider's own profile, for an EQ Timing id from the harvested lists; null when they have none.
+  const profileFor = async (uid: number) => {
+    const rid = (await getJSON<Record<string, string>>("eq.json").catch(() => ({} as Record<string, string>)))[uid];
+    return rid ? (await ids()).toKey(rid, (k) => indexRef.current.some((r) => r.id === k)) : null;
+  };
   // Public site: every profile, the owner's included, is written in the third person.
   const isMe = false;
-  const home = !riderId && find === null && race === null && top === null;
+  const home = !riderId && find === null && race === null && top === null && alle === null;
   const riderName = athlete?.name || index.find((r) => r.id === riderId)?.name || "";
   const isWoman = athlete?.sex === "K";
   const shown = useMemo(() => (athlete && isWoman && women ? womenOnly(athlete) : athlete), [athlete, isWoman, women]);
@@ -145,7 +158,7 @@ export default function App() {
     if (!riderId || !riderName) return;
     addRecent({ id: riderId, name: riderName, club: athlete?.club || index.find((r) => r.id === riderId)?.club || "" });
   }, [riderId, riderName]); // eslint-disable-line react-hooks/exhaustive-deps
-  const search = <RiderPicker index={index} current={riderId} onPick={(id) => open(id)} onFind={findMe} />;
+  const search = <RiderPicker index={index} current={riderId} onPick={(id) => open(id)} onFind={findMe} profileFor={profileFor} />;
 
   return (
     <TipProvider>
@@ -181,7 +194,8 @@ export default function App() {
           {missing && home && <div className="card empty" role="alert"><b>Fant ikke rytteren</b>Lenken kan være gammel, eller rytteren er ikke med i resultatlistene ennå. Søk etter navnet under.</div>}
           {race !== null && <KlasseProvider value={raceKlasse}><Race id={race} index={index} onRider={(id) => open(id)} /></KlasseProvider>}
           {top !== null && <Top kind={top} onRider={(id) => open(id)} />}
-          {find !== null && <FindMe key={find} name={find} onDone={() => open(null)} />}
+          {alle !== null && <Alle path={alle} profileFor={profileFor} onProfile={(key, redirect) => { replaceNext.current = !!redirect; open(key); }} onFind={findMe} />}
+          {find !== null && <FindMe key={find + findEq} name={find} eq={findEq} onDone={() => open(null)} />}
           {riderId && !error && !athlete && <div className="loading">Henter resultater …</div>}
           {shown && (
             <KlasseProvider value={klasse}>
@@ -219,7 +233,7 @@ function Page({ tab, athlete, isMe, go, onRider, index, onPower, onSaved }: { ta
   }
 }
 
-function RiderPicker({ index, current, onPick, onFind }: { index: IndexRider[]; current: string | null; onPick: (id: string) => void; onFind: (q: string) => void }) {
+function RiderPicker({ index, current, onPick, onFind, profileFor }: { index: IndexRider[]; current: string | null; onPick: (id: string) => void; onFind: (q: string) => void; profileFor: (uid: number) => Promise<string | null> }) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [hi, setHi] = useState(0);
@@ -233,15 +247,35 @@ function RiderPicker({ index, current, onPick, onFind }: { index: IndexRider[]; 
     return keyed.filter(([k]) => words.every((w) => k.includes(w))).map(([, r]) => r)
       .sort((a, b) => b.races - a.races).slice(0, 12);
   }, [q, keyed]);
+  // Riders from every harvested list (api/alle), asked for once typing pauses. Those with a profile of
+  // their own open it, and aren't listed twice.
+  const [more, setMore] = useState<{ q: string; hits: (AlleHit & { key?: string | null })[] }>({ q: "", hits: [] });
+  useEffect(() => {
+    const s = q.trim();
+    if (fold(s).replace(/\s/g, "").length < 3) return;
+    let live = true;
+    const t = setTimeout(async () => {
+      try {
+        const found = await searchAlle(s);
+        const keyed = await Promise.all(found.map(async (h) => Object.assign([...h] as AlleHit, { key: await profileFor(h[0]) })));
+        if (live) setMore({ q: s, hits: keyed });
+      } catch { /* the static index still works */ }
+    }, 250);
+    return () => { live = false; clearTimeout(t); };
+  }, [q]);
+  const shownIds = new Set(hits.map((r) => r.id));
+  const extra = more.q === q.trim() ? more.hits.filter((h) => !(h.key && shownIds.has(h.key))).slice(0, Math.max(0, 12 - hits.length)) : [];
   useEffect(() => {
     const close = (e: MouseEvent) => { if (!box.current?.contains(e.target as Node)) setOpen(false); };
     document.addEventListener("mousedown", close);
     return () => document.removeEventListener("mousedown", close);
   }, []);
-  const pick = (r: { id: string }) => { onPick(r.id); setQ(""); setOpen(false); (document.activeElement as HTMLElement)?.blur(); };
+  const pick = (r: { id: string; uid?: number }) => { if (r.uid != null) openAlleRider(r.uid); else onPick(r.id); setQ(""); setOpen(false); (document.activeElement as HTMLElement)?.blur(); };
   // With nothing typed yet, the list shows the riders this browser opened last.
   const typing = q.trim().length >= 2;
-  const list: { id: string; name: string; club: string; races?: number }[] = typing ? hits : recent.filter((r) => r.id !== current);
+  type Item = { id: string; name: string; club: string; races?: number; uid?: number };
+  const list: Item[] = typing ? [...hits, ...extra.map((h): Item => (h.key ? { id: h.key, name: h[1], club: h[2], races: h[3] } : { id: `alle:${h[0]}`, uid: h[0], name: h[1], club: h[2], races: h[3] }))]
+    : recent.filter((r) => r.id !== current);
   const show = open && (typing || list.length > 0);
   return (
     <div className="picker" ref={box}>
@@ -255,14 +289,14 @@ function RiderPicker({ index, current, onPick, onFind }: { index: IndexRider[]; 
           if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); setHi((h) => Math.min(h + 1, list.length - 1)); }
           if (e.key === "ArrowUp") { e.preventDefault(); setHi((h) => Math.max(h - 1, 0)); }
           if (e.key === "Enter" && show && list[hi]) { e.preventDefault(); pick(list[hi]); }
-          else if (e.key === "Enter" && !hits.length && typing) { e.preventDefault(); const v = q.trim(); setQ(""); setOpen(false); onFind(v); }
+          else if (e.key === "Enter" && !list.length && typing) { e.preventDefault(); const v = q.trim(); setQ(""); setOpen(false); onFind(v); }
           if (e.key === "Escape") setOpen(false);
         }} />
       {show && (
         <ul className="hits" id="rider-hits" role="listbox" aria-label={typing ? "Ryttere" : "Sist besøkt"}>
           {!typing && <li className="recent-head" role="presentation"><span>Sist besøkt</span>
             <button type="button" className="linkish" onMouseDown={(e) => { e.preventDefault(); clearRecent(); setRecent([]); setOpen(false); }}>Tøm listen</button></li>}
-          {typing && hits.length === 0 && <li className="none">Ingen ryttere med det navnet i resultatlistene.
+          {typing && list.length === 0 && <li className="none">Ingen ryttere med det navnet i resultatlistene.
             {" "}<button type="button" className="linkish" onMouseDown={(e) => { e.preventDefault(); const v = q.trim(); setQ(""); setOpen(false); onFind(v); }}>Fant du deg ikke?</button></li>}
           {list.map((r, i) => (
             <li key={r.id} role="option" aria-selected={i === hi} onMouseEnter={() => setHi(i)} onMouseDown={(e) => { e.preventDefault(); pick(r); }}>
