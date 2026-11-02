@@ -61,7 +61,7 @@ def race_type(name):
         return "TTT"
     if "tempo" in n or "klostermil" in n or "toskaskabet" in n or re.search(r"\bmila\b", n):
         return "TT"
-    if "gravel" in n or "cx" in n:
+    if "gravel" in n or "cx" in n or "kross" in n:  # cyclocross (KleppeKrossen) counts as gravel
         return "Gravel"
     # Neither Turritt nor EQ Timing says what kind of race it is, so the name decides.
     # Terrain races: "MTB", "Terrengcup", XC classes ("CC Elite"), and forest loops ("-skogen").
@@ -147,6 +147,8 @@ def build_rider(rider, log=print):
             rider["_turritt_blocked"] = True
             rid = turritt._cache.get(f"rider:{rider['turritt_id']}")
             pairs = turritt.cached_races(rid) if rid else []
+        # Races read once from Turritt by hand (registry one_off) aren't on any cached rider page.
+        pairs = [*pairs, *(p for p in turritt.one_off_races(rider["turritt_id"]) if p[0] not in {x[0] for x in pairs})]
         if rid or rider["_turritt_blocked"]:
             since = int(rider.get("since") or 0)  # older seasons cost a request per race list
             for race_id, year in pairs:

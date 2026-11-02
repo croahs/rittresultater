@@ -185,6 +185,8 @@ def courses(rows):
 def pool(race_id, year):
     """Every counted row on the same course: the race plus its sibling races."""
     names = dict(turritt.year_list(year))
+    if race_id not in names and any(race_id in r["turritt_ids"] for r in turritt._one_off()):
+        names[race_id] = turritt.race_name(race_id)  # outside the Rogaland lists; its name gives the bike class
     name = names.get(race_id, "")
     sibs = [v for v, n in names.items() if name and turritt._base(n) == turritt._base(name)] or [race_id]
     rows = [(r, category(names.get(v, ""), r[3])) for v in sibs for r in turritt.results(v) if turritt._counts(r)]
@@ -202,7 +204,7 @@ def category(race_name, group):
     g = f"{race_name} | {group}".lower()
     if re.search(r"mtb|hybrid", g):
         return "MTB/Hybrid"
-    if re.search(r"\bcx\b|gravel", g):
+    if re.search(r"\bcx\b|gravel|kross", g):  # kross: a cyclocross race (KleppeKrossen)
         return "CX/Gravel"
     # The class a start is listed in decides first: «Tempo Bue - Bryne - Racer» is a race named
     # Tempo whose class is Racersykkel, and a class named "Tempo ..." is the time-trial bike class
@@ -865,7 +867,7 @@ def write_all(evs):
             "distance_km": dist, "climb_m_per_km": round(elev / dist, 1) if dist else None,
             "turritt": sh["Turritt"],
             "rows": [[r[2], name(r), r[7].strip(), r[8], c, int(r[9]) if int(r[9]) < DNF else None, x]
-                     + (r[11:13] if ev["race_id"].startswith("eq:") and len(r) == 13 else [])
+                     + (r[11:13] if len(r) == 13 else [])  # lapped (EQ Timing, turritt.lap_rows)
                      for (r, c), x in sorted(zip(ev["cats"], ev["sex"]), key=lambda rcx: int(rcx[0][0][9]))],
         })
         for tid, (r, _) in ev["by_id"].items():

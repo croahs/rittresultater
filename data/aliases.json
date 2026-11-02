@@ -1,6 +1,6 @@
 {
   "_help": "Our rider ids (riderids.py). Each id is given once and never reused or changed. turritt: TurrittID (only while the site still uses Turritt data), eq: EQ Timing participant id, named: results in lists without rider ids (raceresult, Birken).",
-  "next": 28187,
+  "next": 28190,
   "riders": {
     "r1": {"name": "Aage Stangeland", "club": "Oslo", "turritt": "20008"},
     "r2": {"name": "Agnar Gjertsen", "club": "Dalane SK", "turritt": "20018", "eq": 506951, "eq_also": [384251]},
@@ -22387,7 +22387,7 @@
     "r22383": {"name": "Henrik Astrup", "club": "Økern Cykle Klubb", "eq": 678870},
     "r22384": {"name": "Joar Nilsen Lohne", "same_as": "r26174"},
     "r22385": {"name": "Ørjan Bohinen", "club": "Harstad CK", "eq": 678957},
-    "r22386": {"name": "Vetle Slemdahl", "eq": 679143},
+    "r22386": {"name": "Vetle Slemdahl", "same_as": "r28188"},
     "r22387": {"name": "Gunnar Steinsland", "eq": 679145},
     "r22388": {"name": "Øystein Walle", "eq": 6793108},
     "r22389": {"name": "Hermann Olaussen Hermansen", "club": "Tromsø CK", "eq": 679409},
@@ -27687,9 +27687,9 @@
     "r27683": {"name": "Tore Jan Hodnemyr", "club": "Returkraft", "eq": 870243},
     "r27684": {"name": "Rasmus Olav Vigrestad", "club": "Biri IL", "eq": 907},
     "r27685": {"name": "Kjetil Sandstå", "club": "Å ENERGI BEDRIFTSIDRETTSLAG", "eq": 910837},
-    "r27686": {"name": "Ole Jørgen Nordhagen", "club": "Klepp Cykle Club", "eq": 5950795},
+    "r27686": {"name": "Ole Jørgen Nordhagen", "club": "Klepp Cykle Club", "same_as": "r28189"},
     "r27687": {"name": "Samuel Spencer", "club": "Sandnes", "eq": 6957105},
-    "r27688": {"name": "Fredrik Krey Berntz", "club": "Asker CK", "eq": 840374},
+    "r27688": {"name": "Fredrik Krey Berntz", "club": "Asker CK", "same_as": "r28187"},
     "r27689": {"name": "Orvar Ra", "named": ["raceresult:346769:Nordsjørittet Egersund - Sandnes:RA, Orvar"]},
     "r27690": {"name": "Jakob Hansen", "named": ["raceresult:346769:Nordsjørittet Egersund - Sandnes:HANSEN, Jakob"]},
     "r27691": {"name": "Helene Mæhle", "named": ["raceresult:346769:Nordsjørittet Egersund - Sandnes:MÆHLE, Helene"]},
@@ -28187,6 +28187,9 @@
     "r28183": {"name": "Oddbjørn Austad", "club": "Nærbø SK", "eq": 732448},
     "r28184": {"name": "Ralph Clino Villaverde", "club": "Team Pinoy Padyakero", "eq": 740595},
     "r28185": {"name": "Nils Torkildsen", "club": "Bergen", "eq": 743857},
-    "r28186": {"name": "Dag Aarthun Hodnesdal", "club": "Hafrsfjord SK", "eq": 901004}
+    "r28186": {"name": "Dag Aarthun Hodnesdal", "club": "Hafrsfjord SK", "eq": 901004},
+    "r28187": {"name": "Fredrik Krey Berntz", "club": "Asker CK", "turritt": "166884", "eq": 840374},
+    "r28188": {"name": "Vetle Slemdahl", "club": "Kristiansands CK", "turritt": "167113", "eq": 679143},
+    "r28189": {"name": "Ole Jørgen Nordhagen", "club": "Klepp Cykle Club", "turritt": "174363", "eq": 5950795}
   }
 }
