@@ -5330,7 +5330,7 @@
 },
 "eq:20972": {
 "date": "2016-06-18",
-"failed": "2026-10-03",
+"failed": "2026-11-02",
 "level": "Regionritt",
 "name": "Nærbø Grand Prix",
 "organizer": "Nærbø SK",
@@ -40571,6 +40571,14 @@
 "place": "Føyka Stadion, Kirkeveien 221, 1383 Asker",
 "sport": "Sykkelkross"
 },
+"eq:84256": {
+"date": "2026-11-01",
+"level": "Regionritt",
+"name": "Føyka Kross-Norges Cup 8",
+"organizer": "Asker CK",
+"place": "Føyka Stadion, Kirkeveien 221, 1383 Asker",
+"sport": "Sykkelkross"
+},
 "eq:84323": {
 "date": "2026-10-24",
 "fetched": "2026-10-31",
@@ -41707,7 +41715,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 246,
+"eq:2026": 247,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
