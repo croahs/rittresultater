@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "test": "node scripts/check-results.mjs",
     "data": "node scripts/copy-data.mjs",
     "predev": "node scripts/copy-data.mjs",
     "dev": "vite",

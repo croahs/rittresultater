@@ -124,10 +124,12 @@ function result(r: Record<string, unknown>): Result {
   // Two shapes: the sheet export (place/field/top/np...) and rivals.py's per-rider rows (top_pct/behind_pct).
   const date = toIso(String(r.date));
   // Riders from the shared lists are placed against the whole field, not tiny age/bike classes.
-  const overall = r.overall_place != null && r.overall_field != null;
-  const place = Number(overall ? r.overall_place : r.place), field = Number(overall ? r.overall_field : r.field);
+  const overallPlace = num(r.overall_place), overallField = num(r.overall_field);
+  const overall = overallPlace != null && overallPlace > 0 && overallField != null && overallField > 0;
+  const place = (overall ? overallPlace : num(r.place)) ?? NaN, field = (overall ? overallField : num(r.field)) ?? NaN;
+  const placed = r.time !== "DNF" && Number.isFinite(place) && place > 0 && Number.isFinite(field) && field >= place;
   const rawTop = overall ? (place / field) * 100 : r.top ?? r.top_pct;
-  const top = rawTop === null || rawTop === undefined || rawTop === "" ? NaN : Number(rawTop); // DNF has no placing
+  const top = !placed || rawTop === null || rawTop === undefined || rawTop === "" ? NaN : Number(rawTop); // DNF has no placing
   // Share of the others beaten: the winner beat 100 %, last beat 0 %.
   const beaten = field > 1 ? ((field - place) / (field - 1)) * 100 : 100;
   return {
