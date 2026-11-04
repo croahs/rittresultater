@@ -17345,7 +17345,7 @@
 },
 "eq:43334": {
 "date": "2018-06-12",
-"failed": "2026-10-05",
+"failed": "2026-11-04",
 "level": "Regionritt",
 "name": "Åsane Lagtempo - 2018",
 "organizer": "Åsane CK",
@@ -40606,6 +40606,14 @@
 "place": "Hvervenbukta, Oslo",
 "sport": "Landevei"
 },
+"eq:84950": {
+"date": "2026-11-03",
+"level": "Regionritt",
+"name": "OlaTest-20261103-01",
+"organizer": "Eina Sportsklubb",
+"place": "Eina",
+"sport": "Terreng"
+},
 "eq:853": {
 "date": "2012-05-26",
 "fetched": "2026-09-30",
@@ -41715,7 +41723,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 247,
+"eq:2026": 248,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
