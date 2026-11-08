@@ -40574,6 +40574,7 @@
 },
 "eq:84256": {
 "date": "2026-11-01",
+"fetched": "2026-11-08",
 "level": "Regionritt",
 "name": "Føyka Kross-Norges Cup 8",
 "organizer": "Asker CK",
@@ -40596,6 +40597,14 @@
 "name": "HOXCROSS - NC #6 - 2026",
 "organizer": "Drøbak-Frogn IL Sykkel",
 "place": "Hoxmark Bikepark",
+"sport": "Sykkelkross"
+},
+"eq:84496": {
+"date": "2026-11-07",
+"level": "NorgesCup",
+"name": "Rye Cross Lørdag NC #9",
+"organizer": "SK Rye sykkel",
+"place": "Oslo",
 "sport": "Sykkelkross"
 },
 "eq:84629": {
@@ -41724,7 +41733,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 248,
+"eq:2026": 249,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
