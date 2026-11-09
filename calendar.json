@@ -40607,6 +40607,14 @@
 "place": "Oslo",
 "sport": "Sykkelkross"
 },
+"eq:84497": {
+"date": "2026-11-08",
+"level": "NorgesCup",
+"name": "Rye Cross søndag NC #10",
+"organizer": "SK Rye sykkel",
+"place": "Oslo",
+"sport": "Sykkelkross"
+},
 "eq:84629": {
 "date": "2026-10-13",
 "fetched": "2026-10-20",
@@ -41733,7 +41741,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 249,
+"eq:2026": 250,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
