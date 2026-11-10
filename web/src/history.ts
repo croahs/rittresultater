@@ -5,6 +5,7 @@
 export interface HistoryState { enabled: boolean; status: "none" | "queued" | "running" | "done" | "failed" | "skipped" | "needs_source"; requested_at?: string; done_at?: string | null; note?: string | null; ahead?: number; ref?: string }
 
 import { ridOf } from "./data";
+import { turnstileToken } from "./turnstile";
 
 const off: HistoryState = { enabled: false, status: "none" };
 
@@ -16,12 +17,15 @@ export async function getHistory(rider: string): Promise<HistoryState> {
   } catch { return off; }
 }
 
-async function post(body: Record<string, unknown>): Promise<HistoryState> {
+/** A request that would add to the queue is answered 403 with a Turnstile site key when the bot check is on:
+    run the check and send once more with the token. */
+async function post(body: Record<string, unknown>, token?: string): Promise<HistoryState> {
   let r: Response;
   try {
-    r = await fetch("api/history", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    r = await fetch("api/history", { method: "POST", headers: { "content-type": "application/json", ...(token ? { "x-turnstile-token": token } : {}) }, body: JSON.stringify(body) });
   } catch { throw new Error("Fikk ikke kontakt med siden. Prøv igjen."); }
-  const b = await r.json().catch(() => ({})) as HistoryState & { error?: string };
+  const b = await r.json().catch(() => ({})) as HistoryState & { error?: string; turnstile?: string };
+  if (r.status === 403 && b.turnstile && !token) return post(body, await turnstileToken(b.turnstile));
   if (!r.ok) throw new Error(b.error || "Noe gikk galt. Prøv igjen.");
   return b;
 }

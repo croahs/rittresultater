@@ -11,10 +11,11 @@
 // row to fetch_requests; the data job (fetch-queue workflow) works through a few requests per
 // run, slowly and with cache, over Cloudflare's D1 API, and sets status, done_at and note. Only riders already in the site's
 // own result lists can be queued by id, each once; a request for someone new is only text for the job to look up.
-// A few per visitor per hour and a capped number per day in total, so the worst a bot can do is make
-// the queue longer; the job keeps its own pace.
+// A new row needs a passed bot check (botCheck in server/lib.ts, when it is set up), then a few per visitor
+// per hour and a capped number per day in total, so the worst a bot can do is make the queue longer; the
+// job keeps its own pace.
 
-import { NO_DB, dataKey, isJSON, json, riderFrom, staticJSON, tables, type Ctx, type D1 } from "../../server/lib";
+import { NO_DB, botCheck, dataKey, isJSON, json, riderFrom, staticJSON, tables, type Ctx, type D1 } from "../../server/lib";
 import { makeIds, type IdMap } from "../../src/ids";
 import { eqParticipant, freeText } from "../../src/find";
 import type { IndexRider, Site } from "../../src/data";
@@ -116,6 +117,8 @@ export async function onRequestPost(ctx: Ctx) {
   const open = await db.prepare(`SELECT 1 FROM fetch_requests WHERE rid = ? AND ${OPEN}`).bind(rider).first();
   if (open) return json(await status(db, rider)); // asking twice changes nothing
 
+  const bot = await botCheck(ctx);
+  if (bot) return bot;
   const limit = await overLimit(db, request);
   if (limit) return limit;
 
@@ -154,6 +157,8 @@ async function findMe(ctx: Ctx, db: D1, b: Record<string, unknown>) {
       .bind(row.name, row.race, row.year).first<{ ref: string }>();
   if (same) return json({ ...(await byRef(db, same.ref)), ref: same.ref });
 
+  const bot = await botCheck(ctx);
+  if (bot) return bot;
   const limit = await overLimit(db, ctx.request);
   if (limit) return limit;
 

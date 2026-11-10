@@ -7,7 +7,7 @@ import { isRid, makeIds, type Ids, type IdMap } from "../src/ids";
 export interface D1Result<T> { results: T[] }
 export interface D1Stmt { bind(...v: unknown[]): D1Stmt; run(): Promise<{ meta?: { changes?: number } }>; all<T>(): Promise<D1Result<T>>; first<T>(): Promise<T | null> }
 export interface D1 { prepare(sql: string): D1Stmt; batch(s: D1Stmt[]): Promise<unknown> }
-export interface Env { DB?: D1; ASSETS: { fetch(req: Request | string): Promise<Response> } }
+export interface Env { DB?: D1; ASSETS: { fetch(req: Request | string): Promise<Response> }; TURNSTILE_SITEKEY?: string; TURNSTILE_SECRET?: string }
 export interface Ctx { request: Request; env: Env }
 
 // owner: the intervals.icu account allowed to save for a rider (set when the names matched),
@@ -122,6 +122,22 @@ export async function riderFrom(ctx: Ctx, id: unknown): Promise<string | null> {
   if (riderOk(id)) return id;
   if (typeof id !== "string" || !/^\d{1,9}$/.test(id)) return null;
   return (await siteIds(ctx)).toRid(id);
+}
+/** The bot check (Cloudflare Turnstile) in front of a write: null when the request carries a token Cloudflare
+ *  accepts, else a 403 with the site key, which the page uses to run the check and send again (src/turnstile.ts).
+ *  Off, so always null, until both TURNSTILE_SITEKEY and TURNSTILE_SECRET are set on the Pages project. */
+export async function botCheck(ctx: Ctx): Promise<Response | null> {
+  const { TURNSTILE_SITEKEY: sitekey, TURNSTILE_SECRET: secret } = ctx.env;
+  if (!sitekey || !secret) return null;
+  const token = ctx.request.headers.get("x-turnstile-token") || "";
+  if (token && token.length <= 2048) {
+    const ok = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ secret, response: token, remoteip: ctx.request.headers.get("cf-connecting-ip") || undefined }),
+    }).then((r) => r.json() as Promise<{ success?: boolean }>).then((v) => v.success === true).catch(() => false);
+    if (ok) return null;
+  }
+  return json({ error: "Fikk ikke bekreftet at du er et menneske. Prøv igjen.", turnstile: sitekey }, 403);
 }
 export const NO_DB = () => json({ error: "Lagring er ikke satt opp på denne siden ennå." }, 503);
 export const BAD_KEY = () => json({ error: "Det ser ikke ut som en API-nøkkel fra intervals.icu." }, 400);

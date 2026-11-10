@@ -118,9 +118,18 @@ Hvordan det virker (`web/functions/api/`, `web/server/lib.ts`, `web/src/saved.ts
 - **Sesongklipp:** `/api/clip?rider=…&year=…` lager klippet fra de lagrede sporene, i samme format som de faste klippfilene.
 - **Vise eller skjule watt:** Hver rytter velger selv. Wattene lagres skjult med mindre rytteren krysser av for «Vis wattene for alle». Under grafen kan rytteren vise eller skjule dem senere med samme nøkkel. Skjulte watt blir liggende lagret, men siden sender dem ikke til andre. Fart og sesongklipp vises uansett.
 - **Sletting:** Under grafen står «Slett lagrede watt og spor». Den krever den samme nøkkelen, og sletter alt den intervals.icu-kontoen har lagret for rytteren.
+- **Robotsjekk på forespørsler:** «Hent alle mine ritt» og «Fant du deg ikke?» legger en rad i køen. Med Turnstile satt opp (under) må nettleseren først bestå Cloudflares robotsjekk. Uten Turnstile gjelder bare grensene: 3 per time per besøkende og 30 nye per dag.
 - **Tilgang:** Siden er offentlig, så `/api/*` er åpent for alle. Det er derfor nøkkelsjekken, grensene over og den signerte tillatelsen for spor finnes.
 - **Uten databasen:** Svarer API-et at lagring er av, og siden oppfører seg som før.
 - **Senere:** Når rytterne får egne brukerkontoer, kan kontoen erstatte nøkkelsjekken. Tabellene kan stå som de er.
+
+### Robotsjekk (Turnstile, valgfritt, cirka 2 minutter)
+
+1. I Cloudflare-dashbordet: **Turnstile → Add widget**. Legg til domenet siden ligger på, og velg **Managed**.
+2. Gå til Pages-prosjektet og velg **Settings → Variables and Secrets**. Legg inn `TURNSTILE_SITEKEY` (Site Key, som tekst) og `TURNSTILE_SECRET` (Secret Key, som Secret), for Production.
+3. Trykk **Deployments → Retry deployment**.
+
+Sjekken er av til begge er satt. Da svarer `POST /api/history` med 403 og site-nøkkelen til den som ikke har et godkjent token; siden kjører sjekken (`web/src/turnstile.ts`) og sender på nytt.
 
 Lokalt kan det testes med `npx wrangler pages dev` i `web/` etter `pnpm build`, med en `wrangler.toml` som peker `DB` til en lokal D1. Den fila skal ikke committes, for bindingen settes i dashbordet.
 
