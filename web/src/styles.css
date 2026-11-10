@@ -467,6 +467,8 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .find-form .err { color: var(--loss); margin: 0; }
 .find-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .hits li.none .linkish { font-weight: 650; }
+/* The bot check, shown only while Cloudflare wants the visitor to tick a box (src/turnstile.ts). */
+.turnstile { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 1000; }
 
 /* «Åpen | Kvinner» */
 .filters { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: flex-end; }
