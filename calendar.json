@@ -29162,7 +29162,7 @@
 },
 "eq:62180": {
 "date": "2022-08-06",
-"failed": "2026-10-15",
+"fetched": "2026-11-14",
 "level": "Ungdomsmesterskap",
 "name": "Jokermesterskapet 2022 UL Fellesstart",
 "organizer": "Smaalenene SK",
@@ -40601,6 +40601,7 @@
 },
 "eq:84496": {
 "date": "2026-11-07",
+"fetched": "2026-11-14",
 "level": "NorgesCup",
 "name": "Rye Cross Lørdag NC #9",
 "organizer": "SK Rye sykkel",
@@ -41076,7 +41077,7 @@
 },
 "rr:188462": {
 "date": "2022-06-19",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "NM Landevei Junior & U23 2022",
 "organizer": null,
@@ -41085,7 +41086,7 @@
 },
 "rr:188467": {
 "date": "2022-06-21",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "NM Lagtempo 2022",
 "organizer": null,
@@ -41094,7 +41095,7 @@
 },
 "rr:188468": {
 "date": "2022-06-23",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "NM Tempo 2022",
 "organizer": null,
@@ -41103,7 +41104,7 @@
 },
 "rr:188469": {
 "date": "2022-06-24",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "NM Gateritt 2022",
 "organizer": null,
@@ -41112,7 +41113,7 @@
 },
 "rr:188470": {
 "date": "2022-06-26",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "NM Fellesstart Elite 2022",
 "organizer": null,
@@ -41130,7 +41131,7 @@
 },
 "rr:197449": {
 "date": "2022-08-14",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "TelemarkUltra 2022 [Kansellert]",
 "organizer": null,
@@ -41139,7 +41140,7 @@
 },
 "rr:203043": {
 "date": "2022-08-01",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "Terrengsykkelskolen i Drøbak 2022",
 "organizer": null,
@@ -41148,7 +41149,7 @@
 },
 "rr:203928": {
 "date": "2022-06-08",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "Terrengsykkelskole for voksne",
 "organizer": null,
@@ -41193,7 +41194,7 @@
 },
 "rr:229146": {
 "date": "2023-06-22",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "NM Landevei 2023 Påmelding",
 "organizer": null,
@@ -41265,7 +41266,7 @@
 },
 "rr:248196": {
 "date": "2023-04-24",
-"failed": "2026-10-15",
+"failed": "2026-11-14",
 "level": null,
 "name": "Landeveiscup Øst 2023 - Sammenlagt",
 "organizer": null,
