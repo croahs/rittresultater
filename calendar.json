@@ -40473,6 +40473,14 @@
 "place": "Tønsberg",
 "sport": "Terreng"
 },
+"eq:83954": {
+"date": "2026-11-14",
+"level": "Norgesmesterskap",
+"name": "Norway Cross 2026 UM/NM Sykkelkross",
+"organizer": "IF Frøy",
+"place": "Grønmo, Oslo",
+"sport": "Sykkelkross"
+},
 "eq:83980": {
 "date": "2026-09-03",
 "fetched": "2026-10-17",
@@ -40610,6 +40618,7 @@
 },
 "eq:84497": {
 "date": "2026-11-08",
+"fetched": "2026-11-15",
 "level": "NorgesCup",
 "name": "Rye Cross søndag NC #10",
 "organizer": "SK Rye sykkel",
@@ -41311,7 +41320,7 @@
 },
 "rr:258730": {
 "date": "2024-08-03",
-"failed": "2026-10-16",
+"failed": "2026-11-15",
 "level": null,
 "name": "Offroad Valdres 2024",
 "organizer": null,
@@ -41419,7 +41428,7 @@
 },
 "rr:291575": {
 "date": "2024-05-23",
-"failed": "2026-10-16",
+"failed": "2026-11-15",
 "level": null,
 "name": "Tour of Norway 2024",
 "organizer": null,
@@ -41743,7 +41752,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 250,
+"eq:2026": 251,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
