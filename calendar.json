@@ -37658,7 +37658,7 @@
 },
 "eq:77814": {
 "date": "2025-06-22",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": "Turritt",
 "name": "Kirkenesrittet 2025",
 "organizer": "Kirkenes cykleklubb",
@@ -40481,6 +40481,14 @@
 "place": "Grønmo, Oslo",
 "sport": "Sykkelkross"
 },
+"eq:83975": {
+"date": "2026-11-15",
+"level": "NorgesCup",
+"name": "Vargcross (Norway Cross) NC #11",
+"organizer": "IF Frøy",
+"place": "Grønmo, Oslo",
+"sport": "Sykkelkross"
+},
 "eq:83980": {
 "date": "2026-09-03",
 "fetched": "2026-10-17",
@@ -41500,7 +41508,7 @@
 },
 "rr:318261": {
 "date": "2025-08-02",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": null,
 "name": "Offroad Valdres 2025",
 "organizer": null,
@@ -41536,7 +41544,7 @@
 },
 "rr:341526": {
 "date": "2025-05-28",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": null,
 "name": "Tour of Norway 2025",
 "organizer": null,
@@ -41545,7 +41553,7 @@
 },
 "rr:346769": {
 "date": "2026-06-13",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": null,
 "name": "Nordsjørittet 2026",
 "organizer": null,
@@ -41590,7 +41598,7 @@
 },
 "rr:376873": {
 "date": "2026-06-25",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": null,
 "name": "NM Landevei 2026 Påmelding",
 "organizer": null,
@@ -41635,7 +41643,7 @@
 },
 "rr:379200": {
 "date": "2026-08-29",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": null,
 "name": "Ridderdagene på Storedal 2026",
 "organizer": null,
@@ -41671,7 +41679,7 @@
 },
 "rr:401576": {
 "date": "2026-06-13",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": null,
 "name": "Follo 2-dagers 2026",
 "organizer": null,
@@ -41680,7 +41688,7 @@
 },
 "rr:415700": {
 "date": "2026-08-24",
-"failed": "2026-10-17",
+"failed": "2026-11-16",
 "level": null,
 "name": "ELEKTROIDÉ CUP DRØBAK 2026",
 "organizer": null,
@@ -41752,7 +41760,7 @@
 "eq:2023": 252,
 "eq:2024": 248,
 "eq:2025": 240,
-"eq:2026": 251,
+"eq:2026": 252,
 "rr:2008": 0,
 "rr:2009": 0,
 "rr:2010": 0,
