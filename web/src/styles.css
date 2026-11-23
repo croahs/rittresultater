@@ -481,3 +481,7 @@ a.brand { color: inherit; text-decoration: none; border-radius: 8px; }
 .hits .recent-head .linkish { text-transform: none; letter-spacing: 0; font-size: .8rem; font-weight: 500; padding: 6px 0; }
 .race-link { color: inherit; text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 3px; }
 .race-link:hover { text-decoration-color: var(--accent); }
+
+/* Every harvested race (pages/Alle.tsx): the ask for a profile of their own */
+.alle-ask { padding: 14px 18px; }
+.alle-ask p { margin: 0; }

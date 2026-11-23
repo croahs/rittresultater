@@ -5,10 +5,10 @@ import { eqParticipant, freeText, FIRST_YEAR } from "../find";
 /* «Fant du deg ikke?»: for riders the search can't find. The form only puts a request in the queue;
    the data job looks the rider up later, never during the visit. This browser keeps the request's ref,
    so the status is here on the next visit too. */
-export default function FindMe({ name: initial, onDone }: { name: string; onDone: () => void }) {
+export default function FindMe({ name: initial, eq: initialEq = "", onDone }: { name: string; eq?: string; onDone: () => void }) {
   const [h, setH] = useState<HistoryState | null>(null);
   const [how, setHow] = useState<"eq" | "text">("eq");
-  const [eq, setEq] = useState("");
+  const [eq, setEq] = useState(initialEq);
   const [name, setName] = useState(initial);
   const [race, setRace] = useState("");
   const [year, setYear] = useState(String(new Date().getFullYear()));

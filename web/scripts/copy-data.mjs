@@ -25,5 +25,10 @@ if (existsSync(root + "aliases.json")) {
   // Riders without a TurrittID map to "eq<id>", so old #/eq<id> links still find them.
   const ids = Object.fromEntries(Object.entries(riders).filter(([, r]) => r.turritt || r.eq).map(([id, r]) => [id, r.turritt ? String(r.turritt) : `eq${r.eq}`]));
   writeFileSync(out + "ids.json", JSON.stringify(ids));
+  // eq.json: EQ Timing id -> our id, so a rider found among every harvested race (api/alle) opens
+  // their own profile when they have one. Only the ids go out.
+  const eq = {};
+  for (const [id, r] of Object.entries(riders)) for (const e of [r.eq, ...(r.eq_also || [])]) if (e) eq[e] = id;
+  writeFileSync(out + "eq.json", JSON.stringify(eq));
 }
 console.log("copied data/site and data/riders into web/public/data");
