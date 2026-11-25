@@ -97,13 +97,13 @@
     }
     const step = data.step || 5;
     const races = data.races.filter((r) => r.pts && r.pts.length > 1);
-    const end = Math.max(...races.map((r) => r.time));
+    const end = races.length ? Math.max(0, ...races.map((r) => Number(r.time) || 0)) : 0;
     const byTime = [...races].sort((a, b) => a.time - b.time);
 
     // Races far from the rest (a trip north, say) go in an inset so the home region stays readable.
     const mids = races.map((r) => r.pts[Math.floor(r.pts.length / 2)]);
     const med = (k) => [...mids].map((m) => m[k]).sort((a, b) => a - b)[Math.floor(mids.length / 2)];
-    const centre = [med(0), med(1)];
+    const centre = mids.length ? [med(0), med(1)] : [0, 0];
     const far = new Set(races.filter((r, i) => km(mids[i], centre) > FAR_KM));
 
     root.innerHTML = `
@@ -111,7 +111,7 @@
   <div class="sc-bar">
     <button class="sc-btn primary" data-k="play">Spill av</button>
     <button class="sc-btn" data-k="restart">Start på nytt</button>
-    <input class="sc-range" data-k="scrub" type="range" min="0" max="${end}" step="1" value="0" aria-label="Rittid">
+    <input class="sc-range" data-k="scrub" type="range" min="0" max="${esc(end)}" step="1" value="0" aria-label="Rittid">
     <label class="sc-len">Klipp
       <select data-k="len">${LENGTHS.map((n) => `<option value="${n}">${n} s</option>`).join("")}</select></label>
   </div>
@@ -122,7 +122,7 @@
       <div class="sc-clock"><small>Rittid</small><span data-k="clock">0:00:00</span></div>
       ${[...far].map((r, i) => `<div class="sc-inset" style="bottom:${26 + i * 160}px" data-inset="${i}"><canvas></canvas><span>${esc(r.name)}</span></div>`).join("")}
     </div>
-    <div class="sc-list"><h3>Målgang, ${data.year}</h3><ol>
+    <div class="sc-list"><h3>Målgang, ${esc(data.year)}</h3><ol>
       ${byTime.map((r) => `<li data-i="${races.indexOf(r)}" title="${esc(`${r.date} · ${TYPE_NAME[r.type] || r.type} · ${r.place}. av ${r.field}`)}">
         <span class="n"></span><span class="sw"></span><span class="nm">${esc(r.name)}</span><span>${hms(r.time)}</span></li>`).join("")}
     </ol></div>

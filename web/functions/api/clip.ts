@@ -4,7 +4,7 @@
 import { athleteFor, json, riderFrom, tables, type Ctx } from "../../server/lib";
 import { TRACK_STEP, raceKeyOf } from "../../src/intervals";
 
-const secs = (t: string) => t.split(":").reduce((s, p) => s * 60 + Number(p), 0);
+const secs = (t: string) => (/^\d+(?::\d{1,2}){1,2}$/.test(t) ? t.split(":").reduce((s, p) => s * 60 + Number(p), 0) : 0);
 
 export async function onRequestGet(ctx: Ctx) {
   const { request, env } = ctx;
@@ -23,8 +23,9 @@ export async function onRequestGet(ctx: Ctx) {
   const races: string[] = [], skipped: string[] = [];
   for (const r of a.results.filter((x) => x.year === year)) {
     const ride = byKey.get(raceKeyOf(r));
-    if (!ride || ride.pts.length <= 2) { skipped.push(r.race); continue; }
-    const head = JSON.stringify({ name: r.race, date: r.date, type: r.type, time: secs(r.time), place: r.place, field: r.field, km: r.km ?? ride.km ?? 0 });
+    const time = secs(r.time);
+    if (!ride || ride.pts.length <= 2 || !time) { skipped.push(r.race); continue; }
+    const head = JSON.stringify({ name: r.race, date: r.date, type: r.type, time, place: r.place, field: r.field, km: r.km ?? ride.km ?? 0 });
     races.push(`${head.slice(0, -1)},"pts":${ride.pts}}`);
   }
   return new Response(`{"year":${year},"step":${TRACK_STEP},"races":[${races.join(",")}],"skipped":${JSON.stringify(skipped)}}`,

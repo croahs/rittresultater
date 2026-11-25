@@ -186,9 +186,16 @@ def points_json(rider, r):
 def run_rider(rider, log):
     rows, changes = build.build_rider(rider, log)
     # Keep last run's watts for rides we couldn't read this time (no key in this run).
-    prev = {r["Date"]: r for r in read_csv(rider_csv(rider))}
+    prev_rows = read_csv(rider_csv(rider))
+    prev_by_race = {(r["Date"], r["Race"]): r for r in prev_rows}
+    date_counts = {}
+    prev_by_date = {}
+    for pr in prev_rows:
+        date_counts[pr["Date"]] = date_counts.get(pr["Date"], 0) + 1
+        prev_by_date[pr["Date"]] = pr
+    prev_unique_date = {d: r for d, r in prev_by_date.items() if date_counts[d] == 1}
     for r in rows:
-        p = prev.get(r["Date"])
+        p = prev_by_race.get((r["Date"], r["Race"])) or prev_unique_date.get(r["Date"])
         if not r.get("_power") and p and p.get("intervals.icu activity"):
             for c in build.POWER_COLS:
                 r[c] = p.get(c, "")

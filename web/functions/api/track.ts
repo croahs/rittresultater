@@ -23,7 +23,7 @@ export async function onRequestPost(ctx: Ctx) {
   if (typeof b.race_key !== "string" || !/^\d{4}-\d\d-\d\d\|.{1,120}$/.test(b.race_key)
     || !okPts(b.pts)) return json({ error: "Ugyldig spor." }, 400);
   await tables(env.DB, ctx);
-  const athlete = await readToken(env.DB, b.token, b.rider);
+  const athlete = await readToken(env.DB, b.token, b.rider, env.TOKEN_SECRET);
   if (!athlete) return json({ error: "Lagre på nytt: tillatelsen er utløpt." }, 403);
   const r = await env.DB.prepare(`UPDATE ride SET pts = ? WHERE rider_id = ? AND race_key = ? AND athlete_id = ?
     AND ? <= secs / ${TRACK_STEP} + 1`).bind(JSON.stringify(b.pts), b.rider, b.race_key, athlete, b.pts.length).run();

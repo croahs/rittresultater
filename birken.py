@@ -79,21 +79,6 @@ def result_list(arr, year):
     return _cache[key]
 
 
-def age(result_id):
-    """(age, day read) for the rider of one result, read once and cached."""
-    key = f"age:{result_id}"
-    if key not in _cache:
-        d = json.loads(_get("person", {"resultid": result_id}))
-        _cache[key] = [d[0].get("Alder") if d else None, datetime.date.today().isoformat()]
-        _save()
-    return _cache[key]
-
-
-def uci_age(result_id, year):
-    a, read = age(result_id)
-    return None if a is None else a - (int(read[:4]) - year)
-
-
 def uci_class(cls, a):
     """UCI gravel age group ("M19-34", "K35-39", ..., "M Elite"), or None for youth, para and
     companions. Elite riders stay elite: in a UCI race they ride the elite class, not an age group."""
@@ -108,9 +93,31 @@ def uci_class(cls, a):
     return f"{sex}{lo}+" if lo == 80 else f"{sex}{lo}-{lo + 4}"
 
 
+def uci_for(result_id, cls, year):
+    """Derived UCI gravel age group for one result ("M19-34", ..., "M Elite", or None),
+    cached as the bucket only (never storing exact individual age or lookup date)."""
+    if cls in ("ME", "KE"):
+        return f"{cls[:1]} Elite"
+    if cls[:1] not in "MK" or cls not in CLASSES:
+        return None
+    key = f"uci:{result_id}"
+    if key in _cache:
+        return _cache[key]
+    legacy = _cache.get(f"age:{result_id}")
+    if legacy is not None:
+        a, read = legacy
+        return uci_class(cls, None if a is None else a - (int(read[:4]) - year))
+    d = json.loads(_get("person", {"resultid": result_id}))
+    a = d[0].get("Alder") if d else None
+    val = uci_class(cls, None if a is None else a - (datetime.date.today().year - year))
+    _cache[key] = val
+    _save()
+    return val
+
+
 def uci_classes(arr, year):
-    """{result id: UCI class} for every rider in one race (an age lookup per rider not cached yet)."""
-    return {r[5]: uci_class(r[3], uci_age(r[5], year)) for r in result_list(arr, year) if r[3] not in NO_TIME}
+    """{result id: UCI class} for every rider in one race (a lookup per rider not cached yet)."""
+    return {r[5]: uci_for(r[5], r[3], year) for r in result_list(arr, year) if r[3] not in NO_TIME}
 
 
 def races(entry, name):
@@ -118,8 +125,11 @@ def races(entry, name):
     the UCI gravel age group: uci_class, uci_place, uci_n."""
     want, year = raceresult.fold(name), int(entry["date"][:4])
     rows = [r for r in result_list(entry["event"], year) if r[3] not in NO_TIME]
-    me = next((r for r in rows if raceresult.fold(r[1]) == want), None)
-    if not me or not me[0].isdigit():
+    matches = [r for r in rows if raceresult.fold(r[1]) == want]
+    if len(matches) != 1:
+        return []
+    me = matches[0]
+    if not me[0].isdigit():
         return []
     rank = lambda group: 1 + sum(1 for r in group if r[4] and _secs(r[4]) < _secs(me[4]))
     cls = [r for r in rows if r[3] == me[3]]

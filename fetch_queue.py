@@ -74,7 +74,7 @@ def d1(sql, *params):
 
 def fold(name):
     s = unicodedata.normalize("NFD", name.lower().replace("ø", "o").replace("æ", "ae"))
-    return " ".join(re.sub(r"[̀-ͯ]", "", s).split())
+    return " ".join(re.sub(r"[\u0300-\u036f]", "", s).split())
 
 
 def eq_id_for(name):
@@ -196,6 +196,8 @@ def main():
               "WHERE status = 'queued' ORDER BY id LIMIT ?", MAX_PER_RUN)
     built, done = [], []
     for req in todo:
+        aliases = riderids.load()
+        by_tt = {a["turritt"]: k for k, a in aliases.items() if a.get("turritt")}
         eqtiming.list_budget = MAX_LISTS  # new result lists one request may fetch, all steps together
         kind = req.get("kind") or "rider"
         name = str(req.get("name") or "").strip()[:100]

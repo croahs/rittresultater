@@ -83,8 +83,10 @@ def earlier_list(event, n):
     key = f"{event}:cup{n}"
     if key not in _cache:
         time.sleep(PAUSE)
-        conf = requests.get(f"https://my.raceresult.com/{event}/RRPublish/data/config",
-                            params={"page": "results", "noVisitor": "1"}, timeout=60).json()
+        cr = requests.get(f"https://my.raceresult.com/{event}/RRPublish/data/config",
+                          params={"page": "results", "noVisitor": "1"}, timeout=60)
+        cr.raise_for_status()
+        conf = cr.json()
         listname = next(l["Name"] for l in conf["lists"] if re.search(rf"\|{n} Cup {n}$", l["Name"]))
         time.sleep(PAUSE)
         r = requests.get(f"https://{conf['server']}/{event}/results/list",
@@ -116,7 +118,7 @@ def fetch_earlier(log=print):
 
 def fold(name):
     s = unicodedata.normalize("NFD", name.lower().replace("ø", "o").replace("æ", "ae"))
-    return sorted(re.sub(r"[\u0300-\u036f]", "", s).split())
+    return sorted(re.sub(r"[^\w\s-]", " ", re.sub(r"[\u0300-\u036f]", "", s)).split())
 
 
 def name_for(name):
@@ -228,7 +230,9 @@ def main(rider, icu, log=print):
         sort_class = n in set(conf.get("rode_sort") or [])
         k = f"ssk:{a['id']}:{int(sort_class)}"
         if k not in build.METRICS:
-            full = icu.s.get(f"{sync.INTERVALS}/activity/{a['id']}", params={"intervals": "true"}).json()
+            fr = icu.s.get(f"{sync.INTERVALS}/activity/{a['id']}", params={"intervals": "true"})
+            fr.raise_for_status()
+            full = fr.json()
             laps = race_laps(full.get("icu_intervals") or [], sort_class)
             stats = [None, None, None, None]
             if laps:

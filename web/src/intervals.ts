@@ -17,7 +17,14 @@ export interface PowerFetch { athlete: string; athleteId: string; power: Map<str
 
 export const validKey = (k: string) => /^[\x21-\x7e]{8,256}$/.test(k);
 
-export const secs = (t: string) => t.split(":").reduce((s, p) => s * 60 + Number(p), 0);
+export const secs = (t: string) => (/^\d+(?::\d{1,2}){1,2}$/.test(t) ? t.split(":").reduce((s, p) => s * 60 + Number(p), 0) : 0);
+
+/** Next calendar day (YYYY-MM-DD), because intervals.icu's newest filter can be exclusive of late local rides. */
+export function nextDay(iso: string): string {
+  const d = new Date(`${iso}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
 
 /** An error whose message is written for the reader. */
 export class IcuError extends Error {}
@@ -124,7 +131,8 @@ export async function fetchRacePower(key: string, rows: Result[], rider: string 
   // Pass rider = null once the person has confirmed that an unfamiliar account name is theirs.
   if (rider && me.name && !sameName(me.name, rider)) throw new NameMismatch(me.name);
   const dates = rows.map((r) => r.date).sort();
-  const acts = await get<Activity[]>(key, `/athlete/0/activities?oldest=${dates[0]}&newest=${dates[dates.length - 1]}`);
+  if (!dates.length) return { athlete: me.name || "", athleteId: String(me.id || ""), power: new Map(), tracks: new Map(), missing: 0, failed: 0 };
+  const acts = await get<Activity[]>(key, `/athlete/0/activities?oldest=${dates[0]}&newest=${nextDay(dates[dates.length - 1])}`);
   const power = new Map<string, RacePower>(), tracks = new Map<string, RaceTrack>();
   let done = 0, missing = 0, failed = 0;
   await eachLimited(rows, 3, async (r) => {

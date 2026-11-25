@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { loadVideos, raceLists, videosFor, type IndexRider, type RaceList, type RaceVideo, type VideoFile } from "../data";
-import { TYPE_LABEL, TYPE_VAR, ageLabel, clock, clsLabel, dateLong } from "../format";
+import { TYPE_LABEL, TYPE_VAR, ageLabel, clock, clsLabel, dateLong, safeHref } from "../format";
 import { KlasseToggle, useKlasse } from "../klasse";
 import RaceVideos from "../RaceVideos";
 import { Icon } from "../ui";
@@ -26,18 +26,27 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
     const done = pick.filter((r) => r[5] != null).sort((a, b) => a[5]! - b[5]!);
     return [...done, ...pick.filter((r) => r[5] == null)];
   }, [race, women]);
+  const places = useMemo(() => {
+    let rank = 0;
+    return rows.map((r, i) => {
+      if (r[5] == null) return null;
+      if (i === 0 || rows[i - 1][5] !== r[5]) rank = i + 1;
+      return rank;
+    });
+  }, [rows]);
   if (race === undefined) return <div className="loading">Henter resultatlisten …</div>;
   if (!race) return <div className="card empty"><b>Fant ikke rittet</b></div>;
   const best = rows[0]?.[5] ?? null;
   const finished = rows.filter((r) => r[5] != null).length;
   const name = race.name.replace(/\s+20\d\d$/, "");
+  const origHref = safeHref(race.turritt);
   return (
     <section className="race-page" aria-labelledby="h-race">
       <div className="section-head">
         <div>
           <p className="eyebrow" style={{ color: TYPE_VAR[race.type] }}>{TYPE_LABEL[race.type]} · {dateLong(race.date)}{race.distance_km ? ` · ${Math.round(race.distance_km)} km` : ""}</p>
           <h1 className="h-display" id="h-race">{name} {race.date.slice(0, 4)}</h1>
-          <p className="lead">{women ? `${finished} kvinner i mål` : `${finished} i mål`}{rows.length > finished ? `, ${rows.length - finished} DNF` : ""}. {women ? "Plassene er regnet blant kvinnene." : "Alle klasser i samme liste."}{race.turritt && <> <a href={race.turritt} target="_blank" rel="noopener">Original resultatliste</a>.</>}</p>
+          <p className="lead">{women ? `${finished} kvinner i mål` : `${finished} i mål`}{rows.length > finished ? `, ${rows.length - finished} DNF` : ""}. {women ? "Plassene er regnet blant kvinnene." : "Alle klasser i samme liste."}{origHref && <> <a href={origHref} target="_blank" rel="noopener">Original resultatliste</a>.</>}</p>
         </div>
         <div className="filters"><KlasseToggle /></div>
       </div>
@@ -49,12 +58,12 @@ export default function Race({ id, index, onRider }: { id: string; index: IndexR
             return (
               <Fragment key={`${r[0]}-${i}`}>
               <tr>
-                <td className="tnum">{t == null ? "DNF" : i + 1}</td>
+                <td className="tnum">{places[i] ?? "DNF"}</td>
                 <td className="l">{known.has(r[0]) ? <button type="button" className="linkish" onClick={() => onRider(r[0])}>{r[1]}</button> : r[1]}
                   {vids.has(r[0]) && <button type="button" className="vid media-btn name-vid" aria-expanded={open === r[0]} title={`Video fra ${r[1]}`} aria-label={`Video fra ${r[1]}`}
                     onClick={() => setOpen(open === r[0] ? null : r[0])}><Icon.play /></button>}</td>
                 <td className="tnum">{shown == null ? "–" : clock(shown)}</td>
-                <td className="tnum muted">{down ? `−${down} ${down === 1 ? "runde" : "runder"}` : t == null || best == null || i === 0 ? "" : `+${clock(t - best)}`}</td>
+                <td className="tnum muted">{down ? `−${down} ${down === 1 ? "runde" : "runder"}` : t == null || best == null || t === best ? "" : `+${clock(t - best)}`}</td>
                 <td className="l muted">{r[2]}</td>
                 <td className="l muted">{r[4] ? clsLabel(r[4]) : ageLabel(r[3])}</td>
               </tr>

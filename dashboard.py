@@ -22,13 +22,14 @@ def rows(path):
         for r in csv.DictReader(f):
             d = sync.parse_date(r["Date"])
             num = lambda k: float(r[k]) if r.get(k) else None
+            ival = lambda k: int(r[k]) if (r.get(k) or "").strip().isdigit() else None
             out.append({
                 "name": re.sub(r"\s+20\d\d$", "", r["Race"]),
                 "key": series_key(r["Race"]),
                 "date": d.isoformat(), "year": d.year,
                 "type": r["Type"],
-                "place": int(r["Placement in class"]),
-                "field": int(r["Class participants (not officials or DNS, DNF included)"]),
+                "place": ival("Placement in class"),
+                "field": ival("Class participants (not officials or DNS, DNF included)"),
                 "top": num("Percentile in class"),
                 "behind": num("% behind winner"),
                 "np": num("Normalized Power"), "ap": num("Average Power"),
@@ -36,8 +37,11 @@ def rows(path):
                 "km": num("Distance (km)"), "climb": num("Elevation gain (m)"),
                 "time": r["Time"], "winner": r["Class winner"],
                 "age_class": r.get("Age class", ""),
-                "age_place": int(r["Age class placement"]) if r.get("Age class placement") else None,
-                "age_n": int(r["Age class participants"]) if r.get("Age class participants") else None,
+                "age_place": ival("Age class placement"),
+                "age_n": ival("Age class participants"),
+                "uci_class": r.get("UCI class", ""),
+                "uci_place": ival("UCI class placement"),
+                "uci_n": ival("UCI class participants"),
                 "turritt": r.get("Turritt", "") or r.get("EQ Timing", "") or r.get("raceresult", ""),
                 "icu": r.get("intervals.icu activity", ""),
             })

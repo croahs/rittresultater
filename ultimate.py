@@ -45,8 +45,9 @@ def result_list(event, distance):
             # A later page repeats the rows before it (it is "show more"), so keep each rider once.
             seen = {tuple(x) for x in out}
             out += [x for x in ([c[0], c[2], c[4], c[5], c[6]] for c in rows) if tuple(x) not in seen]
-            total = int(re.search(r"(\d+) deltager", r.text).group(1))
-            if len(out) >= total or len(out) == start:
+            m = re.search(r"(\d+) deltager", r.text)
+            total = int(m.group(1)) if m else 0
+            if not rows or (total and len(out) >= total) or len(out) == start:
                 break
             start = len(out)
         _cache[key] = out
@@ -56,7 +57,7 @@ def result_list(event, distance):
     return _cache[key]
 
 
-SMARTRES = "http://results.ultimate.dk/smartres/"
+SMARTRES = "https://results.ultimate.dk/smartres/"
 
 
 def smartres_list(event, distance):
@@ -66,7 +67,9 @@ def smartres_list(event, distance):
     key = f"smartres:{event}:{distance}"
     if key not in _cache:
         time.sleep(PAUSE)
-        page = requests.get(SMARTRES, params={"eventid": event}, timeout=60).text
+        pr = requests.get(SMARTRES, params={"eventid": event}, timeout=60)
+        pr.raise_for_status()
+        page = pr.text
         sel = page[page.find('name="results_category"'):]
         sel = sel[:sel.find("</select>")]
         cats = [(v, html.unescape(n)) for v, n in re.findall(r'<option value="(C::[^"]+)"[^>]*>([^<]*)', sel)]

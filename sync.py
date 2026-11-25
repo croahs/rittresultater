@@ -108,14 +108,17 @@ def race_window(streams, race_secs):
     are None without power data.
     """
     t, w, d = streams.get("time"), streams.get("watts"), streams.get("distance")
-    if not t or not (w and any(w)) and not d:
+    if not t or not race_secs or race_secs <= 0 or (not (w and any(w)) and not d):
         return None
     w = w or [0.0] * len(t)
     n = t[-1] + 1
+    if n <= 0:
+        return None
     watts, dist = [0.0] * n, [0.0] * n
     for i, s in enumerate(t):
-        watts[s] = w[i] or 0.0
-        dist[s] = (d[i] or 0.0) if d else 0.0
+        if 0 <= s < n:
+            watts[s] = w[i] or 0.0
+            dist[s] = (d[i] or 0.0) if d else 0.0
     for s in range(1, n):  # carry distance over recording gaps
         dist[s] = max(dist[s], dist[s - 1])
     span = min(race_secs, n)
@@ -143,6 +146,8 @@ def match(race, activities):
     """
     d = parse_date(race["Date"])
     t = secs(race["Time"])
+    if t <= 0:
+        return None, "no valid race time"
     dist_m = float(race["Distance (km)"]) * 1000 if race.get("Distance (km)") else None
     cands = [a for a in activities
              if a.get("type") in RIDE_TYPES and str(a.get("start_date_local", ""))[:10] == d.isoformat()]

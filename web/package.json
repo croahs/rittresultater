@@ -12,7 +12,7 @@
     "build": "tsc -b && vite build",
     "build:single": "node scripts/copy-data.mjs && tsc -b && vite build --mode single",
     "preview": "vite preview",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b && tsc -p functions/tsconfig.json --noEmit"
   },
   "dependencies": {
     "leaflet": "1.9.4",

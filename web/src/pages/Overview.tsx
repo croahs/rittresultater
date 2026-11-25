@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import MoreRaces from "../MoreRaces";
 import RaceVideos from "../RaceVideos";
 import { median, mean, raceFor, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
-import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, hms, pct, span } from "../format";
+import { TYPE_LABEL, TYPE_VAR, dateLong, dateShort, dec, firstName, hms, pct, safeHref, span } from "../format";
 import { useState } from "react";
 import { raceKey, useSel } from "../state";
 import { flags, ridOf } from "../data";
@@ -69,6 +69,8 @@ function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void
   const top = a.results.reduce<Result | null>((b, r) => (!b || r.place < b.place || (r.place === b.place && r.field > b.field) ? r : b), null);
   const roll = (text: string, from: number) => [...text].map((d, i) => <span key={i} aria-hidden="true" style={{ animationDelay: `${from + i * 70}ms` }}>{d}</span>);
   const jump = (t: Tab, id: string) => { go(t); setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 250); };
+  const nps = a.results.filter((r) => r.np != null).map((r) => r.np!);
+  const hasPower = a.power && nps.length > 0;
   return (
     <div className="hero">
       <div className="bib" aria-label={`Rytterkort for ${a.name}`}>
@@ -91,9 +93,9 @@ function Hero({ a, isMe, go }: { a: Athlete; isMe: boolean; go: (t: Tab) => void
         <button type="button" className="card stat" onClick={() => jump("utvikling", "samme-ritt")}><span className="eyebrow">Utvikling <i aria-hidden="true">→</i></span>
           <b className={change == null ? "" : change >= 0 ? "pos" : "neg"}>{change == null ? "–" : `${change >= 0 ? "+" : "−"}${Math.abs(change).toFixed(0)}`}</b>
           <small>{change == null ? "Trenger minst tre av de samme rittene i to sesonger" : `prosentpoeng ${change >= 0 ? "mer" : "mindre"} av ${felt} slått i ${y1} enn i ${y0}, snitt over ${pairs.length} ritt ${who.toLowerCase() === "du" ? "du" : who} kjørte begge år`}</small></button>
-        <button type="button" className="card stat" onClick={() => jump("utvikling", "watt")}><span className="eyebrow">{a.power ? "Snitt NP" : "Watt"} <i aria-hidden="true">→</i></span>
-          <b>{a.power ? `${Math.round(mean(a.results.filter((r) => r.np).map((r) => r.np!)))} W` : "–"}</b>
-          <small>{a.power ? "normalisert watt i rittene med wattdata" : "Ikke delt ennå. Trykk for å hente watt fra intervals.icu."}</small></button>
+        <button type="button" className="card stat" onClick={() => jump("utvikling", "watt")}><span className="eyebrow">{hasPower ? "Snitt NP" : "Watt"} <i aria-hidden="true">→</i></span>
+          <b>{hasPower ? `${Math.round(mean(nps))} W` : "–"}</b>
+          <small>{hasPower ? "normalisert watt i rittene med wattdata" : "Ikke delt ennå. Trykk for å hente watt fra intervals.icu."}</small></button>
       </div>
     </div>
   );
@@ -118,14 +120,19 @@ function FinishSheet({ a }: { a: Athlete }) {
       </div>
       <ol>
         {items.length === 0 && <li className="empty">Ingen ritt i denne perioden.</li>}
-        {items.map((it) => {
+        {items.map((it, i) => {
           if (it.p) {
             const p = it.p;
+            const detail = [
+              p.cls,
+              p.pts ? `${p.pts} poeng` : p.laps ? `Datt av etter ${p.laps} runder` : null,
+              p.np ? `NP ${p.np} W` : null,
+            ].filter(Boolean).join(". ");
             return (
-              <li key={`p${p.date}`} className="pts-row">
+              <li key={`p-${p.date}-${p.name}-${i}`} className="pts-row">
                 <span className="place"><i style={{ background: "var(--pts)" }} />{p.place ? p.place.replace(" (shared)", "").replace("-", "–") : "–"}<small>{p.n ? `av ${p.n}` : "poeng"}</small></span>
                 <div><div className="t" style={{ display: "flex", justifyContent: "space-between", gap: 8, fontWeight: 600 }}><span>{p.name}</span><small className="muted">{dateShort(p.date)} {p.date.slice(2, 4)}</small></div>
-                  <p style={{ margin: "1px 0 0", color: "var(--ink-2)", fontSize: ".82rem" }}>{p.cls}. {p.pts ? `${p.pts} poeng` : `Datt av etter ${p.laps} runder`}. NP {p.np} W.</p></div>
+                  {detail && <p style={{ margin: "1px 0 0", color: "var(--ink-2)", fontSize: ".82rem" }}>{detail}.</p>}</div>
               </li>
             );
           }
@@ -200,7 +207,12 @@ function DialCard({ a, r, rows, go }: { a: Athlete; r: Result | null; rows: Resu
           {r.behind != null && <div className="fact"><span>Bak vinneren</span><b>{pct(r.behind, r.behind % 1 ? 1 : 0)}</b></div>}
           {r.np && <div className="fact"><span>Watt (NP / snitt)</span><b>{r.np} / {r.ap} W</b></div>}
           {r.speed && <div className="fact"><span>Fart / distanse</span><b>{dec(r.speed)} km/t · {dec(r.km)} km{r.climb ? ` · ${Math.round(r.climb)} hm` : ""}</b></div>}
-          <div className="fact"><span>Kilder</span><b>{r.link && <a href={r.link} target="_blank" rel="noopener">Resultatliste</a>}{r.icu && flags.activityLinks && <> · <a href={r.icu} target="_blank" rel="noopener">intervals.icu</a></>}</b></div>
+          {(() => {
+            const link = safeHref(r.link), icu = flags.activityLinks ? safeHref(r.icu) : undefined;
+            return (link || icu) ? (
+              <div className="fact"><span>Kilder</span><b>{link && <a href={link} target="_blank" rel="noopener">Resultatliste</a>}{link && icu ? " · " : ""}{icu && <a href={icu} target="_blank" rel="noopener">intervals.icu</a>}</b></div>
+            ) : null;
+          })()}
           <div className="find-actions">
             {list && <button type="button" className="btn" onClick={() => openRace(list)}>Hele resultatlisten</button>}
             <button type="button" className="btn" onClick={() => go("rivaler")}>Se rivalene</button>

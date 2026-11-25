@@ -12,7 +12,8 @@ import json, os, sys
 import shapely
 from shapely.geometry import shape, Polygon
 
-d = json.load(open(sys.argv[1]))
+with open(sys.argv[1], encoding="utf-8") as f:
+    d = json.load(f)
 geoms = d['geometries'] if 'geometries' in d else [f['geometry'] for f in d['features']]
 parts = []
 for g in geoms:
@@ -73,8 +74,10 @@ for lat in range(57, 72):
         if not rings_out:
             continue
         s = json.dumps(rings_out, separators=(',', ':'))
-        open(f"{out}/{key}.json", "w").write(s)
+        with open(f"{out}/{key}.json", "w", encoding="utf-8") as f:
+            f.write(s)
         total += len(s)
         index["part"].append(key)
-json.dump(index, open(f"{out}/index.json", "w"), separators=(',', ':'))
+with open(f"{out}/index.json", "w", encoding="utf-8") as f:
+    json.dump(index, f, separators=(',', ':'))
 print('cells', len(index['part']), 'full', len(index['full']), 'bytes', total, flush=True)

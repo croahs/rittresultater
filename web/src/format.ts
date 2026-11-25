@@ -42,6 +42,10 @@ export const initials = (n: string) =>
 
 export const firstName = (n: string) => n.split(" ")[0];
 
-export const fold = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ø/g, "o").replace(/æ/g, "ae");
+export const fold = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ø/g, "o").replace(/æ/g, "ae");
+
+/** Only allow http(s) URLs in external links (never javascript: or data:). */
+export const safeHref = (u: string | null | undefined): string | undefined =>
+  u && /^https?:\/\//i.test(u.trim()) ? u.trim() : undefined;
 
 export const listNo = (a: string[]) => (a.length > 1 ? `${a.slice(0, -1).join(", ")} og ${a[a.length - 1]}` : a.join(""));

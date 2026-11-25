@@ -31,6 +31,22 @@ OWN_RACE_GROUP = re.compile(r"\d\s*km|racer|tempo|rekrutt", re.I)
 # Classes in a list that ride their own distance (fewer laps, a shorter course): a rider in one is
 # placed within that class, as on the race page and in rivals (rivals.courses()).
 OWN_DISTANCE = re.compile(r"senior|junior|jr\b|^[mkgj]\s?-?(6-9|10|11-12|13-14|15-16)$", re.I)
+# Youth classes under 17 (6-9, 10, 11-12, 13-14, 15-16, barn): excluded before caching.
+_YOUTH_AGE = re.compile(
+    r"^(?:(?:aktiv\s+)?(?:menn|kvinner|gutter|jenter)\s+|[mkgj]\s?-?)(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?(?:\s*år)?$",
+    re.I,
+)
+
+
+def is_youth(age_class):
+    """True for youth classes under 17 (e.g. G6-9, J6-9, M10, K11-12, M13-14, M15-16, Trim (barn))."""
+    s = (age_class or "").strip()
+    if not s:
+        return False
+    if re.search(r"\bbarn\b", s, re.I):
+        return True
+    m = _YOUTH_AGE.match(s)
+    return bool(m and int(m.group(2) or m.group(1)) < 17)
 # Points races: everyone who scores gets the race's time, so the time says nothing about the
 # placing. They are read as points races (kermesse()), not as timed races (races()).
 POINTS_RACE = re.compile(r"kermesse", re.I)
@@ -132,6 +148,8 @@ def _total(event, stage):
     with [laps down, official time in ms]."""
     laps = int(stage_laps(event).get(str(stage)) or 0)
     items = _get(f"Result/Total/{event}/{stage}", count=99999, **({"round": 0} if laps > 1 else {}))["Items"]
+    # Drop DNS and youth (<17) entries before caching.
+    items = [i for i in items if i.get("StatusTekst") != "DNS" and not is_youth(i["Deltaker"]["Klasse"]["Navn"])]
     lapped = lap_times(items) if laps > 1 else {}
     ms = lambda n, i: lapped[n][0] if n in lapped else _ms(i)
     tail = lambda n, i: [lapped[n][1] if n in lapped else 0, _ms(i)]
@@ -319,6 +337,15 @@ def registry_races(entry, name, rider=None):
         if OWN_RACE_GROUP.search(me[6]):
             pool = [r for r in pool if r[4] == me[6]]
         pool = _course(pool, me[3], lambda r: r[1])
+        try:
+            km = stage_km(entry["event"], stage)
+        except requests.RequestException:
+            km = None
+        tt = bool(re.search(r"tempo|\bmila\b|klostermil", f"{entry['name']} {stage_name}", re.I))
+        bad = timing_errors([r[3] for r in pool if r[2] == "TIME"], km, tt) | {r[3] for r in pool if r[2] == "TIME" and (r[3] or 0) < 1000}
+        if me[4] == "TIME" and me[5] in bad:
+            continue
+        pool = [r for r in pool if not (r[2] == "TIME" and r[3] in bad)]
         place, n = _rank(pool, me[0])
         age_place, age_n = _rank([r for r in pool if decade(r[1]) == decade(me[3])], me[0])
         finishers = [r[3] for r in pool if r[2] == "TIME"]

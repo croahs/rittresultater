@@ -7,12 +7,11 @@ import { isRid, makeIds, type Ids, type IdMap } from "../src/ids";
 export interface D1Result<T> { results: T[] }
 export interface D1Stmt { bind(...v: unknown[]): D1Stmt; run(): Promise<{ meta?: { changes?: number } }>; all<T>(): Promise<D1Result<T>>; first<T>(): Promise<T | null> }
 export interface D1 { prepare(sql: string): D1Stmt; batch(s: D1Stmt[]): Promise<unknown> }
-export interface Env { DB?: D1; ASSETS: { fetch(req: Request | string): Promise<Response> }; TURNSTILE_SITEKEY?: string; TURNSTILE_SECRET?: string }
+export interface Env { DB?: D1; ASSETS: { fetch(req: Request | string): Promise<Response> }; TURNSTILE_SITEKEY?: string; TURNSTILE_SECRET?: string; TOKEN_SECRET?: string }
 export interface Ctx { request: Request; env: Env }
 
-// owner: the intervals.icu account allowed to save for a rider (set when the names matched),
-// and whether the rider shows the saved watts to everyone (show_power; hidden by default).
-// power: avg power and NP per race. ride: speed, GPS distance and the 5 s track per race.
+// Fallback DDL when migrations (web/migrations/0001_init.sql) have not been applied yet.
+// Run at most once per Worker isolate per DB instance.
 const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS owner (rider_id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, show_power INTEGER NOT NULL DEFAULT 0, saved_at TEXT NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS power (rider_id TEXT NOT NULL, race_key TEXT NOT NULL, np INTEGER NOT NULL, ap INTEGER NOT NULL,
@@ -21,35 +20,69 @@ const SCHEMA = [
     athlete_id TEXT NOT NULL, saved_at TEXT NOT NULL, PRIMARY KEY (rider_id, race_key))`,
   // hits: calls that reach intervals.icu, per visitor IP and hour ("*" = everyone), for rate limiting.
   `CREATE TABLE IF NOT EXISTS hits (ip TEXT NOT NULL, hour INTEGER NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (ip, hour))`,
-  // meta: the random secret that signs save tokens, made on first use.
+  // meta: the random secret that signs save tokens when TOKEN_SECRET env secret is not set.
   `CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL)`,
 ];
+
+const initialized = new WeakSet<D1>();
 
 // Only requests that reach intervals.icu (checking a key) count. A person saving uses one;
 // the tracks that follow use the signed token instead, so they never reach intervals.icu.
 const PER_IP_HOUR = 10, ALL_HOUR = 200;
 
-/** Refuse (429) when this visitor, or everyone together, has checked too many keys this hour. */
-export async function limited(ctx: Ctx): Promise<Response | null> {
+/** Refuse (429) when this visitor has checked too many keys this hour, or the global quota is already full.
+ *  Does NOT increment the global "*" counter yet, so invalid keys cannot DoS legitimate users. */
+export async function limitedIp(ctx: Ctx): Promise<Response | null> {
   const db = ctx.env.DB!;
   const hour = Math.floor(Date.now() / 3_600_000);
   const ip = ctx.request.headers.get("cf-connecting-ip") || "unknown";
-  const bump = db.prepare(`INSERT INTO hits (ip, hour, n) VALUES (?, ?, 1)
-    ON CONFLICT (ip, hour) DO UPDATE SET n = n + 1 RETURNING n`);
-  const [mine, all] = await Promise.all([bump.bind(ip, hour).first<{ n: number }>(), bump.bind("*", hour).first<{ n: number }>()]);
-  if (hour % 6 === 0) await db.prepare("DELETE FROM hits WHERE hour < ?").bind(hour - 24).run();
-  if ((mine?.n ?? 0) > PER_IP_HOUR || (all?.n ?? 0) > ALL_HOUR) return json({ error: "For mange forsøk. Prøv igjen om en time." }, 429);
+  const check = async () => {
+    const bump = db.prepare(`INSERT INTO hits (ip, hour, n) VALUES (?, ?, 1)
+      ON CONFLICT (ip, hour) DO UPDATE SET n = n + 1 RETURNING n`);
+    return Promise.all([
+      bump.bind(ip, hour).first<{ n: number }>(),
+      db.prepare("SELECT n FROM hits WHERE ip = '*' AND hour = ?").bind(hour).first<{ n: number }>(),
+    ]);
+  };
+  let mine: { n: number } | null, all: { n: number } | null;
+  try {
+    [mine, all] = await check();
+  } catch {
+    await tables(db, ctx);
+    [mine, all] = await check();
+  }
+  if ((mine?.n ?? 0) > PER_IP_HOUR || (all?.n ?? 0) >= ALL_HOUR) return json({ error: "For mange forsøk. Prøv igjen om en time." }, 429);
   return null;
 }
 
-async function secret(db: D1): Promise<CryptoKey> {
-  let row = await db.prepare("SELECT v FROM meta WHERE k = 'token_secret'").first<{ v: string }>();
-  if (!row) {
-    const v = [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, "0")).join("");
-    await db.prepare("INSERT OR IGNORE INTO meta (k, v) VALUES ('token_secret', ?)").bind(v).run();
-    row = await db.prepare("SELECT v FROM meta WHERE k = 'token_secret'").first<{ v: string }>();
+/** Increment the global hourly counter after a request's key has been validated against intervals.icu. */
+export async function bumpGlobal(ctx: Ctx): Promise<Response | null> {
+  const db = ctx.env.DB!;
+  const hour = Math.floor(Date.now() / 3_600_000);
+  const all = await db.prepare(`INSERT INTO hits (ip, hour, n) VALUES ('*', ?, 1)
+    ON CONFLICT (ip, hour) DO UPDATE SET n = n + 1 RETURNING n`).bind(hour).first<{ n: number }>();
+  if (hour % 6 === 0) await db.prepare("DELETE FROM hits WHERE hour < ?").bind(hour - 24).run();
+  if ((all?.n ?? 0) > ALL_HOUR) return json({ error: "For mange forsøk. Prøv igjen om en time." }, 429);
+  return null;
+}
+
+/** Refuse (429) when this visitor, or everyone together, has checked too many keys this hour. */
+export async function limited(ctx: Ctx): Promise<Response | null> {
+  return (await limitedIp(ctx)) || (await bumpGlobal(ctx));
+}
+
+async function secret(db: D1, envSecret?: string): Promise<CryptoKey> {
+  let raw = envSecret?.trim();
+  if (!raw) {
+    let row = await db.prepare("SELECT v FROM meta WHERE k = 'token_secret'").first<{ v: string }>();
+    if (!row) {
+      const v = [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, "0")).join("");
+      await db.prepare("INSERT OR IGNORE INTO meta (k, v) VALUES ('token_secret', ?)").bind(v).run();
+      row = await db.prepare("SELECT v FROM meta WHERE k = 'token_secret'").first<{ v: string }>();
+    }
+    raw = row!.v;
   }
-  return crypto.subtle.importKey("raw", new TextEncoder().encode(row!.v), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
+  return crypto.subtle.importKey("raw", new TextEncoder().encode(raw), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
 }
 
 const b64 = (b: ArrayBuffer | Uint8Array) => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -57,25 +90,28 @@ const unb64 = (s: string) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/
 
 /** A short-lived token saying "this intervals.icu account may save for this rider", so the
  *  tracks after a save don't need the API key or another call to intervals.icu. */
-export async function signToken(db: D1, rider: string, athlete: string, minutes = 30): Promise<string> {
+export async function signToken(db: D1, rider: string, athlete: string, minutes = 30, envSecret?: string): Promise<string> {
   const body = new TextEncoder().encode(JSON.stringify({ r: rider, a: athlete, e: Date.now() + minutes * 60_000 }));
-  return `${b64(body)}.${b64(await crypto.subtle.sign("HMAC", await secret(db), body))}`;
+  return `${b64(body)}.${b64(await crypto.subtle.sign("HMAC", await secret(db, envSecret), body))}`;
 }
 
-export async function readToken(db: D1, token: unknown, rider: string): Promise<string | null> {
+export async function readToken(db: D1, token: unknown, rider: string, envSecret?: string): Promise<string | null> {
   if (typeof token !== "string" || token.length > 600) return null;
   const [p, sig] = token.split(".");
+  if (!p || !sig) return null;
   try {
     const body = unb64(p);
-    if (!await crypto.subtle.verify("HMAC", await secret(db), unb64(sig), body)) return null;
+    if (!await crypto.subtle.verify("HMAC", await secret(db, envSecret), unb64(sig), body)) return null;
     const t = JSON.parse(new TextDecoder().decode(body)) as { r: string; a: string; e: number };
     return t.r === rider && t.e > Date.now() ? t.a : null;
   } catch { return null; }
 }
 
 export async function tables(db: D1, ctx: Ctx) {
+  if (initialized.has(db)) return;
   await db.batch(SCHEMA.map((q) => db.prepare(q)));
   await toOurIds(db, ctx);
+  initialized.add(db);
 }
 
 /** A file from the site's own static data. */

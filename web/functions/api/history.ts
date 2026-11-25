@@ -26,25 +26,31 @@ import type { IndexRider, Site } from "../../src/data";
 // kind: 'rider' (rid, a rider on the site), 'eq_profile' (eq_participant_id) or 'freetext' (name, race_text,
 // race_year). rid is our rider id; turritt_id is kept filled ("" when unknown) while the job still reads it.
 // ref is a random token the visitor gets back for a request without a rid, to look up its status.
+// Fallback DDL when migrations (web/migrations/0001_init.sql) have not been applied yet.
+// Run at most once per Worker isolate per DB instance.
 const QUEUE = `CREATE TABLE IF NOT EXISTS fetch_requests (id INTEGER PRIMARY KEY AUTOINCREMENT, turritt_id TEXT NOT NULL,
   name TEXT NOT NULL, requested_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'queued', done_at TEXT, note TEXT, rid TEXT,
   kind TEXT NOT NULL DEFAULT 'rider', eq_participant_id TEXT, race_text TEXT, race_year INTEGER, ref TEXT)`;
 // Columns added after the table first went live, added to an existing table without touching its rows.
 const ADDED: [string, string][] = [["rid", "TEXT"], ["kind", "TEXT NOT NULL DEFAULT 'rider'"], ["eq_participant_id", "TEXT"],
   ["race_text", "TEXT"], ["race_year", "INTEGER"], ["ref", "TEXT"]];
+const queueReady = new WeakSet<D1>();
 
-/** The queue table, with newer columns added to an older table and rid filled in from the TurrittID. */
-async function queue(db: D1, ctx: Ctx): Promise<IdMap> {
+/** Lazy fallback init for fetch_requests (at most once per isolate) and one-time rid backfill. */
+async function queue(db: D1, ctx: Ctx): Promise<void> {
+  if (queueReady.has(db)) return;
   await db.batch([db.prepare(QUEUE)]);
   const cols = await db.prepare("PRAGMA table_info(fetch_requests)").all<{ name: string }>();
   const have = new Set(cols.results.map((c) => c.name));
   for (const [c, type] of ADDED) if (!have.has(c)) await db.prepare(`ALTER TABLE fetch_requests ADD COLUMN ${c} ${type}`).run();
-  const map = (await staticJSON<IdMap>(ctx, "ids.json")) || {};
   const todo = await db.prepare("SELECT DISTINCT turritt_id FROM fetch_requests WHERE rid IS NULL AND kind = 'rider'").all<{ turritt_id: string }>();
-  const ids = makeIds(map);
-  const moves = todo.results.map((r) => [r.turritt_id, ids.toRid(r.turritt_id)] as const).filter((x): x is readonly [string, string] => !!x[1]);
-  if (moves.length) await db.batch(moves.map(([t, rid]) => db.prepare("UPDATE fetch_requests SET rid = ? WHERE turritt_id = ? AND rid IS NULL").bind(rid, t)));
-  return map;
+  if (todo.results.length) {
+    const map = (await staticJSON<IdMap>(ctx, "ids.json")) || {};
+    const ids = makeIds(map);
+    const moves = todo.results.map((r) => [r.turritt_id, ids.toRid(r.turritt_id)] as const).filter((x): x is readonly [string, string] => !!x[1]);
+    if (moves.length) await db.batch(moves.map(([t, rid]) => db.prepare("UPDATE fetch_requests SET rid = ? WHERE turritt_id = ? AND rid IS NULL").bind(rid, t)));
+  }
+  queueReady.add(db);
 }
 const PER_IP_HOUR = 3, NEW_PER_DAY = 30;
 
@@ -83,16 +89,25 @@ export async function onRequestGet(ctx: Ctx) {
 }
 
 /** Per visitor and hour, in the same counter table as the key checks but under its own prefix; then the cap per day. */
-async function overLimit(db: D1, request: Request): Promise<Response | null> {
+async function overLimit(db: D1, ctx: Ctx): Promise<Response | null> {
   const hour = Math.floor(Date.now() / 3_600_000);
-  const ip = "history:" + (request.headers.get("cf-connecting-ip") || "unknown");
-  const mine = await db.prepare(`INSERT INTO hits (ip, hour, n) VALUES (?, ?, 1)
-    ON CONFLICT (ip, hour) DO UPDATE SET n = n + 1 RETURNING n`).bind(ip, hour).first<{ n: number }>();
-  if ((mine?.n ?? 0) > PER_IP_HOUR) return json({ error: "For mange forespørsler. Prøv igjen om en time." }, 429);
+  const ip = "history:" + (ctx.request.headers.get("cf-connecting-ip") || "unknown");
   const today = new Date().toISOString().slice(0, 10);
-  const n = await db.prepare("SELECT COUNT(*) AS n FROM fetch_requests WHERE requested_at >= ?").bind(today).first<{ n: number }>();
-  if ((n?.n ?? 0) >= NEW_PER_DAY) return json({ error: "Køen er full for i dag. Prøv igjen i morgen." }, 429);
-  return null;
+  const check = async () => {
+    const mine = await db.prepare(`INSERT INTO hits (ip, hour, n) VALUES (?, ?, 1)
+      ON CONFLICT (ip, hour) DO UPDATE SET n = n + 1 RETURNING n`).bind(ip, hour).first<{ n: number }>();
+    if ((mine?.n ?? 0) > PER_IP_HOUR) return json({ error: "For mange forespørsler. Prøv igjen om en time." }, 429);
+    const n = await db.prepare("SELECT COUNT(*) AS n FROM fetch_requests WHERE requested_at >= ?").bind(today).first<{ n: number }>();
+    if ((n?.n ?? 0) >= NEW_PER_DAY) return json({ error: "Køen er full for i dag. Prøv igjen i morgen." }, 429);
+    return null;
+  };
+  try {
+    return await check();
+  } catch {
+    await tables(db, ctx);
+    await queue(db, ctx);
+    return await check();
+  }
 }
 
 function newRef(): string {
@@ -111,18 +126,24 @@ export async function onRequestPost(ctx: Ctx) {
   if ("eq" in b || "race" in b) return findMe(ctx, db, b);
   const rider = await riderFrom(ctx, b.rider);
   if (!rider) return json({ error: "Ukjent rytter." }, 400);
+
+  // Run bot check and rate limiting BEFORE any queue/table init or D1 lookups.
+  const bot = await botCheck(ctx);
+  if (bot) return bot;
+  const limit = await overLimit(db, ctx);
+  if (limit) return limit;
+
   await tables(db, ctx);
-  const map = await queue(db, ctx);
+  await queue(db, ctx);
 
   const open = await db.prepare(`SELECT 1 FROM fetch_requests WHERE rid = ? AND ${OPEN}`).bind(rider).first();
   if (open) return json(await status(db, rider)); // asking twice changes nothing
 
-  const bot = await botCheck(ctx);
-  if (bot) return bot;
-  const limit = await overLimit(db, request);
-  if (limit) return limit;
-
-  const [site, index] = await Promise.all([staticJSON<Site>(ctx, "site.json"), staticJSON<IndexRider[]>(ctx, "riders/index.json")]);
+  const [site, index, map] = await Promise.all([
+    staticJSON<Site>(ctx, "site.json"),
+    staticJSON<IndexRider[]>(ctx, "riders/index.json"),
+    staticJSON<IdMap>(ctx, "ids.json"),
+  ]);
   if (!site || !index) return json({ error: "Fikk ikke lest resultatlistene. Prøv igjen." }, 502);
   // Riders the pipeline follows (the job adds requested riders there) have a full profile already.
   const key = await dataKey(ctx, rider, index);
@@ -131,7 +152,7 @@ export async function onRequestPost(ctx: Ctx) {
   if (!entry) return json({ error: "Fant ikke rytteren i resultatlistene." }, 404);
 
   await db.prepare("INSERT INTO fetch_requests (turritt_id, rid, name, requested_at, kind) VALUES (?, ?, ?, ?, 'rider')")
-    .bind(map[rider] || "", rider, entry.name, new Date().toISOString()).run();
+    .bind((map || {})[rider] || "", rider, entry.name, new Date().toISOString()).run();
   return json(await status(db, rider));
 }
 
@@ -147,6 +168,13 @@ async function findMe(ctx: Ctx, db: D1, b: Record<string, unknown>) {
     if (typeof f === "string") return json({ error: f }, 400);
     row = { kind: "freetext", name: f.name, race: f.race, year: f.year };
   }
+
+  // Run bot check and rate limiting BEFORE any queue/table init or D1 lookups.
+  const bot = await botCheck(ctx);
+  if (bot) return bot;
+  const limit = await overLimit(db, ctx);
+  if (limit) return limit;
+
   await tables(db, ctx);
   await queue(db, ctx);
 
@@ -156,11 +184,6 @@ async function findMe(ctx: Ctx, db: D1, b: Record<string, unknown>) {
     : await db.prepare(`SELECT ref FROM fetch_requests WHERE kind = 'freetext' AND lower(name) = lower(?) AND lower(race_text) = lower(?) AND race_year = ? AND ${OPEN} AND ref IS NOT NULL`)
       .bind(row.name, row.race, row.year).first<{ ref: string }>();
   if (same) return json({ ...(await byRef(db, same.ref)), ref: same.ref });
-
-  const bot = await botCheck(ctx);
-  if (bot) return bot;
-  const limit = await overLimit(db, ctx.request);
-  if (limit) return limit;
 
   const ref = newRef();
   await db.prepare(`INSERT INTO fetch_requests (turritt_id, rid, name, requested_at, kind, eq_participant_id, race_text, race_year, ref)

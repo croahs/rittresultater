@@ -161,7 +161,11 @@ def year_list(year, need=None):
 def race_info(race_id):
     def fetch():
         t = re.sub(r"\s+", " ", _text(_get(Turritt=race_id, page="resultat", current=2, su=2)))
-        return (re.search(r"Dato: (\d\d\.\d\d\.\d{4})", t).group(1), float(re.search(r"Distanse: ([\d.]+)", t).group(1)))
+        dm = re.search(r"Dato: (\d\d\.\d\d\.\d{4})", t)
+        if not dm:
+            raise ValueError(f"Turritt race {race_id}: missing Dato")
+        km = re.search(r"Distanse: ([\d.]+)", t)
+        return (dm.group(1), float(km.group(1)) if km else 0.0)
     d, dist = _cached(f"info:{race_id}", fetch)
     return datetime.strptime(d, "%d.%m.%Y").date(), dist
 
@@ -216,7 +220,7 @@ def lap_rows(rows):
 
 
 def _counts(r):
-    return int(r[0]) != DNS_PLACE and int(r[9]) != DNS_TIME and not EXCLUDE_GROUP.search(r[3] or "")
+    return int(r[0]) != DNS_PLACE and int(r[9]) != DNS_TIME and not EXCLUDE_GROUP.search(f"{r[3] or ''} {r[8] or ''}")
 
 
 def _base(name):
@@ -257,9 +261,11 @@ def team_name(r):
 def race_row(race_id, year, turritt_id):
     rows = results(race_id)
     me = next(r for r in rows if r[2] == str(turritt_id))
-    t = int(me[9])
     names = dict(year_list(year, need=race_id))
     name = names.get(race_id) or race_name(race_id)
+    if not _counts(me) or EXCLUDE_GROUP.search(name or ""):
+        raise ValueError(f"Turritt race {race_id}: DNS or excluded group")
+    t = int(me[9])
     groups = {r[3] or "" for r in rows if _counts(r)}
     split_by_bike = any(BIKE_GROUP.search(g) for g in groups) and not BIKE_GROUP.search(me[3] or "")
     cls = [r for r in rows if _counts(r) and not (split_by_bike and BIKE_GROUP.search(r[3] or ""))]
@@ -273,6 +279,7 @@ def race_row(race_id, year, turritt_id):
         cls = overall = [[""] * 9 + [str(x)] for x in team_times]
     date, dist = race_info(race_id)
     finished = t < 359000
+    finishers = [int(r[9]) for r in cls if int(r[9]) < 359000]
     return {
         "turritt_race_id": race_id,
         "turritt_name": name,
@@ -284,7 +291,7 @@ def race_row(race_id, year, turritt_id):
         "class_n": len(cls),
         "overall_place": rank(overall) if finished else "",
         "overall_n": len(overall),
-        "class_winner": hms(min(int(r[9]) for r in cls)),
+        "class_winner": hms(min(finishers)) if finishers else "",
         "age_class": me[8],
     }
 

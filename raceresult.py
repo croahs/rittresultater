@@ -44,8 +44,10 @@ def result_list(entry):
     pc, nc, tc = entry.get("cols") or [2, 3, 5]
 
     def fetch():
-        conf = requests.get(f"https://my.raceresult.com/{event}/results/config",
-                            params={"page": "results", "noVisitor": "1"}, timeout=60).json()
+        cr = requests.get(f"https://my.raceresult.com/{event}/results/config",
+                          params={"page": "results", "noVisitor": "1"}, timeout=60)
+        cr.raise_for_status()
+        conf = cr.json()
         time.sleep(PAUSE)
         r = requests.get(f"https://{conf['server']}/{event}/results/list",
                          params={"key": conf["key"], "listname": listname, "contest": "0", "r": "all", "l": "0"},

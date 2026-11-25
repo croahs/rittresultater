@@ -243,7 +243,7 @@ def changed(old, new, riders):
     for me in riders:                                  # anonymised: the original wins, not a meeting lost
         a = _outcomes(old, me)
         b = next((x for x in (_outcomes(p, me) for p in new) if x), {})
-        lost += sum(1 for o in a if o not in b and o not in dnf) if b else 0
+        lost += sum(1 for o in a if o not in b and o not in dnf)
         other += sum(1 for o, v in a.items() if o in b and b[o] != v)
     return lost, other
 
@@ -493,7 +493,7 @@ def build(me=ME, evs=None, keep=None):
             "class_place": 1 + bisect.bisect_left(cls, t) if t < DNF else "",
             "class_n": len(cls),
             "behind_class_winner_pct": behind(t, cls[0]),
-            "class_winner": turritt.hms(cls[0]),
+            "class_winner": turritt.hms(cls[0]) if cls[0] < DNF else "DNF",
         })
         wt = ev.get("women_times")
         if SEX.get(me) == "K" and wt:
@@ -764,12 +764,13 @@ def rider_object(entry, evs, full):
         "race": a["race"], "date": iso(a["date"]), "type": a["type"], "class": a["class"],
         "place": a["class_place"] if a["time"] != "DNF" else None, "field": a["class_n"],
         "top_pct": round(100 * a["class_place"] / a["class_n"], 2) if a["class_place"] != "" else None,
-        "behind_pct": a["behind_class_winner_pct"] if a["time"] != "DNF" else None, "time": a["time"],
+        "behind_pct": a["behind_class_winner_pct"] if a["time"] != "DNF" and a["behind_class_winner_pct"] != "" else None, "time": a["time"],
         "winner": a["class_winner"], "overall_place": a["place"], "overall_field": a["field"],
         "beaten_pct": a["beaten_pct"], "distance_km": a["distance_km"], "climb_m_per_km": a["climb_m_per_km"],
         "turritt": urls[a["turritt_race_id"]],
         **({"women_place": a["women_place"] or None, "women_field": a["women_field"],
-            "women_beaten_pct": a["women_beaten_pct"], "women_behind_pct": a["behind_women_winner_pct"] or None}
+            "women_beaten_pct": a["women_beaten_pct"],
+            "women_behind_pct": a["behind_women_winner_pct"] if a["time"] != "DNF" and a["behind_women_winner_pct"] != "" else None}
            if "women_field" in a else {}),
     } for a in analysis]
     results.sort(key=lambda a: a["date"])
@@ -856,8 +857,9 @@ def write_all(evs):
     """Static-site data for every rider in the cached lists: races.json, riders/index.json, riders/shard-NN.json."""
     data = os.path.join(HERE, "data")
     os.makedirs(os.path.join(data, "riders"), exist_ok=True)
-    dump = lambda path, obj: json.dump(obj, open(os.path.join(data, path), "w", encoding="utf-8"),
-                                       ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    def dump(path, obj):
+        with open(os.path.join(data, path), "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     races_out, seen = [], defaultdict(list)
     for ev in evs:
         sh = ev["sheet"]
@@ -960,8 +962,8 @@ def write_summary(evs, index_ids):
     if quick:
         kmh, ev, f, _ = quick[0]
         out["fastest_avg"] = {"name": title(ev["sheet"]), "kmh": round(kmh, 1), "rider": who(f[0][1])}
-    json.dump(out, open(os.path.join(HERE, "data", "summary.json"), "w", encoding="utf-8"),
-              ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    with open(os.path.join(HERE, "data", "summary.json"), "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     return out
 
 
@@ -988,7 +990,10 @@ def summary(opps, analysis):
     y = [a["beaten_pct"] for a in analysis]
     print("\nSammenheng med andel slått (korrelasjon, -1 til 1):")
     for label, key in (("feltstørrelse", "field"), ("stigning per km", "climb_m_per_km"), ("distanse", "distance_km")):
-        print(f"  {label:<16} {statistics.correlation([float(a[key]) for a in analysis], y):+.2f}")
+        try:
+            print(f"  {label:<16} {statistics.correlation([float(a[key] or 0) for a in analysis], y):+.2f}")
+        except statistics.StatisticsError:
+            print(f"  {label:<16} –")
 
     ins = insights(opps, club_table(ME, EVS))
     for typ, rs in ins["rivals_by_type"].items():
@@ -1031,7 +1036,8 @@ if __name__ == "__main__":
     else:
         write(opps, analysis)
         n, written = write_all(evs)
-        index_ids = {r["id"] for r in json.load(open(os.path.join(HERE, "data", "riders", "index.json"), encoding="utf-8"))}
+        with open(os.path.join(HERE, "data", "riders", "index.json"), encoding="utf-8") as f:
+            index_ids = {r["id"] for r in json.load(f)}
         s = write_summary(evs, index_ids)
         summary(opps, analysis)
         print(f"\ndata/: {n} ryttere i indeksen, {written} med rivaler (ryttere i riders.json)")

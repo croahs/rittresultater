@@ -69,7 +69,7 @@ function RaceChart({ rows, value, max, ticks, unit, label, invert }: { rows: Res
   const H = 240, L = 40, R = 12, T = 12, B = 34;
   const n = rows.length, step = (W - L - R) / Math.max(n - 1, 1);
   const x = (i: number) => L + (n === 1 ? (W - L - R) / 2 : i * step);
-  const y = (v: number) => T + (1 - v / max) * (H - T - B);
+  const y = (v: number) => T + (invert ? v / max : 1 - v / max) * (H - T - B);
   const tk = ticks || Array.from({ length: 5 }, (_, i) => Math.round((max / 4) * i));
   const roll = rows.map((_, i) => median(rows.slice(Math.max(0, i - 4), i + 1).map(value)));
   const yearStarts = rows.map((r, i) => (i && r.year !== rows[i - 1].year ? i : -1)).filter((i) => i > 0);
@@ -88,7 +88,7 @@ function RaceChart({ rows, value, max, ticks, unit, label, invert }: { rows: Res
           const k = raceKey(r), on = k === sel;
           return (
             <g key={k} className="hit" onClick={() => setSel(on ? null : k)}
-              onPointerMove={(e) => tip(e, <><b>{r.race} {r.year}</b><span>{dateLong(r.date)}, {TYPE_LABEL[r.type]}<br />{r.place}. av {r.field}, {Math.round(value(r))} % {label}{invert ? "" : ""}</span></>)}
+              onPointerMove={(e) => tip(e, <><b>{r.race} {r.year}</b><span>{dateLong(r.date)}, {TYPE_LABEL[r.type]}<br />{r.place}. av {r.field}, {Math.round(value(r))} % {label}</span></>)}
               onPointerLeave={() => tip(null)}>
               <circle cx={x(i)} cy={y(value(r))} r="14" fill="transparent" />
               {on && <circle cx={x(i)} cy={y(value(r))} r="10" fill="none" stroke="var(--accent)" strokeWidth="2.5" />}
@@ -109,7 +109,7 @@ function RaceChart({ rows, value, max, ticks, unit, label, invert }: { rows: Res
 
 /** Name of the selected race above its point, kept inside the chart. */
 function SelLabel({ x, y, W, L, R, text }: { x: number; y: number; W: number; L: number; R: number; text: string }) {
-  const w = Math.min(W - L - R, text.length * 6.6 + 16), bx = Math.max(L, Math.min(W - R - w, x - w / 2)), by = Math.max(0, y - 40);
+  const w = Math.min(W - L - R, text.length * 6.6 + 16), bx = Math.max(L, Math.min(W - R - w, x - w / 2)), by = y < 46 ? y + 14 : Math.max(0, y - 40);
   return (
     <g pointerEvents="none">
       <rect x={bx} y={by} width={w} height={22} rx={6} fill="var(--accent)" />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { RaceVideo } from "./data";
-import { firstName } from "./format";
+import { firstName, safeHref } from "./format";
 import { Icon } from "./ui";
 
 /** YouTube id from a watch, youtu.be or Shorts link. */
@@ -33,7 +33,7 @@ export default function RaceVideos({ videos, race, autoOpen }: { videos?: RaceVi
             allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen loading="lazy" />
         </div>
       ) : null)}
-      {playing && <a className="note" href={playing.url} target="_blank" rel="noopener">Åpne på YouTube{playing.own ? "" : ` (${playing.by})`}</a>}
+      {playing && safeHref(playing.url) && <a className="note" href={safeHref(playing.url)} target="_blank" rel="noopener">Åpne på YouTube{playing.own ? "" : ` (${playing.by})`}</a>}
     </div>
   );
 }

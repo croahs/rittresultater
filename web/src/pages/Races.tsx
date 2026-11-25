@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { findRace, flags, raceLists, years, type Athlete, type PointsRace, type RaceType, type Result } from "../data";
-import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct } from "../format";
+import { TYPE_LABEL, TYPE_VAR, dateLong, dec, fold, hms, pct, safeHref } from "../format";
 import { SelChip, raceKey, useSel } from "../state";
 import { Icon } from "../ui";
 import { KlasseToggle } from "../klasse";
@@ -72,11 +72,11 @@ export default function Races({ a }: { a: Athlete }) {
                   <td>{dateLong(r.date)}</td>
                   <td className="l"><span className="swatch"><span className="dot" style={{ background: TYPE_VAR[r.type] }} />{TYPE_LABEL[r.type]}{r.cls ? ` · ${r.cls}` : ""}</span></td>
                   <td>{hms(r.time)}</td><td>{dec(r.km)}</td><td>{dec(r.speed)}</td>
-                  {a.power && <td>{r.np ? (r.icu && flags.activityLinks ? <a href={r.icu} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>{r.np}</a> : r.np) : "–"}</td>}
+                  {a.power && <td>{r.np ? (safeHref(r.icu) && flags.activityLinks ? <a href={safeHref(r.icu)} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>{r.np}</a> : r.np) : "–"}</td>}
                   {a.power && <td>{r.ap ?? "–"}</td>}
                   {media && <td className="links">{n > 0 && <button type="button" className="vid media-btn" aria-expanded={open === k} title={n === 1 ? "Video fra rittet" : `${n} videoer fra rittet`}
                     aria-label={`${n === 1 ? "Video" : `${n} videoer`} fra ${r.race} ${r.year}`} onClick={(e) => { e.stopPropagation(); setOpen(open === k ? null : k); }}><Icon.play />{n > 1 && <span>{n}</span>}</button>}</td>}
-                  <td className="links">{r.link ? <a href={r.link} target="_blank" rel="noopener" aria-label={`Resultatliste for ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}>↗</a> : ""}</td>
+                  <td className="links">{safeHref(r.link) ? <a href={safeHref(r.link)} target="_blank" rel="noopener" aria-label={`Resultatliste for ${r.race} ${r.year}`} onClick={(e) => e.stopPropagation()}>↗</a> : ""}</td>
                 </tr>
                 {open === k && <tr className="media-row"><td colSpan={99}><RaceVideos videos={r.videos} race={`${r.race} ${r.year}`} autoOpen /></td></tr>}
                 </Fragment>
@@ -90,10 +90,10 @@ export default function Races({ a }: { a: Athlete }) {
           <div className="card-pad"><h2 className="h-card">Poengritt</h2><p className="note" style={{ margin: "4px 0 0" }}>SSK Cup og kermesse telles i poeng, ikke tid, og er ikke med i plasseringstallene over. Kermesse-listene har ofte bare dem som fikk poeng, så de uten poeng deler plassene etter dem. Watt og fart gjelder bare selve rittet.</p></div>
           <div className="table-wrap"><table className="sticky">
             <thead><tr><th className="l">Ritt</th><th>Dato</th><th className="l">Klasse</th><th>Plass</th><th>Poeng</th><th>Runder</th><th>Tid</th><th>Fart</th><th>NP</th><th>Snitt W</th>{pv && <th>Video</th>}</tr></thead>
-            <tbody>{a.points.map((p) => (
-              <tr key={p.date}><td>{p.name}</td><td>{dateLong(p.date)}</td><td className="l">{p.cls}</td>
-                <td>{placeText(p)}</td><td>{p.pts ? `${p.pts} (vinner ${p.win})` : "–"}</td><td>{p.laps}</td><td>{p.time}</td><td>{p.speed}</td><td>{p.np}</td><td>{p.ap}</td>
-                {pv && <td className="links">{p.video && <a className="vid" href={p.video} target="_blank" rel="noopener" title="Video fra rittet" aria-label={`Video fra ${p.name}`}><Icon.play /></a>}</td>}</tr>
+            <tbody>{a.points.map((p, i) => (
+              <tr key={`${p.date}-${p.name}-${i}`}><td>{p.name}</td><td>{dateLong(p.date)}</td><td className="l">{p.cls}</td>
+                <td>{placeText(p)}</td><td>{p.pts ? `${p.pts} (vinner ${p.win})` : "–"}</td><td>{p.laps || "–"}</td><td>{p.time || "–"}</td><td>{p.speed || "–"}</td><td>{p.np || "–"}</td><td>{p.ap || "–"}</td>
+                {pv && <td className="links">{safeHref(p.video) && <a className="vid" href={safeHref(p.video)} target="_blank" rel="noopener" title="Video fra rittet" aria-label={`Video fra ${p.name}`}><Icon.play /></a>}</td>}</tr>
             ))}</tbody>
           </table></div>
         </section>

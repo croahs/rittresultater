@@ -18,14 +18,14 @@ Innhold i `web/public/_headers`:
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://cache.kartverket.no; connect-src 'self' https://intervals.icu; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://intervals.icu; frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 /data/*
   Cache-Control: public, max-age=300
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 ```
 
-`Content-Security-Policy` sørger for at siden bare kan kjøre sine egne skript og bare snakke med intervals.icu. Det beskytter API-nøkkelen som en rytter limer inn. Legger du til en ny tjeneste, må den også legges inn her.
+`Content-Security-Policy` sørger for at siden bare kan kjøre egne skript (og Turnstile-robotsjekken), bare bygge inn YouTube-videoer (`youtube-nocookie.com`) og bare snakke med intervals.icu. Det beskytter API-nøkkelen som en rytter limer inn. Legger du til en ny tjeneste, må den også legges inn her.
 
 ## Bygg og test lokalt
 
@@ -86,7 +86,7 @@ Watt for andre ryttere: på Utvikling kan en rytter lime inn sin egen API-nøkke
 
 Før lansering bør du vite dette:
 - Siden viser andre rytteres navn og innbyrdes oppgjør. Resultatene er offentlige hos Turritt, men sammenstillingen er ny. Kontaktadressen står i `"contact"` i `site.json`-linja i `export_web.py` og vises nederst på siden, slik at folk kan be om retting eller fjerning.
-- Kartflisene i sesongklippet kommer fra Kartverkets åpne kartcache (`cache.kartverket.no`, gråtonekartet). De er åpne data under CC BY 4.0, krever ingen nøkkel, og kildehenvisningen «© Kartverket» vises nederst i kartet. Kartet dekker Norge; ritt i utlandet får tom bakgrunn.
+- Kartbakgrunnen i sesongklippet er forenklede landpolygoner fra OpenStreetMap (ODbL) lagret som egne statiske JSON-celler i `data/land/` (`tools/land_cells.py`), uten eksterne kartfliser. Kildehenvisningen «© OpenStreetMap» vises nederst i kartet. Kartet dekker Norge; ritt i utlandet får tom bakgrunn.
 
 ## 4. Nye ritt
 
@@ -103,10 +103,14 @@ Jobben `.github/workflows/update-data.yml` kjører hver mandag klokka 05:00 UTC.
 Uten dette steget kan andre ryttere hente wattene sine i nettleseren, men tallene forsvinner når de lukker siden. Med steget får de et avkrysningsfelt, «Lagre … på siden», som er av som standard. Krysser de av, blir watt, fart og GPS-spor per ritt liggende, og de får sitt eget sesongklipp. Wattene vises bare for andre hvis rytteren også krysser av for «Vis wattene for alle».
 
 1. I Cloudflare-dashbordet: **Storage & Databases → D1 SQL Database → Create**. Kall den `rittresultater`.
-2. Gå til Pages-prosjektet og velg **Settings → Bindings → Add → D1 database**. Sett **Variable name** til `DB`, og velg databasen `rittresultater`. Gjør det for både Production og Preview.
-3. Trykk **Deployments → Retry deployment** på det siste bygget, eller push en endring.
-
-Tabellene lages av seg selv første gang noen lagrer. Du trenger ikke kjøre noe SQL.
+2. Kjør database-migreringen (`web/migrations/0001_init.sql`) mot databasen fra `web/`:
+   ```
+   npx wrangler d1 migrations apply rittresultater --remote
+   ```
+   (Tabellene opprettes også automatisk som reserveløsning første gang per Worker-instans dersom migreringen ikke er kjørt.)
+3. Gå til Pages-prosjektet og velg **Settings → Bindings → Add → D1 database**. Sett **Variable name** til `DB`, og velg databasen `rittresultater`. Gjør det for både Production og Preview.
+4. Valgfritt (anbefalt): under **Settings → Variables and Secrets**, legg inn `TOKEN_SECRET` som en **Secret** (f.eks. utdata fra `openssl rand -hex 32`) til signering av korte opplastingstillatelser for GPS-spor. Uten `TOKEN_SECRET` faller serveren tilbake på en tilfeldig nøkkel lagret i D1-tabellen `meta`.
+5. Trykk **Deployments → Retry deployment** på det siste bygget, eller push en endring.
 
 Hvordan det virker (`web/functions/api/`, `web/server/lib.ts`, `web/src/saved.ts`):
 

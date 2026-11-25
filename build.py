@@ -253,7 +253,7 @@ def build_rider(rider, log=print):
     taken = {sync.parse_date(r["Date"]) for r in rows}
     for e in eq_all:
         d = sync.parse_date_iso(e["date"])
-        if any(abs((d - x).days) <= 1 for x in taken) or ":" not in e["time"]:
+        if d in taken or ":" not in e["time"]:
             continue
         r = eq_row(e, rider)
         rows.append(r)

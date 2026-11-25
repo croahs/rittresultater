@@ -30,11 +30,18 @@ def turritt_rider(rider_id):
     """Name, club and age class as the latest Turritt list has them."""
     with open(os.path.join(HERE, "cache", "turritt.json"), encoding="utf-8") as f:
         cache = json.load(f)
-    rows = [r for k, v in cache.items() if k.startswith("results:") and isinstance(v, list)
-            for r in v if r[2] == rider_id]
+    rows = []
+    for k, v in cache.items():
+        if k.startswith("results:") and isinstance(v, list):
+            info = cache.get(f"info:{k.split(':', 1)[1]}")
+            d = info[0] if isinstance(info, list) and info else ""
+            date_key = f"{d[6:10]}-{d[3:5]}-{d[0:2]}" if len(d) == 10 else ""
+            for r in v:
+                if r[2] == rider_id:
+                    rows.append((date_key, r))
     if not rows:
         return {}
-    r = rows[-1]
+    r = max(rows, key=lambda x: x[0])[1]
     return {"name": f"{r[5]} {r[6]}".strip(), "club": r[7].strip(), "age_class": r[8]}
 
 
